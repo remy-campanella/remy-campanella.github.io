@@ -42,6 +42,25 @@
     
     
     <entry>
+      <title>网站源库开发日志</title>
+      <link href="/2025/09/28/log/"/>
+      <url>/2025/09/28/log/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>注意：</p><ol><li>这是网站源代码库的日志，不是网站部署库的日志。</li><li>本日志关注网站功能的添加、删除、更改与问题修复，与文章内容的增减无关。</li></ol></blockquote><h3 id="Source-1-0-0"><a href="#Source-1-0-0" class="headerlink" title="Source 1.0.0"></a>Source 1.0.0</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 28, 2025</td></tr><tr><td>Description</td><td>The first formal version of <a href="remy-campanella.github.io">remy-campanella.github.io</a>. Basic functions are ready and <code>hexo clean</code>ed.</td></tr></tbody></table><h3 id="Source-1-0-1"><a href="#Source-1-0-1" class="headerlink" title="Source 1.0.1"></a>Source 1.0.1</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 28, 2025</td></tr><tr><td>Description</td><td>Fixed “the wrong user directed by “Follow me” button” problem.</td></tr></tbody></table>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> log </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于我</title>
       <link href="/2025/09/28/me/"/>
       <url>/2025/09/28/me/</url>
