@@ -30,6 +30,14 @@
         <content type="html"><![CDATA[<p>这是一个以帖子形式展示的目录，目的是能够更直观地展示本站的文章分类。</p><p>本目录是手动更新的，更新内容可能不及时，分类也不一定准确，作者仍然推荐使用页面右上角的搜索功能。</p><p>如果您执意要使用本目录并不想翻找内容，推荐使用浏览器文字搜索功能（一般为 <code>Ctrl + F</code>）。</p><br /><br /><center><p style="font-size: 24px;">Have a nice day!</p></center><br /><br /><h2 id="门面"><a href="#门面" class="headerlink" title="门面"></a>门面</h2><ul><li><a href="/2105/03/29/welcome-zh-cn/">【置顶】 什么风把您吹来啦？</a></li><li><a href="/2105/03/28/content/">【置顶】 目录</a> </li><li><a href="/2025/09/28/me/">关于我</a></li></ul><h2 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h2><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul><li><a href="/2025/09/28/log/">网站源库开发日志</a></li></ul>]]></content>
       
       
+      <categories>
+          
+          <category> 本站 </category>
+          
+          <category> 介绍 </category>
+          
+      </categories>
+      
       
         <tags>
             
@@ -42,12 +50,47 @@
     
     
     <entry>
+      <title>【新功能特辑】不蒜子访问量统计</title>
+      <link href="/2025/09/30/busuanzi/"/>
+      <url>/2025/09/30/busuanzi/</url>
+      
+        <content type="html"><![CDATA[<p>自源代码库版本 <code>1.1.0</code> 起，本站引入<a href="https://busuanzi.ibruce.info/">不蒜子网页访问量统计服务</a>，以提供更准确的访问量统计。</p><h2 id="用户隐私说明"><a href="#用户隐私说明" class="headerlink" title="用户隐私说明"></a>用户隐私说明</h2><p><a href="https://busuanzi.ibruce.info/">不蒜子网页访问量统计服务</a>提供两种统计：页面访问量统计和用户访问量统计。页面访问量统计仅记录页面被访问的动作，用户访问量统计仅收集用户 IP 地址进行去重。这里的 IP 地址只能大致判断用户所在的国家和地区，难以得知用户更私密的信息。且不蒜子是轻量级的统计服务，没有收集用户隐私的服务。</p><h2 id="顺带一提"><a href="#顺带一提" class="headerlink" title="顺带一提"></a>顺带一提</h2><h3 id="为什么要引入这个服务？"><a href="#为什么要引入这个服务？" class="headerlink" title="为什么要引入这个服务？"></a>为什么要引入这个服务？</h3><p>要回答这个问题，就要了解 Hexo + Butterfly 自带的页面访问量统计<strong>为什么不行</strong>。</p><p>简单来讲，原版页面访问量统计是<strong>可覆盖的</strong>，一次新部署之后访问量统计可能会改变，甚至丢失。回顾网站部署前的命令行操作（我的操作）：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hexo clean <span class="comment"># 清除缓存，为新功能做准备。</span></span><br><span class="line">hexo generate <span class="comment"># 执行 Markdown 转 HTML、生成搜索索引文件等操作。</span></span><br><span class="line">hexo server <span class="comment"># 在本机上进行**调试**。即便是在服务器上执行此命令也不等同于正式启动服务。</span></span><br><span class="line">hexo server --drafts <span class="comment"># 调试，且展示草稿。</span></span><br><span class="line"></span><br><span class="line">hexo deploy <span class="comment"># 部署服务器，包括 `hexo generate`。</span></span><br></pre></td></tr></table></figure><blockquote><p>注意：<code>hexo deploy</code> 不会自动启动服务，自动启动服务功能是 Github Pages 给的。</p></blockquote><p>这里，访问量统计被当作了缓存，在 <code>hexo clean</code> 被清理。即便访问量统计能保留，这也是作者在调试时产生的访问统计量，真正的访问量还在线上等着被覆盖呢（悲）。</p><p>这就是静态网站的缺陷：<strong>仅有的数据易被视作缓存，难以长期存储</strong>。这引出了第三方服务的意义之一：<strong>使纯静态网站拥有动态网站的功能，统计的数据更加有意义</strong>。</p><h3 id="这个服务是怎么实现的？"><a href="#这个服务是怎么实现的？" class="headerlink" title="这个服务是怎么实现的？"></a>这个服务是怎么实现的？</h3><p>不蒜子通过 JavaScript 异步请求实现数据统计，无需复杂的后端配置。其核心流程分为两步：</p><ul><li>前端嵌入代码：在网站页面中插入一段 JS 脚本，用于触发统计请求。</li><li>后端计数服务：接收请求后，根据访问来源（IP、页面 URL 等）更新数据库中的 PV（页面浏览量）和 UV（独立访客数）。</li></ul><p>不蒜子使用轻量级数据库（如 Redis）存储统计数据，以键值对形式记录：</p><table><thead><tr><th>服务</th><th>算法</th><th>功能</th></tr></thead><tbody><tr><td>页面访问量统计</td><td>PV（Page View）算法</td><td>每个 URL 对应一个计数器，长期统计页面被访问的次数</td></tr><tr><td>用户访问量统计</td><td>UV（User View）算法</td><td>在 PV 算法的基础上，将用户一天内的访问视作一次，得到独立访客数</td></tr></tbody></table><h3 id="那我缺的-DHCP-这一块的谁给我补啊？"><a href="#那我缺的-DHCP-这一块的谁给我补啊？" class="headerlink" title="那我缺的 DHCP 这一块的谁给我补啊？"></a>那我缺的 DHCP 这一块的谁给我补啊？</h3><p>DHCP（Dynamic Host Configuration Protocol，动态主机配置协议）是一个网络管理协议，它的核心作用是<strong>自动地为网络中的设备分配 IP 地址及其他相关网络配置参数</strong>。是网络 IP 分配的常用技术。</p><p>也就是说，用户的 IP 地址是随时变化的，IP 与用户不是一一对应的关系，这可能会使不蒜子将一个用户识别为多个用户，UV 算法准确度降低。您目前在网站上看到的统计量是 PV 算法的。</p><h3 id="怎么配置？"><a href="#怎么配置？" class="headerlink" title="怎么配置？"></a>怎么配置？</h3><p>通用的办法是，在这个数字要显示的地方（比如模板）嵌入统计代码：</p><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;//api.busuanzi.cc/static/3.6.9/busuanzi.min.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line">本站总访问量 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_site_pv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 次</span><br><span class="line">本站总访客数 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_site_uv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 人</span><br><span class="line">本页总阅读量 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_page_pv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 次</span><br><span class="line">本页总访客数 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_page_uv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 人</span><br><span class="line"></span><br><span class="line">本站今日访问量 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_today_site_pv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 次</span><br><span class="line">本站今日访客数 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_today_site_uv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 人</span><br><span class="line">本页今日阅读量 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_today_page_pv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 次</span><br><span class="line">本页今日访客数 <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;busuanzi_today_page_uv&quot;</span>&gt;</span>加载中...<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 人</span><br></pre></td></tr></table></figure><p>如果使用的是 Butterfly 主题，可以更改<code>\theme\butterfly\layout\widget\card_webinfo.pug</code>：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">script.</span><br><span class="line">    function checkPv()&#123; </span><br><span class="line">        var init_pv = parseInt(!&#123;theme.busuanzi.init_pv&#125;)</span><br><span class="line">        var pv = document.getElementById(&quot;busuanzi_value_site_pv&quot;)</span><br><span class="line">        if (pv.innerText === &#x27;&#x27;)&#123;</span><br><span class="line">        setTimeout(checkPv, 100)</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            pv.innerText = parseInt(pv.innerText) + init_pv</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">script checkPv()</span><br><span class="line"></span><br><span class="line">script.</span><br><span class="line">    function checkUv()&#123; </span><br><span class="line">        var init_uv = parseInt(!&#123;theme.busuanzi.init_uv&#125;)</span><br><span class="line">        var uv = document.getElementById(&quot;busuanzi_value_site_uv&quot;)</span><br><span class="line">        if (uv.innerText === &#x27;&#x27;)&#123;</span><br><span class="line">        setTimeout(checkUv, 100)</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            uv.innerText = parseInt(uv.innerText) + init_uv</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">script checkUv()</span><br></pre></td></tr></table></figure><blockquote><p>注意：要把原有代码全部注释。VSCode 批量注释&#x2F;批量去注释快捷键 <code>Ctrl + /</code>。</p></blockquote><p>这样，PV 统计量就出现在“浏览量”的位置上了。</p><h2 id="Request-for-Comments"><a href="#Request-for-Comments" class="headerlink" title="Request for Comments"></a>Request for Comments</h2><p>有些说法是我查的，有些说法是我 AI 的，有些说法是我疑？悟！的。如有谬误，欢迎指正。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 本站 </category>
+          
+          <category> 更新 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 网站 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>网站源库开发日志</title>
       <link href="/2025/09/28/log/"/>
       <url>/2025/09/28/log/</url>
       
-        <content type="html"><![CDATA[<blockquote><p>注意：</p><ol><li>这是网站源代码库的日志，不是网站部署库的日志。</li><li>本日志关注网站功能的添加、删除、更改与问题修复，与文章内容的增减无关。</li></ol></blockquote><h3 id="Source-1-0-0"><a href="#Source-1-0-0" class="headerlink" title="Source 1.0.0"></a>Source 1.0.0</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 28, 2025</td></tr><tr><td>Description</td><td>The first formal version of <a href="/">remy-campanella.github.io</a>. Basic functions are ready and <code>hexo clean</code>ed.</td></tr></tbody></table><h3 id="Source-1-0-1"><a href="#Source-1-0-1" class="headerlink" title="Source 1.0.1"></a>Source 1.0.1</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 28, 2025</td></tr><tr><td>Description</td><td>Fixed “the wrong user directed by “Follow me” button” problem.</td></tr></tbody></table>]]></content>
+        <content type="html"><![CDATA[<blockquote><p>注意：</p><ol><li>这是网站源代码库的日志，不是网站部署库的日志。</li><li>本日志关注网站功能的添加、删除、更改与问题修复，与文章内容的增减无关。</li></ol></blockquote><h3 id="Source-1-0-0"><a href="#Source-1-0-0" class="headerlink" title="Source 1.0.0"></a>Source 1.0.0</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 28, 2025</td></tr><tr><td>Description</td><td>The first formal version of <a href="/">remy-campanella.github.io</a>. Basic functions are ready and <code>hexo clean</code>ed.</td></tr></tbody></table><h3 id="Source-1-0-1"><a href="#Source-1-0-1" class="headerlink" title="Source 1.0.1"></a>Source 1.0.1</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 28, 2025</td></tr><tr><td>Description</td><td>Fixed “the wrong user directed by “Follow me” button” problem.</td></tr></tbody></table><h3 id="Source-1-1-0"><a href="#Source-1-1-0" class="headerlink" title="Source 1.1.0"></a>Source 1.1.0</h3><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Date</td><td>Sept. 30, 2025</td></tr><tr><td>Description</td><td>Added Busuanzi page view statistics.</td></tr><tr><td>Artical Report</td><td><a href="/2025/9/30/busuanzi/">【新功能特辑】不蒜子访问量统计</a></td></tr></tbody></table>]]></content>
       
+      
+      <categories>
+          
+          <category> 本站 </category>
+          
+          <category> 更新 </category>
+          
+      </categories>
       
       
         <tags>
@@ -86,6 +129,12 @@
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       
+      
+      <categories>
+          
+          <category> 本站 </category>
+          
+      </categories>
       
       
     </entry>
