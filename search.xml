@@ -11,6 +11,12 @@
         <content type="html"><![CDATA[<p>如果您是第一次来，作者建议您先从这里开始。 🤗</p><p>如果您已经来过了，那就……</p><ul><li><a href="/2105/03/28/content/">【置顶】 目录</a></li></ul><h2 id="我这是到哪来了？"><a href="#我这是到哪来了？" class="headerlink" title="我这是到哪来了？"></a>我这是到哪来了？</h2><p>这是一个普通社恐计科学生的个人网站。这个学生竟是如此的社恐以至于他连搜索引擎站长平台都没注册，所以搜索引擎大概是很难搜到这个网站的（但是我的 Github 主页、这个网站的仓库、甚至我曾经删除过的 README.md 都能搜到）。</p><h2 id="我能在这里看到什么？"><a href="#我能在这里看到什么？" class="headerlink" title="我能在这里看到什么？"></a>我能在这里看到什么？</h2><ul><li>记录学习过程</li><li>记录霉嚎生活</li><li>分享好 van 的</li></ul><p>这就关系到我为什么要建这个网站了。事实上，这并不是一个新项目。通过查询<a href="https://github.com/remy-campanella/remy-campanella.github.io/actions">工作流</a>，代码仓库在 2025 年 5 月 12 日就建好了。如果您恰好在当时访问了<a href="/">remy-campanella.github.io</a>，您会看到整个页面只有一句话：</p><br /><br /><center><p style="font-size: 24px;">Hello, this is Remy Campanella speaking.</p></center><br /><br /><p>就像一段永远不会收到回复的宇宙通讯。但据某位<a href="https://www.arpx4kun.site/">不知道愿不愿意透露姓名的无线电玩家</a>，收到回复已经是意外之喜了。</p><h2 id="个人网站一定要有个人-✍️✍️✍️"><a href="#个人网站一定要有个人-✍️✍️✍️" class="headerlink" title="个人网站一定要有个人 ✍️✍️✍️"></a>个人网站一定要有个人 ✍️✍️✍️</h2><p>众所周知，这是一个<strong>网站</strong>。虽然在浏览器上不好搜，只能直接输网址，但用户恰好输入 <code>remy-campanella.github.io</code> 概率<strong>很小，但不为 0</strong>。本人还是在对外发布个人信息这方面比较保守（大嘘，我的个人信息防护措施应该早被各种<a href="https://weixin.qq.com/cgi-bin/readtemplate?lang=zh_CN&t=weixin_agreement&s=privacy">用户协议</a>杀穿了）。</p><h2 id="我已经等不及了，快快端上来罢（喜）"><a href="#我已经等不及了，快快端上来罢（喜）" class="headerlink" title="我已经等不及了，快快端上来罢（喜）"></a>我已经等不及了，快快端上来罢（喜）</h2><p>真好！如果您需要某个特定的帖子，请在页面右上角使用搜索功能或</p><ul><li><a href="/2105/03/28/content/">【置顶】 目录</a></li></ul>]]></content>
       
       
+      <categories>
+          
+          <category> 本站 </category>
+          
+      </categories>
+      
       
         <tags>
             
@@ -42,6 +48,76 @@
         <tags>
             
             <tag> intro </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Hexo 插件开发学习】 一、Hello World。</title>
+      <link href="/2025/10/12/25-10-11-1/"/>
+      <url>/2025/10/12/25-10-11-1/</url>
+      
+        <content type="html"><![CDATA[<p>众所周知，学 Python 从 <code>print(&quot;Hello world&quot;)</code> 开始，学 C++ 从 <code>cout &lt;&lt; &quot;Hello World&quot; &lt;&lt; endl;</code> 开始。那么，学 Hexo 插件从哪里开始呢？</p><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>实现一个简单插件，当插件被加载时在终端输出字符。</p><h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h3 id="1-准备环境"><a href="#1-准备环境" class="headerlink" title="1. 准备环境"></a>1. 准备环境</h3><p>第一，你需要一个可用的网站源代码库。</p><p>第二，你不会真拿网站源代码库做实验吧？复制一份吧。</p><h3 id="2-创建插件"><a href="#2-创建插件" class="headerlink" title="2. 创建插件"></a>2. 创建插件</h3><p>懒得写了，参考<a href="https://blog.csdn.net/godread_cn/article/details/122031503">这个</a>。</p><p>创建一个叫 <code>hexo-tutor-hello</code> 的插件。执行 <code>npm init</code> 时进行这样的配置：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">package name: (hexo-tutor-hello)</span><br><span class="line">version: (1.0.0)</span><br><span class="line">description: A Hello World tutorial plugin for Hexo.</span><br><span class="line">entry point: (index.js)</span><br><span class="line">test command:</span><br><span class="line">git repository: null</span><br><span class="line">keywords: hexo tutor intro</span><br><span class="line">author: Remy Campanella</span><br><span class="line">license: (ISC) MIT</span><br></pre></td></tr></table></figure><h3 id="3-编写文件"><a href="#3-编写文件" class="headerlink" title="3. 编写文件"></a>3. 编写文件</h3><p>据配置可知，程序的入口是 <code>index.js</code>。我们需要创建这个文件，并编辑：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hexo.<span class="property">extend</span>.<span class="property">filter</span>.<span class="title function_">register</span>( <span class="comment">// 执行过滤器。</span></span><br><span class="line">    <span class="string">&quot;before_generate&quot;</span>, <span class="comment">// 填入过滤器。`before_generate`：在生成器解析前执行。</span></span><br><span class="line">    <span class="keyword">function</span> (<span class="params"></span>) &#123; <span class="comment">// 一个匿名函数，定义在`before_generate`阶段执行的具体操作。</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello world!&quot;</span>); <span class="comment">// JavaScript 终端输出。</span></span><br><span class="line">        hexo.<span class="property">log</span>.<span class="title function_">info</span>(<span class="string">&quot;Hello world from Hexo log!&quot;</span>); <span class="comment">// Hexo 日志系统终端输出。</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure><h3 id="4-注册插件"><a href="#4-注册插件" class="headerlink" title="4. 注册插件"></a>4. 注册插件</h3><p>编辑根目录下 <code>package.json</code>：</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// Existed code...</span></span><br><span class="line">    <span class="attr">&quot;hexo-tutor-hello&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^1.0.0&quot;</span> <span class="comment">// 使用 “^ + 当前插件使用的版本号”。</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><p>编辑根目录下 <code>_config.yml</code>：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">plugins:</span> <span class="comment"># 若原文件没有此条目则添加。</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">hexo-tutor-hello</span> <span class="comment"># 插件名。</span></span><br></pre></td></tr></table></figure><h3 id="5-测试"><a href="#5-测试" class="headerlink" title="5. 测试"></a>5. 测试</h3><p>在根目录启动终端，运行：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure><p>得到终端输出：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">INFO  Validating config</span><br><span class="line">INFO  </span><br><span class="line">  ===================================================================</span><br><span class="line">      #####  #    # ##### ##### ###### #####  ###### #      #   #</span><br><span class="line">      #    # #    #   #     #   #      #    # #      #       # #</span><br><span class="line">      #####  #    #   #     #   #####  #    # #####  #        #</span><br><span class="line">      #    # #    #   #     #   #      #####  #      #        #</span><br><span class="line">      #    # #    #   #     #   #      #   #  #      #        #</span><br><span class="line">      #####   ####    #     #   ###### #    # #      ######   #</span><br><span class="line">                            5.5.0</span><br><span class="line">  ===================================================================</span><br><span class="line">INFO  Start processing</span><br><span class="line">Hello world!</span><br><span class="line">INFO  Hello world from Hexo log!</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/ . Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 网站 </category>
+          
+          <category> Hexo 插件开发学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> 插件开发 </tag>
+            
+            <tag> Node.js </tag>
+            
+            <tag> 前端工程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【Hexo 插件开发学习】 零、哥们，这插件保熟吗？</title>
+      <link href="/2025/10/11/25-10-10-1/"/>
+      <url>/2025/10/11/25-10-10-1/</url>
+      
+        <content type="html"><![CDATA[<center><em style="color: #666666">众所周知，凡是有插件的东西我都喜欢折腾一下。</em></center><br><center><em style="color: #666666">众所又周知，Hexo 是有插件系统的。</em></center><br><center><em style="color: #666666">那么，头抬起，请坐和放宽，好东西就要来了。（doge）</em></center><p>不幸的是，我并没有找到一个适合我的教程。随着学业的进行，我越来越理解“大学课程知识不足以找工作”这句话了。这不是大学课程的锅，而是从基础到应用本来就有一段很长的距离。同学们都在数字电路学过 Verilog（硬件描述语言，考试甚至还考了语法），但是能将 Verilog 应用在机器上则需要比学习语法更多的准备（计算机组成原理实验：（抬头））。此外，在学习中，我已适应了这样一套教程模式：</p><ul><li>对新手友好（至少是有编程基础的）</li><li>以相对完整的示例进行导向（而不是抽象的函数、接口说明）</li><li>具有真实可使用的代码而不是伪代码（说的就是你，<a href="https://c.biancheng.net/view/c0w91wc.html">《数据结构（C 语言版）》</a>）</li></ul><p>当然，<strong>我并不是说不具有以上特点的教程就不好</strong>。直接开讲函数、接口、字段的教程有利于具有一定经验的读者快速抓住技术要点、提高学习效率。其实，这样的教程应该被称为“文档”。</p><h2 id="如何学习？"><a href="#如何学习？" class="headerlink" title="如何学习？"></a>如何学习？</h2><p>了解 Hexo 插件开发，就是要了解 Hexo 插件基本结构、Hexo 插件加载顺序、Hexo 插件函数功能。要获取有关教程并不难，但是<strong>我看不懂</strong>。因此我需要通过简单的例子进行学习（至少起步）。</p><p>既然网上没有这样的教程，那就让 AI 生成一个。</p><blockquote><div style="float: right;">众所周知，学编程从输出Hello world开始，学Minecraft模组从添加第一个物品开始，那么，开发Hexo插件有没有简单又通用又好上手的新手尝试项目呢</div>当然有！Hexo 插件开发的“Hello World”项目，最经典、通用、好上手的，就是 “给每篇文章末尾自动添加自定义版权声明”。</blockquote><p>以此为基础，让 AI 逐步增加项目的难度，直至实现自己的需求。</p><h2 id="这是一个教程吗？"><a href="#这是一个教程吗？" class="headerlink" title="这是一个教程吗？"></a>这是一个教程吗？</h2><p>让一个连开发文档都看不懂的人写教程还是太城市化了（畏怖），因此我不打算把这个合集定义为一个教程。正如本站的关于页所说，这里记录的是学习过程。对于其他读者来说，这更像是一份“踩坑实录”和“避雷指南”。你在这里看到的，可能不是最优解，甚至充满了笨拙的尝试和可笑的错误。但如果你也和我一样，在面对那些“写给专业人士”的文档时感到无从下手，希望找到一个能陪你一起从零开始、把“天书”翻译成“人话”的同伴，那么欢迎来到我的世界。我们可以一起迷路，再一起找到出口。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 网站 </category>
+          
+          <category> Hexo 插件开发学习 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> 插件开发 </tag>
+            
+            <tag> Node.js </tag>
+            
+            <tag> 前端工程 </tag>
             
         </tags>
       
@@ -110,6 +186,12 @@
       
         <content type="html"><![CDATA[<center><img src="/img/post/me/1759025646729.jpg" width = "300" height = "300" alt="me" align=center /></center><h2 id="信息"><a href="#信息" class="headerlink" title="信息"></a>信息</h2><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>名字</td><td>Remy Campanella</td></tr><tr><td>生日</td><td><a href="https://www.rili.com.cn/jieridaquan/89210.html">Mar. 29</a>, 2005</td></tr><tr><td>星座</td><td>下界之星（doge）</td></tr><tr><td>学校</td><td>西南大学</td></tr></tbody></table><h2 id="部分专业知识（但愿我还记得）"><a href="#部分专业知识（但愿我还记得）" class="headerlink" title="部分专业知识（但愿我还记得）"></a>部分专业知识（但愿我还记得）</h2><ul><li>编程基础（<a href="https://www.runoob.com/python/python-tutorial.html">Python</a>，<a href="https://www.runoob.com/cprogramming/c-tutorial.html">C</a>，<a href="https://www.runoob.com/cplusplus/cpp-tutorial.html">C++</a>，<a href="https://www.runoob.com/r/r-tutorial.html">R</a>）</li><li><a href="https://bookdown.org/wangminjie/R4DS/tidystats-lm.html">数据分析（R）</a></li><li><a href="https://www.icourse163.org/course/UESTC-1003040002">Linux 系统编程</a></li><li><a href="https://www.runoob.com/sql/sql-tutorial.html">数据库原理及应用</a></li><li><a href="https://www.runoob.com/w3cnote/summary-of-network.html">计算机网络</a></li></ul><blockquote><p>注意：以上链接网站为作者推荐网站，而非全部是作者学习所使用的网站</p></blockquote><h2 id="个人履历"><a href="#个人履历" class="headerlink" title="个人履历"></a>个人履历</h2><p><a href="https://zhuanlan.zhihu.com/p/1910498558249002272">棍木</a></p><h2 id="还会一些"><a href="#还会一些" class="headerlink" title="还会一些"></a>还会一些</h2><ul><li><a href="https://doc.embedfire.com/fpga/altera/ep4ce10_pro/zh/latest/index.html">FPGA</a></li><li><a href="https://ww2.mathworks.cn/products/matlab.html">MATLAB</a></li><li><a href="https://fabricmc.net/">Minecraft Fabric</a></li></ul><blockquote><p>注意：以上链接网站为作者推荐网站，而非全部是作者学习所使用的网站</p></blockquote><h2 id="神秘小爱好"><a href="#神秘小爱好" class="headerlink" title="神秘小爱好"></a>神秘小爱好</h2><ul><li><a href="https://cn.imslp.org/">古典音乐</a></li><li><a href="https://www.bilibili.com/video/BV1bKqvYjEwL/?spm_id_from=333.337.search-card.all.click&vd_source=db9a6ea0eb211a378d71c7ae1c33c3d2">苏联歌曲</a></li><li><a href="https://classic.minecraft.net/">Minecraft</a></li></ul><blockquote><p>注意：以上链接网站为作者推荐网站，而非全部是作者学习所使用的网站</p></blockquote>]]></content>
       
+      
+      <categories>
+          
+          <category> 本站 </category>
+          
+      </categories>
       
       
         <tags>
