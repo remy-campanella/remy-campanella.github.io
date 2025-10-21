@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理学习】 第三章 指令系统 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="第三章 指令系统3.1 指令格式 基本格式|  |  || —- | —- || 操作码字段 | 地址码字段 |  地址码结构对于一般的双操作数运算指令，除去操作码（Operation Code），还包含    第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。   指令结构    四地址指令    含义：$(A_1) OP (">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理学习】 第三章 指令系统 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="第三章 指令系统 3.1 指令格式   基本格式          操作码字段 地址码字段      地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。    指令结构   四地址指令  含义：$(A_1) OP (A_2) \righ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【计算机组成原理学习】 第三章 指令系统">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-command-system/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="第三章 指令系统3.1 指令格式 基本格式|  |  || —- | —- || 操作码字段 | 地址码字段 |  地址码结构对于一般的双操作数运算指令，除去操作码（Operation Code），还包含    第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。   指令结构    四地址指令    含义：$(A_1) OP (">
+<meta property="og:description" content="第三章 指令系统 3.1 指令格式   基本格式          操作码字段 地址码字段      地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。    指令结构   四地址指令  含义：$(A_1) OP (A_2) \righ">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-10-15T13:41:16.000Z">
@@ -160,14 +160,29 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><!-- hexo injector head_end start -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理学习】 第三章 指令系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理学习】 第三章 指令系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-15T13:41:16.000Z" title="发表于 2025-10-15 21:41:16">2025-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-16T00:11:15.238Z" title="更新于 2025-10-16 08:11:15">2025-10-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="第三章-指令系统"><a href="#第三章-指令系统" class="headerlink" title="第三章 指令系统"></a>第三章 指令系统</h2><h3 id="3-1-指令格式"><a href="#3-1-指令格式" class="headerlink" title="3.1 指令格式"></a>3.1 指令格式</h3><ol>
-<li><p><strong>基本格式</strong><br>|  |  |<br>| —- | —- |<br>| 操作码字段 | 地址码字段 |</p>
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理学习】 第三章 指令系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理学习】 第三章 指令系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-15T13:41:16.000Z" title="发表于 2025-10-15 21:41:16">2025-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-16T00:11:15.238Z" title="更新于 2025-10-16 08:11:15">2025-10-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="第三章-指令系统">第三章 指令系统</h2>
+<h3 id="3-1-指令格式">3.1 指令格式</h3>
+<ol>
+<li>
+<p><strong>基本格式</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>操作码字段</td>
+<td>地址码字段</td>
+</tr>
+</tbody>
+</table>
 </li>
-<li><p><strong>地址码结构</strong><br>对于一般的双操作数运算指令，除去<strong>操作码（Operation Code）</strong>，还包含  </p>
+<li>
+<p><strong>地址码结构</strong><br>
+对于一般的双操作数运算指令，除去<strong>操作码（Operation Code）</strong>，还包含</p>
 <ul>
 <li>第一操作数地址 $A_1$，</li>
 <li>第二操作数地址 $A_2$，</li>
@@ -175,15 +190,18 @@
 <li>下一条指令地址 $A_4$。</li>
 </ul>
 </li>
-<li><p><strong>指令结构</strong>  </p>
+<li>
+<p><strong>指令结构</strong></p>
 <ul>
-<li><p><strong>四地址指令</strong>  </p>
+<li>
+<p><strong>四地址指令</strong></p>
 <ul>
 <li>含义：$(A_1) OP (A_2) \rightarrow A_3$</li>
 <li>直观，但太长，不实际。</li>
 </ul>
 </li>
-<li><p><strong>三地址指令</strong>  </p>
+<li>
+<p><strong>三地址指令</strong></p>
 <ul>
 <li>含义：$(A_1) OP (A_2) \rightarrow A_3$，$(PC) + 1 \rightarrow PC$</li>
 <li>每执行一条指令，<strong>程序计数器（PC）</strong> 自增。</li>
@@ -191,31 +209,38 @@
 <li>适用于向量、矩阵运算。</li>
 </ul>
 </li>
-<li><p><strong>二地址指令</strong>  </p>
+<li>
+<p><strong>二地址指令</strong></p>
 <ul>
 <li>含义：$(A_1) OP (A_2) \rightarrow A_1$，$\rm (PC) + 1 \rightarrow PC$</li>
 <li>$A_1$ 为<strong>目的操作数地址</strong>，$A_2$为<strong>源操作数地址</strong>。$A_1$中原内容会被破坏。</li>
 <li>至少需要访问<strong>四次主存</strong>。</li>
 </ul>
 </li>
-<li><p><strong>一地址指令</strong>  </p>
+<li>
+<p><strong>一地址指令</strong></p>
 <ul>
 <li>含义：$(Acc) OP (A_1) \rightarrow Acc$，$(PC) + 1 \rightarrow PC$</li>
 <li>另一个操作数在<strong>累加寄存器（Accumulator）</strong> 中，操作结果也存入累加寄存器，用于累加操作、连续运算。</li>
 <li>只需访问<strong>两次</strong>主存。</li>
 </ul>
 </li>
-<li><p><strong>零地址指令</strong>  </p>
+<li>
+<p><strong>零地址指令</strong></p>
 <ul>
 <li>只有操作码，没有地址码。</li>
-<li>操作数从堆栈顶部<strong>弹出</strong>，结果<strong>压入</strong>堆栈。  </li>
+<li>操作数从堆栈顶部<strong>弹出</strong>，结果<strong>压入</strong>堆栈。</li>
 <li>用于<strong>嵌套、递归</strong>。</li>
 </ul>
 <blockquote>
-<p><strong>堆（Heap）</strong> 是程序运行时用于动态分配内存的一块区域。与栈不同，堆的内存分配和释放通常由程序员手动控制（如C/C++中的<code>malloc</code>/<code>free</code>），或者由垃圾回收机制自动管理（如Java、Python）。堆空间较大，但分配和释放效率较低，且容易出现内存碎片。<br><strong>栈（Stack）</strong> 是程序运行时自动分配和释放的内存区域，主要用于存放函数的参数、局部变量等。栈由系统自动管理，内存连续，分配和释放速度快，但容量有限。栈的操作方式类似于数据结构中的栈，即“先进后出”。<br><strong>堆栈</strong>通常指“栈”，尤其是在底层和系统编程中；少数情况下也可指“堆和栈”的总称。</p>
+<p><strong>堆（Heap）</strong> 是程序运行时用于动态分配内存的一块区域。与栈不同，堆的内存分配和释放通常由程序员手动控制（如C/C++中的<code>malloc</code>/<code>free</code>），或者由垃圾回收机制自动管理（如Java、Python）。堆空间较大，但分配和释放效率较低，且容易出现内存碎片。<br>
+<strong>栈（Stack）</strong> 是程序运行时自动分配和释放的内存区域，主要用于存放函数的参数、局部变量等。栈由系统自动管理，内存连续，分配和释放速度快，但容量有限。栈的操作方式类似于数据结构中的栈，即“先进后出”。<br>
+<strong>堆栈</strong>通常指“栈”，尤其是在底层和系统编程中；少数情况下也可指“堆和栈”的总称。</p>
 </blockquote>
 </li>
-<li><p><strong>规律</strong><br>地址数越少：</p>
+<li>
+<p><strong>规律</strong><br>
+地址数越少：</p>
 <ul>
 <li>程序越<strong>长</strong>。</li>
 <li>程序存储量<strong>越小</strong>。</li>
@@ -224,16 +249,26 @@
 </li>
 </ul>
 </li>
-<li><p><strong>操作码编码</strong>  </p>
+<li>
+<p><strong>操作码编码</strong></p>
 <ul>
-<li><p><strong>规整型（定长）编码</strong><br>操作码位数、位置固定。设系统共有 $m$ 条指令，$N$ 位操作码字段，则  </p>
-<script type="math/tex; mode=display">
-m \leq 2^N \\
-N \geq \log_2m</script><p>可简化硬件设计，减少编译时间，用于字长较长的大、中型计算机与超级小型计算机。</p>
+<li>
+<p><strong>规整型（定长）编码</strong><br>
+操作码位数、位置固定。设系统共有 $m$ 条指令，$N$ 位操作码字段，则<br>
+$$<br>
+m \leq 2^N \<br>
+N \geq \log_2m<br>
+$$<br>
+可简化硬件设计，减少编译时间，用于字长较长的大、中型计算机与超级小型计算机。</p>
 </li>
-<li><p><strong>非规整型（变长）编码</strong><br>操作码位数不固定，分散放在指令字不同位置上。压缩指令操作码字段平均长度。  </p>
+<li>
+<p><strong>非规整型（变长）编码</strong><br>
+操作码位数不固定，分散放在指令字不同位置上。压缩指令操作码字段平均长度。</p>
 <ul>
-<li><strong>扩展操作码法</strong><br>使操作数多的指令操作码字段长尽量短，操作数少的指令操作码字段长尽量长。<br>要求：<ul>
+<li><strong>扩展操作码法</strong><br>
+使操作数多的指令操作码字段长尽量短，操作数少的指令操作码字段长尽量长。<br>
+要求：
+<ul>
 <li>不允许短码是长码的前缀。</li>
 <li>操作码不能重复。</li>
 </ul>
@@ -243,166 +278,250 @@ N \geq \log_2m</script><p>可简化硬件设计，减少编译时间，用于字
 </ul>
 </li>
 </ol>
-<h3 id="3-2-寻址技术"><a href="#3-2-寻址技术" class="headerlink" title="3.2 寻址技术"></a>3.2 寻址技术</h3><p>寻找操作数的地址或下一条指令的地址，包括编址方式和寻址方式。</p>
+<h3 id="3-2-寻址技术">3.2 寻址技术</h3>
+<p>寻找操作数的地址或下一条指令的地址，包括编址方式和寻址方式。</p>
 <ol>
-<li><p><strong>编址方式</strong><br>对各种存储设备进行编码的方式。</p>
+<li>
+<p><strong>编址方式</strong><br>
+对各种存储设备进行编码的方式。</p>
 <ul>
-<li><p><strong>编址单位</strong>  </p>
+<li>
+<p><strong>编址单位</strong></p>
 <ul>
 <li>字编址：编址单位与访问单位相一致。</li>
 <li>字节编址：编址单位与一字节相一致。字节编址方式存在地址信息浪费。</li>
 <li>位编址：浪费更大。</li>
 </ul>
 </li>
-<li><p><strong>位数</strong>  </p>
+<li>
+<p><strong>位数</strong></p>
 <ul>
 <li>与<strong>主存容量</strong>和<strong>编址单位</strong>有关。</li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><strong>寻址方式</strong></p>
+<li>
+<p><strong>寻址方式</strong></p>
 <ul>
 <li>指令寻址、数据寻址。</li>
 <li>顺序寻址、跳跃寻址。</li>
 </ul>
 </li>
-<li><p><strong>数据寻址</strong><br>根据地址码寻找真实操作数地址。</p>
+<li>
+<p><strong>数据寻址</strong><br>
+根据地址码寻找真实操作数地址。</p>
 <ul>
-<li><p><strong>立即寻址</strong>  </p>
+<li>
+<p><strong>立即寻址</strong></p>
 <ul>
 <li>指令中世界存放操作数本身，这样的数称为<strong>立即数</strong>。</li>
 <li>操作数不能被修改，长度受指令长度限制，用于赋初值或提供常数。</li>
 </ul>
 </li>
-<li><p><strong>寄存器寻址</strong>  </p>
+<li>
+<p><strong>寄存器寻址</strong></p>
 <ul>
 <li>给出某通用寄存器编号 $R_i$，寄存器中为操作数。$S = (R_i)$。</li>
 <li>速度快，地址码字段短，几乎所用计算机都使用。</li>
 </ul>
 </li>
-<li><p><strong>直接寻址</strong>  </p>
+<li>
+<p><strong>直接寻址</strong></p>
 <ul>
 <li>地址码 $A$ 即为操作数有效地址形式地址等于有效地址，$EA = A$，$S = (A)$。</li>
 <li>不需寻址运算，简单，便于硬件实现，但地址空间受地址码字段位数限制。</li>
 </ul>
 </li>
-<li><p><strong>间接寻址</strong>  </p>
+<li>
+<p><strong>间接寻址</strong></p>
 <ul>
 <li>地址码为主存中存储操作数的单元的地址。指令中划出标明直接（$@ = 0$）或间接（$@ = 1$）寻址的标志位。$EA = (A)$，$S = ((A))$。</li>
 <li>分为一级间接寻址与多级间接寻址。</li>
 </ul>
 </li>
-<li><p><strong>寄存器间接寻址</strong>  </p>
+<li>
+<p><strong>寄存器间接寻址</strong></p>
 <ul>
 <li>通用寄存器给出主存中存储操作数的单元的地址。$S = ((R_i))$。</li>
 <li>指令较短，只需一次访存。</li>
 </ul>
 </li>
-<li><p><strong>变址寻址</strong>  </p>
+<li>
+<p><strong>变址寻址</strong></p>
 <ul>
 <li>将编址寄存器 $R_x$ 内容与地址码 $A$ 相加得到有效地址，$EA = ((R_x) + A)$。</li>
 <li>频繁修改地址时只需修改变址值，用于成批数据处理。</li>
 </ul>
 </li>
-<li><p><strong>基址寻址</strong>  </p>
+<li>
+<p><strong>基址寻址</strong></p>
 <ul>
 <li>将基址寄存器 $R_x$ 内容与指令中位移量 $D$ 相加得到有效地址，$EA = (R_b) + D$，$S = ((R_b) + D)$。</li>
 <li>将用户编程时的逻辑地址转化位物理地址。</li>
-<li>区别<br>|  |  |<br>| —- | —- |<br>| 变址寻址 | 变址寻址是面向用户的，用于访问字符串、向量和数组等成批数据 |<br>| 基址寻址 | 基址寻址面向系统，主要用于逻辑地址和物理地址的变换，用以解决程序在主存中的再定位和扩大寻址空间等向题 |</li>
+<li>区别
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>变址寻址</td>
+<td>变址寻址是面向用户的，用于访问字符串、向量和数组等成批数据</td>
+</tr>
+<tr>
+<td>基址寻址</td>
+<td>基址寻址面向系统，主要用于逻辑地址和物理地址的变换，用以解决程序在主存中的再定位和扩大寻址空间等向题</td>
+</tr>
+</tbody>
+</table>
+</li>
 </ul>
 </li>
-<li><p><strong>相对寻址</strong>  </p>
+<li>
+<p><strong>相对寻址</strong></p>
 <ul>
 <li>由程序计数器提供基准地址，指令中地址码作为位移量 $D$。$EA = (PC) + D$。</li>
 </ul>
 </li>
-<li><p><strong>页面寻址</strong>  </p>
+<li>
+<p><strong>页面寻址</strong></p>
 <ul>
 <li>将整个主存空间分成若干大小相同的区，每个区成为一页。</li>
-<li>分类<br>|  |  |<br>| — | —- |<br>| 基页（零页寻址） | $EA = 0 // A$，操作数在零页面中。|<br>| 当前页寻址 | 页面地址为程序计数器高位内容，$EA = (PC)_H // A$。<br>| 页寄存器地址 | 页寄存器提供页面地址。 |</li>
+<li>分类
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基页（零页寻址）</td>
+<td>$EA = 0 // A$，操作数在零页面中。</td>
+</tr>
+<tr>
+<td>当前页寻址</td>
+<td>页面地址为程序计数器高位内容，$EA = (PC)_H // A$。</td>
+</tr>
+<tr>
+<td>页寄存器地址</td>
+<td>页寄存器提供页面地址。</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li>寻址方式标识<center><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/Summaries/1758960780042.png" width = "300" height = "207" alt="移码和真值的映射" align=center /></center>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><strong>变型或组合寻址方式</strong>  </p>
+<li>
+<p><strong>变型或组合寻址方式</strong></p>
 <ul>
-<li><p><strong>自增型寄存器间址和自减型寄存器间址</strong>  </p>
+<li>
+<p><strong>自增型寄存器间址和自减型寄存器间址</strong></p>
 <ul>
 <li>自增寻址时，寄存器 $R_i$ 内容为有效地址，$EA = (R_i), R \leftarrow (R_i) + d$。$d$ 为修改量，记作$(R_i)+$，表示先操作后修改。</li>
 <li>自减寻址时，$R_i \leftarrow (R_i) - d, EA = (R_i)$，记作 $-(R_i)$，表示先修改后操作。</li>
 </ul>
 </li>
-<li><p><strong>扩展变址方式</strong>  </p>
+<li>
+<p><strong>扩展变址方式</strong></p>
 <ul>
-<li><strong>前变址寻址方式</strong><br>$EA = ((R_x) + A), S = (((R_x) + A))$。</li>
-<li><strong>后变址寻址方式</strong><br>$EA = (R_x) + (A), S = ((R_x) + (A))$。</li>
-<li><strong>基址变址寻址</strong><br>基址寄存器 $R_b$，变址寄存器 $R_x$，位移量 $D$，$EA = (R_b) + (R_x) + D$。</li>
+<li><strong>前变址寻址方式</strong><br>
+$EA = ((R_x) + A), S = (((R_x) + A))$。</li>
+<li><strong>后变址寻址方式</strong><br>
+$EA = (R_x) + (A), S = ((R_x) + (A))$。</li>
+<li><strong>基址变址寻址</strong><br>
+基址寄存器 $R_b$，变址寄存器 $R_x$，位移量 $D$，$EA = (R_b) + (R_x) + D$。</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<h3 id="3-3-堆栈与堆栈操作"><a href="#3-3-堆栈与堆栈操作" class="headerlink" title="3.3 堆栈与堆栈操作"></a>3.3 堆栈与堆栈操作</h3><ol>
-<li><p><strong>寄存器堆栈</strong><br>用一组专门的寄存器构成的堆栈，也称<strong>硬堆栈</strong>。具有自动推移功能。栈顶位置固定，无栈顶指针。</p>
+<h3 id="3-3-堆栈与堆栈操作">3.3 堆栈与堆栈操作</h3>
+<ol>
+<li>
+<p><strong>寄存器堆栈</strong><br>
+用一组专门的寄存器构成的堆栈，也称<strong>硬堆栈</strong>。具有自动推移功能。栈顶位置固定，无栈顶指针。</p>
 </li>
-<li><p><strong>存储器堆栈</strong><br>从主存中划出一段区域作为堆栈，也称<strong>软堆栈</strong>。栈底固定，需要专门的硬件寄存器作为栈顶指针（SP）。</p>
+<li>
+<p><strong>存储器堆栈</strong><br>
+从主存中划出一段区域作为堆栈，也称<strong>软堆栈</strong>。栈底固定，需要专门的硬件寄存器作为栈顶指针（SP）。</p>
 <ul>
 <li>自底向上生成堆栈</li>
 <li>自顶向下生成堆栈</li>
 </ul>
 </li>
-<li><p><strong>堆栈操作</strong>  </p>
+<li>
+<p><strong>堆栈操作</strong></p>
 </li>
 </ol>
-<h3 id="3-4-指令类型"><a href="#3-4-指令类型" class="headerlink" title="3.4 指令类型"></a>3.4 指令类型</h3><ol>
-<li><p><strong>数据传送类指令</strong>  </p>
+<h3 id="3-4-指令类型">3.4 指令类型</h3>
+<ol>
+<li>
+<p><strong>数据传送类指令</strong></p>
 <ul>
-<li><p><strong>一般传送指令 MOV</strong><br>数据从源地址传送到目的地址，而源地址不变</p>
+<li>
+<p><strong>一般传送指令 MOV</strong><br>
+数据从源地址传送到目的地址，而源地址不变</p>
 </li>
-<li><p><strong>堆栈操作指令 PUSH，POP</strong>  </p>
+<li>
+<p><strong>堆栈操作指令 PUSH，POP</strong></p>
 </li>
-<li><p><strong>数据交换指令</strong>  </p>
+<li>
+<p><strong>数据交换指令</strong></p>
 </li>
 </ul>
 </li>
-<li><p><strong>运算类指令</strong>  </p>
+<li>
+<p><strong>运算类指令</strong></p>
 <ul>
-<li><p><strong>算数运算类指令</strong></p>
+<li>
+<p><strong>算数运算类指令</strong></p>
 </li>
-<li><p><strong>逻辑运算类指令</strong></p>
+<li>
+<p><strong>逻辑运算类指令</strong></p>
 <ul>
-<li><strong>按位测（位检查）</strong>  </li>
-<li><strong>按位清（位清除）</strong>  </li>
+<li><strong>按位测（位检查）</strong></li>
+<li><strong>按位清（位清除）</strong></li>
 <li><strong>按位置（位设置）</strong></li>
-<li><strong>按位修改</strong>  </li>
+<li><strong>按位修改</strong></li>
 <li><strong>判符合</strong></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><strong>移位类指令</strong>  </p>
+<li>
+<p><strong>移位类指令</strong></p>
 <ul>
 <li><strong>算数移位</strong></li>
 <li><strong>逻辑移位</strong></li>
 <li><strong>循环移位</strong></li>
 </ul>
 </li>
-<li><p><strong>程序控制类指令</strong>  </p>
+<li>
+<p><strong>程序控制类指令</strong></p>
 <ul>
-<li><strong>转移指令</strong>  </li>
-<li><strong>子程序调用指令</strong> </li>
+<li><strong>转移指令</strong></li>
+<li><strong>子程序调用指令</strong></li>
 </ul>
 </li>
-<li><p><strong>输入输出类指令</strong>  </p>
+<li>
+<p><strong>输入输出类指令</strong></p>
 <ul>
 <li><strong>独立编址的 I/O 指令</strong></li>
 <li><strong>统一编址的 I/O 指令</strong></li>
 </ul>
 </li>
-<li><p><strong>80x86 指令系统举例</strong></p>
+<li>
+<p><strong>80x86 指令系统举例</strong></p>
 <ul>
 <li>MOV</li>
 <li>PUSH/POP</li>
@@ -418,8 +537,10 @@ N \geq \log_2m</script><p>可简化硬件设计，减少编译时间，用于字
 </ul>
 </li>
 </ol>
-<h3 id="3-5-指令系统的发展"><a href="#3-5-指令系统的发展" class="headerlink" title="3.5 指令系统的发展"></a>3.5 指令系统的发展</h3><ol>
-<li><p><strong>x86 架构的扩展指令集</strong>  </p>
+<h3 id="3-5-指令系统的发展">3.5 指令系统的发展</h3>
+<ol>
+<li>
+<p><strong>x86 架构的扩展指令集</strong></p>
 <ul>
 <li>MMX（Multi Media eXtension）</li>
 <li>SSE（Streaming SIMD Extension）</li>
@@ -432,12 +553,14 @@ N \geq \log_2m</script><p>可简化硬件设计，减少编译时间，用于字
 <li>FMA（Fused Multiply Accumulate）</li>
 </ul>
 </li>
-<li><p><strong>从复杂指令系统道精简指令系统</strong></p>
+<li>
+<p><strong>从复杂指令系统道精简指令系统</strong></p>
 </li>
-<li><p><strong>VLIW（Very Long Instruction Word） 和 EPIC（Explicit Parallel Instruction Code）</strong></p>
+<li>
+<p><strong>VLIW（Very Long Instruction Word） 和 EPIC（Explicit Parallel Instruction Code）</strong></p>
 </li>
 </ol>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-command-system/">https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-command-system/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景 实际用途： 国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。   工作场景： 文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。    二、软件工程学科与教材分析 经典教材： 《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。   学科演变： 从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。    三、软件工程核心内容 关键主题： 需求分析：用户故事、用例建...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">第二章 数据的机器层次表示2.1 数值数据的表示 无符号数整个机器字长全部二进制位位数值位。范围$[0, 2^n - 1]$。  原码将最高位设为符号位，其余位数值位，与真值相同。其中，$[+0]原 = 00000$，$[-0]原 = 10000$。原码实现乘除简单，实现加减复杂。范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。  补码正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。其中，$[+0]补 = [-0]补 = 00000$。范围$[-2^{n - 1}, 2^{n - 1} - 1]$。  反码正数反码与原码相同，负数补码为真值数值按位取反。其中，$[+0]原 = 00000$，$[-0]原 = 11111$。范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   2.2 机器数的定点表示与浮点表示 定点小数即纯小数（$-1 &lt; x &lt; 1$），小数点位置固定，整数位被取代为符号位。设机器字长$n + 1$位，原码、反码范围$[-(1 - 2^{-n}), 1 - 2^{-n}]$，补码...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-intro/" title="【计算机组成原理学习】 第一章 概论"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论1.1 电子计算机与存储程序控制 存储程序的计算机世界上第一台数字计算机：美国 ENIAC（1946）。早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。  存储程序概念（Von Neumann, 1945）    计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。    1.2 计算机的硬件组成 计算机的主要部件|  |  || —- | —- || 输入设备 | 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件 || 输出设备 | 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备 || 存储器 | 用于存放程序和数据的部件 || 运算器 | 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU） || 控制器 | 按照人们预先确定的操作步骤，控制整个计算机各部件...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">第二章 数据的机器层次表示2.1 数值数据的表示 无符号数整个机器字长全部二进制位位数值位。范围$[0, 2^n - 1]$。  原码将最高位设为符号位，其余位数值位，与真值相同。其中，$[+0]原 = 00000$，$[-0]原 = 10000$。原码实现乘除简单，实现加减复杂。范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。  补码正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。其中，$[+0]补 = [-0]补 = 00000$。范围$[-2^{n - 1}, 2^{n - 1} - 1]$。  反码正数反码与原码相同，负数补码为真值数值按位取反。其中，$[+0]原 = 00000$，$[-0]原 = 11111$。范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   2.2 机器数的定点表示与浮点表示 定点小数即纯小数（$-1 &lt; x &lt; 1$），小数点位置固定，整数位被取代为符号位。设机器字长$n + 1$位，原码、反码范围$[-(1 - 2^{-n}), 1 - 2^{-n}]$，补码...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">一、系统流程图系统流程图是概括地描绘物理系统的传统工具。  符号  示例   二、数据流图数据流图是一种图形化技术，它描绘信息流和数据从输入移动到输出所经受的变换。  符号  示例   </div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景 实际用途： 国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。   工作场景： 文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。    二、软件工程学科与教材分析 经典教材： 《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。   学科演变： 从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。    三、软件工程核心内容 关键主题： 需求分析：用户故事、用例建...</div></div></div></a><a class="pagination-related" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-20</div><div class="info-item-2">【STATS 330】 Introduction</div></div><div class="info-2"><div class="info-item-1">This course is about statistical modelling. We will expand on the generalised linear model (GLM) encountered in STATS 201/8. It comprises four parts:  Generalised linear models Simulation and bootstrapping Regression models for prediction Regression models for explanation  This course provides a versatile statistical toolbox that is useful in a range of fields, including almost all subjects in business and economics, along with experimental or social science. Course Link Prof. Jing Liu’s Emai...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">第三章 指令系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">3.1 指令格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%AF%BB%E5%9D%80%E6%8A%80%E6%9C%AF"><span class="toc-number">1.2.</span> <span class="toc-text">3.2 寻址技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%A0%86%E6%A0%88%E4%B8%8E%E5%A0%86%E6%A0%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.</span> <span class="toc-text">3.3 堆栈与堆栈操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%8C%87%E4%BB%A4%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">3.4 指令类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8F%91%E5%B1%95"><span class="toc-number">1.5.</span> <span class="toc-text">3.5 指令系统的发展</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【STATS 330】 Introduction"/></a><div class="content"><a class="title" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction">【STATS 330】 Introduction</a><time datetime="2025-10-20T07:54:53.000Z" title="发表于 2025-10-20 15:54:53">2025-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-15-2-SoftEng-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【软件工程学习】 第二章 可行性研究"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-15-2-SoftEng-feasibility/" title="【软件工程学习】 第二章 可行性研究">【软件工程学习】 第二章 可行性研究</a><time datetime="2025-10-15T13:42:12.000Z" title="发表于 2025-10-15 21:42:12">2025-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【软件工程学习】 第一章 软件工程概述"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述">【软件工程学习】 第一章 软件工程概述</a><time datetime="2025-10-15T13:41:48.000Z" title="发表于 2025-10-15 21:41:48">2025-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-14-3-CompOrg-command-system/" title="【计算机组成原理学习】 第三章 指令系统"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理学习】 第三章 指令系统"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-14-3-CompOrg-command-system/" title="【计算机组成原理学习】 第三章 指令系统">【计算机组成原理学习】 第三章 指令系统</a><time datetime="2025-10-15T13:41:16.000Z" title="发表于 2025-10-15 21:41:16">2025-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-14-2-CompOrg-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理学习】 第二章 数据的机器层次表示"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-14-2-CompOrg-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示">【计算机组成原理学习】 第二章 数据的机器层次表示</a><time datetime="2025-10-15T13:40:58.000Z" title="发表于 2025-10-15 21:40:58">2025-10-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.2.0</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-command-system/">https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-command-system/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。   工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。    二、软件工程学科与教材分析  经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。   学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。    三、软件工程核心内容  关键主题：  需求分析：...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">第二章 数据的机器层次表示 2.1 数值数据的表示   无符号数 整个机器字长全部二进制位位数值位。 范围$[0, 2^n - 1]$。   原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，$[+0]_原 = 00000$，$[-0]_原 = 10000$。 原码实现乘除简单，实现加减复杂。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，$[+0]_补 = [-0]_补 = 00000$。 范围$[-2^{n - 1}, 2^{n - 1} - 1]$。   反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，$[+0]_原 = 00000$，$[-0]_原 = 11111$。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   2.2 机器数的定点表示与浮点表示   定点小数 即纯小数（$-1 &lt; x &lt; 1$），小数点位置固定，整数位被取代为符号位。设机器字长$n + 1$位，原码、反码范围$[-(1...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-intro/" title="【计算机组成原理学习】 第一章 概论"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制   存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。 早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。   存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。    1.2 计算机的硬件组成   计算机的主要部件          输入设备 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件   输出设备 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备   存储器 用于存放程序和数据的部件   运算器 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU）   控制器 按照人们预先确定的操作步骤，控制整个计算机各部件有条不紊地自动工作地部件     ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">第二章 数据的机器层次表示 2.1 数值数据的表示   无符号数 整个机器字长全部二进制位位数值位。 范围$[0, 2^n - 1]$。   原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，$[+0]_原 = 00000$，$[-0]_原 = 10000$。 原码实现乘除简单，实现加减复杂。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，$[+0]_补 = [-0]_补 = 00000$。 范围$[-2^{n - 1}, 2^{n - 1} - 1]$。   反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，$[+0]_原 = 00000$，$[-0]_原 = 11111$。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   2.2 机器数的定点表示与浮点表示   定点小数 即纯小数（$-1 &lt; x &lt; 1$），小数点位置固定，整数位被取代为符号位。设机器字长$n + 1$位，原码、反码范围$[-(1...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。   工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。    二、软件工程学科与教材分析  经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。   学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。    三、软件工程核心内容  关键主题：  需求分析：...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">一、系统流程图 系统流程图是概括地描绘物理系统的传统工具。   符号    示例    二、数据流图 数据流图是一种图形化技术，它描绘信息流和数据从输入移动到输出所经受的变换。   符号    示例    </div></div></div></a><a class="pagination-related" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img class="cover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-20</div><div class="info-item-2">【STATS 330】 Introduction</div></div><div class="info-2"><div class="info-item-1">This course is about statistical modelling. We will expand on the generalised linear model (GLM) encountered in STATS 201/8. It comprises four parts:  Generalised linear models Simulation and bootstrapping Regression models for prediction Regression models for explanation  This course provides a versatile statistical toolbox that is useful in a range of fields, including almost all subjects in business and economics, along with experimental or social science. Course Link Prof. Jing Liu’s Emai...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">第三章 指令系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">3.1 指令格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%AF%BB%E5%9D%80%E6%8A%80%E6%9C%AF"><span class="toc-number">1.2.</span> <span class="toc-text">3.2 寻址技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%A0%86%E6%A0%88%E4%B8%8E%E5%A0%86%E6%A0%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.</span> <span class="toc-text">3.3 堆栈与堆栈操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%8C%87%E4%BB%A4%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">3.4 指令类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8F%91%E5%B1%95"><span class="toc-number">1.5.</span> <span class="toc-text">3.5 指令系统的发展</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/10/21/25-10-21-1-HexoDev-test-post/" title="网站渲染测试"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网站渲染测试"/></a><div class="content"><a class="title" href="/2025/10/21/25-10-21-1-HexoDev-test-post/" title="网站渲染测试">网站渲染测试</a><time datetime="2025-10-21T02:18:08.000Z" title="发表于 2025-10-21 10:18:08">2025-10-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【STATS 330】 Introduction"/></a><div class="content"><a class="title" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction">【STATS 330】 Introduction</a><time datetime="2025-10-20T07:54:53.000Z" title="发表于 2025-10-20 15:54:53">2025-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-15-2-SoftEng-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【软件工程学习】 第二章 可行性研究"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-15-2-SoftEng-feasibility/" title="【软件工程学习】 第二章 可行性研究">【软件工程学习】 第二章 可行性研究</a><time datetime="2025-10-15T13:42:12.000Z" title="发表于 2025-10-15 21:42:12">2025-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【软件工程学习】 第一章 软件工程概述"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-15-1-SoftEng-intro/" title="【软件工程学习】 第一章 软件工程概述">【软件工程学习】 第一章 软件工程概述</a><time datetime="2025-10-15T13:41:48.000Z" title="发表于 2025-10-15 21:41:48">2025-10-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/15/25-10-14-3-CompOrg-command-system/" title="【计算机组成原理学习】 第三章 指令系统"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSI0IiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgaWQ9InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAiIGF0dHJpYnV0ZU5hbWU9InIiIGJlZ2luPSIwO3N2Z1NwaW5uZXJzM0RvdHNTY2FsZTEuZW5kLTAuMjVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNnMiIGR1cj0iMC43NXMiIHZhbHVlcz0iMzsuMjszIi8+PC9jaXJjbGU+PGNpcmNsZSBjeD0iMjAiIGN5PSIxMiIgcj0iMyIgZmlsbD0iY3VycmVudENvbG9yIj48YW5pbWF0ZSBpZD0ic3ZnU3Bpbm5lcnMzRG90c1NjYWxlMSIgYXR0cmlidXRlTmFtZT0iciIgYmVnaW49InN2Z1NwaW5uZXJzM0RvdHNTY2FsZTAuZW5kLTAuNDVzIiBkdXI9IjAuNzVzIiB2YWx1ZXM9IjM7LjI7MyIvPjwvY2lyY2xlPjwvc3ZnPg==" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理学习】 第三章 指令系统"/></a><div class="content"><a class="title" href="/2025/10/15/25-10-14-3-CompOrg-command-system/" title="【计算机组成原理学习】 第三章 指令系统">【计算机组成原理学习】 第三章 指令系统</a><time datetime="2025-10-15T13:41:16.000Z" title="发表于 2025-10-15 21:41:16">2025-10-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.2.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
   const loadMathjax = () => {
     if (!window.MathJax) {
       window.MathJax = {
