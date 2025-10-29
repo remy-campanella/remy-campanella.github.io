@@ -28,7 +28,7 @@
 
 @font-face {
     font-family: "rmgSimsun";
-    src: url(/assets/fonts/simsun.ttc) format(truetype);
+    src: url("/assets/fonts/simsun.ttc") format("truetype");
 }
 
 /* @font-face {
@@ -41,5 +41,5 @@
 } */
 
 body, p {
-    font-family: "rmgTimes", "rmgSimsum", serif;
+    font-family: "rmgTimes", "rmgSimsun", serif;
 }
