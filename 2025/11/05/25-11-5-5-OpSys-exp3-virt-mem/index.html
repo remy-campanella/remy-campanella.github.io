@@ -1,0 +1,438 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【操作系统原理】 Lecture 10 实验三 虚拟内存管理 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、实验目标：虚存管理 本实验的核心目标是构建一个完整的虚拟内存管理系统，具体包括：  基础：在Lab1（保护模式、中断）和Lab2（物理内存管理、页机制）之上。 核心机制：利用页表和中断异常处理机制。 关键实现：  Page Fault异常处理：当访问的虚拟页不在物理内存中时，能够捕获并处理该异常。 页替换算法：实现FIFO（先进先出）算法，在物理内存已满时选择一个页面换出到磁盘。 磁盘交互：实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【操作系统原理】 Lecture 10 实验三 虚拟内存管理">
+<meta property="og:url" content="https://remy-campanella.github.io/2025/11/05/25-11-5-5-OpSys-exp3-virt-mem/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="一、实验目标：虚存管理 本实验的核心目标是构建一个完整的虚拟内存管理系统，具体包括：  基础：在Lab1（保护模式、中断）和Lab2（物理内存管理、页机制）之上。 核心机制：利用页表和中断异常处理机制。 关键实现：  Page Fault异常处理：当访问的虚拟页不在物理内存中时，能够捕获并处理该异常。 页替换算法：实现FIFO（先进先出）算法，在物理内存已满时选择一个页面换出到磁盘。 磁盘交互：实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2025-11-05T01:34:47.000Z">
+<meta property="article:modified_time" content="2025-11-05T01:34:47.091Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【操作系统原理】 Lecture 10 实验三 虚拟内存管理",
+  "url": "https://remy-campanella.github.io/2025/11/05/25-11-5-5-OpSys-exp3-virt-mem/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2025-11-05T01:34:47.000Z",
+  "dateModified": "2025-11-05T01:34:47.091Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2025/11/05/25-11-5-5-OpSys-exp3-virt-mem/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【操作系统原理】 Lecture 10 实验三 虚拟内存管理',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【操作系统原理】 Lecture 10 实验三 虚拟内存管理</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【操作系统原理】 Lecture 10 实验三 虚拟内存管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T01:34:47.000Z" title="发表于 2025-11-05 09:34:47">2025-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-05T01:34:47.091Z" title="更新于 2025-11-05 09:34:47">2025-11-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/">操作系统原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h3 id="一、实验目标：虚存管理"><strong>一、实验目标：虚存管理</strong></h3>
+<p>本实验的核心目标是构建一个完整的虚拟内存管理系统，具体包括：</p>
+<ol>
+<li><strong>基础</strong>：在Lab1（保护模式、中断）和Lab2（物理内存管理、页机制）之上。</li>
+<li><strong>核心机制</strong>：利用页表和中断异常处理机制。</li>
+<li><strong>关键实现</strong>：
+<ul>
+<li><strong>Page Fault异常处理</strong>：当访问的虚拟页不在物理内存中时，能够捕获并处理该异常。</li>
+<li><strong>页替换算法</strong>：实现FIFO（先进先出）算法，在物理内存已满时选择一个页面换出到磁盘。</li>
+<li><strong>磁盘交互</strong>：实现对硬盘swap分区的读写，为换出的页面提供存储空间。</li>
+</ul>
+</li>
+<li><strong>最终效果</strong>：为用户提供一个比实际物理内存“更大”的虚拟内存空间，使得程序可以运行在超过物理内存大小的地址空间中。</li>
+</ol>
+<hr>
+<h3 id="二、回顾历史：Lab1和Lab2"><strong>二、回顾历史：Lab1和Lab2</strong></h3>
+<p>Lab3的实现高度依赖于前两个实验的成果：</p>
+<ul>
+<li><strong>Lab1</strong>：
+<ul>
+<li>建立了<strong>保护模式</strong>和<strong>段机制</strong>，为内存访问提供了硬件层面的保护。</li>
+<li>建立了<strong>中断机制</strong>，这是处理Page Fault异常的基础。</li>
+<li>实现了基本的屏幕输出功能，便于调试。</li>
+</ul>
+</li>
+<li><strong>Lab2</strong>：
+<ul>
+<li>探测了可用的<strong>物理内存空间</strong>。</li>
+<li>建立了基于<strong>连续物理内存</strong>的动态分配与释放机制（如伙伴系统）。</li>
+<li>完成了<strong>页机制</strong>的建立，包括初始化页目录和页表，并开启了CR0寄存器的PG位，使能分页。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="三、了解当下：Lab3的总体框架"><strong>三、了解当下：Lab3的总体框架</strong></h3>
+<p>Lab3的实验设计是一个循序渐进、层层递进的过程，其总体框架和步骤如下：</p>
+<ol>
+<li><strong>初始化</strong>：完成虚拟内存管理机制的初始化，包括IDE硬盘的读写驱动和缺页异常处理程序的设置。</li>
+<li><strong>数据结构设计</strong>：设计数据结构来表示虚拟页空间和物理页帧空间，并能描述那些“合法”但当前不在物理内存中的虚拟页。</li>
+<li><strong>核心功能实现</strong>：完善建立页表映射、处理页访问异常等核心函数。</li>
+<li><strong>测试与验证</strong>：通过一系列访存测试，逐步验证系统的正确性：
+<ul>
+<li>验证页表项能否正确完成虚实地址转换。</li>
+<li>验证页表项能否正确描述一个页是在物理内存中还是在硬盘上。</li>
+<li>验证能否正确地在物理内存和硬盘之间传递页面（换入/换出）。</li>
+<li>验证页面替换算法（FIFO）是否被正确实现。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、处理流程、关键数据结构和功能"><strong>四、处理流程、关键数据结构和功能</strong></h3>
+<h4 id="1-初始化流程"><strong>1. 初始化流程</strong></h4>
+<p>虚拟内存管理的初始化在<code>kern/init/init.c</code>的<code>kern_init</code>函数中完成，调用顺序如下：</p>
+<ul>
+<li><code>pmm_init()</code> (Lab2)：初始化物理内存管理。</li>
+<li><code>pic_init()</code>, <code>idt_init()</code> (Lab1)：初始化中断控制器和中断描述符表。</li>
+<li><code>vmm_init()</code>, <code>ide_init()</code>, <code>swap_init()</code> (Lab3)：<strong>本次实验的核心初始化函数</strong>。
+<ul>
+<li><code>vmm_init()</code>：初始化虚拟内存管理数据结构。</li>
+<li><code>ide_init()</code>：初始化IDE硬盘驱动，为swap分区提供读写能力。</li>
+<li><code>swap_init()</code>：初始化交换空间管理器。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-关键数据结构"><strong>2. 关键数据结构</strong></h4>
+<p>虚拟内存管理的核心是两个相互关联的结构体，定义在<code>kern/mm/vmm.h</code>中：</p>
+<ul>
+<li><strong><code>vma_struct</code> (虚拟内存区域)</strong>：
+<ul>
+<li><code>vm_start</code>, <code>vm_end</code>：定义了一段连续的虚拟地址空间。</li>
+<li><code>vm_flags</code>：描述该区域的属性（如可读、可写、可执行）。</li>
+<li><code>list_link</code>：链表节点，用于将多个VMA链接起来。</li>
+<li><code>vm_mm</code>：指向所属的<code>mm_struct</code>。</li>
+</ul>
+</li>
+<li><strong><code>mm_struct</code> (内存管理描述符)</strong>：
+<ul>
+<li><code>mmap_list</code>：一个链表头，链接了该进程所有的<code>vma_struct</code>。</li>
+<li><code>mmap_cache</code>：一个缓存，指向最近一次访问的VMA，加速地址查找。</li>
+<li><code>pgdir</code>：指向该进程的<strong>页目录基址</strong>，是整个地址转换的起点。</li>
+<li><code>map_count</code>：记录VMA的数量。</li>
+<li><code>sm_priv</code>：一个私有指针，用于指向swap manager（如FIFO算法）的特定数据。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="五、页访问异常"><strong>五、页访问异常</strong></h3>
+<p>当CPU访问一个无效的虚拟地址（如页表项的P位为0）时，会触发<strong>Page Fault异常（中断向量14）</strong>。</p>
+<ol>
+<li><strong>硬件响应</strong>：
+<ul>
+<li>CPU将引发异常的<strong>线性地址</strong>存入<code>CR2</code>寄存器。</li>
+<li>将<strong>错误码</strong>压入栈中，错误码包含以下信息：
+<ul>
+<li><code>P</code>：0表示页不存在，1表示页保护违规。</li>
+<li><code>W/R</code>：0表示读操作，1表示写操作。</li>
+<li><code>U/S</code>：0表示内核态访问，1表示用户态访问。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>软件处理</strong>：
+<ul>
+<li>CPU跳转到<code>vectors.S</code>中的<code>vector14</code>入口。</li>
+<li>最终会调用C语言编写的<code>do_pgfault</code>函数。</li>
+<li><code>do_pgfault</code>函数会读取<code>CR2</code>和错误码，根据<code>CR2</code>地址找到对应的<code>vma_struct</code>，判断访问是否合法。</li>
+<li>如果合法，则分配一个物理页，从磁盘（swap分区）中读入数据（如果之前被换出），更新页表项，然后返回，重新执行引发异常的指令。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="六、页换入换出机制"><strong>六、页换入换出机制</strong></h3>
+<p>这是虚拟内存管理的动态核心，解决了“内存不足”的问题。</p>
+<ol>
+<li><strong>核心问题</strong>：
+<ul>
+<li><strong>换出哪个页？</strong> -&gt; 由<strong>页替换算法</strong>决定（Lab3实现<strong>FIFO</strong>）。</li>
+<li><strong>虚拟页与磁盘扇区的对应关系？</strong> -&gt; 通过<strong>页表项</strong>中的<code>swap_entry_t</code>字段来记录。</li>
+<li><strong>何时换入/换出？</strong> -&gt; <strong>换入</strong>由<strong>Page Fault</strong>触发；<strong>换出</strong>在<strong>物理内存不足</strong>时被动触发。</li>
+<li><strong>如何支持算法？</strong> -&gt; 设计特定数据结构（如FIFO队列）。</li>
+<li><strong>如何执行换入/换出？</strong> -&gt; 调用IDE硬盘读写函数。</li>
+</ul>
+</li>
+<li><strong>关键实现细节</strong>：
+<ul>
+<li><strong>页替换算法</strong>：Lab3要求实现<strong>FIFO</strong>算法。该算法维护一个页面队列，每次需要换出时，选择最早进入队列的页面。</li>
+<li><strong>虚拟页与磁盘的映射</strong>：当一个页被换出时，其物理页帧被回收，页表项的P位置0，并在页表项中记录它在swap分区中的位置（扇区偏移）。这个记录通过<code>swap_entry_t</code>结构实现，它复用了页表项的32位空间，用其中24位记录磁盘偏移。</li>
+<li><strong>换入时机</strong>：当访问一个P=0的页时，触发<code>do_pgfault</code>，该函数会检查页表项，如果发现它是一个swap entry，就会调用<code>swap_in</code>函数，从磁盘读回数据到新分配的物理页中。</li>
+<li><strong>换出时机</strong>：当分配物理页失败时（即内存已满），会调用<code>swap_out</code>函数。该函数会根据FIFO算法选择一个牺牲页，如果该页被修改过（Dirty Bit为1），则先调用<code>swap_out</code>将其写回磁盘，然后更新其页表项为swap entry，最后释放其物理页帧。</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/11/05/25-11-5-5-OpSys-exp3-virt-mem/">https://remy-campanella.github.io/2025/11/05/25-11-5-5-OpSys-exp3-virt-mem/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/05/25-11-5-6-OpSys-proc-thrd/" title="【操作系统原理】 Lecture 11 进程与线程"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【操作系统原理】 Lecture 11 进程与线程</div></div><div class="info-2"><div class="info-item-1">一、进程 1. 进程的定义与组成  定义：进程是一个具有一定独立功能的程序在一个数据集合上的一次动态执行过程。它是操作系统进行资源分配和调度的基本单位。 与程序的区别：    维度 程序 进程     性质 静态的代码和数据集合 动态的执行过程   生命周期 长期存在于磁盘 临时存在，有创建、执行、消亡的生命周期   并发性 自身无法并发 可以与其他进程并发执行   资源分配 不直接占用系统资源 是资源分配的基本单位（内存、文件等）     组成：进程包含了正在运行的一个程序的所有状态信息，包括：  代码段：程序的指令。 数据段：全局变量和静态变量。 堆栈段：函数调用栈、局部变量和动态分配的内存。 进程控制块：管理进程的核心数据结构。    2. 进程控制块  作用：PCB是操作系统管理控制进程运行所用的信息集合，是进程存在的唯一标志。 包含信息：  进程标识信息：如进程ID（PID）、父进程ID。 进程控制信息：进程状态、程序计数器、CPU寄存器值、内存管理信息（页表基址）、I/O状态信息等。   组织方式：  链表：将同一状态的PCB链接成一个队列（如就绪队列、等待队列）。 ...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-4-OpSys-page-swap/" title="【操作系统原理】 Lecture 9 页面置换算法"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【操作系统原理】 Lecture 9 页面置换算法</div></div><div class="info-2"><div class="info-item-1">一、页面置换算法的概念 1. 功能与目标  功能：当发生缺页异常且内存已满时，选择一个页面换出到外存，为新页面腾出空间。 目标：  减少缺页次数：尽可能置换未来最长时间不会被访问的页面。 降低系统开销：避免频繁的磁盘I/O操作。    2. 评价方法  缺页率：缺页次数占总访问次数的比例。 Belady现象：某些算法（如FIFO）在增加物理页帧时，缺页次数反而增多。  3. 算法分类    类型 特点 代表算法     局部置换算法 仅在当前进程的物理页帧中选择置换页面 OPT, FIFO, LRU, Clock, LFU   全局置换算法 从所有进程的物理页帧中选择置换页面，需考虑进程间的内存分配 工作集算法、缺页率算法     二、局部页面置换算法 1. 最优页面置换算法  原理：置换未来最长时间不会被访问的页面（理论最优，实际不可实现）。 示例：  访问序列：a, b, c, d, a, b, e, b, d, a, c。 置换时选择下次访问时间最晚的页面（如d下次访问时间为10）。    2. 先进先出算法  原理：置换最早进入内存的页面（队列实现）。 问题：存在Bela...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/05/25-11-3-5-OpSys-exp0-env/" title="【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备</div></div><div class="info-2"><div class="info-item-1">一、了解操作系统（OS）  核心概念  特权机制：CPU通过特权级（如CPL=0为最高特权）保护系统安全，特权指令（如LIDT、MOV CRn）只能在特权态执行，否则触发异常。 中断与异常管理：包括外设中断、陷阱中断（如系统调用）和故障中断（如缺页异常）。 内存管理：  分段（Segmentation）和分页（Paging）机制，实现虚拟内存（Virtual Memory）。 硬件支持：TLB（快表）、MMU（内存管理单元）。     OS设计目标  高效管理硬件资源（CPU、内存、外设）。 提供系统调用接口，实现用户态与内核态切换。    二、了解硬件  计算机体系结构  图灵机模型：有限状态机，通过读写符号和状态转换实现计算。 冯·诺依曼架构：  组成：CPU（寄存器、执行单元）、内存、磁盘、键盘、显示器等。 特点：存储程序，指令与数据共享内存。     x86硬件特性  特权指令：仅当CPL=0时可执行，否则触发通用保护异常（如LGDT、STI）。 关键组件：  BIOS ROM（启动固件）、时钟（中断源）、地址/数据信号线。   实验环境：ucore OS基于x86架构，...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-6-OpSys-interrupt/" title="【操作系统原理】 Lecture 3 启动中断异常系统调用"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 3 启动中断异常系统调用</div></div><div class="info-2"><div class="info-item-1">一、计算机启动流程  启动前的硬件状态  CPU状态：PC指向固定地址（如x86的0xFFFF0），处于特权态（实模式），地址空间有限（x86为1MB）。 内存布局：BIOS固件位于高地址区域，低地址为加载程序预留空间。 初始化：硬件自检（POST）、内存控制器初始化、寄存器复位。   启动阶段  BIOS阶段：  执行自检程序，初始化硬件（如键盘、串口）。 加载磁盘引导扇区（512字节）到内存0x7C00，跳转执行。   Bootloader阶段：  加载操作系统内核到内存，跳转至OS入口。   OS初始化：  初始化数据结构、外设驱动，建立中断处理机制。     启动规范  传统BIOS：MBR（主引导记录）→ 分区引导扇区 → OS加载。 UEFI：更现代的固件接口，支持安全启动和大容量磁盘。    二、中断、异常与系统调用  定义与分类    类型 触发方式 示例（x86）     中断 外部设备信号（如键盘、时钟） INTR（可屏蔽）、NMI（不可屏蔽）   异常 CPU执行指令时的错误或特殊事件 页故障（#PF）、除零错误（#DE）   系统调用 用户程序主动请求内核...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-7-OpSys-exp1-bootloader/" title="【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS</div></div><div class="info-2"><div class="info-item-1">一、x86启动顺序 启动流程  BIOS阶段   初始状态：CS=0xF000, EIP=0xFFF0，物理地址为0xFFFFFFF0（BIOS EPROM位置）。 第一条指令：长跳转（JMP）到BIOS代码区，更新CS:EIP。   加载Bootloader   BIOS将存储设备（硬盘/USB）的**主引导扇区（MBR，512字节）**加载到内存0x7C00，并跳转执行。   Bootloader任务   使能保护模式：设置CR0寄存器的PE位（Bit 0）。 加载内核：从硬盘读取ELF格式的ucore内核到内存固定位置。 跳转执行：跳转到ucore入口点，移交控制权。  实模式与保护模式  实模式（历史背景）   寻址方式：段基址:偏移量（如CS:IP），物理地址 = 段基址*16 + 偏移量。 限制：20位地址总线，最大1MB空间（0x00000~0xFFFFF），无保护机制。 中断处理：中断向量表（IVT）位于内存低地址，INT n通过N*4获取ISR地址。   保护模式   段机制：通过**全局描述符表（GDT）**管理段基址和权限，lgdt指令加载GDT。 特权级：...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-4-OpSys-intro/" title="【操作系统原理】 Lecture 1 课程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 1 课程概述</div></div><div class="info-2"><div class="info-item-1">一、课程目标与意义  学习目的  掌握操作系统（OS）的基本原理与实现技术。 通过开发小型OS实践核心阶段（如中断处理、内存管理）。 深化对计算机系统的整体理解，提升知识应用能力。   OS的重要性  计算机科学的基石，连接硬件、软件与应用的核心支撑。 贯穿程序语言、编译、体系结构等领域，影响专业素质。    二、课程结构与内容  核心教学内容  OS结构、中断与系统调用、内存管理、进程/线程、调度、同步互斥、文件系统、I/O子系统。   实验与实践  实验序列：环境准备→系统启动→物理/虚拟内存管理→内核线程→用户进程→调度→同步→文件系统。 课程设计：基于RISC-V的ucore OS内核开发。   参考教材  《Operating System Concepts》（恐龙书） 《Operating Systems: Three Easy Pieces》（OSTEP）    三、操作系统核心概念  定义与地位  OS是管理硬件资源、提供用户接口的系统软件，位于硬件与应用之间（承上启下）。   内核特征  并发：多程序同时运行，需调度管理。 共享：资源互斥或同时访问。 虚拟：通过...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-8-OpSys-phy-mem-con/" title="【操作系统原理】 Lecture 5 物理内存管理：连续内存分配"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 5 物理内存管理：连续内存分配</div></div><div class="info-2"><div class="info-item-1">一、计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。 核心组件：   CPU：执行指令，生成逻辑地址。 MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。 总线：连接CPU、内存和外设。  内存层次  结构：   高速缓存（Cache）：速度快，容量小，减少CPU访问内存延迟。 主存（RAM）：存放运行中的程序和数据。 外存（磁盘）：持久化存储，用于交换分区（Swapping）。   性能问题：   高速缓存未命中：需从主存加载数据，延迟增加。 缺页（Page Fault）：虚拟内存机制中，访问未加载的页需从磁盘读取。  二、操作系统的内存管理方式 管理方式分类    方式 特点 应用场景     重定位 程序加载时调整地址，适应内存位置 早期单任务系统   分段 按逻辑模块划分段（如代码段、数据段），支持地址隔离 Intel x86保护模式   分页 将内存划分为固定大小的页，减少外部...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-10-OpSys-proc-sche/" title="【操作系统原理】 Lecture 15 处理机调度"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 15 处理机调度</div></div><div class="info-2"><div class="info-item-1">一、处理机调度概念 1. 调度的本质  CPU资源的时分复用：通过在多个进程之间快速切换CPU，使得宏观上看起来多个进程在同时运行，从而提高系统资源利用率。 调度时机：调度决策发生的时刻，主要包括：  时钟中断：当前进程的时间片用完。 I/O中断：一个进程因等待I/O而阻塞，另一个进程变为就绪。 系统调用：进程主动放弃CPU（如sleep）或创建新进程。 进程退出：当前进程执行完毕。    2. 调度策略  非抢占式调度：一旦CPU分配给一个进程，该进程会一直使用CPU，直到它自己主动释放（如阻塞或结束）。早期系统常用。 抢占式调度：操作系统可以强制剥夺当前进程的CPU使用权，并将其分配给另一个更重要或更紧急的进程。现代通用操作系统普遍采用。   二、调度准则 评价一个调度算法好坏的标准，通常从以下几个维度衡量：  CPU利用率：保持CPU尽可能忙碌。 吞吐量：单位时间内完成的进程数量。 周转时间：从进程提交到完成的总时间（包括等待和执行）。 等待时间：进程在就绪队列中等待的总时间。 响应时间：从提交请求到首次产生响应的时间，对交互式系统尤为重要。 公平性：确保每个进程都能获得合...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">11</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%9B%AE%E6%A0%87%EF%BC%9A%E8%99%9A%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">一、实验目标：虚存管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9B%9E%E9%A1%BE%E5%8E%86%E5%8F%B2%EF%BC%9ALab1%E5%92%8CLab2"><span class="toc-number">2.</span> <span class="toc-text">二、回顾历史：Lab1和Lab2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BA%86%E8%A7%A3%E5%BD%93%E4%B8%8B%EF%BC%9ALab3%E7%9A%84%E6%80%BB%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="toc-number">3.</span> <span class="toc-text">三、了解当下：Lab3的总体框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%E3%80%81%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E5%8A%9F%E8%83%BD"><span class="toc-number">4.</span> <span class="toc-text">四、处理流程、关键数据结构和功能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="toc-number">4.1.</span> <span class="toc-text">1. 初始化流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">2. 关键数据结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%A1%B5%E8%AE%BF%E9%97%AE%E5%BC%82%E5%B8%B8"><span class="toc-number">5.</span> <span class="toc-text">五、页访问异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%A1%B5%E6%8D%A2%E5%85%A5%E6%8D%A2%E5%87%BA%E6%9C%BA%E5%88%B6"><span class="toc-number">6.</span> <span class="toc-text">六、页换入换出机制</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/11/05/25-11-5-14-OpSys-sema-tube/" title="【操作系统原理】 Lecture 18 信号量与管程"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【操作系统原理】 Lecture 18 信号量与管程"/></a><div class="content"><a class="title" href="/2025/11/05/25-11-5-14-OpSys-sema-tube/" title="【操作系统原理】 Lecture 18 信号量与管程">【操作系统原理】 Lecture 18 信号量与管程</a><time datetime="2025-11-05T01:36:42.000Z" title="发表于 2025-11-05 09:36:42">2025-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/05/25-11-5-13-OpSys-sync-excl/" title="【操作系统原理】 Lecture 17 同步互斥"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【操作系统原理】 Lecture 17 同步互斥"/></a><div class="content"><a class="title" href="/2025/11/05/25-11-5-13-OpSys-sync-excl/" title="【操作系统原理】 Lecture 17 同步互斥">【操作系统原理】 Lecture 17 同步互斥</a><time datetime="2025-11-05T01:36:28.000Z" title="发表于 2025-11-05 09:36:28">2025-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/05/25-11-5-12-OpSys-exp6-sche/" title="【操作系统原理】 Lecture 16 实验六 调度器"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【操作系统原理】 Lecture 16 实验六 调度器"/></a><div class="content"><a class="title" href="/2025/11/05/25-11-5-12-OpSys-exp6-sche/" title="【操作系统原理】 Lecture 16 实验六 调度器">【操作系统原理】 Lecture 16 实验六 调度器</a><time datetime="2025-11-05T01:36:17.000Z" title="发表于 2025-11-05 09:36:17">2025-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/05/25-11-5-10-OpSys-proc-sche/" title="【操作系统原理】 Lecture 15 处理机调度"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【操作系统原理】 Lecture 15 处理机调度"/></a><div class="content"><a class="title" href="/2025/11/05/25-11-5-10-OpSys-proc-sche/" title="【操作系统原理】 Lecture 15 处理机调度">【操作系统原理】 Lecture 15 处理机调度</a><time datetime="2025-11-05T01:36:06.000Z" title="发表于 2025-11-05 09:36:06">2025-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/11/05/25-11-5-8-OpSys-core-thr-man/" title="【操作系统原理】 Lecture 13 线程控制"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【操作系统原理】 Lecture 13 线程控制"/></a><div class="content"><a class="title" href="/2025/11/05/25-11-5-8-OpSys-core-thr-man/" title="【操作系统原理】 Lecture 13 线程控制">【操作系统原理】 Lecture 13 线程控制</a><time datetime="2025-11-05T01:35:53.000Z" title="发表于 2025-11-05 09:35:53">2025-11-05</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.3.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

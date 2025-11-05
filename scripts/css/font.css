@@ -1,45 +1,16 @@
-@font-face {
-    font-family: "rmgTimes";
-    src: url("/assets/fonts/times.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: "rmgTimes";
-    src: url("/assets/fonts/timesbd.ttf") format("truetype");
-    font-style: normal;
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: "rmgTimes";
-    src: url("/assets/fonts/timesbi.ttf") format("truetype");
-    font-style: italic;
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: "rmgTimes";
-    src: url("/assets/fonts/timesi.ttf") format("truetype");
-    font-style: italic;
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: "rmgSimsun";
-    src: url("/assets/fonts/simsun.ttc") format("truetype");
-}
-
-@font-face {
-    font-family: "rmgHei";
-    src: url(/assets/fonts/simhei.ttf) format(truetype);
-}
-
-/* h1, h2, h3, h4, h5, h6 {
-    font-family: "rmgTimes", "rmgHei", sans-serif;
-} */
+@import url("https://fontsapi.zeoseven.com/285/main/result.css");
+@import url("https://fontsapi.zeoseven.com/447/main/result.css");
+@import url("data:text/css,%40font-face%7Bfont-family%3A%22ZSFT-603%22%3Bsrc%3Aurl(%22https%3A%2F%2Ffontsapi.zeoseven.com%2F603%2Fbold.woff2%22)%20format(%22woff2%22)%2Curl(%22https%3A%2F%2Ffontsapi-storage.zeoseven.com%2F603%2Fbold.woff2%22)%20format(%22woff2%22)%3Bfont-style%3Anormal%3Bfont-weight%3A700%3Bfont-display%3Aswap%3B%7D%40font-face%7Bfont-family%3A%22ZSFT-603%22%3Bsrc%3Aurl(%22https%3A%2F%2Ffontsapi.zeoseven.com%2F603%2Fbold-italic.woff2%22)%20format(%22woff2%22)%2Curl(%22https%3A%2F%2Ffontsapi-storage.zeoseven.com%2F603%2Fbold-italic.woff2%22)%20format(%22woff2%22)%3Bfont-style%3Aitalic%3Bfont-weight%3A700%3Bfont-display%3Aswap%3B%7D%40font-face%7Bfont-family%3A%22ZSFT-603%22%3Bsrc%3Aurl(%22https%3A%2F%2Ffontsapi.zeoseven.com%2F603%2Fitalic.woff2%22)%20format(%22woff2%22)%2Curl(%22https%3A%2F%2Ffontsapi-storage.zeoseven.com%2F603%2Fitalic.woff2%22)%20format(%22woff2%22)%3Bfont-style%3Aitalic%3Bfont-weight%3A400%3Bfont-display%3Aswap%3B%7D%40font-face%7Bfont-family%3A%22ZSFT-603%22%3Bsrc%3Aurl(%22https%3A%2F%2Ffontsapi.zeoseven.com%2F603%2Fmain.woff2%22)%20format(%22woff2%22)%2Curl(%22https%3A%2F%2Ffontsapi-storage.zeoseven.com%2F603%2Fmain.woff2%22)%20format(%22woff2%22)%3Bfont-style%3Anormal%3Bfont-weight%3A400%3Bfont-display%3Aswap%3B%7D");
 
 body, p {
-    font-family: "rmgTimes", "rmgSimsun", serif;
+    font-family: "ZSFT-603", "Noto Serif CJK", serif;
+}
+
+code, pre {
+    font-family: "Cascadia Code", "Noto Serif CJK", sans-serif;
+}
+
+.comment { /*, .c1, .cm, .c, .cdo*/
+    font-style: italic;
+    color: rgba(10, 10, 10, 0.4);
 }

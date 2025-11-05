@@ -1730,7 +1730,7 @@ body {
   background: var(--global-bg);
   color: var(--font-color);
   font-size: var(--global-font-size);
-  font-family: rmgTimes, rmgSimsun, serif;
+  font-family: ZSFT-603, Noto Serif CJK, serif;
   line-height: 2;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   scroll-behavior: smooth;
@@ -2016,7 +2016,7 @@ figure.highlight pre .javascript .function {
 .container pre,
 .container code {
   font-size: var(--global-font-size);
-  font-family: monospace !important;
+  font-family: Cascadia Code, Noto Serif CJK, sans-serif !important;
   border-radius: 6px;
 }
 .container code {
