@@ -8,6 +8,7 @@ body, p {
 
 code, pre {
     font-family: "Cascadia Code", "Noto Serif CJK", sans-serif;
+    font-variant-ligatures: none;
 }
 
 .comment { /*, .c1, .cm, .c, .cdo*/
