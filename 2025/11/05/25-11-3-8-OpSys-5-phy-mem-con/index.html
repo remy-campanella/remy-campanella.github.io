@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【操作系统原理】 Lecture 5 物理内存管理：连续内存分配 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。  核心组件：    CPU：执行指令，生成逻辑地址。  MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。  总线：连接CP">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【操作系统原理】 Lecture 5 物理内存管理：连续内存分配 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。 核心组件：   CPU：执行指令，生成逻辑地址。 MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。 总线：连接CPU、内存和外设。  内存层次  结构：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【操作系统原理】 Lecture 5 物理内存管理：连续内存分配">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。  核心组件：    CPU：执行指令，生成逻辑地址。  MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。  总线：连接CP">
+<meta property="og:description" content="计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。 核心组件：   CPU：执行指令，生成逻辑地址。 MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。 总线：连接CPU、内存和外设。  内存层次  结构：">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-11-05T01:32:56.000Z">
@@ -164,249 +164,269 @@
     <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
 <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【操作系统原理】 Lecture 5 物理内存管理：连续内存分配</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【操作系统原理】 Lecture 5 物理内存管理：连续内存分配</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T01:32:56.000Z" title="发表于 2025-11-05 09:32:56">2025-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-15T13:55:03.909Z" title="更新于 2025-12-15 21:55:03">2025-12-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/">操作系统原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="计算机体系结构与内存层次">计算机体系结构与内存层次</h2>
 <h3 id="计算机体系结构">计算机体系结构</h3>
-<ol type="1">
-<li><strong>基础</strong>：基于Intel®
-64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software
-Developer Manuals）。<br />
-</li>
-<li><strong>核心组件</strong>：<br />
-</li>
+<ol>
+<li class="lvl-3"><strong>基础</strong>：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。</li>
+<li class="lvl-3"><strong>核心组件</strong>：</li>
 </ol>
-<ul>
-<li><strong>CPU</strong>：执行指令，生成逻辑地址。<br />
-</li>
-<li><strong>MMU（内存管理单元）</strong>：将逻辑地址转换为物理地址，支持分段和分页。<br />
-</li>
-<li><strong>总线</strong>：连接CPU、内存和外设。<br />
-### 内存层次</li>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>CPU</strong>：执行指令，生成逻辑地址。</li>
+<li class="lvl-4"><strong>MMU（内存管理单元）</strong>：将逻辑地址转换为物理地址，支持分段和分页。</li>
+<li class="lvl-4"><strong>总线</strong>：连接CPU、内存和外设。</li>
 </ul>
-<ol type="1">
-<li><strong>结构</strong>：<br />
-</li>
+<h3 id="内存层次">内存层次</h3>
+<ol>
+<li class="lvl-3"><strong>结构</strong>：</li>
 </ol>
-<ul>
-<li><strong>高速缓存（Cache）</strong>：速度快，容量小，减少CPU访问内存延迟。<br />
-</li>
-<li><strong>主存（RAM）</strong>：存放运行中的程序和数据。<br />
-</li>
-<li><strong>外存（磁盘）</strong>：持久化存储，用于交换分区（Swapping）。<br />
-</li>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>高速缓存（Cache）</strong>：速度快，容量小，减少CPU访问内存延迟。</li>
+<li class="lvl-4"><strong>主存（RAM）</strong>：存放运行中的程序和数据。</li>
+<li class="lvl-4"><strong>外存（磁盘）</strong>：持久化存储，用于交换分区（Swapping）。</li>
 </ul>
-<ol start="2" type="1">
-<li><strong>性能问题</strong>：<br />
-</li>
+<ol start="2">
+<li class="lvl-3"><strong>性能问题</strong>：</li>
 </ol>
-<ul>
-<li><strong>高速缓存未命中</strong>：需从主存加载数据，延迟增加。<br />
-</li>
-<li><strong>缺页（Page
-Fault）</strong>：虚拟内存机制中，访问未加载的页需从磁盘读取。</li>
+<ul class="lvl-0">
+<li class="lvl-4"><strong>高速缓存未命中</strong>：需从主存加载数据，延迟增加。</li>
+<li class="lvl-4"><strong>缺页（Page Fault）</strong>：虚拟内存机制中，访问未加载的页需从磁盘读取。</li>
 </ul>
 <h2 id="操作系统的内存管理方式">操作系统的内存管理方式</h2>
-<ol type="1">
-<li><strong>操作系统中的内存管理方式</strong>
-<ul>
-<li>重定位（relocation）</li>
-<li>分段（segmentation）</li>
-<li>分页（paging）</li>
-<li>虚拟存储（virtual memory） &gt; 目前多数系统（如
-Linux）采用<strong>按需页式虚拟存储</strong>。</li>
-</ul></li>
-<li><strong>实现高度依赖硬件</strong>
-<ul>
-<li>MMU（内存管理单元）：处理 CPU 存储访问请求的硬件</li>
-</ul></li>
+<ol>
+<li class="lvl-3">
+<p><strong>操作系统中的内存管理方式</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">重定位（relocation）</li>
+<li class="lvl-5">分段（segmentation）</li>
+<li class="lvl-5">分页（paging）</li>
+<li class="lvl-5">虚拟存储（virtual memory）
+<blockquote>
+<p>目前多数系统（如 Linux）采用<strong>按需页式虚拟存储</strong>。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p><strong>实现高度依赖硬件</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">MMU（内存管理单元）：处理 CPU 存储访问请求的硬件</li>
+</ul>
+</li>
 </ol>
 <h2 id="地址空间与地址生成">地址空间与地址生成</h2>
 <h3 id="地址空间定义">地址空间定义</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>空间类型</th>
 <th>定义</th>
 <th>范围表示</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>物理地址空间</td>
 <td>硬件支持的地址空间</td>
-<td>0 ~ <span class="math inline">\(MAX_{sys}\)</span></td>
+<td>0 ~ $MAX_{sys}$</td>
 </tr>
-<tr class="even">
+<tr>
 <td>逻辑地址空间</td>
 <td>在 CPU 运行的<strong>进程</strong>看到的地址</td>
-<td>0 ~ <span class="math inline">\(MAX_{prog}\)</span></td>
+<td>0 ~ $MAX_{prog}$</td>
 </tr>
 </tbody>
 </table>
 <h3 id="逻辑地址生成">逻辑地址生成</h3>
-<figure>
-<img src="image/25-11-3-8-OpSys-5-phy-mem-con/1765805173546.png"
-alt="1765805173546" />
-<figcaption aria-hidden="true">1765805173546</figcaption>
-</figure>
+<p><img src="/image/icon/loading.gif" data-original="image/25-11-3-8-OpSys-5-phy-mem-con/1765805173546.png" alt="1765805173546"></p>
 <h3 id="地址生成过程">地址生成过程</h3>
-<ol type="1">
-<li><strong>CPU</strong>
-<ul>
-<li>ALU：需要逻辑地址的内存内容</li>
-<li>MMU：进行逻辑地址和物理地址的转换</li>
-<li>CPU 控制逻辑：给总线发送物理地址请求</li>
-</ul></li>
-<li><strong>内存</strong>
-<ul>
-<li>发送物理地址的内容给 CPU</li>
-<li>或接收 CPU 数据到物理地址</li>
-</ul></li>
-<li><strong>操作系统</strong>
-<ul>
-<li>建立逻辑地址 LA 和物理地址 PA 的映射</li>
-</ul></li>
+<ol>
+<li class="lvl-3">
+<p><strong>CPU</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">ALU：需要逻辑地址的内存内容</li>
+<li class="lvl-5">MMU：进行逻辑地址和物理地址的转换</li>
+<li class="lvl-5">CPU 控制逻辑：给总线发送物理地址请求</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p><strong>内存</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">发送物理地址的内容给 CPU</li>
+<li class="lvl-5">或接收 CPU 数据到物理地址</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p><strong>操作系统</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">建立逻辑地址 LA 和物理地址 PA 的映射</li>
+</ul>
+</li>
 </ol>
 <h3 id="地址检查">地址检查</h3>
-<figure>
-<img src="image/25-11-3-8-OpSys-5-phy-mem-con/1765805550322.png"
-alt="1765805550322" />
-<figcaption aria-hidden="true">1765805550322</figcaption>
-</figure>
+<p><img src="/image/icon/loading.gif" data-original="image/25-11-3-8-OpSys-5-phy-mem-con/1765805550322.png" alt="1765805550322"></p>
 <h2 id="连续内存分配">连续内存分配</h2>
 <h3 id="连续内存分配与内存碎片">连续内存分配与内存碎片</h3>
 <dl>
 <dt><strong>连续内存分配</strong></dt>
-<dd>
-给进程分配一块<strong>不小于</strong>指定大小的连续的物理内存区域。
-</dd>
+<dd>给进程分配一块<strong>不小于</strong>指定大小的连续的物理内存区域。</dd>
 <dt><strong>内存碎片</strong></dt>
-<dd>
-不能被利用的空闲内存。
-</dd>
+<dd>不能被利用的空闲内存。</dd>
 <dt><strong>外部碎片</strong></dt>
-<dd>
-分配单元之间未使用的内存。
-</dd>
+<dd>分配单元之间未使用的内存。</dd>
 <dt><strong>内部碎片</strong></dt>
-<dd>
-分配单元之间未使用的内存，取决于分配单元大小是否要取整。
-</dd>
+<dd>分配单元之间未使用的内存，取决于分配单元大小是否要取整。</dd>
 </dl>
 <h3 id="动态分区分配策略">动态分区分配策略</h3>
-<ol type="1">
-<li><strong>动态分区分配</strong>
-<ul>
-<li>当程序被加载执行时，分配一个进程指定大小可变的分区（块、内存块）。</li>
-<li>分区的地址是<strong>连续的</strong>。</li>
-</ul></li>
-<li><strong>数据结构</strong>
-<ul>
-<li>所有进程已分配的分区。</li>
-<li>空闲分区（Empty Block）。</li>
-</ul></li>
-<li><strong>最先匹配策略（First Fit Allocation）</strong>
-<ul>
-<li><p><strong>思路</strong><br />
-分配 <span class="math inline">\(n\)</span> 字节分区时，
-查找并使用不小于 <span class="math inline">\(n\)</span>
-的最小空闲分区。</p></li>
-<li><p><strong>实现</strong></p>
-<ul>
-<li>空闲分区列表按<strong>地址顺序</strong>排序。</li>
-<li><strong>分配</strong>过程时，搜索一个合适的分区。</li>
-<li><strong>释放</strong>分区时，检查是否可<strong>与临近的空闲分区合并</strong>。</li>
-</ul></li>
-<li><p><strong>优点</strong></p>
-<ul>
-<li>简单</li>
-<li>高地址大块空闲分区</li>
-</ul></li>
-<li><p><strong>缺点</strong></p>
-<ul>
-<li>外部碎片</li>
-<li>分配大块时较慢</li>
-</ul></li>
-</ul></li>
-<li><strong>最佳匹配策略（Best Fit Allocation）</strong></li>
-</ol>
-<h4 id="碎片整理方法"><strong>2. 碎片整理方法</strong></h4>
-<ul>
-<li><strong>紧凑（Compaction）</strong>：
-<ul>
-<li>移动内存中的进程，使空闲空间连续。<br />
-</li>
-<li><strong>缺点</strong>：开销大，需暂停所有进程。<br />
-</li>
-</ul></li>
-<li><strong>分区对换（Swapping）</strong>：
-<ul>
-<li>将等待状态的进程换出到外存，释放内存空间。<br />
-</li>
-<li><strong>流程</strong>：
-<ul>
-<li>选择等待进程（如P2）。<br />
-</li>
-<li>将其内存数据写入磁盘。<br />
-</li>
-<li>回收分区供其他进程使用。</li>
-</ul></li>
-</ul></li>
+<ol>
+<li class="lvl-3">
+<p><strong>动态分区分配</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">当程序被加载执行时，分配一个进程指定大小可变的分区（块、内存块）。</li>
+<li class="lvl-5">分区的地址是<strong>连续的</strong>。</li>
 </ul>
-<h2 id="四伙伴系统buddy-system">四、伙伴系统（Buddy System）</h2>
+</li>
+<li class="lvl-3">
+<p><strong>数据结构</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">所有进程已分配的分区。</li>
+<li class="lvl-5">空闲分区（Empty Block）。</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p><strong>最先匹配策略（First Fit Allocation）</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">
+<p><strong>思路</strong><br>
+分配 $n$ 字节分区时， 查找并使用不小于 $n$ 的最小空闲分区。</p>
+</li>
+<li class="lvl-5">
+<p><strong>实现</strong></p>
+<ul class="lvl-4">
+<li class="lvl-7">空闲分区列表按<strong>地址顺序</strong>排序。</li>
+<li class="lvl-7"><strong>分配</strong>过程时，搜索一个合适的分区。</li>
+<li class="lvl-7"><strong>释放</strong>分区时，检查是否可<strong>与临近的空闲分区合并</strong>。</li>
+</ul>
+</li>
+<li class="lvl-5">
+<p><strong>优点</strong></p>
+<ul class="lvl-4">
+<li class="lvl-7">简单</li>
+<li class="lvl-7">高地址大块空闲分区</li>
+</ul>
+</li>
+<li class="lvl-5">
+<p><strong>缺点</strong></p>
+<ul class="lvl-4">
+<li class="lvl-7">外部碎片</li>
+<li class="lvl-7">分配大块时较慢</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="lvl-3">
+<p><strong>最佳匹配策略（Best Fit Allocation）</strong></p>
+</li>
+</ol>
+<h4 id="2-碎片整理方法"><strong>2. 碎片整理方法</strong></h4>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>紧凑（Compaction）</strong>：</p>
+<ul class="lvl-2">
+<li class="lvl-4">移动内存中的进程，使空闲空间连续。</li>
+<li class="lvl-4"><strong>缺点</strong>：开销大，需暂停所有进程。</li>
+</ul>
+</li>
+<li class="lvl-2">
+<p><strong>分区对换（Swapping）</strong>：</p>
+<ul class="lvl-2">
+<li class="lvl-4">将等待状态的进程换出到外存，释放内存空间。</li>
+<li class="lvl-4"><strong>流程</strong>：
+<ul class="lvl-4">
+<li class="lvl-6">选择等待进程（如P2）。</li>
+<li class="lvl-6">将其内存数据写入磁盘。</li>
+<li class="lvl-6">回收分区供其他进程使用。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="四、伙伴系统（Buddy-System）">四、伙伴系统（Buddy System）</h2>
 <h3 id="核心思想">核心思想</h3>
-<ul>
-<li><strong>分区规则</strong>：内存划分为大小为<code>2^U</code>的块，分配时按需拆分。<br />
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>分区规则</strong>：内存划分为大小为<code>2^U</code>的块，分配时按需拆分。</p>
 </li>
-<li><strong>伙伴关系</strong>：两个大小相同、地址连续的块互为“伙伴”，可合并为更大的块。<br />
-### 分配与释放流程</li>
+<li class="lvl-2">
+<p><strong>伙伴关系</strong>：两个大小相同、地址连续的块互为“伙伴”，可合并为更大的块。</p>
+</li>
 </ul>
-<ol type="1">
-<li><strong>分配示例</strong>：<br />
+<h3 id="分配与释放流程">分配与释放流程</h3>
+<ol>
+<li class="lvl-3">
+<p><strong>分配示例</strong>：</p>
 </li>
 </ol>
-<ul>
-<li>请求100K → 分配128K（<code>2^7</code>）。<br />
+<ul class="lvl-0">
+<li class="lvl-4">
+<p>请求100K → 分配128K（<code>2^7</code>）。</p>
 </li>
-<li>请求240K → 分配256K（<code>2^8</code>）。<br />
+<li class="lvl-4">
+<p>请求240K → 分配256K（<code>2^8</code>）。</p>
 </li>
 </ul>
-<ol start="2" type="1">
-<li><strong>合并条件</strong>：<br />
+<ol start="2">
+<li class="lvl-3">
+<p><strong>合并条件</strong>：</p>
 </li>
 </ol>
-<ul>
-<li>释放的块与其伙伴均为空闲时，合并为更大的块。<br />
+<ul class="lvl-0">
+<li class="lvl-4">
+<p>释放的块与其伙伴均为空闲时，合并为更大的块。</p>
 </li>
-<li><strong>公式</strong>：<code>buddy_addr = block_addr ^ block_size</code>（异或运算）。<br />
-### 优缺点</li>
-<li><strong>优点</strong>：分配/释放高效，合并算法简单。<br />
+<li class="lvl-4">
+<p><strong>公式</strong>：<code>buddy_addr = block_addr ^ block_size</code>（异或运算）。</p>
 </li>
-<li><strong>缺点</strong>：可能产生内部碎片（如请求100K却分配128K）。</li>
 </ul>
-<h2 id="五ucore中的物理内存管理">五、ucore中的物理内存管理</h2>
+<h3 id="优缺点">优缺点</h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>优点</strong>：分配/释放高效，合并算法简单。</p>
+</li>
+<li class="lvl-2">
+<p><strong>缺点</strong>：可能产生内部碎片（如请求100K却分配128K）。</p>
+</li>
+</ul>
+<h2 id="五、ucore中的物理内存管理">五、ucore中的物理内存管理</h2>
 <h3 id="数据结构设计">数据结构设计</h3>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pmm_manager</span> &#123;</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *name;              <span class="comment">// 管理器名称</span></span><br><span class="line">    <span class="type">void</span> (*init)(<span class="type">void</span>);            <span class="comment">// 初始化</span></span><br><span class="line">    <span class="type">void</span> (*init_memmap)(<span class="keyword">struct</span> Page *base, <span class="type">size_t</span> n); <span class="comment">// 初始化内存映射</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Page</span> *(*<span class="title">alloc_pages</span>)(<span class="title">size_t</span> <span class="title">order</span>);</span>        <span class="comment">// 分配页（order=2^n）</span></span><br><span class="line">    <span class="type">void</span> (*free_pages)(<span class="keyword">struct</span> Page *base, <span class="type">size_t</span> n);  <span class="comment">// 释放页</span></span><br><span class="line">    <span class="type">size_t</span> (*nr_free_pages)(<span class="type">void</span>);   <span class="comment">// 获取空闲页数</span></span><br><span class="line">    <span class="type">void</span> (*check)(<span class="type">void</span>);            <span class="comment">// 检查一致性</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h3 id="伙伴系统实现">伙伴系统实现</h3>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">pmm_manager</span> <span class="title">buddy_pmm_manager</span> =</span> &#123;</span><br><span class="line">    .name = <span class="string">&quot;buddy_pmm_manager&quot;</span>,</span><br><span class="line">    .init = buddy_init,             <span class="comment">// 初始化空闲块链表</span></span><br><span class="line">    .alloc_pages = buddy_alloc_pages, <span class="comment">// 分配页（按order拆分）</span></span><br><span class="line">    .free_pages = buddy_free_pages,   <span class="comment">// 释放页（尝试合并伙伴）</span></span><br><span class="line">    .check = buddy_check,           <span class="comment">// 检查链表一致性</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h3 id="关键函数逻辑">关键函数逻辑</h3>
-<ol type="1">
-<li><strong><code>buddy_alloc_pages</code></strong>：<br />
+<ol>
+<li class="lvl-3">
+<p><strong><code>buddy_alloc_pages</code></strong>：</p>
 </li>
 </ol>
-<ul>
-<li>查找满足<code>order</code>的最小空闲块。<br />
+<ul class="lvl-0">
+<li class="lvl-4">
+<p>查找满足<code>order</code>的最小空闲块。</p>
 </li>
-<li>若不存在，拆分更大的块并递归分配。<br />
+<li class="lvl-4">
+<p>若不存在，拆分更大的块并递归分配。</p>
 </li>
 </ul>
-<ol start="2" type="1">
-<li><strong><code>buddy_free_pages</code></strong>：<br />
+<ol start="2">
+<li class="lvl-3">
+<p><strong><code>buddy_free_pages</code></strong>：</p>
 </li>
 </ol>
-<ul>
-<li>标记释放的块为空闲。<br />
+<ul class="lvl-0">
+<li class="lvl-4">
+<p>标记释放的块为空闲。</p>
 </li>
-<li>检查伙伴是否空闲，是则合并。</li>
+<li class="lvl-4">
+<p>检查伙伴是否空闲，是则合并。</p>
+</li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/">https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/05/25-11-5-1-OpSys-6-phy-mem-man-discon/" title="【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配</div></div><div class="info-2"><div class="info-item-1">一、非连续内存分配的需求背景 设计目标  解决连续分配的缺陷：  外部碎片：内存中存在大量不连续的小空闲块，难以利用。  内部碎片：分配的块大于实际需求（如伙伴系统）。   支持灵活的内存布局：  允许程序代码、数据、堆栈等分散在物理内存的不同位置。  便于实现内存共享和保护（如共享库）。   实现方式  段式管理：按逻辑模块划分内存（如代码段、数据段）。  页式管理：将内存划分为固定大小的页，按需分配。  段页式管理：结合段式逻辑划分与页式物理分配。  二、段式存储管理 段地址空间  逻辑结构：  进程地址空间由多个段组成，如：  主代码段、子模块代码段、堆栈段、堆数据段。   二维地址：(段号, 段内偏移)。   非连续性：  各段可独立加载到物理内存的任意位置，无需连续。 ### 段访问机制  硬件实现：  逻辑地址：(段选择子, 偏移量)。  段表（GDT/LDT）：存储段基址和段限长。  地址转换：  物理地址 = 段基址 + 偏移量。  检查偏移量是否超过段限长，...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-7-OpSys-4-exp1-bootloader/" title="【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS</div></div><div class="info-2"><div class="info-item-1">一、x86启动顺序 启动流程  BIOS阶段    初始状态：CS=0xF000, EIP=0xFFF0，物理地址为0xFFFFFFF0（BIOS EPROM位置）。  第一条指令：长跳转（JMP）到BIOS代码区，更新CS:EIP。    加载Bootloader    BIOS将存储设备（硬盘/USB）的主引导扇区（MBR，512字节）加载到内存0x7C00，并跳转执行。    Bootloader任务    使能保护模式：设置CR0寄存器的PE位（Bit 0）。  加载内核：从硬盘读取ELF格式的ucore内核到内存固定位置。  跳转执行：跳转到ucore入口点，移交控制权。 ### 实模式与保护模式   实模式（历史背景）    寻址方式：段基址:偏移量（如CS:IP），物理地址 = 段基址*16 + 偏移量。  限制：20位地址总线，最大1MB空间（0x00000~0xFFFFF），无保护机制。  中断处理：中断向量表（IVT）位于内存低地址，INT n通过N*4获取ISR地址。...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/05/25-11-3-5-OpSys-2-exp0-env/" title="【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备</div></div><div class="info-2"><div class="info-item-1">一、了解操作系统（OS）  核心概念  特权机制：CPU 通过特权级（如 CPL = 0 为最高特权）保护系统安全，特权指令（如LIDT、MOV CRn）只能在特权态执行，否则触发异常。  中断与异常管理：包括外设中断、陷阱中断（如系统调用）和故障中断（如缺页异常）。  内存管理：  分段（Segmentation）和分页（Paging）机制，实现虚拟内存（Virtual Memory）。  硬件支持：TLB（快表）、MMU（内存管理单元）。    OS设计目标  高效管理硬件资源（CPU、内存、外设）。  提供系统调用接口，实现用户态与内核态切换。   二、了解硬件  计算机体系结构  图灵机模型：有限状态机，通过读写符号和状态转换实现计算。  冯·诺依曼架构：  组成：CPU（寄存器、执行单元）、内存、磁盘、键盘、显示器等。  特点：存储程序，指令与数据共享内存。    x86硬件特性  特权指令：仅当CPL=0时可执行，否则触发通用保护异常（如LGDT、STI）。  关键组件：  BI...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-4-OpSys-1-intro/" title="【操作系统原理】 Lecture 1 课程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 1 课程概述</div></div><div class="info-2"><div class="info-item-1">一、课程目标与意义  学习目的  掌握操作系统（OS）的基本原理与实现技术。  通过开发小型OS实践核心阶段（如中断处理、内存管理）。  深化对计算机系统的整体理解，提升知识应用能力。   OS的重要性  计算机科学的基石，连接硬件、软件与应用的核心支撑。  贯穿程序语言、编译、体系结构等领域，影响专业素质。   二、课程结构与内容  核心教学内容  OS结构、中断与系统调用、内存管理、进程/线程、调度、同步互斥、文件系统、I/O子系统。   实验与实践  实验序列：环境准备→系统启动→物理/虚拟内存管理→内核线程→用户进程→调度→同步→文件系统。  课程设计：基于RISC-V的ucore OS内核开发。   参考教材  《Operating System Concepts》（恐龙书）  《Operating Systems: Three Easy Pieces》（OSTEP）   三、操作系统核心概念  定义与地位  OS是管理硬件资源、提供用户接口的系统软件，位于硬件与应用之间（承上启下）。...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-6-OpSys-3-interrupt/" title="【操作系统原理】 Lecture 3 系统启动、中断、异常和系统调用"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 3 系统启动、中断、异常和系统调用</div></div><div class="info-2"><div class="info-item-1">一、计算机启动流程  启动前的硬件状态  CPU状态：PC 指向固定地址（如 x86 的 0xFFFF0），处于特权态（实模式），地址空间有限（x86 为 1 MB）。  内存布局：BIOS 固件位于高地址区域，低地址为加载程序预留空间。  初始化：硬件自检（POST）、内存控制器初始化、寄存器复位。   启动阶段  BIOS阶段：  执行自检程序，初始化硬件（如键盘、串口）。  加载磁盘引导扇区（512 字节）到内存 0x7C00，跳转执行。   Bootloader阶段：  加载操作系统内核到内存，跳转至 OS 入口。   OS初始化：  初始化数据结构、外设驱动，建立中断处理机制。    启动规范  传统BIOS：MBR（主引导记录）→ 分区引导扇区 → OS 加载。  UEFI：更现代的固件接口，支持安全启动和大容量磁盘。   二、中断、异常与系统调用  定义与分类 | 类型 | 触发方式 | 示例（x86） | | — | — | — | | 中断 | 外部设备信号（如键盘、时...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-7-OpSys-4-exp1-bootloader/" title="【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS</div></div><div class="info-2"><div class="info-item-1">一、x86启动顺序 启动流程  BIOS阶段    初始状态：CS=0xF000, EIP=0xFFF0，物理地址为0xFFFFFFF0（BIOS EPROM位置）。  第一条指令：长跳转（JMP）到BIOS代码区，更新CS:EIP。    加载Bootloader    BIOS将存储设备（硬盘/USB）的主引导扇区（MBR，512字节）加载到内存0x7C00，并跳转执行。    Bootloader任务    使能保护模式：设置CR0寄存器的PE位（Bit 0）。  加载内核：从硬盘读取ELF格式的ucore内核到内存固定位置。  跳转执行：跳转到ucore入口点，移交控制权。 ### 实模式与保护模式   实模式（历史背景）    寻址方式：段基址:偏移量（如CS:IP），物理地址 = 段基址*16 + 偏移量。  限制：20位地址总线，最大1MB空间（0x00000~0xFFFFF），无保护机制。  中断处理：中断向量表（IVT）位于内存低地址，INT n通过N*4获取ISR地址。...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-1-OpSys-6-phy-mem-man-discon/" title="【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配</div></div><div class="info-2"><div class="info-item-1">一、非连续内存分配的需求背景 设计目标  解决连续分配的缺陷：  外部碎片：内存中存在大量不连续的小空闲块，难以利用。  内部碎片：分配的块大于实际需求（如伙伴系统）。   支持灵活的内存布局：  允许程序代码、数据、堆栈等分散在物理内存的不同位置。  便于实现内存共享和保护（如共享库）。   实现方式  段式管理：按逻辑模块划分内存（如代码段、数据段）。  页式管理：将内存划分为固定大小的页，按需分配。  段页式管理：结合段式逻辑划分与页式物理分配。  二、段式存储管理 段地址空间  逻辑结构：  进程地址空间由多个段组成，如：  主代码段、子模块代码段、堆栈段、堆数据段。   二维地址：(段号, 段内偏移)。   非连续性：  各段可独立加载到物理内存的任意位置，无需连续。 ### 段访问机制  硬件实现：  逻辑地址：(段选择子, 偏移量)。  段表（GDT/LDT）：存储段基址和段限长。  地址转换：  物理地址 = 段基址 + 偏移量。  检查偏移量是否超过段限长，...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-10-OpSys-15-proc-sche/" title="【操作系统原理】 Lecture 15 处理机调度"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 15 处理机调度</div></div><div class="info-2"><div class="info-item-1">一、处理机调度概念 1. 调度的本质  CPU资源的时分复用：通过在多个进程之间快速切换CPU，使得宏观上看起来多个进程在同时运行，从而提高系统资源利用率。 调度时机：调度决策发生的时刻，主要包括：  时钟中断：当前进程的时间片用完。 I/O中断：一个进程因等待I/O而阻塞，另一个进程变为就绪。 系统调用：进程主动放弃CPU（如sleep）或创建新进程。 进程退出：当前进程执行完毕。 #### 2. 调度策略  非抢占式调度：一旦CPU分配给一个进程，该进程会一直使用CPU，直到它自己主动释放（如阻塞或结束）。早期系统常用。 抢占式调度：操作系统可以强制剥夺当前进程的CPU使用权，并将其分配给另一个更重要或更紧急的进程。现代通用操作系统普遍采用。 二、调度准则 评价一个调度算法好坏的标准，通常从以下几个维度衡量：   CPU利用率：保持CPU尽可能忙碌。 吞吐量：单位时间内完成的进程数量。 周转时间：从进程提交到完成的总时间（包括等待和执行）。 等待时间：进程在就绪队列中等待的总时间。 响应时间：从提交请求到首次产生响应的时间，对交互式...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%86%85%E5%AD%98%E5%B1%82%E6%AC%A1"><span class="toc-number">1.</span> <span class="toc-text">计算机体系结构与内存层次</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">计算机体系结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">操作系统的内存管理方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90"><span class="toc-number">3.</span> <span class="toc-text">地址空间与地址生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%AE%9A%E4%B9%89"><span class="toc-number">3.1.</span> <span class="toc-text">地址空间定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90"><span class="toc-number">3.2.</span> <span class="toc-text">逻辑地址生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">地址生成过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E6%A3%80%E6%9F%A5"><span class="toc-number">3.4.</span> <span class="toc-text">地址检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">连续内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87"><span class="toc-number">4.1.</span> <span class="toc-text">连续内存分配与内存碎片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">4.2.</span> <span class="toc-text">动态分区分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A2%8E%E7%89%87%E6%95%B4%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.1.</span> <span class="toc-text">2. 碎片整理方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9Fbuddy-system"><span class="toc-number">5.</span> <span class="toc-text">四、伙伴系统（Buddy System）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">5.1.</span> <span class="toc-text">核心思想</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94ucore%E4%B8%AD%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">五、ucore中的物理内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">6.1.</span> <span class="toc-text">数据结构设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.2.</span> <span class="toc-text">伙伴系统实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%87%BD%E6%95%B0%E9%80%BB%E8%BE%91"><span class="toc-number">6.3.</span> <span class="toc-text">关键函数逻辑</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</a><time datetime="2025-12-22T08:24:15.000Z" title="发表于 2025-12-22 16:24:15">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 10 Quick Sort"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort">【COMPSCI 220】 Lecture 10 Quick Sort</a><time datetime="2025-12-22T07:30:37.000Z" title="发表于 2025-12-22 15:30:37">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</a><time datetime="2025-12-22T06:32:24.000Z" title="发表于 2025-12-22 14:32:24">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</a><time datetime="2025-12-22T05:16:46.000Z" title="发表于 2025-12-22 13:16:46">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 7 Divide and Conquer"/></a><div class="content"><a class="title" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer">【COMPSCI 220】 Lecture 7 Divide and Conquer</a><time datetime="2025-12-22T05:09:08.000Z" title="发表于 2025-12-22 13:09:08">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/">https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/05/25-11-5-1-OpSys-6-phy-mem-man-discon/" title="【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配</div></div><div class="info-2"><div class="info-item-1">一、非连续内存分配的需求背景 设计目标  解决连续分配的缺陷：  外部碎片：内存中存在大量不连续的小空闲块，难以利用。 内部碎片：分配的块大于实际需求（如伙伴系统）。   支持灵活的内存布局：  允许程序代码、数据、堆栈等分散在物理内存的不同位置。 便于实现内存共享和保护（如共享库）。    实现方式   段式管理：按逻辑模块划分内存（如代码段、数据段）。   页式管理：将内存划分为固定大小的页，按需分配。   段页式管理：结合段式逻辑划分与页式物理分配。   二、段式存储管理 段地址空间   逻辑结构：  进程地址空间由多个段组成，如：  主代码段、子模块代码段、堆栈段、堆数据段。   二维地址：(段号, 段内偏移)。    非连续性：  各段可独立加载到物理内存的任意位置，无需连续。    段访问机制   硬件实现：  逻辑地址：(段选择子, 偏移量)。 段表（GDT/LDT）：存储段基址和段限长。 地址转换：  物理地址 = 段基址 + 偏移量。 检查偏移量是否超过段限长，否则触发异常。      优点：  支持内存共享（如多个进程共享代码段）。 便于模块化编程和保护。  ...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-7-OpSys-4-exp1-bootloader/" title="【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS</div></div><div class="info-2"><div class="info-item-1">一、x86启动顺序 启动流程  BIOS阶段   初始状态：CS=0xF000, EIP=0xFFF0，物理地址为0xFFFFFFF0（BIOS EPROM位置）。 第一条指令：长跳转（JMP）到BIOS代码区，更新CS:EIP。   加载Bootloader   BIOS将存储设备（硬盘/USB）的**主引导扇区（MBR，512字节）**加载到内存0x7C00，并跳转执行。   Bootloader任务   使能保护模式：设置CR0寄存器的PE位（Bit 0）。 加载内核：从硬盘读取ELF格式的ucore内核到内存固定位置。 跳转执行：跳转到ucore入口点，移交控制权。  实模式与保护模式  实模式（历史背景）   寻址方式：段基址:偏移量（如CS:IP），物理地址 = 段基址*16 + 偏移量。 限制：20位地址总线，最大1MB空间（0x00000~0xFFFFF），无保护机制。 中断处理：中断向量表（IVT）位于内存低地址，INT n通过N*4获取ISR地址。   保护模式   段机制：通过**全局描述符表（GDT）**管理段基址和权限，lgdt指令加载GDT。 特权级：...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/05/25-11-3-4-OpSys-1-intro/" title="【操作系统原理】 Lecture 1 课程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 1 课程概述</div></div><div class="info-2"><div class="info-item-1">一、课程目标与意义  学习目的  掌握操作系统（OS）的基本原理与实现技术。 通过开发小型OS实践核心阶段（如中断处理、内存管理）。 深化对计算机系统的整体理解，提升知识应用能力。   OS的重要性  计算机科学的基石，连接硬件、软件与应用的核心支撑。 贯穿程序语言、编译、体系结构等领域，影响专业素质。    二、课程结构与内容   核心教学内容  OS结构、中断与系统调用、内存管理、进程/线程、调度、同步互斥、文件系统、I/O子系统。    实验与实践  实验序列：环境准备→系统启动→物理/虚拟内存管理→内核线程→用户进程→调度→同步→文件系统。 课程设计：基于RISC-V的ucore OS内核开发。    参考教材  《Operating System Concepts》（恐龙书） 《Operating Systems: Three Easy Pieces》（OSTEP）    三、操作系统核心概念   定义与地位  OS是管理硬件资源、提供用户接口的系统软件，位于硬件与应用之间（承上启下）。    内核特征  并发：多程序同时运行，需调度管理。 共享：资源互斥或同时访问。 ...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-6-OpSys-3-interrupt/" title="【操作系统原理】 Lecture 3 系统启动、中断、异常和系统调用"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 3 系统启动、中断、异常和系统调用</div></div><div class="info-2"><div class="info-item-1">一、计算机启动流程  启动前的硬件状态  CPU状态：PC 指向固定地址（如 x86 的 0xFFFF0），处于特权态（实模式），地址空间有限（x86 为 1 MB）。 内存布局：BIOS 固件位于高地址区域，低地址为加载程序预留空间。 初始化：硬件自检（POST）、内存控制器初始化、寄存器复位。   启动阶段  BIOS阶段：  执行自检程序，初始化硬件（如键盘、串口）。 加载磁盘引导扇区（512 字节）到内存 0x7C00，跳转执行。   Bootloader阶段：  加载操作系统内核到内存，跳转至 OS 入口。   OS初始化：  初始化数据结构、外设驱动，建立中断处理机制。     启动规范  传统BIOS：MBR（主引导记录）→ 分区引导扇区 → OS 加载。 UEFI：更现代的固件接口，支持安全启动和大容量磁盘。    二、中断、异常与系统调用   定义与分类    类型 触发方式 示例（x86）     中断 外部设备信号（如键盘、时钟） INTR（可屏蔽）、NMI（不可屏蔽）   异常 CPU执行指令时的错误或特殊事件 页故障（#PF）、除零错误（#DE）   系...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-7-OpSys-4-exp1-bootloader/" title="【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS</div></div><div class="info-2"><div class="info-item-1">一、x86启动顺序 启动流程  BIOS阶段   初始状态：CS=0xF000, EIP=0xFFF0，物理地址为0xFFFFFFF0（BIOS EPROM位置）。 第一条指令：长跳转（JMP）到BIOS代码区，更新CS:EIP。   加载Bootloader   BIOS将存储设备（硬盘/USB）的**主引导扇区（MBR，512字节）**加载到内存0x7C00，并跳转执行。   Bootloader任务   使能保护模式：设置CR0寄存器的PE位（Bit 0）。 加载内核：从硬盘读取ELF格式的ucore内核到内存固定位置。 跳转执行：跳转到ucore入口点，移交控制权。  实模式与保护模式  实模式（历史背景）   寻址方式：段基址:偏移量（如CS:IP），物理地址 = 段基址*16 + 偏移量。 限制：20位地址总线，最大1MB空间（0x00000~0xFFFFF），无保护机制。 中断处理：中断向量表（IVT）位于内存低地址，INT n通过N*4获取ISR地址。   保护模式   段机制：通过**全局描述符表（GDT）**管理段基址和权限，lgdt指令加载GDT。 特权级：...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-5-OpSys-2-exp0-env/" title="【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备</div></div><div class="info-2"><div class="info-item-1">一、了解操作系统（OS）  核心概念  特权机制：CPU 通过特权级（如 CPL = 0 为最高特权）保护系统安全，特权指令（如LIDT、MOV CRn）只能在特权态执行，否则触发异常。 中断与异常管理：包括外设中断、陷阱中断（如系统调用）和故障中断（如缺页异常）。 内存管理：  分段（Segmentation）和分页（Paging）机制，实现虚拟内存（Virtual Memory）。 硬件支持：TLB（快表）、MMU（内存管理单元）。     OS设计目标  高效管理硬件资源（CPU、内存、外设）。 提供系统调用接口，实现用户态与内核态切换。    二、了解硬件   计算机体系结构  图灵机模型：有限状态机，通过读写符号和状态转换实现计算。 冯·诺依曼架构：  组成：CPU（寄存器、执行单元）、内存、磁盘、键盘、显示器等。 特点：存储程序，指令与数据共享内存。      x86硬件特性  特权指令：仅当CPL=0时可执行，否则触发通用保护异常（如LGDT、STI）。 关键组件：  BIOS ROM（启动固件）、时钟（中断源）、地址/数据信号线。   实验环境：ucore OS基...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-1-OpSys-6-phy-mem-man-discon/" title="【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配</div></div><div class="info-2"><div class="info-item-1">一、非连续内存分配的需求背景 设计目标  解决连续分配的缺陷：  外部碎片：内存中存在大量不连续的小空闲块，难以利用。 内部碎片：分配的块大于实际需求（如伙伴系统）。   支持灵活的内存布局：  允许程序代码、数据、堆栈等分散在物理内存的不同位置。 便于实现内存共享和保护（如共享库）。    实现方式   段式管理：按逻辑模块划分内存（如代码段、数据段）。   页式管理：将内存划分为固定大小的页，按需分配。   段页式管理：结合段式逻辑划分与页式物理分配。   二、段式存储管理 段地址空间   逻辑结构：  进程地址空间由多个段组成，如：  主代码段、子模块代码段、堆栈段、堆数据段。   二维地址：(段号, 段内偏移)。    非连续性：  各段可独立加载到物理内存的任意位置，无需连续。    段访问机制   硬件实现：  逻辑地址：(段选择子, 偏移量)。 段表（GDT/LDT）：存储段基址和段限长。 地址转换：  物理地址 = 段基址 + 偏移量。 检查偏移量是否超过段限长，否则触发异常。      优点：  支持内存共享（如多个进程共享代码段）。 便于模块化编程和保护。  ...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-10-OpSys-15-proc-sche/" title="【操作系统原理】 Lecture 15 处理机调度"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 15 处理机调度</div></div><div class="info-2"><div class="info-item-1">一、处理机调度概念 1. 调度的本质  CPU资源的时分复用：通过在多个进程之间快速切换CPU，使得宏观上看起来多个进程在同时运行，从而提高系统资源利用率。 调度时机：调度决策发生的时刻，主要包括：  时钟中断：当前进程的时间片用完。 I/O中断：一个进程因等待I/O而阻塞，另一个进程变为就绪。 系统调用：进程主动放弃CPU（如sleep）或创建新进程。 进程退出：当前进程执行完毕。    2. 调度策略  非抢占式调度：一旦CPU分配给一个进程，该进程会一直使用CPU，直到它自己主动释放（如阻塞或结束）。早期系统常用。 抢占式调度：操作系统可以强制剥夺当前进程的CPU使用权，并将其分配给另一个更重要或更紧急的进程。现代通用操作系统普遍采用。   二、调度准则 评价一个调度算法好坏的标准，通常从以下几个维度衡量：  CPU利用率：保持CPU尽可能忙碌。 吞吐量：单位时间内完成的进程数量。 周转时间：从进程提交到完成的总时间（包括等待和执行）。 等待时间：进程在就绪队列中等待的总时间。 响应时间：从提交请求到首次产生响应的时间，对交互式系统尤为重要。 公平性：确保每个进程都能获得合...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%86%85%E5%AD%98%E5%B1%82%E6%AC%A1"><span class="toc-number">1.</span> <span class="toc-text">计算机体系结构与内存层次</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">计算机体系结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%B1%82%E6%AC%A1"><span class="toc-number">1.2.</span> <span class="toc-text">内存层次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">操作系统的内存管理方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90"><span class="toc-number">3.</span> <span class="toc-text">地址空间与地址生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%AE%9A%E4%B9%89"><span class="toc-number">3.1.</span> <span class="toc-text">地址空间定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90"><span class="toc-number">3.2.</span> <span class="toc-text">逻辑地址生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">地址生成过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E6%A3%80%E6%9F%A5"><span class="toc-number">3.4.</span> <span class="toc-text">地址检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">连续内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87"><span class="toc-number">4.1.</span> <span class="toc-text">连续内存分配与内存碎片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">4.2.</span> <span class="toc-text">动态分区分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%A2%8E%E7%89%87%E6%95%B4%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.1.</span> <span class="toc-text">2. 碎片整理方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9F%EF%BC%88Buddy-System%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">四、伙伴系统（Buddy System）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">5.1.</span> <span class="toc-text">核心思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%85%8D%E4%B8%8E%E9%87%8A%E6%94%BE%E6%B5%81%E7%A8%8B"><span class="toc-number">5.2.</span> <span class="toc-text">分配与释放流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-number">5.3.</span> <span class="toc-text">优缺点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81ucore%E4%B8%AD%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">五、ucore中的物理内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">6.1.</span> <span class="toc-text">数据结构设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.2.</span> <span class="toc-text">伙伴系统实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%87%BD%E6%95%B0%E9%80%BB%E8%BE%91"><span class="toc-number">6.3.</span> <span class="toc-text">关键函数逻辑</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</a><time datetime="2025-12-22T08:24:15.000Z" title="发表于 2025-12-22 16:24:15">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 10 Quick Sort"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort">【COMPSCI 220】 Lecture 10 Quick Sort</a><time datetime="2025-12-22T07:30:37.000Z" title="发表于 2025-12-22 15:30:37">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</a><time datetime="2025-12-22T06:32:24.000Z" title="发表于 2025-12-22 14:32:24">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</a><time datetime="2025-12-22T05:16:46.000Z" title="发表于 2025-12-22 13:16:46">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 7 Divide and Conquer"/></a><div class="content"><a class="title" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer">【COMPSCI 220】 Lecture 7 Divide and Conquer</a><time datetime="2025-12-22T05:09:08.000Z" title="发表于 2025-12-22 13:09:08">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
   var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
   mermaid.initialize(options);
 }</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
