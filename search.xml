@@ -8,7 +8,7 @@
       <link href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/"/>
       <url>/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/</url>
       
-        <content type="html"><![CDATA[<h2 id="Graphs">Graphs</h2><ul class="lvl-0"><li class="lvl-2">A <strong>graph</strong> is …</li><li class="lvl-2">A <strong>directed graph</strong> (or simply called a <strong>digraph</strong>) is …</li></ul><h2 id="Variants-of-Graphs">Variants of Graphs</h2><ul class="lvl-0"><li class="lvl-2"><p>Multigraph.</p></li><li class="lvl-2"><p>Weighted (di)graph.</p></li></ul><h2 id="Terminology">Terminology</h2><ol><li class="lvl-3"><p><strong>For undirected graph</strong></p><table><thead><tr><th>Terminology</th><th>Definition</th></tr></thead><tbody><tr><td><em>order</em> of a graph</td><td>The number of <strong>nodes</strong> in $G$, $</td></tr><tr><td><em>adjacent</em>, <em>neighbours</em></td><td>If ${u, v} \in E$, then $u$ and $v$ are adjacent or neighbours.</td></tr><tr><td><em>endpoints</em> of an edge</td><td>If ${u, v} \in E$, then $u$ and $v$ are endpoints of edge ${u, v}$.</td></tr><tr><td><em>degree</em> of a vertex</td><td>The number of its adjacent vertices.</td></tr><tr><td><em>walk</em></td><td>A sequence of vertices where each consecutive pair of vertices are joined by an edge.</td></tr><tr><td><em>path</em></td><td>A walk where <strong>no vertex is repeated</strong>.</td></tr></tbody></table><blockquote><p>Customarily, we use $n = |V|$ and $m = |E|$.</p></blockquote></li><li class="lvl-3"><p><strong>For directed graph</strong></p><table><thead><tr><th>Terminology</th><th>Definition</th></tr></thead><tbody><tr><td><em>in/out-degree</em> of a node</td><td>The number of incoming/outgoing neighbours of the node.</td></tr><tr><td><em>walk</em>(<em>path</em>)</td><td>A sequence of nodes where each consecutive pair of nodes are connected by a directed edge(which no node is repeated).</td></tr></tbody></table></li><li class="lvl-3"><p><strong>Special Types of Graphs</strong></p><table><thead><tr><th>Type</th><th>Symbol</th><th>Definition</th></tr></thead><tbody><tr><td>Complete graphs</td><td>$K_n$</td><td>$G = (V, E)$, $(v_i, v_j) \in E$ as long as $v_i, v_j \in V, i \neq j$</td></tr><tr><td>Path graphs</td><td>$P_n$</td><td>$G = (V, E)$, $(v_i, v_j) \in E$ as long as $v_i, v_j \in V, i \neq j$</td></tr><tr><td>Cycle graphs</td><td>$C_n$</td><td>$G = (V, E)$, $V = \bigcup_{i = 1}^n v_i$, $E = \bigcup_{i = 1}^{n - 1}(v_i, v_{i + 1}) \cup (v_n, v_1)$</td></tr><tr><td>Wheel graphs</td><td>$W_n$</td><td>$G = (V, E)$, $V = u \cup \bigcup_{i = 1}^n v_i$, $E = \bigcup_{i = 1}^{n - 1}(v_i, v_{i + 1}) \cup (v_n, v_1) \cup \bigcup_{i = 1}^{n}(u, v_n)$</td></tr></tbody></table></li></ol><h2 id="Modeling-with-Graphs">Modeling with Graphs</h2><h3 id="Map-Coloring">Map Coloring</h3><p>You are a cartographer charged with designing a map of a continent. You should fill regions using various colours, but want to use as few colours as possible, while giving different colours to neighbouring countries. How can you colour all the regions?</p><h3 id="Exam-Scheduling">Exam Scheduling</h3><p>A university needs to schedule exams at the end of the semester so that if a student is enrolled in two courses, these courses must get different examination periods. How can this be done?</p><h3 id="Dining-Mathematicians">Dining Mathematicians</h3><p>Two mathematicians are working on different problems. Sometimes they get hungry and need to eat. However, there is only one (very large) bowl of noodles and only one person can eat at a time. They decide to share a flag. When the flag is raised, one person is eating, and the other has to wait.</p><h3 id="Transition-Diagrams">Transition Diagrams</h3><p>A transition diagram is a digraph that represents states of a system and transitions between states.</p><h2 id="Graph-as-a-Data-Structure">Graph as a Data Structure</h2><h3 id="Adjacency-Matrix">Adjacency Matrix</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="type">bool</span>&gt;&gt; adjMtx</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  | 1 2 3 4 5</span></span><br><span class="line"><span class="comment">-------------</span></span><br><span class="line"><span class="comment">1 | 0 1 0 0 1</span></span><br><span class="line"><span class="comment">2 | 1 0 1 1 1</span></span><br><span class="line"><span class="comment">3 | 0 1 1 0 1</span></span><br><span class="line"><span class="comment">4 | 0 0 0 1 0</span></span><br><span class="line"><span class="comment">5 | 1 1 0 1 0</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure><p>The adjacency matrix of $G$ is the $n \times n$ boolean matrix (encoded using 0, 1) such that $(i, j) \in E$ if and only if the entry $(i, j)$ is 1.</p><p>Size of representation: $O(n^2)$.</p><h3 id="Adjacency-List">Adjacency List</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="type">bool</span>&gt;&gt; adjLst</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">1 | 2 5 </span></span><br><span class="line"><span class="comment">2 | 1 3 4 5</span></span><br><span class="line"><span class="comment">3 | 2 3 5</span></span><br><span class="line"><span class="comment">4 | 4</span></span><br><span class="line"><span class="comment">5 | 1 2 4</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure><p>The adjacency list of a digraph $G$ is a list of $n$ lists, $L_0, L_1, \cdots, L_{n − 1}$, where the $i$-th list $L_i$ contains all the <strong>out-neighbors</strong> of node $i$.</p><p>Size of representation: $O(n + m)$.</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="Graphs">Graphs</h2><ul class="lvl-0"><li class="lvl-2">A <strong>graph</strong> is …</li><li class="lvl-2">A <strong>directed graph</strong> (or simply called a <strong>digraph</strong>) is …</li></ul><h2 id="Variants-of-Graphs">Variants of Graphs</h2><ul class="lvl-0"><li class="lvl-2"><p>Multigraph.</p></li><li class="lvl-2"><p>Weighted (di)graph.</p></li></ul><h2 id="Terminology">Terminology</h2><ol><li class="lvl-3"><p><strong>For undirected graph</strong></p><table><thead><tr><th>Terminology</th><th>Definition</th></tr></thead><tbody><tr><td><em>order</em> of a graph</td><td>The number of <strong>nodes</strong> in $G$, $|V|$.</td></tr><tr><td><em>adjacent</em>, <em>neighbours</em></td><td>If $\{u, v\} \in E$, then $u$ and $v$ are adjacent or neighbours.</td></tr><tr><td><em>endpoints</em> of an edge</td><td>If $\{u, v\} \in E$, then $u$ and $v$ are endpoints of edge $\{u, v\}$.</td></tr><tr><td><em>degree</em> of a vertex</td><td>The number of its adjacent vertices.</td></tr><tr><td><em>walk</em></td><td>A sequence of vertices where each consecutive pair of vertices are joined by an edge.</td></tr><tr><td><em>path</em></td><td>A walk where <strong>no vertex is repeated</strong>.</td></tr></tbody></table><blockquote><p>Customarily, we use $n = |V|$ and $m = |E|$.</p></blockquote></li><li class="lvl-3"><p><strong>For directed graph</strong></p><table><thead><tr><th>Terminology</th><th>Definition</th></tr></thead><tbody><tr><td><em>in/out-degree</em> of a node</td><td>The number of incoming/outgoing neighbours of the node.</td></tr><tr><td><em>walk</em>(<em>path</em>)</td><td>A sequence of nodes where each consecutive pair of nodes are connected by a directed edge(which no node is repeated).</td></tr></tbody></table></li><li class="lvl-3"><p><strong>Special Types of Graphs</strong></p><table><thead><tr><th>Type</th><th>Symbol</th><th>Definition</th></tr></thead><tbody><tr><td>Complete graphs</td><td>$K_n$</td><td>$G = (V, E)$, $(v_i, v_j) \in E$ as long as $v_i, v_j \in V, i \neq j$</td></tr><tr><td>Path graphs</td><td>$P_n$</td><td>$G = (V, E)$, $(v_i, v_j) \in E$ as long as $v_i, v_j \in V, i \neq j$</td></tr><tr><td>Cycle graphs</td><td>$C_n$</td><td>$G = (V, E)$, $V = \bigcup_{i = 1}^n v_i$, $E = \bigcup_{i = 1}^{n - 1}(v_i, v_{i + 1}) \cup (v_n, v_1)$</td></tr><tr><td>Wheel graphs</td><td>$W_n$</td><td>$G = (V, E)$, $V = u \cup \bigcup_{i = 1}^n v_i$, $E = \bigcup_{i = 1}^{n - 1}(v_i, v_{i + 1}) \cup (v_n, v_1) \cup \bigcup_{i = 1}^{n}(u, v_n)$</td></tr></tbody></table></li></ol><h2 id="Modeling-with-Graphs">Modeling with Graphs</h2><h3 id="Map-Coloring">Map Coloring</h3><p>You are a cartographer charged with designing a map of a continent. You should fill regions using various colours, but want to use as few colours as possible, while giving different colours to neighbouring countries. How can you colour all the regions?</p><h3 id="Exam-Scheduling">Exam Scheduling</h3><p>A university needs to schedule exams at the end of the semester so that if a student is enrolled in two courses, these courses must get different examination periods. How can this be done?</p><h3 id="Dining-Mathematicians">Dining Mathematicians</h3><p>Two mathematicians are working on different problems. Sometimes they get hungry and need to eat. However, there is only one (very large) bowl of noodles and only one person can eat at a time. They decide to share a flag. When the flag is raised, one person is eating, and the other has to wait.</p><h3 id="Transition-Diagrams">Transition Diagrams</h3><p>A transition diagram is a digraph that represents states of a system and transitions between states.</p><h2 id="Graph-as-a-Data-Structure">Graph as a Data Structure</h2><h3 id="Adjacency-Matrix">Adjacency Matrix</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="type">bool</span>&gt;&gt; adjMtx</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  | 1 2 3 4 5</span></span><br><span class="line"><span class="comment">-------------</span></span><br><span class="line"><span class="comment">1 | 0 1 0 0 1</span></span><br><span class="line"><span class="comment">2 | 1 0 1 1 1</span></span><br><span class="line"><span class="comment">3 | 0 1 1 0 1</span></span><br><span class="line"><span class="comment">4 | 0 0 0 1 0</span></span><br><span class="line"><span class="comment">5 | 1 1 0 1 0</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure><p>The adjacency matrix of $G$ is the $n \times n$ boolean matrix (encoded using 0, 1) such that $(i, j) \in E$ if and only if the entry $(i, j)$ is 1.</p><p>Size of representation: $O(n^2)$.</p><h3 id="Adjacency-List">Adjacency List</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="type">bool</span>&gt;&gt; adjLst</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">1 | 2 5 </span></span><br><span class="line"><span class="comment">2 | 1 3 4 5</span></span><br><span class="line"><span class="comment">3 | 2 3 5</span></span><br><span class="line"><span class="comment">4 | 4</span></span><br><span class="line"><span class="comment">5 | 1 2 4</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure><p>The adjacency list of a digraph $G$ is a list of $n$ lists, $L_0, L_1, \cdots, L_{n − 1}$, where the $i$-th list $L_i$ contains all the <strong>out-neighbors</strong> of node $i$.</p><p>Size of representation: $O(n + m)$.</p>]]></content>
       
       
       <categories>
@@ -1269,9 +1269,9 @@
       
         <tags>
             
-            <tag> 软件工程 </tag>
-            
             <tag> 学习笔记 </tag>
+            
+            <tag> 软件工程 </tag>
             
         </tags>
       
@@ -1300,11 +1300,11 @@
       
         <tags>
             
-            <tag> 软件工程 </tag>
-            
             <tag> 学习笔记 </tag>
             
             <tag> 介绍 </tag>
+            
+            <tag> 软件工程 </tag>
             
         </tags>
       
@@ -1333,9 +1333,9 @@
       
         <tags>
             
-            <tag> 学习笔记 </tag>
-            
             <tag> 计算机组成原理 </tag>
+            
+            <tag> 学习笔记 </tag>
             
             <tag> 基础知识 </tag>
             
@@ -1366,9 +1366,9 @@
       
         <tags>
             
-            <tag> 学习笔记 </tag>
-            
             <tag> 计算机组成原理 </tag>
+            
+            <tag> 学习笔记 </tag>
             
         </tags>
       
@@ -1397,9 +1397,9 @@
       
         <tags>
             
-            <tag> 学习笔记 </tag>
-            
             <tag> 计算机组成原理 </tag>
+            
+            <tag> 学习笔记 </tag>
             
         </tags>
       
@@ -1428,11 +1428,11 @@
       
         <tags>
             
+            <tag> 计算机组成原理 </tag>
+            
             <tag> 学习笔记 </tag>
             
             <tag> 介绍 </tag>
-            
-            <tag> 计算机组成原理 </tag>
             
         </tags>
       
