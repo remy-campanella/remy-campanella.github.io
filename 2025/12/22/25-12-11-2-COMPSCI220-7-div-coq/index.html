@@ -1,0 +1,373 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 7 Divide and Conquer | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Divide-and-Conquer The divide-and-conquer technique solves a computational problem by dividing it into one or more subprograms of smaller size, conquering each of them by solving them recursively,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 220】 Lecture 7 Divide and Conquer">
+<meta property="og:url" content="https://remy-campanella.github.io/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Divide-and-Conquer The divide-and-conquer technique solves a computational problem by dividing it into one or more subprograms of smaller size, conquering each of them by solving them recursively,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2025-12-22T05:09:08.000Z">
+<meta property="article:modified_time" content="2025-12-22T05:09:08.234Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="奥克兰大学—西南大学合作课程">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="算法分析与设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 220】 Lecture 7 Divide and Conquer",
+  "url": "https://remy-campanella.github.io/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2025-12-22T05:09:08.000Z",
+  "dateModified": "2025-12-22T05:09:08.234Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 220】 Lecture 7 Divide and Conquer',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 220】 Lecture 7 Divide and Conquer</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 220】 Lecture 7 Divide and Conquer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-22T05:09:08.000Z" title="发表于 2025-12-22 13:09:08">2025-12-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T05:09:08.234Z" title="更新于 2025-12-22 13:09:08">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-220-Algorithms-and-Data-Structures/">COMPSCI 220 Algorithms and Data Structures</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="divide-and-conquer">Divide-and-Conquer</h2>
+<p>The divide-and-conquer technique solves a computational problem by
+dividing it into one or more subprograms of smaller size, conquering
+each of them by solving them recursively, and then combining their
+solutions into a solution for the original problem.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if n &lt;= n0 then</span><br><span class="line">    directly solve problem without dividing</span><br><span class="line">else</span><br><span class="line">    divide problem into a subproblems of size n/b each</span><br><span class="line">    for i ← 0 to a − 1 do</span><br><span class="line">        recursively solve the ith subproblem</span><br><span class="line">    combine the a solutions into a solution of the original problem</span><br></pre></td></tr></table></figure>
+<p>Running time: <span class="math display">\[
+T(n) = a T(\frac{n}{b}) + f(n)
+\]</span></p>
+<h2 id="example-1-karatsubas-algorithm">Example 1: Karatsuba’s
+Algorithm</h2>
+<p><a
+href="/2025/12/18/25-12-11-1-COMPSCI220-6-karastuba/#karastubas-algorithms">【COMPSCI
+220】 Lecture 6 Karastuba’s Algorithms</a></p>
+<h2 id="example-2-binary-search">Example 2: Binary Search</h2>
+<h3 id="problem">Problem</h3>
+<p>Search from a number from a sorted sequence of numbers. | 0 | 1 | 2 |
+3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | | — | — | — |
+— | — | — | — | — | — | — | — | — | — | — | — | — | | 0 | 29 | 43 | 45 |
+56 | 58 | 71 | 78 | 83 | 91 | 95 | 99 | 156 | 171 | 222 | 291 |</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function BinarySearch(arr, target, start, end)</span><br><span class="line">    INPUT: Integer array arr, indices start,end, integer target</span><br><span class="line">    OUTPUT: Yes if target is in arr; No otherwise</span><br><span class="line"></span><br><span class="line">    if start &gt; end then</span><br><span class="line">        return “the element doesn’t belong to the sequence”</span><br><span class="line"></span><br><span class="line">    middle ← celi(start + end)</span><br><span class="line"></span><br><span class="line">    if arr[middle] = target then</span><br><span class="line">        return “the element is found”</span><br><span class="line">    else if target &lt; arr[middle] then</span><br><span class="line">        return BinarySearch(arr, target, start, middle − 1)</span><br><span class="line">    else</span><br><span class="line">        return BinarySearch(arr, target, middle + 1, end)</span><br></pre></td></tr></table></figure>
+<p>Time complexity: <span class="math display">\[
+T(n) = T(\frac{n}{2}) + c
+\]</span></p>
+<h2 id="master-theorem">Master Theorem</h2>
+<p>If a time complexity has a form like <span class="math inline">\(T(n)
+= aT(\frac{n}{b}) + f(n)\)</span>, then <span class="math display">\[
+T(n) = \begin{cases}
+    \Theta(n^{\log_ba}), &amp;f(n) \ll n^{\log_ba} \\\\
+    \Theta(n^{\log_ba} \log n), &amp;f(n) \approx n^{\log_ba} \\\\
+    \Theta(f(n)), &amp;f(n) \gg n^{\log_ba}
+\end{cases}
+\]</span></p>
+<p><strong>Example</strong><br />
+Calculate <span class="math display">\[
+T(n) = 9T(\frac{n}{3}) + n
+\]</span></p>
+<details>
+<p><strong>Answer</strong><br />
+Applying <strong>Master’s Theorem</strong>, we have <span
+class="math display">\[
+a = 9, b = 3, f(n) = n
+\]</span></p>
+<p>so <span class="math display">\[
+n^{\log_ba} = n^2, \Theta(f(n)) = \Theta(n)
+\]</span></p>
+<p>so <span class="math display">\[
+f(n) \ll n^{\log_ba}
+\]</span></p>
+<p>so <span class="math display">\[
+T(n) = \Theta(n^{\log_ba}) = \Theta(n^2)
+\]</span></p>
+</details>
+<blockquote>
+<p><strong>Cases when Master’s Theorem doesn’t Work</strong><br />
+1. <span class="math inline">\(a &lt; 1\)</span>. 2. <span
+class="math inline">\(f(n) &lt; 0\)</span>. 3. <span
+class="math inline">\(f(n)\)</span> is <strong>not small
+enough</strong>(difference is smaller than a polynomial factor). 4.
+<span class="math inline">\(f(n)\)</span> is <strong>not big
+enough</strong>(difference is smaller than a polynomial factor).</p>
+</blockquote>
+<p><strong>Other Examples</strong><br />
+- Karastuba’s Algorithm - Binary Search</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/">https://remy-campanella.github.io/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</div></div><div class="info-2"><div class="info-item-1">Standard Matrix Multiplication Algorithm Let  A=[a11a12a13a21a22a23a31a32a33],B=[b11b12b13b21b22b23b31b32b33] then \[ \mathbf{C} = \mathbf{A} \mathbf{B}, c_{ij} = \sum_{k = 1}^3 a_{ik}b_{kj} \] Complexity  Inner-most loop: Compute value for an entry. Middle loop: Compute values in a row. Outer-most loop: Compute values in all rows.  For \(n \times n\) matrix multiplication, time complexity \(\Theta(n^3)\). Divide and Conquer To multiply two \(n \times n\) matricies, we can fi...</div></div></div></a><a class="pagination-related" href="/2025/12/18/25-12-11-1-COMPSCI220-6-karastuba/" title="【COMPSCI 220】 Lecture 6 Karastuba's Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 6 Karastuba's Algorithms</div></div><div class="info-2"><div class="info-item-1">Multiplication Problem  INPUT: Two binary arrays \(x[0 \cdots n - 1]\), \(y[0 \cdots n - 1]\). OUTPUT: A binary array \(z[0 \cdots 2n - 1]\) represents \(xy\).  Long Multiplication: The “Grade School” Algorithm  Outer for-loop: repeats \(n\) times. Inner for-loop: repeats \(n\) times in worst case. Each iteration in the inner loop: Constant number of (single-bit) addition, modulo, division, and assignment  Therefore the running time of long multiplication is \(\Theta(n^2)\). K...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/19/25-11-19-1-COMPSCI220-4-asym-not/" title="【COMPSCI 220】Lecture 4 Asymptotic notations"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-19</div><div class="info-item-2">【COMPSCI 220】Lecture 4 Asymptotic notations</div></div><div class="info-2"><div class="info-item-1">Dominance Relation The dominance relation of the frequently used classes: \[ 1 \prec \log n \prec (\log n)^2 \prec n \prec n \log n \prec n^2 \prec n^2 \log n \prec n^3 \prec \cdots \prec 2^n \prec n! \] Asymptotic Notation Define \[ f(n) \prec g(n) \Leftrightarrow f(n) = O(g(n)) \\\\ g(n) \prec f(n) \Leftrightarrow f(n) = \Omega(g(n)) \\\\ f(n) = O(g(n)), f(n) = \Omega(g(n)) \Leftrightarrow f(n) = \Theta(g(n)) \]    Notation Read     \(O\) asymptotic upper bound   \(\...</div></div></div></a><a class="pagination-related" href="/2025/12/11/25-11-19-2-COMPSCI220-5-more-iss/" title="【COMPSCI 220】 Lecture 5 More Issues on Algorithm Analysis"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-11</div><div class="info-item-2">【COMPSCI 220】 Lecture 5 More Issues on Algorithm Analysis</div></div><div class="info-2"><div class="info-item-1">Elementary Operations  Comparison | Operation | Theoretically | Actually | | — | — | — | | Adding two numbers | \(O(1)\) | \(\Theta(n)\) | | Multiplying two numbers | \(O(1)\) | \(O(n^2)\) (by hand) | Default Nevertheless, in this course, we will assume \(+\), \(\times\) are elementary by default(\(O(1)\)), unless stated otherwise.  Input Size  Definition The input size of an algorithm is the number of bits taken to store the input of the algorithm. Comaprison Let \(x\) be th...</div></div></div></a><a class="pagination-related" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-22</div><div class="info-item-2">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</div></div><div class="info-2"><div class="info-item-1">Standard Matrix Multiplication Algorithm Let  A=[a11a12a13a21a22a23a31a32a33],B=[b11b12b13b21b22b23b31b32b33] then \[ \mathbf{C} = \mathbf{A} \mathbf{B}, c_{ij} = \sum_{k = 1}^3 a_{ik}b_{kj} \] Complexity  Inner-most loop: Compute value for an entry. Middle loop: Compute values in a row. Outer-most loop: Compute values in all rows.  For \(n \times n\) matrix multiplication, time complexity \(\Theta(n^3)\). Divide and Conquer To multiply two \(n \times n\) matricies, we can fi...</div></div></div></a><a class="pagination-related" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-22</div><div class="info-item-2">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</div></div><div class="info-2"><div class="info-item-1">The Sorting Problem The sorting problem seeks to arrange a list (i.e., array or linked list) of keys (e.g., integers, strings) so that every adjacent pair of keys is in the designated order.  INPUT: An unsorted list of keys \(a = [0, \cdots, n - 1]\). OUTPUT: A sorted list containing the same list of elements \({a[0], \cdots, a[n - 1]}\).  Selection Sort  Split the input list into sorted and unsorted sublists. Sorted sublist is initially empty, and the unsorted sublist is the w...</div></div></div></a><a class="pagination-related" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-22</div><div class="info-item-2">【COMPSCI 220】 Lecture 10 Quick Sort</div></div><div class="info-2"><div class="info-item-1">Divide and Conquer Sorting Algorithms  Split the list into sublist Recursively sort each sublists. Combine the sorted lists.  Merge Sort does comparisons during combining, quick sort does comparisons during splitting. Quick Sort  Choose a pivot, then split(partition):  All elements in left sublist \(\leq\) pivot. All elements in right sublist \(&gt;\) pivot.  Recursively sort the left and right sublists. Combine.  Choose a pivot: Use the first entry as pivot element for...</div></div></div></a><a class="pagination-related" href="/2025/11/19/25-11-4-1-COMPSCI220-1-intro/" title="【COMPSCI 220】 Lecture 1 What is a Algorithm and Why Analyse It?"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-19</div><div class="info-item-2">【COMPSCI 220】 Lecture 1 What is a Algorithm and Why Analyse It?</div></div><div class="info-2"><div class="info-item-1">Algorithms and Data Structures  Algorithms are sequences of clearly-stated rules that specify a step-by-step method for solving a given problem. Data structure are particular ways of storing and organising data in a computer system so that it can be used efficiently.  History Calculating Fibonacci Sequence Approximately, \(F(n) \approx 1.618^n\). Two Central Questions  What is an algorithm?  A list of unambiguous and detailed rules that specify successive operations. An id...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#divide-and-conquer"><span class="toc-number">1.</span> <span class="toc-text">Divide-and-Conquer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-1-karatsubas-algorithm"><span class="toc-number">2.</span> <span class="toc-text">Example 1: Karatsuba’s
+Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-2-binary-search"><span class="toc-number">3.</span> <span class="toc-text">Example 2: Binary Search</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#problem"><span class="toc-number">3.1.</span> <span class="toc-text">Problem</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#master-theorem"><span class="toc-number">4.</span> <span class="toc-text">Master Theorem</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</a><time datetime="2025-12-22T08:24:15.000Z" title="发表于 2025-12-22 16:24:15">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 10 Quick Sort"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort">【COMPSCI 220】 Lecture 10 Quick Sort</a><time datetime="2025-12-22T07:30:37.000Z" title="发表于 2025-12-22 15:30:37">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</a><time datetime="2025-12-22T06:32:24.000Z" title="发表于 2025-12-22 14:32:24">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</a><time datetime="2025-12-22T05:16:46.000Z" title="发表于 2025-12-22 13:16:46">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 7 Divide and Conquer"/></a><div class="content"><a class="title" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer">【COMPSCI 220】 Lecture 7 Divide and Conquer</a><time datetime="2025-12-22T05:09:08.000Z" title="发表于 2025-12-22 13:09:08">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

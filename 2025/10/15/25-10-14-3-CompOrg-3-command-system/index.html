@@ -1,0 +1,615 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理学习】 第三章 指令系统 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="3.1 指令格式  基本格式 | | | | — | — | | 操作码字段 | 地址码字段 | 地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 \(A_1\)， 第二操作数地址 \(A_2\)， 操作结果存放地址 \(A_3\)， 下一条指令地址 \(A_4\)。  指令结构  四地址指令  含义：\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【计算机组成原理学习】 第三章 指令系统">
+<meta property="og:url" content="https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-3-command-system/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="3.1 指令格式  基本格式 | | | | — | — | | 操作码字段 | 地址码字段 | 地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 \(A_1\)， 第二操作数地址 \(A_2\)， 操作结果存放地址 \(A_3\)， 下一条指令地址 \(A_4\)。  指令结构  四地址指令  含义：\">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2025-10-15T13:41:16.000Z">
+<meta property="article:modified_time" content="2025-10-23T02:19:47.860Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="计算机组成原理">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【计算机组成原理学习】 第三章 指令系统",
+  "url": "https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-3-command-system/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2025-10-15T13:41:16.000Z",
+  "dateModified": "2025-10-23T02:19:47.860Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-3-command-system/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【计算机组成原理学习】 第三章 指令系统',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理学习】 第三章 指令系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理学习】 第三章 指令系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-15T13:41:16.000Z" title="发表于 2025-10-15 21:41:16">2025-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-10-23T02:19:47.860Z" title="更新于 2025-10-23 10:19:47">2025-10-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="指令格式">3.1 指令格式</h2>
+<ol type="1">
+<li><p><strong>基本格式</strong> | | | | — | — | | 操作码字段 |
+地址码字段 |</p></li>
+<li><p><strong>地址码结构</strong><br />
+对于一般的双操作数运算指令，除去<strong>操作码（Operation
+Code）</strong>，还包含</p>
+<ul>
+<li>第一操作数地址 <span class="math inline">\(A_1\)</span>，</li>
+<li>第二操作数地址 <span class="math inline">\(A_2\)</span>，</li>
+<li>操作结果存放地址 <span class="math inline">\(A_3\)</span>，</li>
+<li>下一条指令地址 <span class="math inline">\(A_4\)</span>。</li>
+</ul></li>
+<li><p><strong>指令结构</strong></p>
+<ul>
+<li><strong>四地址指令</strong>
+<ul>
+<li>含义：<span class="math inline">\((A_1) OP (A_2) \rightarrow
+A_3\)</span></li>
+<li>直观，但太长，不实际。</li>
+</ul></li>
+<li><strong>三地址指令</strong>
+<ul>
+<li>含义：<span class="math inline">\((A_1) OP (A_2) \rightarrow
+A_3\)</span>，<span class="math inline">\((PC) + 1 \rightarrow
+PC\)</span></li>
+<li>每执行一条指令，<strong>程序计数器（PC）</strong> 自增。</li>
+<li>仍然较长，在大、中型计算机使用。</li>
+<li>适用于向量、矩阵运算。</li>
+</ul></li>
+<li><strong>二地址指令</strong>
+<ul>
+<li>含义：<span class="math inline">\((A_1) OP (A_2) \rightarrow
+A_1\)</span>，<span class="math inline">\(\rm (PC) + 1 \rightarrow
+PC\)</span></li>
+<li><span class="math inline">\(A_1\)</span>
+为<strong>目的操作数地址</strong>，<span
+class="math inline">\(A_2\)</span>为<strong>源操作数地址</strong>。<span
+class="math inline">\(A_1\)</span>中原内容会被破坏。</li>
+<li>至少需要访问<strong>四次主存</strong>。</li>
+</ul></li>
+<li><strong>一地址指令</strong>
+<ul>
+<li>含义：<span class="math inline">\((Acc) OP (A_1) \rightarrow
+Acc\)</span>，<span class="math inline">\((PC) + 1 \rightarrow
+PC\)</span></li>
+<li>另一个操作数在<strong>累加寄存器（Accumulator）</strong>
+中，操作结果也存入累加寄存器，用于累加操作、连续运算。</li>
+<li>只需访问<strong>两次</strong>主存。</li>
+</ul></li>
+<li><strong>零地址指令</strong>
+<ul>
+<li>只有操作码，没有地址码。</li>
+<li>操作数从堆栈顶部<strong>弹出</strong>，结果<strong>压入</strong>堆栈。<br />
+</li>
+<li>用于<strong>嵌套、递归</strong>。</li>
+</ul>
+<blockquote>
+<p><strong>堆（Heap）</strong>
+是程序运行时用于动态分配内存的一块区域。与栈不同，堆的内存分配和释放通常由程序员手动控制（如C/C++中的<code>malloc</code>/<code>free</code>），或者由垃圾回收机制自动管理（如Java、Python）。堆空间较大，但分配和释放效率较低，且容易出现内存碎片。<br />
+<strong>栈（Stack）</strong>
+是程序运行时自动分配和释放的内存区域，主要用于存放函数的参数、局部变量等。栈由系统自动管理，内存连续，分配和释放速度快，但容量有限。栈的操作方式类似于数据结构中的栈，即“先进后出”。<br />
+<strong>堆栈</strong>通常指“栈”，尤其是在底层和系统编程中；少数情况下也可指“堆和栈”的总称。</p>
+</blockquote></li>
+<li><strong>规律</strong><br />
+地址数越少：
+<ul>
+<li>程序越<strong>长</strong>。</li>
+<li>程序存储量<strong>越小</strong>。</li>
+<li>执行速度<strong>越低</strong>。</li>
+</ul></li>
+</ul></li>
+<li><p><strong>操作码编码</strong></p>
+<ul>
+<li><p><strong>规整型（定长）编码</strong><br />
+操作码位数、位置固定。设系统共有 <span class="math inline">\(m\)</span>
+条指令，<span class="math inline">\(N\)</span> 位操作码字段，则<br />
+<span class="math display">\[
+m \leq 2^N \\
+N \geq \log_2m
+\]</span>
+可简化硬件设计，减少编译时间，用于字长较长的大、中型计算机与超级小型计算机。</p></li>
+<li><p><strong>非规整型（变长）编码</strong><br />
+操作码位数不固定，分散放在指令字不同位置上。压缩指令操作码字段平均长度。</p>
+<ul>
+<li><strong>扩展操作码法</strong><br />
+使操作数多的指令操作码字段长尽量短，操作数少的指令操作码字段长尽量长。<br />
+要求：
+<ul>
+<li>不允许短码是长码的前缀。</li>
+<li>操作码不能重复。</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ol>
+<h2 id="寻址技术">3.2 寻址技术</h2>
+<p>寻找操作数的地址或下一条指令的地址，包括编址方式和寻址方式。</p>
+<ol type="1">
+<li><strong>编址方式</strong><br />
+对各种存储设备进行编码的方式。
+<ul>
+<li><strong>编址单位</strong>
+<ul>
+<li>字编址：编址单位与访问单位相一致。</li>
+<li>字节编址：编址单位与一字节相一致。字节编址方式存在地址信息浪费。</li>
+<li>位编址：浪费更大。</li>
+</ul></li>
+<li><strong>位数</strong>
+<ul>
+<li>与<strong>主存容量</strong>和<strong>编址单位</strong>有关。</li>
+</ul></li>
+</ul></li>
+<li><strong>寻址方式</strong>
+<ul>
+<li>指令寻址、数据寻址。</li>
+<li>顺序寻址、跳跃寻址。</li>
+</ul></li>
+<li><strong>数据寻址</strong><br />
+根据地址码寻找真实操作数地址。
+<ul>
+<li><strong>立即寻址</strong>
+<ul>
+<li>指令中世界存放操作数本身，这样的数称为<strong>立即数</strong>。</li>
+<li>操作数不能被修改，长度受指令长度限制，用于赋初值或提供常数。</li>
+</ul></li>
+<li><strong>寄存器寻址</strong>
+<ul>
+<li>给出某通用寄存器编号 <span
+class="math inline">\(R_i\)</span>，寄存器中为操作数。<span
+class="math inline">\(S = (R_i)\)</span>。</li>
+<li>速度快，地址码字段短，几乎所用计算机都使用。</li>
+</ul></li>
+<li><strong>直接寻址</strong>
+<ul>
+<li>地址码 <span class="math inline">\(A\)</span>
+即为操作数有效地址形式地址等于有效地址，<span class="math inline">\(EA =
+A\)</span>，<span class="math inline">\(S = (A)\)</span>。</li>
+<li>不需寻址运算，简单，便于硬件实现，但地址空间受地址码字段位数限制。</li>
+</ul></li>
+<li><strong>间接寻址</strong>
+<ul>
+<li>地址码为主存中存储操作数的单元的地址。指令中划出标明直接（<span
+class="math inline">\(@ = 0\)</span>）或间接（<span
+class="math inline">\(@ = 1\)</span>）寻址的标志位。<span
+class="math inline">\(EA = (A)\)</span>，<span class="math inline">\(S =
+((A))\)</span>。</li>
+<li>分为一级间接寻址与多级间接寻址。</li>
+</ul></li>
+<li><strong>寄存器间接寻址</strong>
+<ul>
+<li>通用寄存器给出主存中存储操作数的单元的地址。<span
+class="math inline">\(S = ((R_i))\)</span>。</li>
+<li>指令较短，只需一次访存。</li>
+</ul></li>
+<li><strong>变址寻址</strong>
+<ul>
+<li>将编址寄存器 <span class="math inline">\(R_x\)</span> 内容与地址码
+<span class="math inline">\(A\)</span> 相加得到有效地址，<span
+class="math inline">\(EA = ((R_x) + A)\)</span>。</li>
+<li>频繁修改地址时只需修改变址值，用于成批数据处理。</li>
+</ul></li>
+<li><strong>基址寻址</strong>
+<ul>
+<li>将基址寄存器 <span class="math inline">\(R_x\)</span>
+内容与指令中位移量 <span class="math inline">\(D\)</span>
+相加得到有效地址，<span class="math inline">\(EA = (R_b) +
+D\)</span>，<span class="math inline">\(S = ((R_b) + D)\)</span>。</li>
+<li>将用户编程时的逻辑地址转化位物理地址。</li>
+<li>区别 | | | | — | — | | 变址寻址 |
+变址寻址是面向用户的，用于访问字符串、向量和数组等成批数据 | | 基址寻址
+|
+基址寻址面向系统，主要用于逻辑地址和物理地址的变换，用以解决程序在主存中的再定位和扩大寻址空间等向题
+|</li>
+</ul></li>
+<li><strong>相对寻址</strong>
+<ul>
+<li>由程序计数器提供基准地址，指令中地址码作为位移量 <span
+class="math inline">\(D\)</span>。<span class="math inline">\(EA = (PC)
++ D\)</span>。</li>
+</ul></li>
+<li><strong>页面寻址</strong>
+<ul>
+<li>将整个主存空间分成若干大小相同的区，每个区成为一页。</li>
+<li>分类<br />
+| | | | – | — | | 基页（零页寻址） | <span class="math inline">\(EA = 0
+// A\)</span>，操作数在零页面中。| | 当前页寻址 |
+页面地址为程序计数器高位内容，<span class="math inline">\(EA = (PC)_H //
+A\)</span>。 | 页寄存器地址 | 页寄存器提供页面地址。 |</li>
+<li>寻址方式标识
+<center>
+<img src="/image/icon/loading.gif" data-original="/image/Summaries/1758960780042.png" width = "300" height = "207" alt="移码和真值的映射" align=center />
+</center></li>
+</ul></li>
+</ul></li>
+<li><strong>变型或组合寻址方式</strong>
+<ul>
+<li><strong>自增型寄存器间址和自减型寄存器间址</strong>
+<ul>
+<li>自增寻址时，寄存器 <span class="math inline">\(R_i\)</span>
+内容为有效地址，<span class="math inline">\(EA = (R_i), R \leftarrow
+(R_i) + d\)</span>。<span class="math inline">\(d\)</span>
+为修改量，记作<span
+class="math inline">\((R_i)+\)</span>，表示先操作后修改。</li>
+<li>自减寻址时，<span class="math inline">\(R_i \leftarrow (R_i) - d, EA
+= (R_i)\)</span>，记作 <span
+class="math inline">\(-(R_i)\)</span>，表示先修改后操作。</li>
+</ul></li>
+<li><strong>扩展变址方式</strong>
+<ul>
+<li><strong>前变址寻址方式</strong><br />
+<span class="math inline">\(EA = ((R_x) + A), S = (((R_x) +
+A))\)</span>。</li>
+<li><strong>后变址寻址方式</strong><br />
+<span class="math inline">\(EA = (R_x) + (A), S = ((R_x) +
+(A))\)</span>。</li>
+<li><strong>基址变址寻址</strong><br />
+基址寄存器 <span class="math inline">\(R_b\)</span>，变址寄存器 <span
+class="math inline">\(R_x\)</span>，位移量 <span
+class="math inline">\(D\)</span>，<span class="math inline">\(EA = (R_b)
++ (R_x) + D\)</span>。</li>
+</ul></li>
+</ul></li>
+</ol>
+<h2 id="堆栈与堆栈操作">3.3 堆栈与堆栈操作</h2>
+<ol type="1">
+<li><p><strong>寄存器堆栈</strong><br />
+用一组专门的寄存器构成的堆栈，也称<strong>硬堆栈</strong>。具有自动推移功能。栈顶位置固定，无栈顶指针。</p></li>
+<li><p><strong>存储器堆栈</strong><br />
+从主存中划出一段区域作为堆栈，也称<strong>软堆栈</strong>。栈底固定，需要专门的硬件寄存器作为栈顶指针（SP）。</p>
+<ul>
+<li>自底向上生成堆栈</li>
+<li>自顶向下生成堆栈</li>
+</ul></li>
+<li><p><strong>堆栈操作</strong></p></li>
+</ol>
+<h2 id="指令类型">3.4 指令类型</h2>
+<ol type="1">
+<li><strong>数据传送类指令</strong>
+<ul>
+<li><p><strong>一般传送指令 MOV</strong><br />
+数据从源地址传送到目的地址，而源地址不变</p></li>
+<li><p><strong>堆栈操作指令 PUSH，POP</strong></p></li>
+<li><p><strong>数据交换指令</strong></p></li>
+</ul></li>
+<li><strong>运算类指令</strong>
+<ul>
+<li><p><strong>算数运算类指令</strong></p></li>
+<li><p><strong>逻辑运算类指令</strong></p>
+<ul>
+<li><strong>按位测（位检查）</strong><br />
+</li>
+<li><strong>按位清（位清除）</strong><br />
+</li>
+<li><strong>按位置（位设置）</strong></li>
+<li><strong>按位修改</strong><br />
+</li>
+<li><strong>判符合</strong></li>
+</ul></li>
+</ul></li>
+<li><strong>移位类指令</strong>
+<ul>
+<li><strong>算数移位</strong></li>
+<li><strong>逻辑移位</strong></li>
+<li><strong>循环移位</strong></li>
+</ul></li>
+<li><strong>程序控制类指令</strong>
+<ul>
+<li><strong>转移指令</strong><br />
+</li>
+<li><strong>子程序调用指令</strong></li>
+</ul></li>
+<li><strong>输入输出类指令</strong>
+<ul>
+<li><strong>独立编址的 I/O 指令</strong></li>
+<li><strong>统一编址的 I/O 指令</strong></li>
+</ul></li>
+<li><strong>80x86 指令系统举例</strong>
+<ul>
+<li>MOV</li>
+<li>PUSH/POP</li>
+<li>加减、比较</li>
+<li>乘除</li>
+<li>BCD、ASCII 运算</li>
+<li>基本逻辑指令</li>
+<li>位测试指令</li>
+<li>移位与循环指令</li>
+<li>转移控制指令</li>
+<li>子程序调用与返回指令</li>
+<li>输入输出指令</li>
+</ul></li>
+</ol>
+<h2 id="指令系统的发展">3.5 指令系统的发展</h2>
+<ol type="1">
+<li><p><strong>x86 架构的扩展指令集</strong></p>
+<ul>
+<li>MMX（Multi Media eXtension）</li>
+<li>SSE（Streaming SIMD Extension）</li>
+<li>3DNow</li>
+<li>SSE2</li>
+<li>SSE3</li>
+<li>SSE4</li>
+<li>SSE5</li>
+<li>AVX（Advanced Vector eXtension）</li>
+<li>FMA（Fused Multiply Accumulate）</li>
+</ul></li>
+<li><p><strong>从复杂指令系统道精简指令系统</strong></p></li>
+<li><p><strong>VLIW（Very Long Instruction Word） 和 EPIC（Explicit
+Parallel Instruction Code）</strong></p></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-3-command-system/">https://remy-campanella.github.io/2025/10/15/25-10-14-3-CompOrg-3-command-system/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/" title="【计算机组成原理学习】 第四章 数值的机器运算"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【计算机组成原理学习】 第四章 数值的机器运算</div></div><div class="info-2"><div class="info-item-1">4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i = A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行 | 种类 | 方法 | 优点 | 缺点 | | — | — | — | — | | 串行加法器 | 数据逐位送入一个加法器进行计算 | 器件少、成本低 | 速度慢 | | 并行加法器 | 由多个全加器组成，位数多少取决于字长 | 速度高 | 加法运算最长时间问题 |  4.2.2 进位的产生与传递 设进位传递函数 \[ P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\\\ G_i = A_iB_i \] 则 \[ C_n = G_n + P_nC_{n - 1} \] 串行进位加法器的总延迟时间与字长成正比。设一级与门、或门的延迟时间为\(ty\)，每一级全加器延迟为\(2ty\)，从\(C_0\)到\(C_N\)的最长...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示  无符号数 整个机器字长全部二进制位位数值位。 范围\([0, 2^n - 1]\)。 原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 10000\)。 原码实现乘除简单，实现加减复杂。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。 补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，\([+0]_补 = [-0]_补 = 00000\)。 范围\([-2^{n - 1}, 2^{n - 1} - 1]\)。 反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 11111\)。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。  2.2 机器数的定点表示与浮点表示  定点小数 即纯小数（\(-1 &lt; x &lt; 1\)），小数点位置固定，整数位被取代为符号位。设机器...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示  无符号数 整个机器字长全部二进制位位数值位。 范围\([0, 2^n - 1]\)。 原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 10000\)。 原码实现乘除简单，实现加减复杂。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。 补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，\([+0]_补 = [-0]_补 = 00000\)。 范围\([-2^{n - 1}, 2^{n - 1} - 1]\)。 反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 11111\)。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。  2.2 机器数的定点表示与浮点表示  定点小数 即纯小数（\(-1 &lt; x &lt; 1\)），小数点位置固定，整数位被取代为符号位。设机器...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-1-intro/" title="【计算机组成原理学习】 第一章 概论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制  存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。 早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。 存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。   1.2 计算机的硬件组成  计算机的主要部件 | | | | — | — | | 输入设备 | 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件 | | 输出设备 | 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备 | | 存储器 | 用于存放程序和数据的部件 | | 运算器 | 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU） | |...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/" title="【计算机组成原理学习】 第四章 数值的机器运算"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第四章 数值的机器运算</div></div><div class="info-2"><div class="info-item-1">4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i = A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行 | 种类 | 方法 | 优点 | 缺点 | | — | — | — | — | | 串行加法器 | 数据逐位送入一个加法器进行计算 | 器件少、成本低 | 速度慢 | | 并行加法器 | 由多个全加器组成，位数多少取决于字长 | 速度高 | 加法运算最长时间问题 |  4.2.2 进位的产生与传递 设进位传递函数 \[ P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\\\ G_i = A_iB_i \] 则 \[ C_n = G_n + P_nC_{n - 1} \] 串行进位加法器的总延迟时间与字长成正比。设一级与门、或门的延迟时间为\(ty\)，每一级全加器延迟为\(2ty\)，从\(C_0\)到\(C_N\)的最长...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-1-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。  工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。   二、软件工程学科与教材分析  经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。  学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。  ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-2-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">2.1 可行性研究的任务  任务 并非任何问题都有简单明显的解决办法。如果问题没有可行的解，那么花费在这项工程上的任何时间、人力、软硬件资源和经费，都是无谓的浪费。可行性研究的目的，就是用最小的代价在尽可能短的时间内确定问题是否能够解决。 分析过程  分析和澄清问题定义。 导出系统逻辑模型。 探索若干种可选的主要解法。   2.2 可行性研究过程        步骤      复查系统规模和目标 实质上是为了确保分析员正在解决的问题确实是要求他解决的问题。   研究目前正在使用的系统 新系统必须要完成旧系统的基本功能；新系统必须要解决旧系统的问题。   导出新系统的高层逻辑模型 参考现有系统的逻辑模型，设想目标系统的逻辑模型，最后根据目标系统的逻辑模型建造新的物理系统。   进一步定义问题 在之前的基础上再次定义问题，构成循环，直到提出的逻辑模型完全符合系统目标。   导出和评价供选择的解法 为每个解法考虑操作、经济方面的可行性，制定实现进度表。   推荐行动方针    草拟开发计划...</div></div></div></a><a class="pagination-related" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-20</div><div class="info-item-2">【STATS 330】 Introduction</div></div><div class="info-2"><div class="info-item-1">This course is about statistical modelling. We will expand on the generalised linear model (GLM) encountered in STATS 201/8. It comprises four parts:  Generalised linear models Simulation and bootstrapping Regression models for prediction Regression models for explanation  This course provides a versatile statistical toolbox that is useful in a range of fields, including almost all subjects in business and economics, along with experimental or social science. Course Link Prof. J...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">3.1 指令格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BB%E5%9D%80%E6%8A%80%E6%9C%AF"><span class="toc-number">2.</span> <span class="toc-text">3.2 寻址技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E6%A0%88%E4%B8%8E%E5%A0%86%E6%A0%88%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">3.3 堆栈与堆栈操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">3.4 指令类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%8F%91%E5%B1%95"><span class="toc-number">5.</span> <span class="toc-text">3.5 指令系统的发展</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</a><time datetime="2025-12-22T08:24:15.000Z" title="发表于 2025-12-22 16:24:15">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 10 Quick Sort"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort">【COMPSCI 220】 Lecture 10 Quick Sort</a><time datetime="2025-12-22T07:30:37.000Z" title="发表于 2025-12-22 15:30:37">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</a><time datetime="2025-12-22T06:32:24.000Z" title="发表于 2025-12-22 14:32:24">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</a><time datetime="2025-12-22T05:16:46.000Z" title="发表于 2025-12-22 13:16:46">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 7 Divide and Conquer"/></a><div class="content"><a class="title" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer">【COMPSCI 220】 Lecture 7 Divide and Conquer</a><time datetime="2025-12-22T05:09:08.000Z" title="发表于 2025-12-22 13:09:08">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
