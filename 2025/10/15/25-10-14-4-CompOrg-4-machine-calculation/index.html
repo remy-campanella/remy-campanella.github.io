@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理学习】 第四章 数值的机器运算 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="4.1 基本算数运算的实现 4.1.1 加法器   全加器逻辑与真值表 （略）   逻辑表达式 $$ S_i &#x3D; A_i \oplus B_i \oplus C_{i - 1} \\ C_i &#x3D; A_iB_i + (A_i \oplus B_i)C_{i - 1} $$   串行与并行    种类 方法 优点 缺点     串行加法器 数据逐位送入一个加法器进行计算 器件少、成本低 速度慢   并">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理】 第四章 数值的机器运算 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i &#x3D; A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i &#x3D; A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行          种类 方法 优点 缺点     串行加法器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【计算机组成原理学习】 第四章 数值的机器运算">
+<meta property="og:title" content="【计算机组成原理】 第四章 数值的机器运算">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="4.1 基本算数运算的实现 4.1.1 加法器   全加器逻辑与真值表 （略）   逻辑表达式 $$ S_i &#x3D; A_i \oplus B_i \oplus C_{i - 1} \\ C_i &#x3D; A_iB_i + (A_i \oplus B_i)C_{i - 1} $$   串行与并行    种类 方法 优点 缺点     串行加法器 数据逐位送入一个加法器进行计算 器件少、成本低 速度慢   并">
+<meta property="og:description" content="4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i &#x3D; A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i &#x3D; A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行          种类 方法 优点 缺点     串行加法器">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-10-15T13:41:33.000Z">
-<meta property="article:modified_time" content="2025-12-22T09:26:08.585Z">
+<meta property="article:modified_time" content="2025-12-22T10:45:04.390Z">
 <meta property="article:author" content="Remy Campanella">
 <meta property="article:tag" content="计算机组成原理">
 <meta property="article:tag" content="学习笔记">
@@ -16,11 +16,11 @@
 <meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "【计算机组成原理学习】 第四章 数值的机器运算",
+  "headline": "【计算机组成原理】 第四章 数值的机器运算",
   "url": "https://remy-campanella.github.io/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/",
   "image": "https://remy-campanella.github.io/image/background/remy.jpg",
   "datePublished": "2025-10-15T13:41:33.000Z",
-  "dateModified": "2025-12-22T09:26:08.585Z",
+  "dateModified": "2025-12-22T10:45:04.390Z",
   "author": [
     {
       "@type": "Person",
@@ -157,31 +157,32 @@
   },
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '【计算机组成原理学习】 第四章 数值的机器运算',
+  title: '【计算机组成原理】 第四章 数值的机器运算',
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
 }</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
     <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理学习】 第四章 数值的机器运算</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理学习】 第四章 数值的机器运算</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-15T13:41:33.000Z" title="发表于 2025-10-15 21:41:33">2025-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T09:26:08.585Z" title="更新于 2025-12-22 17:26:08">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="4-1-基本算数运算的实现">4.1 基本算数运算的实现</h2>
-<h3 id="4-1-1-加法器">4.1.1 加法器</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>全加器逻辑与真值表</strong><br>
-（略）</p>
-</li>
-<li class="lvl-3">
-<p><strong>逻辑表达式</strong><br>
-$$<br>
-S_i = A_i \oplus B_i \oplus C_{i - 1} \\<br>
-C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1}<br>
-$$</p>
-</li>
-<li class="lvl-3">
-<p><strong>串行与并行</strong></p>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理】 第四章 数值的机器运算</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理】 第四章 数值的机器运算</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-15T13:41:33.000Z" title="发表于 2025-10-15 21:41:33">2025-10-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-22T10:45:04.390Z" title="更新于 2025-12-22 18:45:04">2025-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="基本算数运算的实现">4.1 基本算数运算的实现</h2>
+<h3 id="加法器">4.1.1 加法器</h3>
+<ol type="1">
+<li><p><strong>全加器逻辑与真值表</strong><br />
+（略）</p></li>
+<li><p><strong>逻辑表达式</strong><br />
+<span class="math display">\[
+S_i = A_i \oplus B_i \oplus C_{i - 1} \\\\
+C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1}
+\]</span></p></li>
+<li><p><strong>串行与并行</strong></p>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>种类</th>
 <th>方法</th>
 <th>优点</th>
@@ -189,844 +190,874 @@ $$</p>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>串行加法器</td>
 <td>数据逐位送入一个加法器进行计算</td>
 <td>器件少、成本低</td>
 <td>速度慢</td>
 </tr>
-<tr>
+<tr class="even">
 <td>并行加法器</td>
 <td>由多个全加器组成，位数多少取决于字长</td>
 <td>速度高</td>
 <td>加法运算最长时间问题</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ol>
-<h3 id="4-2-2-进位的产生与传递">4.2.2 进位的产生与传递</h3>
-<p>设进位传递函数<br>
-$$<br>
-P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\<br>
-G_i = A_iB_i<br>
-$$</p>
-<p>则<br>
-$$<br>
-C_n = G_n + P_nC_{n - 1}<br>
-$$</p>
-<p>串行进位加法器的总延迟时间与字长成<strong>正比</strong>。设一级与门、或门的延迟时间为$ty$，每一级全加器延迟为$2ty$，从$C_0$到$C_N$的最长时间为$2nty$。</p>
-<h3 id="4-1-3-并行加法器的快速进位">4.1.3 并行加法器的快速进位</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>并行进位</strong><br>
-又称先行进位、同时进位，各级信号同时形成。<br>
-$$<br>
-C_n = \sum_{i = 0}^n(\prod_{k = i + 1}^nP_k)C_i<br>
-$$</p>
-<p>可见十分甚至九分得麻烦啊（悲）。</p>
-</li>
-<li class="lvl-3">
-<p><strong>分组并行进位</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5"><strong>单级先行进位（将多位分为几组，组内并行进位，组间串行进位）</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1761126616059.jpg" alt="1761126616059"></li>
-<li class="lvl-5"><strong>多级先行进位（将多位分为几组，组内并行进位，组间并行行进位）</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1761126672774.jpg" alt="1761126672774"></li>
-</ul>
-</li>
+<h3 id="进位的产生与传递">4.2.2 进位的产生与传递</h3>
+<p>设进位传递函数 <span class="math display">\[
+P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\\\
+G_i = A_iB_i
+\]</span></p>
+<p>则 <span class="math display">\[
+C_n = G_n + P_nC_{n - 1}
+\]</span></p>
+<p>串行进位加法器的总延迟时间与字长成<strong>正比</strong>。设一级与门、或门的延迟时间为<span
+class="math inline">\(ty\)</span>，每一级全加器延迟为<span
+class="math inline">\(2ty\)</span>，从<span
+class="math inline">\(C_0\)</span>到<span
+class="math inline">\(C_N\)</span>的最长时间为<span
+class="math inline">\(2nty\)</span>。</p>
+<h3 id="并行加法器的快速进位">4.1.3 并行加法器的快速进位</h3>
+<ol type="1">
+<li><p><strong>并行进位</strong><br />
+又称先行进位、同时进位，各级信号同时形成。 <span class="math display">\[
+C_n = \sum_{i = 0}^n(\prod_{k = i + 1}^nP_k)C_i
+\]</span></p>
+<p>可见十分甚至九分得麻烦啊（悲）。</p></li>
+<li><p><strong>分组并行进位</strong></p>
+<ul>
+<li><strong>单级先行进位（将多位分为几组，组内并行进位，组间串行进位）</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1761126616059.jpg"
+alt="1761126616059" /></li>
+<li><strong>多级先行进位（将多位分为几组，组内并行进位，组间并行行进位）</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1761126672774.jpg"
+alt="1761126672774" /></li>
+</ul></li>
 </ol>
-<h2 id="4-2-定点加减运算">4.2 定点加减运算</h2>
-<h3 id="4-2-1-原码加减运算">4.2.1 原码加减运算</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>减法转加法</strong><br>
-大多数机器只设置加法器而不设置减法器。<br>
-$$<br>
-|X| - |Y| = |X| + |Y|_{\text{变补}}<br>
-$$</p>
-</li>
-<li class="lvl-3">
-<p><strong>规则</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">参加运算的操作数取其绝对值。</li>
-<li class="lvl-5">若做加法运算，则两数直接相加；若做减法运算，则将减数<strong>先变一次补</strong>，再进行加法操作。</li>
-<li class="lvl-5">运算之后，可能有两种情况：
-<ul class="lvl-4">
-<li class="lvl-7">有进位，结果为正，即得到正确的结果。</li>
-<li class="lvl-7">无进位，结果为负，则应<strong>再变一次补</strong>，才能得到正确的结果。</li>
-</ul>
-</li>
-<li class="lvl-5"><strong>结果加上符号位。</strong></li>
+<h2 id="定点加减运算">4.2 定点加减运算</h2>
+<h3 id="原码加减运算">4.2.1 原码加减运算</h3>
+<ol type="1">
+<li><p><strong>减法转加法</strong><br />
+大多数机器只设置加法器而不设置减法器。 <span class="math display">\[
+|X| - |Y| = |X| + |Y|_{\text{变补}}
+\]</span></p></li>
+<li><p><strong>规则</strong></p>
+<ul>
+<li>参加运算的操作数取其绝对值。</li>
+<li>若做加法运算，则两数直接相加；若做减法运算，则将减数<strong>先变一次补</strong>，再进行加法操作。</li>
+<li>运算之后，可能有两种情况：
+<ul>
+<li>有进位，结果为正，即得到正确的结果。</li>
+<li>无进位，结果为负，则应<strong>再变一次补</strong>，才能得到正确的结果。</li>
+</ul></li>
+<li><strong>结果加上符号位。</strong></li>
 </ul>
 <p>通常，把运算之前的变补称为<strong>前变补</strong>，运算之后的变补称为<strong>后变补</strong>。</p>
 <blockquote>
 <p>变补即二进制数<strong>所有位</strong>取反再加一。</p>
-</blockquote>
-</li>
+</blockquote></li>
 </ol>
-<h3 id="4-2-2-补码加减运算">4.2.2 补码加减运算</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>补码加法</strong><br>
-两数之和的补码等于两数补码之和。<br>
-$$<br>
-(X + Y)_补 = X_补 + Y_补<br>
-$$</p>
-<p>证明略。</p>
-</li>
-<li class="lvl-3">
-<p><strong>补码减法</strong><br>
-由补码加法易得<br>
-$$<br>
-(X - Y)_补 = X_补 + (-Y)_补<br>
-$$</p>
-<p>进一步<br>
+<h3 id="补码加减运算">4.2.2 补码加减运算</h3>
+<ol type="1">
+<li><p><strong>补码加法</strong><br />
+两数之和的补码等于两数补码之和。 <span class="math display">\[
+(X + Y)_补 = X_补 + Y_补
+\]</span></p>
+<p>证明略。</p></li>
+<li><p><strong>补码减法</strong><br />
+由补码加法易得<br />
+<span class="math display">\[
+(X - Y)_补 = X_补 + (-Y)_补
+\]</span></p>
+<p>进一步
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mo stretchy="false">(</mo><mi>X</mi><mo>−</mo><mi>Y</mi><msub><mo stretchy="false">)</mo><mo>补</mo></msub><mo>=</mo><msub><mi>X</mi><mo>补</mo></msub><mo>+</mo><mo stretchy="false">(</mo><msub><mi>Y</mi><mo>补</mo></msub><msub><mo stretchy="false">)</mo><mrow><mo>变补</mo></mrow></msub></math></p>
-<p>证明略。</p>
-</li>
-<li class="lvl-3">
-<p><strong>规则</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">参加运算的两个操作数均用补码表示。</li>
-<li class="lvl-5">符号位作为数的一部分参加运算。</li>
-<li class="lvl-5">若做加法运算，则两数直接相加；若做减法运算，则将被减数与减数的<strong>机器负数</strong>相加。</li>
-<li class="lvl-5">运算结果<strong>仍用补码表示</strong>。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>符号扩展</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">有时需要将定位数的位数增加。</li>
-<li class="lvl-5">正数：原有形式的符号位移动到新形式的符号位上，新表示形式的所有附加位都用“0”进行填充。</li>
-<li class="lvl-5">负数：
-<ul class="lvl-4">
-<li class="lvl-7">原码：原码表示负数的符号扩展方法与正数相同，只不过此时符号位为“1”而已。</li>
-<li class="lvl-7">补码：原有形式的符号位移动到新形式的符号位上，新表示形式的所有附加位都用“1”进行填充。</li>
-</ul>
-</li>
-</ul>
-</li>
+<p>证明略。</p></li>
+<li><p><strong>规则</strong></p>
+<ul>
+<li>参加运算的两个操作数均用补码表示。</li>
+<li>符号位作为数的一部分参加运算。</li>
+<li>若做加法运算，则两数直接相加；若做减法运算，则将被减数与减数的<strong>机器负数</strong>相加。</li>
+<li>运算结果<strong>仍用补码表示</strong>。</li>
+</ul></li>
+<li><p><strong>符号扩展</strong></p>
+<ul>
+<li>有时需要将定位数的位数增加。</li>
+<li>正数：原有形式的符号位移动到新形式的符号位上，新表示形式的所有附加位都用“0”进行填充。</li>
+<li>负数：
+<ul>
+<li>原码：原码表示负数的符号扩展方法与正数相同，只不过此时符号位为“1”而已。</li>
+<li>补码：原有形式的符号位移动到新形式的符号位上，新表示形式的所有附加位都用“1”进行填充。</li>
+</ul></li>
+</ul></li>
 </ol>
-<h3 id="4-2-3-补码的溢出判断与检测方法">4.2.3 补码的溢出判断与检测方法</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>溢出的产生</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">成因：运算结果超出了机器所能表示的范围。</li>
-<li class="lvl-5">两数相加产生的溢出为<strong>正溢</strong>，两负数相加产生的溢出为<strong>负溢</strong>。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>溢出检测方法</strong><br>
-设被操作数为$X_补$，操作数为$Y_补$，和（差）为$S_补$<br>
-$$<br>
-X_补 = X_s, X_1X_2 \ldots X_n \\<br>
-Y_补 = Y_s, Y_1Y_2 \ldots Y_n \\<br>
-S_补 = S_s, S_1S_2 \ldots S_n \\<br>
-$$</p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>采用一个符号位</strong><br>
-当$X_s = Y_s = 0$，$S_s = 1$时，产生正溢；$X_s = Y_s = 0$，$S_s = 0$时，产生负溢。</p>
-<p>故溢出判断条件<br>
-$$<br>
-O = \bar{X_s}\bar{Y_s}S_s + X_sY_s\bar{S_s}<br>
-$$</p>
-</li>
-<li class="lvl-5">
-<p><strong>采用进位位</strong><br>
-两数运算时产生进位为<br>
-$$<br>
-C_s, C_1C_2 \ldots C_n<br>
-$$</p>
-<p>两正数相加，当最高有效位产生进位（$C_1 = 1$）而符号位不产生进位（$C_s = 0$）时，发生正溢；两负数相加，当最高有效位不产生进位（$C_1 = 0$）而符号位产生进位（$C_s = 0$）时，发生负溢。<br>
-$$<br>
-O = \bar{C_s}C_1 + C_s\bar{C_1} = C_s \oplus C_1<br>
-$$</p>
-</li>
-<li class="lvl-5">
-<p><strong>采用变形补码（双符号位补码）</strong><br>
-将符号位扩展为两个$X_{s1} = X_{s2} = X_s$，并直接参与运算。</p>
+<h3 id="补码的溢出判断与检测方法">4.2.3 补码的溢出判断与检测方法</h3>
+<ol type="1">
+<li><strong>溢出的产生</strong>
+<ul>
+<li>成因：运算结果超出了机器所能表示的范围。</li>
+<li>两数相加产生的溢出为<strong>正溢</strong>，两负数相加产生的溢出为<strong>负溢</strong>。</li>
+</ul></li>
+<li><strong>溢出检测方法</strong><br />
+设被操作数为<span class="math inline">\(X_补\)</span>，操作数为<span
+class="math inline">\(Y_补\)</span>，和（差）为<span
+class="math inline">\(S_补\)</span> <span class="math display">\[
+X_补 = X_s, X_1X_2 \ldots X_n \\\\
+Y_补 = Y_s, Y_1Y_2 \ldots Y_n \\\\
+S_补 = S_s, S_1S_2 \ldots S_n \\\\
+\]</span>
+<ul>
+<li><p><strong>采用一个符号位</strong><br />
+当<span class="math inline">\(X_s = Y_s = 0\)</span>，<span
+class="math inline">\(S_s = 1\)</span>时，产生正溢；<span
+class="math inline">\(X_s = Y_s = 0\)</span>，<span
+class="math inline">\(S_s = 0\)</span>时，产生负溢。</p>
+<p>故溢出判断条件 <span class="math display">\[
+O = \bar{X_s}\bar{Y_s}S_s + X_sY_s\bar{S_s}
+\]</span></p></li>
+<li><p><strong>采用进位位</strong><br />
+两数运算时产生进位为<br />
+<span class="math display">\[
+C_s, C_1C_2 \ldots C_n
+\]</span></p>
+<p>两正数相加，当最高有效位产生进位（<span class="math inline">\(C_1 =
+1\)</span>）而符号位不产生进位（<span class="math inline">\(C_s =
+0\)</span>）时，发生正溢；两负数相加，当最高有效位不产生进位（<span
+class="math inline">\(C_1 = 0\)</span>）而符号位产生进位（<span
+class="math inline">\(C_s = 0\)</span>）时，发生负溢。 <span
+class="math display">\[
+O = \bar{C_s}C_1 + C_s\bar{C_1} = C_s \oplus C_1
+\]</span></p></li>
+<li><p><strong>采用变形补码（双符号位补码）</strong><br />
+将符号位扩展为两个<span class="math inline">\(X_{s1} = X_{s2} =
+X_s\)</span>，并直接参与运算。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>表现</th>
 <th>含义</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$S_{s1}S_{s2} = 00$</td>
+<tr class="odd">
+<td><span class="math inline">\(S_{s1}S_{s2} = 00\)</span></td>
 <td>正数，无溢出</td>
 </tr>
-<tr>
-<td>$S_{s1}S_{s2} = 01$</td>
+<tr class="even">
+<td><span class="math inline">\(S_{s1}S_{s2} = 01\)</span></td>
 <td>正溢</td>
 </tr>
-<tr>
-<td>$S_{s1}S_{s2} = 10$</td>
+<tr class="odd">
+<td><span class="math inline">\(S_{s1}S_{s2} = 10\)</span></td>
 <td>负溢</td>
 </tr>
-<tr>
-<td>$S_{s1}S_{s2} = 11$</td>
+<tr class="even">
+<td><span class="math inline">\(S_{s1}S_{s2} = 11\)</span></td>
 <td>负数，无溢出</td>
 </tr>
 </tbody>
 </table>
-<p>为了尽可能减少代价，在采用双符号位方案时，操作数和结果在寄存器和主存中仍保持单符号位，仅在运算时再扩充为双符号位。</p>
-</li>
-</ul>
-</li>
+<p>为了尽可能减少代价，在采用双符号位方案时，操作数和结果在寄存器和主存中仍保持单符号位，仅在运算时再扩充为双符号位。</p></li>
+</ul></li>
 </ol>
-<h3 id="4-2-4-补码定点加减运算的实现">4.2.4 补码定点加减运算的实现</h3>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1761181181558.jpg" alt="1761181181558"></p>
-<h2 id="4-3-带符号数的移位和舍入操作">4.3 带符号数的移位和舍入操作</h2>
+<h3 id="补码定点加减运算的实现">4.2.4 补码定点加减运算的实现</h3>
+<figure>
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1761181181558.jpg"
+alt="1761181181558" />
+<figcaption aria-hidden="true">1761181181558</figcaption>
+</figure>
+<h2 id="带符号数的移位和舍入操作">4.3 带符号数的移位和舍入操作</h2>
 <p>实现乘除运算的方案：</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>软件实现，机器内无乘除指令。</p>
-</li>
-<li class="lvl-2">
-<p>增加逻辑线路，将乘除转为加减，机器内有乘除指令。</p>
-</li>
-<li class="lvl-2">
-<p>机器内设有专门的乘除运算器与乘除指令。</p>
-</li>
+<ul>
+<li>软件实现，机器内无乘除指令。</li>
+<li>增加逻辑线路，将乘除转为加减，机器内有乘除指令。</li>
+<li>机器内设有专门的乘除运算器与乘除指令。</li>
 </ul>
-<h3 id="4-3-1-带符号数的移位操作">4.3.1 带符号数的移位操作</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>原码的移位规则</strong><br>
-不论正数还是负数，在左移或右移时，符号位均不变，空出位一律以“0”补入。</p>
-</li>
-<li class="lvl-3">
-<p><strong>补码的移位规则</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>正数</strong><br>
-符号位不变，不论左移或右移，空出位一律以“0”补入。</p>
-</li>
-<li class="lvl-5">
-<p><strong>负数</strong><br>
-符号位不变，左移后的空出位补“0”，右移后的空出位补“1”。</p>
-</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>移位功能的实现</strong></p>
+<h3 id="带符号数的移位操作">4.3.1 带符号数的移位操作</h3>
+<ol type="1">
+<li><p><strong>原码的移位规则</strong><br />
+不论正数还是负数，在左移或右移时，符号位均不变，空出位一律以“0”补入。</p></li>
+<li><p><strong>补码的移位规则</strong></p>
+<ul>
+<li><p><strong>正数</strong><br />
+符号位不变，不论左移或右移，空出位一律以“0”补入。</p></li>
+<li><p><strong>负数</strong><br />
+符号位不变，左移后的空出位补“0”，右移后的空出位补“1”。</p></li>
+</ul></li>
+<li><p><strong>移位功能的实现</strong></p>
 <blockquote>
 <p>注意：移位器与移位寄存器不同，它本身只有移位功能，没有寄存功能，所以移位之后的结果一定要保存到有关寄存器中。</p>
-</blockquote>
-</li>
+</blockquote></li>
 </ol>
-<h3 id="4-3-2-带符号数的舍入操作">4.3.2 带符号数的舍入操作</h3>
-<p>设我们需要将 $p + q$ 位的数（二进制）舍入到前 $p$ 位。</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><strong>恒舍（切断）</strong><br>
-无论 $p + 1$ 位为何数值，都将后 $q$ 位舍去。</p>
-</li>
-<li class="lvl-2">
-<p><strong>冯 · 诺伊曼舍入法（恒置 $1$ 法）</strong><br>
-无论 $p + 1$ 位为何数值，都将第 $p$ 位置为 $1$，并将后 $q$ 位舍去。</p>
-</li>
-<li class="lvl-2">
-<p><strong>下舍上入法</strong><br>
-若 $p + 1$ 位为 $0$ 则舍，若 $p + 1$ 位为 $1$ 则入。</p>
-</li>
-<li class="lvl-2">
-<p><strong>查表舍入法（ROM 舍入法）</strong><br>
-根据在 ROM 中存放的一个表进行舍入。通常，ROM 表的容量为 $2^K$ 个单元，每个单元字长为 $K - 1$ 位。舍人处理表的内容设置一般采用的方法是：当 $K$ 位数据的高 $K - 1$ 位为全 $1$ 时，让那些单元按恒舍法填人 $K - 1$ 位为全 $1$，其余单元都按下舍上人法来填其内容。例如，4 位数经 ROM 查表，舍人成 3 位结果，其 ROM 的地址和内容的对应关系如表所示。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1761308449547.jpg" alt="1761308449547"></p>
-</li>
+<h3 id="带符号数的舍入操作">4.3.2 带符号数的舍入操作</h3>
+<p>设我们需要将 <span class="math inline">\(p + q\)</span>
+位的数（二进制）舍入到前 <span class="math inline">\(p\)</span> 位。</p>
+<ul>
+<li><p><strong>恒舍（切断）</strong><br />
+无论 <span class="math inline">\(p + 1\)</span> 位为何数值，都将后 <span
+class="math inline">\(q\)</span> 位舍去。</p></li>
+<li><p><strong>冯 · 诺伊曼舍入法（恒置 <span
+class="math inline">\(1\)</span> 法）</strong><br />
+无论 <span class="math inline">\(p + 1\)</span> 位为何数值，都将第 <span
+class="math inline">\(p\)</span> 位置为 <span
+class="math inline">\(1\)</span>，并将后 <span
+class="math inline">\(q\)</span> 位舍去。</p></li>
+<li><p><strong>下舍上入法</strong><br />
+若 <span class="math inline">\(p + 1\)</span> 位为 <span
+class="math inline">\(0\)</span> 则舍，若 <span class="math inline">\(p
++ 1\)</span> 位为 <span class="math inline">\(1\)</span> 则入。</p></li>
+<li><p><strong>查表舍入法（ROM 舍入法）</strong><br />
+根据在 ROM 中存放的一个表进行舍入。通常，ROM 表的容量为 <span
+class="math inline">\(2^K\)</span> 个单元，每个单元字长为 <span
+class="math inline">\(K - 1\)</span>
+位。舍人处理表的内容设置一般采用的方法是：当 <span
+class="math inline">\(K\)</span> 位数据的高 <span
+class="math inline">\(K - 1\)</span> 位为全 <span
+class="math inline">\(1\)</span> 时，让那些单元按恒舍法填人 <span
+class="math inline">\(K - 1\)</span> 位为全 <span
+class="math inline">\(1\)</span>，其余单元都按下舍上人法来填其内容。例如，4
+位数经 ROM 查表，舍人成 3 位结果，其 ROM
+的地址和内容的对应关系如表所示。<br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1761308449547.jpg"
+alt="1761308449547" /></p></li>
 </ul>
-<h2 id="4-4-定点乘法运算">4.4 定点乘法运算</h2>
-<h3 id="4-4-1-原码一位乘法">4.4.1 原码一位乘法</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>算法</strong><br>
+<h2 id="定点乘法运算">4.4 定点乘法运算</h2>
+<h3 id="原码一位乘法">4.4.1 原码一位乘法</h3>
+<ol type="1">
+<li><p><strong>算法</strong><br />
 由手算竖式乘法演变而来。</p>
-<p>乘积绝对值 $P$，符号$P_s$<br>
-$$<br>
-P = |X| \times |Y| \\<br>
-P_s = X_s \oplus Y_s<br>
-$$</p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p>(1) 参加运算的操作数取其绝对值。</p>
-</li>
-<li class="lvl-5">
-<p>(2) 令乘数的最低位为判断位，若为 $1$，加被乘数；若为 $0$，不加被乘数（加 $0$） 。</p>
-</li>
-<li class="lvl-5">
-<p>(3) 累加后的部分积以及乘数右移一位。</p>
-</li>
-<li class="lvl-5">
-<p>(4) 重复 $n$ 次 (2) 和 (3) 。</p>
-</li>
-<li class="lvl-5">
-<p>(5) 符号位单独处理，同号为正，异号为负。</p>
-</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>原码一位乘法运算的实现</strong></p>
-</li>
+<p>乘积绝对值 <span class="math inline">\(P\)</span>，符号<span
+class="math inline">\(P_s\)</span><br />
+<span class="math display">\[
+P = |X| \times |Y| \\\\
+P_s = X_s \oplus Y_s
+\]</span></p>
+<ul>
+<li><ol type="1">
+<li>参加运算的操作数取其绝对值。</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>令乘数的最低位为判断位，若为 <span
+class="math inline">\(1\)</span>，加被乘数；若为 <span
+class="math inline">\(0\)</span>，不加被乘数（加 <span
+class="math inline">\(0\)</span>） 。</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>累加后的部分积以及乘数右移一位。</li>
+</ol></li>
+<li><ol start="4" type="1">
+<li>重复 <span class="math inline">\(n\)</span> 次 (2) 和 (3) 。</li>
+</ol></li>
+<li><ol start="5" type="1">
+<li>符号位单独处理，同号为正，异号为负。</li>
+</ol></li>
+</ul></li>
+<li><p><strong>原码一位乘法运算的实现</strong></p></li>
 </ol>
-<h3 id="4-4-2-补码一位乘法">4.4.2 补码一位乘法</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>校正法</strong><br>
-补码的符号位参加运算。将 $X_补$ 与 $Y_补$ 按原码一位乘法运算，最后将结果加以矫正，得到正确的 $(X \times Y)_补$。</p>
-<ul class="lvl-2">
-<li class="lvl-5">当 $Y &gt; 0$，按原码乘法运算，移位时按<strong>补码规则</strong>进行。</li>
-<li class="lvl-5">当 $Y &lt; 0$，忽略 $Y_补$ 符号位，按原码乘法运算，最后加上 $(-X)_补$ 矫正。</li>
-<li class="lvl-5">综上，<br>
-$$<br>
-(X \times Y)_补 = X_补 \times 0.Y_1 \ldots Y_n + (-X)_补Y_s<br>
-$$</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>比较法（Booth 乘法）</strong><br>
-由校正法公式，<br>
-$$<br>
-(X \times Y)<em>补 = X_补 \times \sum</em>{i = 0}^n (Y_{i + 1} - Y_i)2^{-n}<br>
-$$<br>
-其中 $Y_0 = Y_s$。</p>
-<p>可得递推公式<br>
-$$<br>
-(Z_0)<em>{\text{补}} = 0 \\<br>
-(Z_1)</em>{\text{补}} = 2^{-1} \left{ (Z_0)<em>{\text{补}} + (Y</em>{n+1} - Y_n)(X)<em>{\text{补}} \right} \\<br>
-(Z_2)</em>{\text{补}} = 2^{-1} \left{ (Z_1)<em>{\text{补}} + (Y_n - Y</em>{n-1})(X)<em>{\text{补}} \right} \\<br>
-(Z_n)</em>{\text{补}} = 2^{-1} \left{ (Z_{n - 1})<em>{\text{补}} + (Y_2 - Y_1)(X)</em>{\text{补}} \right} \\<br>
-$$</p>
-<p>其中 $Y_{n + 1}$ 为附加位，初值为 $0$。初值为 $0$ 时不影响运算。</p>
-<p>总结得<br>
-$$<br>
-[X \times Y]<em>{\text{补}} = [Z_n]</em>{\text{补}} + (Y_1 - Y_s)[X]_{\text{补}}<br>
-$$</p>
+<h3 id="补码一位乘法">4.4.2 补码一位乘法</h3>
+<ol type="1">
+<li><p><strong>校正法</strong><br />
+补码的符号位参加运算。将 <span class="math inline">\(X_补\)</span> 与
+<span class="math inline">\(Y_补\)</span>
+按原码一位乘法运算，最后将结果加以矫正，得到正确的 <span
+class="math inline">\((X \times Y)_补\)</span>。</p>
+<ul>
+<li>当 <span class="math inline">\(Y &gt;
+0\)</span>，按原码乘法运算，移位时按<strong>补码规则</strong>进行。</li>
+<li>当 <span class="math inline">\(Y &lt; 0\)</span>，忽略 <span
+class="math inline">\(Y_补\)</span> 符号位，按原码乘法运算，最后加上
+<span class="math inline">\((-X)_补\)</span> 矫正。</li>
+<li>综上， <span class="math display">\[
+(X \times Y)_补 = X_补 \times 0.Y_1 \ldots Y_n + (-X)_补Y_s
+\]</span></li>
+</ul></li>
+<li><p><strong>比较法（Booth 乘法）</strong><br />
+由校正法公式，<br />
+<span class="math display">\[
+(X \times Y)_补 = X_补 \times \sum_{i = 0}^n (Y_{i + 1} - Y_i)2^{-n}
+\]</span> 其中 <span class="math inline">\(Y_0 = Y_s\)</span>。</p>
+<p>可得递推公式<br />
+<span class="math display">\[
+(Z_0)_{\text{补}} = 0 \\\\
+(Z_1)_{\text{补}} = 2^{-1} \left\{ (Z_0)_{\text{补}} + (Y_{n+1} -
+Y_n)(X)_{\text{补}} \right\} \\\\
+(Z_2)_{\text{补}} = 2^{-1} \left\{ (Z_1)_{\text{补}} + (Y_n -
+Y_{n-1})(X)_{\text{补}} \right\} \\\\
+(Z_n)_{\text{补}} = 2^{-1} \left\{ (Z_{n - 1})_{\text{补}} + (Y_2 -
+Y_1)(X)_{\text{补}} \right\} \\\\
+\]</span></p>
+<p>其中 <span class="math inline">\(Y_{n + 1}\)</span> 为附加位，初值为
+<span class="math inline">\(0\)</span>。初值为 <span
+class="math inline">\(0\)</span> 时不影响运算。</p>
+<p>总结得 <span class="math display">\[
+[X \times Y]_{\text{补}} = [Z_n]_{\text{补}} + (Y_1 -
+Y_s)[X]_{\text{补}}
+\]</span></p>
 <p><strong>Booth 乘法规则</strong>：</p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p>参加运算的数用补码表示。</p>
-</li>
-<li class="lvl-5">
-<p>符号位参加运算</p>
-</li>
-<li class="lvl-5">
-<p>乘数后面附加一位 $Y_{n + 1} = 0$。</p>
-</li>
-<li class="lvl-5">
-<p>由于每求一次部分积要右移一位，所以乘数的最低两位 $Y_n$、$Y_{n + 1}$的值决定了每次应执行的操作，如表所示。</p>
+<ul>
+<li><p>参加运算的数用补码表示。</p></li>
+<li><p>符号位参加运算</p></li>
+<li><p>乘数后面附加一位 <span class="math inline">\(Y_{n + 1} =
+0\)</span>。</p></li>
+<li><p>由于每求一次部分积要右移一位，所以乘数的最低两位 <span
+class="math inline">\(Y_n\)</span>、<span class="math inline">\(Y_{n +
+1}\)</span>的值决定了每次应执行的操作，如表所示。</p>
 <table>
 <thead>
-<tr>
-<th>$Y_n$、$Y_{n + 1}$</th>
+<tr class="header">
+<th><span class="math inline">\(Y_n\)</span>、<span
+class="math inline">\(Y_{n + 1}\)</span></th>
 <th>操作</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$00$</td>
-<td>原部分积 $+ 0$，右移一位</td>
+<tr class="odd">
+<td><span class="math inline">\(00\)</span></td>
+<td>原部分积 <span class="math inline">\(+ 0\)</span>，右移一位</td>
 </tr>
-<tr>
-<td>$01$</td>
-<td>原部分积 $+ X_补$，右移一位</td>
+<tr class="even">
+<td><span class="math inline">\(01\)</span></td>
+<td>原部分积 <span class="math inline">\(+ X_补\)</span>，右移一位</td>
 </tr>
-<tr>
-<td>$10$</td>
-<td>原部分积 $+ (-X)_补$，右移一位</td>
+<tr class="odd">
+<td><span class="math inline">\(10\)</span></td>
+<td>原部分积 <span class="math inline">\(+
+(-X)_补\)</span>，右移一位</td>
 </tr>
-<tr>
-<td>$11$</td>
-<td>原部分积 $+ 0$，右移一位</td>
+<tr class="even">
+<td><span class="math inline">\(11\)</span></td>
+<td>原部分积 <span class="math inline">\(+ 0\)</span>，右移一位</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li class="lvl-5">
-<p>移位按补码规则进行。</p>
-</li>
-<li class="lvl-5">
-<p>做 $n + 1$ 此累加，$n$ 次移位，第 $n + 1$ 次不移位。</p>
-</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>Booth 乘法的实现</strong></p>
-</li>
+</table></li>
+<li><p>移位按补码规则进行。</p></li>
+<li><p>做 <span class="math inline">\(n + 1\)</span> 此累加，<span
+class="math inline">\(n\)</span> 次移位，第 <span
+class="math inline">\(n + 1\)</span> 次不移位。</p></li>
+</ul></li>
+<li><p><strong>Booth 乘法的实现</strong></p></li>
 </ol>
-<h3 id="4-4-3-补码两位乘法">4.4.3 补码两位乘法</h3>
-<p>即每次处理乘数的两位。设上次乘法的部分积为 $Z^\prime_{\text{补}}$，本次部分积为 $Z^\prime_{\text{补}}$，则<br>
-$$<br>
-Z^\prime_{\text{补}} = 2^{-1}[Z_补 + (Y_{i + 1} - Y_i)]X_补 \\<br>
-Z^\prime_{\text{补}} = 2^{-2}[Z_补 + (Y_{i + 1} + Y_i -2Y_{i - 1})]X_补<br>
-$$</p>
-<p>故使用 $Y_{n - 1}Y_nY_{n + 1}$ 作为判断位，操作规则</p>
+<h3 id="补码两位乘法">4.4.3 补码两位乘法</h3>
+<p>即每次处理乘数的两位。设上次乘法的部分积为 <span
+class="math inline">\(Z^\prime_{\text{补}}\)</span>，本次部分积为 <span
+class="math inline">\(Z^\prime_{\text{补}}\)</span>，则 <span
+class="math display">\[
+Z^\prime_{\text{补}} = 2^{-1}[Z_补 + (Y_{i + 1} - Y_i)]X_补 \\\\
+Z^\prime_{\text{补}} = 2^{-2}[Z_补 + (Y_{i + 1} + Y_i -2Y_{i - 1})]X_补
+\]</span></p>
+<p>故使用 <span class="math inline">\(Y_{n - 1}Y_nY_{n + 1}\)</span>
+作为判断位，操作规则</p>
 <table>
 <thead>
-<tr>
-<th>判断位 $Y_{n-1}Y_nY_{n+1}$</th>
+<tr class="header">
+<th>判断位 <span class="math inline">\(Y_{n-1}Y_nY_{n+1}\)</span></th>
 <th>操作</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$0 0 0$</td>
-<td>原部分积 $+ 0$，右移两位</td>
+<tr class="odd">
+<td><span class="math inline">\(0 0 0\)</span></td>
+<td>原部分积 <span class="math inline">\(+ 0\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$0 0 1$</td>
-<td>原部分积 $+ X_补$，右移两位</td>
+<tr class="even">
+<td><span class="math inline">\(0 0 1\)</span></td>
+<td>原部分积 <span class="math inline">\(+ X_补\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$0 1 0$</td>
-<td>原部分积 $+ X_补$，右移两位</td>
+<tr class="odd">
+<td><span class="math inline">\(0 1 0\)</span></td>
+<td>原部分积 <span class="math inline">\(+ X_补\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$0 1 1$</td>
-<td>原部分积 $+ 2(X_补)$，右移两位</td>
+<tr class="even">
+<td><span class="math inline">\(0 1 1\)</span></td>
+<td>原部分积 <span class="math inline">\(+
+2(X_补)\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$1 0 0$</td>
-<td>原部分积 $+ 2(-X)_补$，右移两位</td>
+<tr class="odd">
+<td><span class="math inline">\(1 0 0\)</span></td>
+<td>原部分积 <span class="math inline">\(+
+2(-X)_补\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$1 0 1$</td>
-<td>原部分积 $+ (-X)_补$，右移两位</td>
+<tr class="even">
+<td><span class="math inline">\(1 0 1\)</span></td>
+<td>原部分积 <span class="math inline">\(+
+(-X)_补\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$1 1 0$</td>
-<td>原部分积 $+ (-X)_补$，右移两位</td>
+<tr class="odd">
+<td><span class="math inline">\(1 1 0\)</span></td>
+<td>原部分积 <span class="math inline">\(+
+(-X)_补\)</span>，右移两位</td>
 </tr>
-<tr>
-<td>$1 1 1$</td>
-<td>原部分积 $+ 0$，右移两位</td>
+<tr class="even">
+<td><span class="math inline">\(1 1 1\)</span></td>
+<td>原部分积 <span class="math inline">\(+ 0\)</span>，右移两位</td>
 </tr>
 </tbody>
 </table>
-<p>被乘数和部分积取 $3$ 个符号位，当乘数的数值位 $n$ 为偶数时，乘数取 $2$ 个符号位，共需作$\frac{n}{2} + 1$次累加，$\frac{n}{2}$次移位（最后一次不移位）;当 $n$ 为奇数时，乘数只需 $1$ 个符号位,共需$\frac{n}{2} + 1$ 次累加和移位，但最后一次仅移一位。</p>
-<p>总结<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1761479777896.jpg" alt="1761479777896"></p>
-<h3 id="4-4-4-阵列乘法器">4.4.4 阵列乘法器</h3>
-<h2 id="4-5-定点除法运算">4.5 定点除法运算</h2>
-<h3 id="4-5-1-原码除法运算">4.5.1 原码除法运算</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>比较法</strong><br>
+<p>被乘数和部分积取 <span class="math inline">\(3\)</span>
+个符号位，当乘数的数值位 <span class="math inline">\(n\)</span>
+为偶数时，乘数取 <span class="math inline">\(2\)</span>
+个符号位，共需作<span class="math inline">\(\frac{n}{2} +
+1\)</span>次累加，<span
+class="math inline">\(\frac{n}{2}\)</span>次移位（最后一次不移位）;当
+<span class="math inline">\(n\)</span> 为奇数时，乘数只需 <span
+class="math inline">\(1\)</span> 个符号位,共需<span
+class="math inline">\(\frac{n}{2} + 1\)</span>
+次累加和移位，但最后一次仅移一位。</p>
+<p>总结<br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1761479777896.jpg"
+alt="1761479777896" /></p>
+<h3 id="阵列乘法器">4.4.4 阵列乘法器</h3>
+<h2 id="定点除法运算">4.5 定点除法运算</h2>
+<h3 id="原码除法运算">4.5.1 原码除法运算</h3>
+<ol type="1">
+<li><p><strong>比较法</strong><br />
 此方法模拟手工除法，通过比较大小来上商。</p>
-<ul class="lvl-2">
-<li class="lvl-5"><strong>初始化</strong>：将被除数（或部分余数）存入寄存器 $A$，除数存入寄存器 $B$，商寄存器 $C$ 清零。</li>
-<li class="lvl-5"><strong>上商与运算</strong>：
-<ul class="lvl-4">
-<li class="lvl-7">若 $A \geq B$，则商上 $1$（写入寄存器 $C$ 的最低位），并执行 $A \leftarrow A - B$。</li>
-<li class="lvl-7">若 $A &lt; B$，则商上 $0$（写入寄存器 $C$ 的最低位），$A$ 寄存器内容不变。</li>
-</ul>
-</li>
-<li class="lvl-5"><strong>移位</strong>：将寄存器 $A$ 和 $C$ 联合左移一位。</li>
-<li class="lvl-5">重复以上步骤，直到上的精度已达到。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>恢复余数法</strong><br>
+<ul>
+<li><strong>初始化</strong>：将被除数（或部分余数）存入寄存器 <span
+class="math inline">\(A\)</span>，除数存入寄存器 <span
+class="math inline">\(B\)</span>，商寄存器 <span
+class="math inline">\(C\)</span> 清零。</li>
+<li><strong>上商与运算</strong>：
+<ul>
+<li>若 <span class="math inline">\(A \geq B\)</span>，则商上 <span
+class="math inline">\(1\)</span>（写入寄存器 <span
+class="math inline">\(C\)</span> 的最低位），并执行 <span
+class="math inline">\(A \leftarrow A - B\)</span>。</li>
+<li>若 <span class="math inline">\(A &lt; B\)</span>，则商上 <span
+class="math inline">\(0\)</span>（写入寄存器 <span
+class="math inline">\(C\)</span> 的最低位），<span
+class="math inline">\(A\)</span> 寄存器内容不变。</li>
+</ul></li>
+<li><strong>移位</strong>：将寄存器 <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(C\)</span> 联合左移一位。</li>
+<li>重复以上步骤，直到上的精度已达到。</li>
+</ul></li>
+<li><p><strong>恢复余数法</strong><br />
 此方法先做减法试探，不够减时再恢复余数。</p>
-<ul class="lvl-2">
-<li class="lvl-5"><strong>初始化</strong>：将被除数存入寄存器 $A$，除数存入寄存器 $B$，商寄存器 $C$ 清零。</li>
-<li class="lvl-5"><strong>减法试探</strong>：执行 $A \leftarrow A - B$。</li>
-<li class="lvl-5"><strong>判断与上商</strong>：
-<ul class="lvl-4">
-<li class="lvl-7">若部分余数 $A$ 为正，表示够减，则商上 $1$。</li>
-<li class="lvl-7">若部分余数 $A$ 为负，表示不够减，则商上 $0$，并执行 恢复余数 操作：$A \leftarrow A + B$。</li>
-</ul>
-</li>
-<li class="lvl-5"><strong>移位</strong>：将寄存器 $A$ 和 $C$ 联合左移一位。</li>
-<li class="lvl-5"><strong>循环</strong>：重复步骤 2 ~ 4，直到商的位数满足要求为止。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>原码加减交替法（不恢复余数法）</strong><br>
+<ul>
+<li><strong>初始化</strong>：将被除数存入寄存器 <span
+class="math inline">\(A\)</span>，除数存入寄存器 <span
+class="math inline">\(B\)</span>，商寄存器 <span
+class="math inline">\(C\)</span> 清零。</li>
+<li><strong>减法试探</strong>：执行 <span class="math inline">\(A
+\leftarrow A - B\)</span>。</li>
+<li><strong>判断与上商</strong>：
+<ul>
+<li>若部分余数 <span class="math inline">\(A\)</span>
+为正，表示够减，则商上 <span class="math inline">\(1\)</span>。</li>
+<li>若部分余数 <span class="math inline">\(A\)</span>
+为负，表示不够减，则商上 <span class="math inline">\(0\)</span>，并执行
+恢复余数 操作：<span class="math inline">\(A \leftarrow A +
+B\)</span>。</li>
+</ul></li>
+<li><strong>移位</strong>：将寄存器 <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(C\)</span> 联合左移一位。</li>
+<li><strong>循环</strong>：重复步骤 2 ~
+4，直到商的位数满足要求为止。</li>
+</ul></li>
+<li><p><strong>原码加减交替法（不恢复余数法）</strong><br />
 此方法是对恢复余数法的改进，避免了恢复余数的步骤。</p>
-<ul class="lvl-2">
-<li class="lvl-5"><strong>初始化</strong>：将被除数绝对值存入寄存器 $A$，除数绝对值存入寄存器 $B$，商寄存器 $C$ 清零。</li>
-<li class="lvl-5"><strong>第一次操作</strong>：执行 $A \leftarrow A - B$。</li>
-<li class="lvl-5"><strong>判断与上商</strong>：
-<ul class="lvl-4">
-<li class="lvl-7">若部分余数 $A$ 为正，商上 $1$。</li>
-<li class="lvl-7">若部分余数 $A$ 为负，商上 $0$。</li>
-</ul>
-</li>
-<li class="lvl-5"><strong>移位与下一步运算</strong>：将寄存器 $A$ 和 $C$ 联合左移一位。
-<ul class="lvl-4">
-<li class="lvl-7">若上次商为 $1$，则本次执行减法：$A \leftarrow A - B$。</li>
-<li class="lvl-7">若上次商为 $0$，则本次执行加法：$A \leftarrow A + B$。</li>
-</ul>
-</li>
-<li class="lvl-5"><strong>循环</strong>：重复步骤 3 ~ 4，共进行 $n$ 次（$n$ 为除数数值位位数）。</li>
-<li class="lvl-5"><strong>最终处理</strong>：
-<ul class="lvl-4">
-<li class="lvl-7"><strong>符号处理</strong>：商的符号由被除数和除数的符号位异或决定。</li>
-<li class="lvl-7"><strong>余数修正</strong>：若最终余数为负，必须执行一次恢复余数操作（$A \leftarrow A + B$），此时不再左移。</li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li><strong>初始化</strong>：将被除数绝对值存入寄存器 <span
+class="math inline">\(A\)</span>，除数绝对值存入寄存器 <span
+class="math inline">\(B\)</span>，商寄存器 <span
+class="math inline">\(C\)</span> 清零。</li>
+<li><strong>第一次操作</strong>：执行 <span class="math inline">\(A
+\leftarrow A - B\)</span>。</li>
+<li><strong>判断与上商</strong>：
+<ul>
+<li>若部分余数 <span class="math inline">\(A\)</span> 为正，商上 <span
+class="math inline">\(1\)</span>。</li>
+<li>若部分余数 <span class="math inline">\(A\)</span> 为负，商上 <span
+class="math inline">\(0\)</span>。</li>
+</ul></li>
+<li><strong>移位与下一步运算</strong>：将寄存器 <span
+class="math inline">\(A\)</span> 和 <span
+class="math inline">\(C\)</span> 联合左移一位。
+<ul>
+<li>若上次商为 <span
+class="math inline">\(1\)</span>，则本次执行减法：<span
+class="math inline">\(A \leftarrow A - B\)</span>。</li>
+<li>若上次商为 <span
+class="math inline">\(0\)</span>，则本次执行加法：<span
+class="math inline">\(A \leftarrow A + B\)</span>。</li>
+</ul></li>
+<li><strong>循环</strong>：重复步骤 3 ~ 4，共进行 <span
+class="math inline">\(n\)</span> 次（<span
+class="math inline">\(n\)</span> 为除数数值位位数）。</li>
+<li><strong>最终处理</strong>：
+<ul>
+<li><strong>符号处理</strong>：商的符号由被除数和除数的符号位异或决定。</li>
+<li><strong>余数修正</strong>：若最终余数为负，必须执行一次恢复余数操作（<span
+class="math inline">\(A \leftarrow A + B\)</span>），此时不再左移。</li>
+</ul></li>
+</ul></li>
 </ol>
-<h3 id="4-5-2-补码除法运算">4.5.2 补码除法运算</h3>
+<h3 id="补码除法运算">4.5.2 补码除法运算</h3>
 <p>被除数和除数都用补码表示，符号位参加运算，商和余数也用补码表示。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>初始化</strong><br>
-将被除数绝对值存入寄存器 $A$，除数绝对值存入寄存器 $B$，商寄存器 $C$ 清零。</p>
-</li>
-<li class="lvl-3">
-<p><strong>够减判断与上商</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1761482112716.jpg" alt="1761482112716"></p>
-</li>
-<li class="lvl-3">
-<p><strong>商符的确定</strong><br>
-第一次得出的商即为商符。</p>
-</li>
-<li class="lvl-3">
-<p><strong>新部分余数</strong><br>
-$$<br>
-(r_{i + 1})_{\text{补}} = 2(r_{i})_{\text{补}} + (1 - 2Q_1)Y_{\text{补}}<br>
-$$<br>
-$Q_i$ 表示第 $i$ 步的商。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763985533565.webp" alt="1763985533565"></p>
-</li>
-<li class="lvl-3">
-<p><strong>末位恒置 1</strong><br>
-商为 $n$ 位，运算次数 $n + 1$ 次，商的最末一位恒为 1，误差最大为 $2^{-n}$。</p>
-</li>
+<ol type="1">
+<li><p><strong>初始化</strong><br />
+将被除数绝对值存入寄存器 <span
+class="math inline">\(A\)</span>，除数绝对值存入寄存器 <span
+class="math inline">\(B\)</span>，商寄存器 <span
+class="math inline">\(C\)</span> 清零。</p></li>
+<li><p><strong>够减判断与上商</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1761482112716.jpg"
+alt="1761482112716" /></p></li>
+<li><p><strong>商符的确定</strong><br />
+第一次得出的商即为商符。</p></li>
+<li><p><strong>新部分余数</strong><br />
+<span class="math display">\[
+(r_{i + 1})\_{\text{补}} = 2(r_{i})_{\text{补}} + (1 -
+2Q_1)Y\_{\text{补}}
+\]</span> <span class="math inline">\(Q_i\)</span> 表示第 <span
+class="math inline">\(i\)</span> 步的商。<br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763985533565.webp"
+alt="1763985533565" /></p></li>
+<li><p><strong>末位恒置 1</strong><br />
+商为 <span class="math inline">\(n\)</span> 位，运算次数 <span
+class="math inline">\(n + 1\)</span> 次，商的最末一位恒为 1，误差最大为
+<span class="math inline">\(2^{-n}\)</span>。</p></li>
 </ol>
-<h3 id="4-5-3-阵列除法器">4.5.3 阵列除法器</h3>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763985743907.webp" alt="1763985743907"><br>
-图中 CAS 为可控加法减法单元。输入控制端为 0 则做加法，为 1 则做减法。</p>
-<h2 id="4-6-规格化浮点运算">4.6 规格化浮点运算</h2>
-<p>设两个非 0 规格化浮点数为<br>
-$$<br>
-A = M_A \times 2^{E_A} \\<br>
-B = M_B \times 2^{E_B}<br>
-$$</p>
-<h3 id="4-6-1-浮点加法运算">4.6.1 浮点加法运算</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>浮点数加减运算步骤</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>对阶</strong><br>
+<h3 id="阵列除法器">4.5.3 阵列除法器</h3>
+<p><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763985743907.webp"
+alt="1763985743907" /><br />
+图中 CAS 为可控加法减法单元。输入控制端为 0 则做加法，为 1
+则做减法。</p>
+<h2 id="规格化浮点运算">4.6 规格化浮点运算</h2>
+<p>设两个非 0 规格化浮点数为 <span class="math display">\[
+A = M_A \times 2^{E_A} \\\\
+B = M_B \times 2^{E_B}
+\]</span></p>
+<h3 id="浮点加法运算">4.6.1 浮点加法运算</h3>
+<ol type="1">
+<li><strong>浮点数加减运算步骤</strong>
+<ul>
+<li><p><strong>对阶</strong><br />
 使两数阶码相等。</p>
-<p>$$<br>
-\Delta E = E_A - E_B<br>
-$$</p>
+<p><span class="math display">\[
+\Delta E = E_A - E_B
+\]</span></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>阶码差</th>
 <th>操作</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$\Delta E = 0$</td>
+<tr class="odd">
+<td><span class="math inline">\(\Delta E = 0\)</span></td>
 <td>不操作</td>
 </tr>
-<tr>
-<td>$\Delta E &gt; 0$</td>
-<td>$M_B$ 右移，$E_B$ 自增，直至 $E_B = E_A$</td>
+<tr class="even">
+<td><span class="math inline">\(\Delta E &gt; 0\)</span></td>
+<td><span class="math inline">\(M_B\)</span> 右移，<span
+class="math inline">\(E_B\)</span> 自增，直至 <span
+class="math inline">\(E_B = E_A\)</span></td>
 </tr>
-<tr>
-<td>$\Delta E &lt; 0$</td>
-<td>$M_A$ 右移，$E_A$ 自增，直至 $E_A = E_B$</td>
+<tr class="odd">
+<td><span class="math inline">\(\Delta E &lt; 0\)</span></td>
+<td><span class="math inline">\(M_A\)</span> 右移，<span
+class="math inline">\(E_A\)</span> 自增，直至 <span
+class="math inline">\(E_A = E_B\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>对阶规则：小阶向大阶看齐。</p>
-</li>
-</ul>
-</li>
+<p>对阶规则：小阶向大阶看齐。</p></li>
+</ul></li>
 </ol>
 <p />
-<ul class="lvl-0">
-<li class="lvl-5">
-<p><strong>尾数加减</strong><br>
-结果尾数<br>
-$$<br>
-M_C = M_A \pm M_B<br>
-$$</p>
-</li>
+<ul>
+<li><strong>尾数加减</strong><br />
+结果尾数 <span class="math display">\[
+M_C = M_A \pm M_B
+\]</span></li>
 </ul>
 <p />
-<ul class="lvl-0">
-<li class="lvl-5">
-<p><strong>规格化</strong><br>
-规格化尾数应满足<br>
-$$<br>
-\frac{1}{2} \leq |M| &lt; 1<br>
-$$</p>
-<p>上一步结束后规格化 $M_C$</p>
+<ul>
+<li><p><strong>规格化</strong><br />
+规格化尾数应满足 <span class="math display">\[
+\frac{1}{2} \leq |M| &lt; 1
+\]</span></p>
+<p>上一步结束后规格化 <span class="math inline">\(M_C\)</span></p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>特征</th>
 <th>操作</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$00.1XXX$、$11.0XXX$</td>
+<tr class="odd">
+<td><span class="math inline">\(00.1XXX\)</span>、<span
+class="math inline">\(11.0XXX\)</span></td>
 <td>已规格化</td>
 </tr>
-<tr>
-<td>$00.0XXX$、$11.1XXX$</td>
-<td>左规，$M_C$ 左移，$E_C$ 自减，直至规格化</td>
+<tr class="even">
+<td><span class="math inline">\(00.0XXX\)</span>、<span
+class="math inline">\(11.1XXX\)</span></td>
+<td>左规，<span class="math inline">\(M_C\)</span> 左移，<span
+class="math inline">\(E_C\)</span> 自减，直至规格化</td>
 </tr>
-<tr>
-<td>$01.XXXX$、$10.XXXX$</td>
-<td>在定点加减中称为溢出，但这里进行右规，$M_C$ 右移，$E_C$ 自增，直至规格化</td>
+<tr class="odd">
+<td><span class="math inline">\(01.XXXX\)</span>、<span
+class="math inline">\(10.XXXX\)</span></td>
+<td>在定点加减中称为溢出，但这里进行右规，<span
+class="math inline">\(M_C\)</span> 右移，<span
+class="math inline">\(E_C\)</span> 自增，直至规格化</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
 <p />
-<ul class="lvl-0">
-<li class="lvl-5">
-<p><strong>舍入</strong><br>
-常用恒舍法，即精度之外的位无条件舍弃。</p>
-</li>
-<li class="lvl-5">
-<p><strong>溢出判断</strong><br>
+<ul>
+<li><p><strong>舍入</strong><br />
+常用恒舍法，即精度之外的位无条件舍弃。</p></li>
+<li><p><strong>溢出判断</strong>
 浮点数溢出由阶码决定，若阶码也使用双符号补码，</p>
 <table>
 <thead>
-<tr>
-<th>$(E_C)_{\text{补}}$</th>
+<tr class="header">
+<th><span class="math inline">\((E_C)_{\text{补}}\)</span></th>
 <th>操作</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$01, XXX$</td>
+<tr class="odd">
+<td><span class="math inline">\(01, XXX\)</span></td>
 <td>上溢，浮点数真正溢出，需做溢出中断处理</td>
 </tr>
-<tr>
-<td>$10, XXX$</td>
+<tr class="even">
+<td><span class="math inline">\(10, XXX\)</span></td>
 <td>下溢，浮点值趋近 0，按机器零处理</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ul>
-<ol start="2">
-<li class="lvl-3">
-<p><strong>举例</strong><br>
-$$<br>
-(0.101110)_2 \times 2^{-(01)_2} + (0.101011)_2 \times 2^{-(10)_2} = (0.110001)_2 \times 2^{-(10)_2}<br>
-$$</p>
-</li>
+<ol start="2" type="1">
+<li><strong>举例</strong> <span class="math display">\[
+(0.101110)_2 \times 2^{-(01)_2} + (0.101011)_2 \times 2^{-(10)_2} =
+(0.110001)_2 \times 2^{-(10)_2}
+\]</span></li>
 </ol>
-<h3 id="4-6-2-浮点乘除运算">4.6.2 浮点乘除运算</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>乘法</strong><br>
-$$<br>
-A \times B = (M_A \times M_B) \times 2^{E_A + E_B}<br>
-$$</p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>阶码相加</strong><br>
-阶码用补码表示，相加后无需校正。阶码用移码表示，相加后要减去偏置值 $2^n$。</p>
-</li>
-<li class="lvl-5">
-<p><strong>尾数相乘</strong><br>
-同定点乘法。</p>
-</li>
-<li class="lvl-5">
-<p><strong>尾数结果规格化</strong><br>
-尾数结果 $M_C$ 一定满足<br>
-$$<br>
-\frac{1}{4} \leq |M_C| \leq 1<br>
-$$</p>
+<h3 id="浮点乘除运算">4.6.2 浮点乘除运算</h3>
+<ol type="1">
+<li><p><strong>乘法</strong><br />
+<span class="math display">\[
+A \times B = (M_A \times M_B) \times 2^{E_A + E_B}
+\]</span></p>
+<ul>
+<li><p><strong>阶码相加</strong><br />
+阶码用补码表示，相加后无需校正。 阶码用移码表示，相加后要减去偏置值
+<span class="math inline">\(2^n\)</span>。</p></li>
+<li><p><strong>尾数相乘</strong><br />
+同定点乘法。</p></li>
+<li><p><strong>尾数结果规格化</strong><br />
+尾数结果 <span class="math inline">\(M_C\)</span> 一定满足 <span
+class="math display">\[
+\frac{1}{4} \leq |M_C| \leq 1
+\]</span></p>
 <table>
 <thead>
-<tr>
-<th>$M_C$</th>
+<tr class="header">
+<th><span class="math inline">\(M_C\)</span></th>
 <th>操作</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>$\geq \frac{1}{2}$</td>
+<tr class="odd">
+<td><span class="math inline">\(\geq \frac{1}{2}\)</span></td>
 <td>已规格化</td>
 </tr>
-<tr>
-<td>$&lt; \frac{1}{2}$</td>
+<tr class="even">
+<td><span class="math inline">\(&lt; \frac{1}{2}\)</span></td>
 <td>左规一次，发生下溢则按机器零处理</td>
 </tr>
 </tbody>
-</table>
-</li>
-</ul>
-</li>
+</table></li>
+</ul></li>
 </ol>
-<h2 id="4-7-十进制整数加法运算">4.7 十进制整数加法运算</h2>
-<h3 id="4-7-1-一位十进制加法运算">4.7.1 一位十进制加法运算</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>8421 码加法运算</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">两数相加，逢二进一。</li>
-<li class="lvl-5">（十进制）和小于 9，不作校正；和大于 9，作 + 6 校正，产生向上一位进位。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>余 3 码加法运算</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">两数相加，逢二进一。</li>
-<li class="lvl-5">（十进制）和无进位，减 3 校正；和有进位，加 3 校正。</li>
-</ul>
-</li>
+<h2 id="十进制整数加法运算">4.7 十进制整数加法运算</h2>
+<h3 id="一位十进制加法运算">4.7.1 一位十进制加法运算</h3>
+<ol type="1">
+<li><strong>8421 码加法运算</strong>
+<ul>
+<li>两数相加，逢二进一。</li>
+<li>（十进制）和小于 9，不作校正；和大于 9，作 + 6
+校正，产生向上一位进位。</li>
+</ul></li>
+<li><strong>余 3 码加法运算</strong>
+<ul>
+<li>两数相加，逢二进一。</li>
+<li>（十进制）和无进位，减 3 校正；和有进位，加 3 校正。</li>
+</ul></li>
 </ol>
-<h3 id="4-7-2-十进制加法器">4.7.2 十进制加法器</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>8421 码加法器</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763990699489.webp" alt="1763990699489"><br>
-图中 FA 为全加器，HA 为半加器。</p>
-</li>
-<li class="lvl-3">
-<p><strong>余 3 码加法器</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763990790119.webp" alt="1763990790119"><br>
-由运算法则知校正前后最后一位必相反，故使用非门简化。</p>
-</li>
+<h3 id="十进制加法器">4.7.2 十进制加法器</h3>
+<ol type="1">
+<li><p><strong>8421 码加法器</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763990699489.webp"
+alt="1763990699489" /><br />
+图中 FA 为全加器，HA 为半加器。</p></li>
+<li><p><strong>余 3 码加法器</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763990790119.webp"
+alt="1763990790119" /><br />
+由运算法则知校正前后最后一位必相反，故使用非门简化。</p></li>
 </ol>
-<h3 id="4-7-3-多位十进制加法">4.7.3 多位十进制加法</h3>
+<h3 id="多位十进制加法">4.7.3 多位十进制加法</h3>
 <p>多位十进制加法可完全遵照一位十进制数加法规则。</p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>8421 码</th>
 <th>余 3 码</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763991116150.webp" alt="1763991116150"></td>
-<td><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763991133301.webp" alt="1763991133301"></td>
+<tr class="odd">
+<td><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763991116150.webp"
+alt="1763991116150" /></td>
+<td><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763991133301.webp"
+alt="1763991133301" /></td>
 </tr>
 </tbody>
 </table>
-<h2 id="4-8-逻辑运算与实现">4.8 逻辑运算与实现</h2>
-<ol>
-<li class="lvl-3">
-<p><strong>逻辑非</strong><br>
-按位<strong>取反</strong>。</p>
-</li>
-<li class="lvl-3">
-<p><strong>逻辑乘</strong><br>
-将两数相应位进行<strong>按位或</strong>操作。</p>
-</li>
-<li class="lvl-3">
-<p><strong>逻辑加</strong><br>
-将两数相应位进行<strong>按位与</strong>操作。</p>
-</li>
-<li class="lvl-3">
-<p><strong>逻辑异或</strong><br>
-将两数相应位进行<strong>按位异或</strong>（求<strong>模 2 和</strong>）操作。</p>
-</li>
+<h2 id="逻辑运算与实现">4.8 逻辑运算与实现</h2>
+<ol type="1">
+<li><p><strong>逻辑非</strong><br />
+按位<strong>取反</strong>。</p></li>
+<li><p><strong>逻辑乘</strong><br />
+将两数相应位进行<strong>按位或</strong>操作。</p></li>
+<li><p><strong>逻辑加</strong><br />
+将两数相应位进行<strong>按位与</strong>操作。</p></li>
+<li><p><strong>逻辑异或</strong><br />
+将两数相应位进行<strong>按位异或</strong>（求<strong>模 2
+和</strong>）操作。</p></li>
 </ol>
-<h2 id="4-9-运算器的基本组成与实例">4.9 运算器的基本组成与实例</h2>
-<h3 id="4-9-1-运算器结构">4.9.1 运算器结构</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>运算器的基本组成</strong><br>
+<h2 id="运算器的基本组成与实例">4.9 运算器的基本组成与实例</h2>
+<h3 id="运算器结构">4.9.1 运算器结构</h3>
+<ol type="1">
+<li><p><strong>运算器的基本组成</strong><br />
 ALU、寄存器组、判别逻辑和控制电路。</p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>带多路选择器的运算器</th>
 <th>带输入锁存器的运算器</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>各寄存器可以独立、多路地将数据送至 ALU 的多路选择器，使 ALU 有选择地同时获得两路输入数据。<br></td>
-<td>运算器的内部总线是一组双向传送的数据线。为了进行双操作数之间的运算操作，ALU 输入端前设置了一级锁存器，可暂存操作数。</td>
+<tr class="odd">
+<td>各寄存器可以独立、多路地将数据送至 ALU 的多路选择器，使 ALU
+有选择地同时获得两路输入数据。<br></td>
+<td>运算器的内部总线是一组双向传送的数据线。为了进行双操作数之间的运算操作，ALU
+输入端前设置了一级锁存器，可暂存操作数。</td>
 </tr>
-<tr>
-<td><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764032867687.webp" alt="1764032867687"></td>
-<td><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1763991916324.webp" alt="1763991916324"></td>
+<tr class="even">
+<td><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764032867687.webp"
+alt="1764032867687" /></td>
+<td><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1763991916324.webp"
+alt="1763991916324" /></td>
 </tr>
 </tbody>
-</table>
-</li>
-<li class="lvl-3">
-<p><strong>运算器的内部总线结构</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>单总线结构运算器</strong><br>
-一次双操作数运算需分成三步，较慢。</p>
-</li>
-<li class="lvl-5">
-<p><strong>双、三总线结构运算器</strong></p>
+</table></li>
+<li><p><strong>运算器的内部总线结构</strong></p>
+<ul>
+<li><p><strong>单总线结构运算器</strong><br />
+一次双操作数运算需分成三步，较慢。</p></li>
+<li><p><strong>双、三总线结构运算器</strong></p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>双总线结构运算器</th>
 <th>三总线结构运算器</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>两根总线传入两操作数，因为总线被操作数占用，运行结果需经缓存器输出</td>
 <td>运算结果由第三条总线输出，算数与逻辑操作可在一步内完成</td>
 </tr>
-<tr>
-<td><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764032867687.webp" alt="1764032867687"></td>
-<td><img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764032879988.webp" alt="1764032879988"></td>
+<tr class="even">
+<td><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764032867687.webp"
+alt="1764032867687" /></td>
+<td><img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764032879988.webp"
+alt="1764032879988" /></td>
 </tr>
 </tbody>
-</table>
-</li>
-</ul>
-</li>
+</table></li>
+</ul></li>
 </ol>
-<h3 id="4-9-2-ALU-举例">4.9.2 ALU 举例</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>ALU 电路</strong><br>
-加减乘除都可归结为加法运算，所以 ALU 核心首先应该是一个并行加法器，同时能执行逻辑运算。</p>
-</li>
-<li class="lvl-3">
-<p><strong>4 位 ALU 芯片</strong><br>
-74181 为典型的 4 位 ALU 芯片。接收两个操作数，能进行 16 种算术运算和 16 种逻辑运算。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764033234725.webp" alt="1764033234725"><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764033283314.jpg" alt="1764033283314"></p>
-</li>
-<li class="lvl-3">
-<p><strong>ALU 的应用</strong><br>
-74181 可以采用并行进位或串行进位（连接底一片的 C<sub>n+4</sub> 与高一片的 C<sub>n</sub>）。<br>
-并行进位时需要 74182 进行先行进位。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764033593574.webp" alt="1764033593574"></p>
-</li>
+<h3 id="alu-举例">4.9.2 ALU 举例</h3>
+<ol type="1">
+<li><p><strong>ALU 电路</strong><br />
+加减乘除都可归结为加法运算，所以 ALU
+核心首先应该是一个并行加法器，同时能执行逻辑运算。</p></li>
+<li><p><strong>4 位 ALU 芯片</strong><br />
+74181 为典型的 4 位 ALU 芯片。接收两个操作数，能进行 16 种算术运算和 16
+种逻辑运算。<br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764033234725.webp"
+alt="1764033234725" /><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764033283314.jpg"
+alt="1764033283314" /></p></li>
+<li><p><strong>ALU 的应用</strong><br />
+74181 可以采用并行进位或串行进位（连接底一片的 C<sub>n+4</sub>
+与高一片的 C<sub>n</sub>）。<br />
+并行进位时需要 74182 进行先行进位。<br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764033593574.webp"
+alt="1764033593574" /></p></li>
 </ol>
-<h3 id="4-9-3-浮点运算器举例">4.9.3 浮点运算器举例</h3>
+<h3 id="浮点运算器举例">4.9.3 浮点运算器举例</h3>
 <p>微机系统往往配有专门的浮点运算部件，如 80x87 浮点协处理器。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>80x87 的数据格式</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764033767777.webp" alt="1764033767777"></p>
-</li>
-<li class="lvl-3">
-<p><strong>80x87 的内部结构</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-10-14-4-CompOrg-machine-calculation/1764033813657.webp" alt="1764033813657"></p>
-</li>
+<ol type="1">
+<li><p><strong>80x87 的数据格式</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764033767777.webp"
+alt="1764033767777" /></p></li>
+<li><p><strong>80x87 的内部结构</strong><br />
+<img
+src="/image/25-10-14-4-CompOrg-machine-calculation/1764033813657.webp"
+alt="1764033813657" /></p></li>
 </ol>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/">https://remy-campanella.github.io/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-1-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。   工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。    二、软件工程学科与教材分析   经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。    学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。    三、软件工程核心内容   关键主题：  需求...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-3-CompOrg-3-command-system/" title="【计算机组成原理学习】 第三章 指令系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【计算机组成原理学习】 第三章 指令系统</div></div><div class="info-2"><div class="info-item-1">3.1 指令格式   基本格式          操作码字段 地址码字段      地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。    指令结构   四地址指令  含义：$(A_1) OP (A_2) \rightarrow A_3$ 直观，但太长，不实际。    三地址指令  含义：$(A_1) OP (A_2) \rightarrow A_3$，$(PC) + 1 \rightarrow PC$ 每执行一条指令，程序计数器（PC） 自增。 仍然较长，在大、中型计算机使用。 适用于向量、矩阵运算。    二地址指令  含义：$(A_1) OP (A_2) \rightarrow A_1$，$\rm (PC) + 1 \rightarrow PC$ $A_1$ 为目的操作数地址，$A_2$为源操作数地址。$A_1$中原内容会被破坏。 至少需要访问四次主存。    一地址指令  含义：$(Acc) OP (A_1)...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-1-intro/" title="【计算机组成原理学习】 第一章 概论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制   存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。   存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。    1.2 计算机的硬件组成   计算机的主要部件          输入设备 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件   输出设备 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备   存储器 用于存放程序和数据的部件   运算器 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU）   控制器 按照人们预先确定的操作步骤，控制整个计算机各部件有条不紊地自动工作地部件      ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理学习】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示   无符号数 整个机器字长全部二进制位位数值位。 范围$[0, 2^n - 1]$。   原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，$[+0]_原 = 00000$，$[-0]_原 = 10000$。 原码实现乘除简单，实现加减复杂。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。其中，$[+0]_补 = [-0]_补 = 00000$。 范围$[-2^{n - 1}, 2^{n - 1} - 1]$。   反码 正数反码与原码相同，负数补码为真值数值按位取反。其中，$[+0]_原 = 00000$，$[-0]_原 = 11111$。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   2.2 机器数的定点表示与浮点表示   定点小数 即纯小数（$-1 &lt; x &lt; 1$），小数点位置固定，整数位被取代为符号位。设机器字长$n + 1$位，原码、反码范围$[-(1 - 2^{-n}), 1 - ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-3-CompOrg-3-command-system/" title="【计算机组成原理学习】 第三章 指令系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理学习】 第三章 指令系统</div></div><div class="info-2"><div class="info-item-1">3.1 指令格式   基本格式          操作码字段 地址码字段      地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。    指令结构   四地址指令  含义：$(A_1) OP (A_2) \rightarrow A_3$ 直观，但太长，不实际。    三地址指令  含义：$(A_1) OP (A_2) \rightarrow A_3$，$(PC) + 1 \rightarrow PC$ 每执行一条指令，程序计数器（PC） 自增。 仍然较长，在大、中型计算机使用。 适用于向量、矩阵运算。    二地址指令  含义：$(A_1) OP (A_2) \rightarrow A_1$，$\rm (PC) + 1 \rightarrow PC$ $A_1$ 为目的操作数地址，$A_2$为源操作数地址。$A_1$中原内容会被破坏。 至少需要访问四次主存。    一地址指令  含义：$(Acc) OP (A_1)...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-1-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。   工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。    二、软件工程学科与教材分析   经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。    学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。    三、软件工程核心内容   关键主题：  需求...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-2-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">2.1 可行性研究的任务   任务 并非任何问题都有简单明显的解决办法。如果问题没有可行的解，那么花费在这项工程上的任何时间、人力、软硬件资源和经费，都是无谓的浪费。可行性研究的目的，就是用最小的代价在尽可能短的时间内确定问题是否能够解决。   分析过程  分析和澄清问题定义。 导出系统逻辑模型。 探索若干种可选的主要解法。    2.2 可行性研究过程    步骤      复查系统规模和目标 实质上是为了确保分析员正在解决的问题确实是要求他解决的问题。   研究目前正在使用的系统 新系统必须要完成旧系统的基本功能；新系统必须要解决旧系统的问题。   导出新系统的高层逻辑模型 参考现有系统的逻辑模型，设想目标系统的逻辑模型，最后根据目标系统的逻辑模型建造新的物理系统。   进一步定义问题 在之前的基础上再次定义问题，构成循环，直到提出的逻辑模型完全符合系统目标。   导出和评价供选择的解法 为每个解法考虑操作、经济方面的可行性，制定实现进度表。   推荐行动方针    草拟开发计划书 制定工程进度表，资源需要情况，系统生命周期每个阶段的成本。   写文档提交审查 应该把上述可行...</div></div></div></a><a class="pagination-related" href="/2025/10/31/25-10-16-1-STATS330-1-synthesis-glm/" title="【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-31</div><div class="info-item-2">【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models</div></div><div class="info-2"><div class="info-item-1">Linear Regression Simple linear regression model is: $$ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\ \epsilon_i \sim {\rm iid \ Normal(0, \sigma^2)} $$ Poisson Linear Regression Macrorhabdus Ornithogaster Chicken Analysis Textbook Page 23:  Macrorhabdus Ornithogaster Chicken Data Data Suitable for Using Poisson Distribution The Poisson distribution better reflects the nature of the response:   It is a discrete distribution   It is right skewed (but almost symmetric when µ is large)   It does n...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">46</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%9F%BA%E6%9C%AC%E7%AE%97%E6%95%B0%E8%BF%90%E7%AE%97%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">4.1 基本算数运算的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-1-%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">4.1.1 加法器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E8%BF%9B%E4%BD%8D%E7%9A%84%E4%BA%A7%E7%94%9F%E4%B8%8E%E4%BC%A0%E9%80%92"><span class="toc-number">1.2.</span> <span class="toc-text">4.2.2 进位的产生与传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-3-%E5%B9%B6%E8%A1%8C%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E5%BF%AB%E9%80%9F%E8%BF%9B%E4%BD%8D"><span class="toc-number">1.3.</span> <span class="toc-text">4.1.3 并行加法器的快速进位</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E5%AE%9A%E7%82%B9%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">4.2 定点加减运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-%E5%8E%9F%E7%A0%81%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1 原码加减运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E8%A1%A5%E7%A0%81%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2 补码加减运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-3-%E8%A1%A5%E7%A0%81%E7%9A%84%E6%BA%A2%E5%87%BA%E5%88%A4%E6%96%AD%E4%B8%8E%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3 补码的溢出判断与检测方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-4-%E8%A1%A5%E7%A0%81%E5%AE%9A%E7%82%B9%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text">4.2.4 补码定点加减运算的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%B8%A6%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%A7%BB%E4%BD%8D%E5%92%8C%E8%88%8D%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">4.3 带符号数的移位和舍入操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-1-%E5%B8%A6%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%A7%BB%E4%BD%8D%E6%93%8D%E4%BD%9C"><span class="toc-number">3.1.</span> <span class="toc-text">4.3.1 带符号数的移位操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-2-%E5%B8%A6%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E8%88%8D%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">3.2.</span> <span class="toc-text">4.3.2 带符号数的舍入操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%AE%9A%E7%82%B9%E4%B9%98%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">4.</span> <span class="toc-text">4.4 定点乘法运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-1-%E5%8E%9F%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95"><span class="toc-number">4.1.</span> <span class="toc-text">4.4.1 原码一位乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-2-%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95"><span class="toc-number">4.2.</span> <span class="toc-text">4.4.2 补码一位乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-3-%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%95"><span class="toc-number">4.3.</span> <span class="toc-text">4.4.3 补码两位乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-4-%E9%98%B5%E5%88%97%E4%B9%98%E6%B3%95%E5%99%A8"><span class="toc-number">4.4.</span> <span class="toc-text">4.4.4 阵列乘法器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-%E5%AE%9A%E7%82%B9%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">5.</span> <span class="toc-text">4.5 定点除法运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-1-%E5%8E%9F%E7%A0%81%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">5.1.</span> <span class="toc-text">4.5.1 原码除法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-2-%E8%A1%A5%E7%A0%81%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">5.2.</span> <span class="toc-text">4.5.2 补码除法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-3-%E9%98%B5%E5%88%97%E9%99%A4%E6%B3%95%E5%99%A8"><span class="toc-number">5.3.</span> <span class="toc-text">4.5.3 阵列除法器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-%E8%A7%84%E6%A0%BC%E5%8C%96%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97"><span class="toc-number">6.</span> <span class="toc-text">4.6 规格化浮点运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-1-%E6%B5%AE%E7%82%B9%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">6.1.</span> <span class="toc-text">4.6.1 浮点加法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-2-%E6%B5%AE%E7%82%B9%E4%B9%98%E9%99%A4%E8%BF%90%E7%AE%97"><span class="toc-number">6.2.</span> <span class="toc-text">4.6.2 浮点乘除运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-%E5%8D%81%E8%BF%9B%E5%88%B6%E6%95%B4%E6%95%B0%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">7.</span> <span class="toc-text">4.7 十进制整数加法运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-1-%E4%B8%80%E4%BD%8D%E5%8D%81%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">7.1.</span> <span class="toc-text">4.7.1 一位十进制加法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-2-%E5%8D%81%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="toc-number">7.2.</span> <span class="toc-text">4.7.2 十进制加法器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-3-%E5%A4%9A%E4%BD%8D%E5%8D%81%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95"><span class="toc-number">7.3.</span> <span class="toc-text">4.7.3 多位十进制加法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="toc-number">8.</span> <span class="toc-text">4.8 逻辑运算与实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-9-%E8%BF%90%E7%AE%97%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90%E4%B8%8E%E5%AE%9E%E4%BE%8B"><span class="toc-number">9.</span> <span class="toc-text">4.9 运算器的基本组成与实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-1-%E8%BF%90%E7%AE%97%E5%99%A8%E7%BB%93%E6%9E%84"><span class="toc-number">9.1.</span> <span class="toc-text">4.9.1 运算器结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-2-ALU-%E4%B8%BE%E4%BE%8B"><span class="toc-number">9.2.</span> <span class="toc-text">4.9.2 ALU 举例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-3-%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97%E5%99%A8%E4%B8%BE%E4%BE%8B"><span class="toc-number">9.3.</span> <span class="toc-text">4.9.3 浮点运算器举例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</a><time datetime="2025-12-22T08:24:15.000Z" title="发表于 2025-12-22 16:24:15">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 10 Quick Sort"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort">【COMPSCI 220】 Lecture 10 Quick Sort</a><time datetime="2025-12-22T07:30:37.000Z" title="发表于 2025-12-22 15:30:37">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</a><time datetime="2025-12-22T06:32:24.000Z" title="发表于 2025-12-22 14:32:24">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</a><time datetime="2025-12-22T05:16:46.000Z" title="发表于 2025-12-22 13:16:46">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 7 Divide and Conquer"/></a><div class="content"><a class="title" href="/2025/12/22/25-12-11-2-COMPSCI220-7-div-coq/" title="【COMPSCI 220】 Lecture 7 Divide and Conquer">【COMPSCI 220】 Lecture 7 Divide and Conquer</a><time datetime="2025-12-22T05:09:08.000Z" title="发表于 2025-12-22 13:09:08">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/">https://remy-campanella.github.io/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-1-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。  工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。   二、软件工程学科与教材分析  经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。  学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。  ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-3-CompOrg-3-command-system/" title="【计算机组成原理】 第三章 指令系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【计算机组成原理】 第三章 指令系统</div></div><div class="info-2"><div class="info-item-1">3.1 指令格式  基本格式 | | | | — | — | | 操作码字段 | 地址码字段 | 地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 \(A_1\)， 第二操作数地址 \(A_2\)， 操作结果存放地址 \(A_3\)， 下一条指令地址 \(A_4\)。  指令结构  四地址指令  含义：\((A_1) OP (A_2) \rightarrow A_3\) 直观，但太长，不实际。  三地址指令  含义：\((A_1) OP (A_2) \rightarrow A_3\)，\((PC) + 1 \rightarrow PC\) 每执行一条指令，程序计数器（PC） 自增。 仍然较长，在大、中型计算机使用。 适用于向量、矩阵运算。  二地址指令  含义：\((A_1) OP (A_2) \rightarrow A_1\)，\(\rm (PC) + 1 \rightarrow PC\) \(A_1\) 为目的操作数地址，\(A_2\)为源操作数...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/24/25-11-26-2-CompOrg-5-mem/" title="【计算机组成原理】 第五章 存储系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-24</div><div class="info-item-2">【计算机组成原理】 第五章 存储系统</div></div><div class="info-2"><div class="info-item-1">5.1 存储系统的组成 5.1.1 存储器分类  按存储器在计算机中的作用分          名称 作用 成本 性能     高速存储缓冲器（Cache） 位于主存与 CPU 之间，存放正在执行的程序段与数据 高 速度与 CPU 匹配，容量小   主存储器 存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写  速度较高，具有一定容量   辅助存储器（外存储器、后援存储器） 存放当前暂不运行的程序和数据以及永久保存的信息 很低 容量大，速度较慢    按存取方式分类         名称 特性 用途     随机存取存储器（RAM） CPU 对存储器内容随机读取，对任何一个单元读写时间相同，使用灵活 主存、高速缓冲存储器   只读存储器（ROM） 内容只读不写，断电不消失 BIOS、存入固定子程序、函数发生器、字符发生器、微程序控制器的控制存储器   顺序存储存储器（SAM） 内容只能按某种顺序读取，读写时间与位置有关 磁带机  ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示  无符号数 整个机器字长全部二进制位位数值位。 范围\([0, 2^n - 1]\)。 原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 10000\)。 原码实现乘除简单，实现加减复杂。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。 补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，\([+0]_补 = [-0]_补 = 00000\)。 范围\([-2^{n - 1}, 2^{n - 1} - 1]\)。 反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 11111\)。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。  2.2 机器数的定点表示与浮点表示  定点小数 即纯小数（\(-1 &lt; x &lt; 1\)），小数点位置固定，整数位被取代为符号位。设机器...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-3-CompOrg-3-command-system/" title="【计算机组成原理】 第三章 指令系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第三章 指令系统</div></div><div class="info-2"><div class="info-item-1">3.1 指令格式  基本格式 | | | | — | — | | 操作码字段 | 地址码字段 | 地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 \(A_1\)， 第二操作数地址 \(A_2\)， 操作结果存放地址 \(A_3\)， 下一条指令地址 \(A_4\)。  指令结构  四地址指令  含义：\((A_1) OP (A_2) \rightarrow A_3\) 直观，但太长，不实际。  三地址指令  含义：\((A_1) OP (A_2) \rightarrow A_3\)，\((PC) + 1 \rightarrow PC\) 每执行一条指令，程序计数器（PC） 自增。 仍然较长，在大、中型计算机使用。 适用于向量、矩阵运算。  二地址指令  含义：\((A_1) OP (A_2) \rightarrow A_1\)，\(\rm (PC) + 1 \rightarrow PC\) \(A_1\) 为目的操作数地址，\(A_2\)为源操作数...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-1-intro/" title="【计算机组成原理】 第一章 概论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制  存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。 早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。 存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。   1.2 计算机的硬件组成  计算机的主要部件 | | | | — | — | | 输入设备 | 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件 | | 输出设备 | 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备 | | 存储器 | 用于存放程序和数据的部件 | | 运算器 | 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU） | |...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-2-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">2.1 可行性研究的任务  任务 并非任何问题都有简单明显的解决办法。如果问题没有可行的解，那么花费在这项工程上的任何时间、人力、软硬件资源和经费，都是无谓的浪费。可行性研究的目的，就是用最小的代价在尽可能短的时间内确定问题是否能够解决。 分析过程  分析和澄清问题定义。 导出系统逻辑模型。 探索若干种可选的主要解法。   2.2 可行性研究过程        步骤      复查系统规模和目标 实质上是为了确保分析员正在解决的问题确实是要求他解决的问题。   研究目前正在使用的系统 新系统必须要完成旧系统的基本功能；新系统必须要解决旧系统的问题。   导出新系统的高层逻辑模型 参考现有系统的逻辑模型，设想目标系统的逻辑模型，最后根据目标系统的逻辑模型建造新的物理系统。   进一步定义问题 在之前的基础上再次定义问题，构成循环，直到提出的逻辑模型完全符合系统目标。   导出和评价供选择的解法 为每个解法考虑操作、经济方面的可行性，制定实现进度表。   推荐行动方针    草拟开发计划...</div></div></div></a><a class="pagination-related" href="/2025/10/31/25-10-16-1-STATS330-1-synthesis-glm/" title="【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-31</div><div class="info-item-2">【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models</div></div><div class="info-2"><div class="info-item-1">Linear Regression Simple linear regression model is: \[ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\\\ \epsilon_i \sim {\rm iid \ Normal(0, \sigma^2)} \] Poisson Linear Regression Macrorhabdus Ornithogaster Chicken Analysis Textbook Page 23:     Macrorhabdus Ornithogaster Chicken Data    Data Suitable for Using Poisson Distribution The Poisson distribution better reflects the nature of the response: - It is a discrete distribution - It is right skewed (but almost symmetric...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%AE%97%E6%95%B0%E8%BF%90%E7%AE%97%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">4.1 基本算数运算的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">4.1.1 加法器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E4%BD%8D%E7%9A%84%E4%BA%A7%E7%94%9F%E4%B8%8E%E4%BC%A0%E9%80%92"><span class="toc-number">1.2.</span> <span class="toc-text">4.2.2 进位的产生与传递</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E5%8A%A0%E6%B3%95%E5%99%A8%E7%9A%84%E5%BF%AB%E9%80%9F%E8%BF%9B%E4%BD%8D"><span class="toc-number">1.3.</span> <span class="toc-text">4.1.3 并行加法器的快速进位</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E7%82%B9%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">4.2 定点加减运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%A0%81%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1 原码加减运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E7%A0%81%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2 补码加减运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E7%A0%81%E7%9A%84%E6%BA%A2%E5%87%BA%E5%88%A4%E6%96%AD%E4%B8%8E%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3 补码的溢出判断与检测方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E7%A0%81%E5%AE%9A%E7%82%B9%E5%8A%A0%E5%87%8F%E8%BF%90%E7%AE%97%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.4.</span> <span class="toc-text">4.2.4 补码定点加减运算的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%A7%BB%E4%BD%8D%E5%92%8C%E8%88%8D%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">4.3 带符号数的移位和舍入操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E7%A7%BB%E4%BD%8D%E6%93%8D%E4%BD%9C"><span class="toc-number">3.1.</span> <span class="toc-text">4.3.1 带符号数的移位操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E7%AC%A6%E5%8F%B7%E6%95%B0%E7%9A%84%E8%88%8D%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="toc-number">3.2.</span> <span class="toc-text">4.3.2 带符号数的舍入操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E7%82%B9%E4%B9%98%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">4.</span> <span class="toc-text">4.4 定点乘法运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95"><span class="toc-number">4.1.</span> <span class="toc-text">4.4.1 原码一位乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95"><span class="toc-number">4.2.</span> <span class="toc-text">4.4.2 补码一位乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%95"><span class="toc-number">4.3.</span> <span class="toc-text">4.4.3 补码两位乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B5%E5%88%97%E4%B9%98%E6%B3%95%E5%99%A8"><span class="toc-number">4.4.</span> <span class="toc-text">4.4.4 阵列乘法器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E7%82%B9%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">5.</span> <span class="toc-text">4.5 定点除法运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%A0%81%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">5.1.</span> <span class="toc-text">4.5.1 原码除法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E7%A0%81%E9%99%A4%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">5.2.</span> <span class="toc-text">4.5.2 补码除法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B5%E5%88%97%E9%99%A4%E6%B3%95%E5%99%A8"><span class="toc-number">5.3.</span> <span class="toc-text">4.5.3 阵列除法器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%84%E6%A0%BC%E5%8C%96%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97"><span class="toc-number">6.</span> <span class="toc-text">4.6 规格化浮点运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">6.1.</span> <span class="toc-text">4.6.1 浮点加法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E4%B9%98%E9%99%A4%E8%BF%90%E7%AE%97"><span class="toc-number">6.2.</span> <span class="toc-text">4.6.2 浮点乘除运算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E8%BF%9B%E5%88%B6%E6%95%B4%E6%95%B0%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">7.</span> <span class="toc-text">4.7 十进制整数加法运算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BD%8D%E5%8D%81%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="toc-number">7.1.</span> <span class="toc-text">4.7.1 一位十进制加法运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95%E5%99%A8"><span class="toc-number">7.2.</span> <span class="toc-text">4.7.2 十进制加法器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E4%BD%8D%E5%8D%81%E8%BF%9B%E5%88%B6%E5%8A%A0%E6%B3%95"><span class="toc-number">7.3.</span> <span class="toc-text">4.7.3 多位十进制加法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="toc-number">8.</span> <span class="toc-text">4.8 逻辑运算与实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90%E4%B8%8E%E5%AE%9E%E4%BE%8B"><span class="toc-number">9.</span> <span class="toc-text">4.9 运算器的基本组成与实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E5%99%A8%E7%BB%93%E6%9E%84"><span class="toc-number">9.1.</span> <span class="toc-text">4.9.1 运算器结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#alu-%E4%B8%BE%E4%BE%8B"><span class="toc-number">9.2.</span> <span class="toc-text">4.9.2 ALU 举例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E8%BF%90%E7%AE%97%E5%99%A8%E4%B8%BE%E4%BE%8B"><span class="toc-number">9.3.</span> <span class="toc-text">4.9.3 浮点运算器举例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/24/25-11-26-2-CompOrg-5-mem/" title="【计算机组成原理】 第五章 存储系统"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 第五章 存储系统"/></a><div class="content"><a class="title" href="/2025/12/24/25-11-26-2-CompOrg-5-mem/" title="【计算机组成原理】 第五章 存储系统">【计算机组成原理】 第五章 存储系统</a><time datetime="2025-12-24T07:55:36.000Z" title="发表于 2025-12-24 15:55:36">2025-12-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</a><time datetime="2025-12-22T08:24:15.000Z" title="发表于 2025-12-22 16:24:15">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 10 Quick Sort"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-3-COMPSCI220-10-quicksort/" title="【COMPSCI 220】 Lecture 10 Quick Sort">【COMPSCI 220】 Lecture 10 Quick Sort</a><time datetime="2025-12-22T07:30:37.000Z" title="发表于 2025-12-22 15:30:37">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-2-COMPSCI220-9-sort/" title="【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms">【COMPSCI 220】 Lecture 9 Analysis of Sorting Algorithms</a><time datetime="2025-12-22T06:32:24.000Z" title="发表于 2025-12-22 14:32:24">2025-12-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm"/></a><div class="content"><a class="title" href="/2025/12/22/25-11-3-1-COMPSCI220-8-matrix/" title="【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm">【COMPSCI 220】 Lecture 8 Matrix Multiplication and Strassen’s Algorithm</a><time datetime="2025-12-22T05:16:46.000Z" title="发表于 2025-12-22 13:16:46">2025-12-22</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
   var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
   mermaid.initialize(options);
 }</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
