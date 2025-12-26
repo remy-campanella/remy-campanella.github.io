@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 22 Flow Network | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Special thanks to Zekun Lin.  Part I: Basic Terminology A Shipping Problem Flow Network  Source Node  A source node in a directed graph is a node with no incoming edges.  Sink Node  A s">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 22 Flow Network | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Special thanks to Zekun Lin.  Part I: Basic Terminology A Shipping Problem Flow Network  Source Node  A source node in a directed graph is a node with no incoming edges.  Sink Node  A sink node in a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【COMPSCI 220】 Lecture 22 Flow Network">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="Special thanks to Zekun Lin.  Part I: Basic Terminology A Shipping Problem Flow Network  Source Node  A source node in a directed graph is a node with no incoming edges.  Sink Node  A s">
+<meta property="og:description" content="Special thanks to Zekun Lin.  Part I: Basic Terminology A Shipping Problem Flow Network  Source Node  A source node in a directed graph is a node with no incoming edges.  Sink Node  A sink node in a">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-12-26T13:22:55.000Z">
@@ -167,273 +167,173 @@
 <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 220】 Lecture 22 Flow Network</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 220】 Lecture 22 Flow Network</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-26T13:39:54.326Z" title="更新于 2025-12-26 21:39:54">2025-12-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-220-Algorithms-and-Data-Structures/">COMPSCI 220 Algorithms and Data Structures</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><blockquote>
 <p>Special thanks to Zekun Lin.</p>
 </blockquote>
-<h1 id="part-i-basic-terminology">Part I: Basic Terminology</h1>
-<h2 id="a-shipping-problem">A Shipping Problem</h2>
-<h2 id="flow-network">Flow Network</h2>
+<h1>Part I: Basic Terminology</h1>
+<h2 id="A-Shipping-Problem">A Shipping Problem</h2>
+<h2 id="Flow-Network">Flow Network</h2>
 <dl>
 <dt><strong>Source Node</strong></dt>
 <dd>
-A source node in a <strong>directed graph</strong> is a node with no
-incoming edges.
+<p>A source node in a <strong>directed graph</strong> is a node with no incoming edges.</p>
 </dd>
 <dt><strong>Sink Node</strong></dt>
 <dd>
-A sink node in a <strong>directed graph</strong> is a node with no
-outgoing edges.
+<p>A sink node in a <strong>directed graph</strong> is a node with no outgoing edges.</p>
 </dd>
 <dt><strong>Flow Network</strong></dt>
 <dd>
-A flow network is a directed graph (<span class="math inline">\(V, E, c,
-s, t\)</span>) where (<span class="math inline">\(V, E, c\)</span>)
-forms <strong>a weighted graph</strong> with <strong>positive</strong>
-edge weights, <span class="math inline">\(s \in V\)</span> is a source
-node and <span class="math inline">\(t \in V\)</span> is a sink node.
+<p>A flow network is a directed graph ($V, E, c, s, t$) where ($V, E, c$) forms <strong>a weighted graph</strong> with <strong>positive</strong> edge weights, $s \in V$ is a source node and $t \in V$ is a sink node.</p>
 </dd>
 <dt><strong>Flow</strong></dt>
 <dd>
-A flow in a flow network is a <strong>function</strong> <span
-class="math inline">\(f : E \to N\)</span> such that <span
-class="math inline">\(f(u, v) \leq c(u, v)\)</span> for every <span
-class="math inline">\((u, v) \in E\)</span> and for any node <span
-class="math inline">\(u\)</span> that is <strong>not <span
-class="math inline">\(s\)</span> nor <span
-class="math inline">\(t\)</span></strong>, we have <span
-class="math display">\[
-\sum_{(u, x) \in E}f(u, x) = \sum_{(y, u) \in E}f(y, u)
-\]</span>
-</dd>
-</dl>
+<p>A flow in a flow network is a <strong>function</strong> $f : E \to N$ such that $f(u, v) \leq c(u, v)$ for every $(u, v) \in E$ and for any node $u$ that is <strong>not $s$ nor $t$</strong>, we have<br>
+$$<br>
+\sum_{(u, x) \in E}f(u, x) = \sum_{(y, u) \in E}f(y, u)<br>
+$$</p>
 <blockquote>
 <p>This means “all in” equals to “all out”.</p>
 </blockquote>
-<p>Intuitively, a flow defines a way to send oil from <span
-class="math inline">\(s\)</span> to <span
-class="math inline">\(t\)</span> <strong>without exceeding the pipeline
-capacity</strong>, and <strong>without any leak</strong> on the way.</p>
+<p>Intuitively, a flow defines a way to send oil from $s$ to $t$ <strong>without exceeding the pipeline capacity</strong>, and <strong>without any leak</strong> on the way.</p>
+</dd>
+</dl>
 <blockquote>
-<p>Here <span class="math inline">\(c(u, v)\)</span> stands for
-<strong>capacity</strong>, <em>i.e.</em> weight.</p>
+<p>Here $c(u, v)$ stands for <strong>capacity</strong>, <em>i.e.</em> weight.</p>
 </blockquote>
 <table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Capacity(Weight)</th>
 <th>Flow</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td><img
-src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766752224454.webp"
-alt="1766752224454" /></td>
-<td><img
-src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766752236262.webp"
-alt="1766752236262" /></td>
+<tr>
+<td><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766752224454.webp" alt="1766752224454"></td>
+<td><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766752236262.webp" alt="1766752236262"></td>
 </tr>
 </tbody>
 </table>
 <dl>
 <dt><strong>Size of a Flow</strong></dt>
-<dd>
-The size of a flow <span class="math inline">\(f\)</span> in a flow
-network is <span class="math inline">\(size(f) =\sum \{f(s, u) | (s, u)
-\in E\}\)</span>. In other words, it is the <strong>total quantity of
-stuff</strong> sent from <span class="math inline">\(s\)</span> to <span
-class="math inline">\(t\)</span>.
-</dd>
+<dd>The size of a flow $f$ in a flow network is $size(f) =\sum {f(s, u) | (s, u) \in E}$. In other words, it is the <strong>total quantity of stuff</strong> sent from $s$ to $t$.</dd>
 </dl>
 <blockquote>
-<p>Also the sum of the weight of edges depart from <span
-class="math inline">\(s\)</span>.</p>
+<p>Also the sum of the weight of edges depart from $s$.</p>
 </blockquote>
-<h2 id="maximal-flows-in-a-flow-network">Maximal Flows in a Flow
-Network</h2>
+<h2 id="Maximal-Flows-in-a-Flow-Network">Maximal Flows in a Flow Network</h2>
 <dl>
 <dt><strong>Maximal Flow</strong></dt>
-<dd>
-A flow in a flow network is maximal if it has maximal size.
-</dd>
+<dd>A flow in a flow network is maximal if it has maximal size.</dd>
 </dl>
-<h2 id="cuts-in-a-flow-network">Cuts in a Flow Network</h2>
+<h2 id="Cuts-in-a-Flow-Network">Cuts in a Flow Network</h2>
 <dl>
 <dt><strong>Cut</strong></dt>
-<dd>
-A cut in a graph is a set <span class="math inline">\(C\)</span> of
-<strong>edges</strong> such that removing them would
-<strong>disconnect</strong> the graph into <span
-class="math inline">\(left(C)\)</span> (nodes reachable from <span
-class="math inline">\(s\)</span>) and the right part <span
-class="math inline">\(right(C)\)</span> (nodes that may reach <span
-class="math inline">\(t\)</span>).
-</dd>
+<dd>A cut in a graph is a set $C$ of <strong>edges</strong> such that removing them would <strong>disconnect</strong> the graph into $left©$ (nodes reachable from $s$) and the right part $right©$ (nodes that may reach $t$).</dd>
 <dt><strong>Capacity of Cut</strong></dt>
-<dd>
-The capacity of a cut <span class="math inline">\(C\)</span> in a flow
-network is the sum of the capacity of edges that goes from left to
-right: <span class="math display">\[
-capacity(C) = \sum \{c(u, v) | (u, v) \in E, u \in left(C), v \in
-right(C)\}
-\]</span> A minimal cut is a cut with <strong>minimal capacity</strong>.
-</dd>
+<dd>The capacity of a cut $C$ in a flow network is the sum of the capacity of edges that goes from left to right:<br>
+$$<br>
+capacity© = \sum {c(u, v) | (u, v) \in E, u \in left©, v \in right©}<br>
+$$<br>
+A minimal cut is a cut with <strong>minimal capacity</strong>.</dd>
 </dl>
 <blockquote>
 <p>The sum of weights of edges cross from left to right.</p>
 </blockquote>
 <dl>
 <dt><strong>Net Flow of a Cut</strong></dt>
-<dd>
-Let <span class="math inline">\(C\)</span> be a cut in a network <span
-class="math inline">\(G\)</span> and <span
-class="math inline">\(f\)</span> be a flow. The <strong>net
-flow</strong> of <span class="math inline">\(f\)</span> over <span
-class="math inline">\(C\)</span> <span class="math display">\[
-f(C) = \sum \{f(u, v) | (u, v) \in E\} - \sum \{f(v, u) | (v, u) \in E\}
-\\
-u \in left(C), v \in right(C)
-\]</span>
-</dd>
+<dd>Let $C$ be a cut in a network $G$ and $f$ be a flow. The <strong>net flow</strong> of $f$ over $C$<br>
+$$<br>
+f© = \sum {f(u, v) | (u, v) \in E} - \sum {f(v, u) | (v, u) \in E} \<br>
+u \in left©, v \in right©<br>
+$$</dd>
 </dl>
-<h2 id="flow-and-cut">Flow and Cut</h2>
-<ol type="1">
-<li><p>For any cut <span class="math inline">\(C\)</span> and flow <span
-class="math inline">\(f\)</span>, <span class="math display">\[
-f(C) = size(f)
-\]</span></p>
+<h2 id="Flow-and-Cut">Flow and Cut</h2>
+<ol>
+<li class="lvl-3">
+<p>For any cut $C$ and flow $f$,<br>
+$$<br>
+f© = size(f)<br>
+$$</p>
 <blockquote>
-<p>All flow depart from <span class="math inline">\(s\)</span> should
-cross <span class="math inline">\(C\)</span>.</p>
-</blockquote></li>
-<li><p>For any flow network <span class="math inline">\(G\)</span>,
-<span class="math display">\[
-size(f_{max}) \leq capacity(C_{min})
-\]</span></p>
+<p>All flow depart from $s$ should cross $C$.</p>
+</blockquote>
+</li>
+<li class="lvl-3">
+<p>For any flow network $G$,<br>
+$$<br>
+size(f_{max}) \leq capacity(C_{min})<br>
+$$</p>
 <blockquote>
-<p>A cumulative conclusion of <span class="math inline">\(f(u, v) \leq
-c(u, v)\)</span>.</p>
-</blockquote></li>
+<p>A cumulative conclusion of $f(u, v) \leq c(u, v)$.</p>
+</blockquote>
+</li>
 </ol>
-<h1 id="part-2-max-flow-min-cut">Part 2: Max-Flow Min-Cut</h1>
-<h2 id="problems">Problems</h2>
-<ul>
-<li><strong>Max Flow Problem</strong>: Find the maximal flow(maximal
-quantity could be sent from <span class="math inline">\(s\)</span> to
-<span class="math inline">\(t\)</span>).</li>
-<li><strong>Min-cut Problem</strong>: Find the minimal cut(bottleneck of
-the network).</li>
+<h1>Part 2: Max-Flow Min-Cut</h1>
+<h2 id="Problems">Problems</h2>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>Max Flow Problem</strong>: Find the maximal flow(maximal quantity could be sent from $s$ to $t$).</p>
+</li>
+<li class="lvl-2">
+<p><strong>Min-cut Problem</strong>: Find the minimal cut(bottleneck of the network).</p>
+</li>
 </ul>
 <blockquote>
 <p>These are two same problems.</p>
 </blockquote>
-<h2 id="residual-network">Residual Network</h2>
+<h2 id="Residual-Network">Residual Network</h2>
 <dl>
 <dt><strong>Residual Network</strong></dt>
-<dd>
-Let <span class="math inline">\(G = (V, E, c,s, t)\)</span> be a flow
-network and <span class="math inline">\(f\)</span> be a flow in <span
-class="math inline">\(G\)</span>. The residual network <span
-class="math inline">\(G_f\)</span> of <span
-class="math inline">\(G\)</span> and <span
-class="math inline">\(F\)</span> is another flow network <span
-class="math inline">\((V, E_f, c_f, s, t)\)</span> - If <span
-class="math inline">\((u, v) \in E\)</span>, <span
-class="math inline">\(f(u, v) &lt; c(u, v)\)</span>, put <span
-class="math inline">\((u, v)\)</span> into <span
-class="math inline">\(E_f\)</span> and set <span
-class="math inline">\(c_f(u, v) = c(u, v) - f(u, v)\)</span>. - If <span
-class="math inline">\(f(u, v) &gt; 0\)</span>, put <span
-class="math inline">\((v, u)\)</span> into <span
-class="math inline">\(E_f\)</span> and set <span
-class="math inline">\(c_f(v, u) = f(u, v)\)</span>.
+<dd>Let $G = (V, E, c,s, t)$ be a flow network and $f$ be a flow in $G$. The residual network $G_f$ of $G$ and $F$ is another flow network $(V, E_f, c_f, s, t)$
+<ul class="lvl-2">
+<li class="lvl-4">If $(u, v) \in E$, $f(u, v) &lt; c(u, v)$, put $(u, v)$ into $E_f$ and set $c_f(u, v) = c(u, v) - f(u, v)$.</li>
+<li class="lvl-4">If $f(u, v) &gt; 0$, put $(v, u)$ into $E_f$ and set $c_f(v, u) = f(u, v)$.</li>
+</ul>
 </dd>
 </dl>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Network(Capacity)</th>
 <th>Flow</th>
 <th>Residual Network</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td><img
-src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766752993668.webp"
-alt="1766752993668" /></td>
-<td><img
-src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753038513.webp"
-alt="1766753038513" /></td>
-<td><img
-src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753049808.webp"
-alt="1766753049808" /></td>
+<tr>
+<td><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766752993668.webp" alt="1766752993668"></td>
+<td><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753038513.webp" alt="1766753038513"></td>
+<td><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753049808.webp" alt="1766753049808"></td>
 </tr>
 </tbody>
 </table>
-<h2 id="combining-flows">Combining Flows</h2>
-<p>Let <span class="math inline">\(f\)</span> be a flow in <span
-class="math inline">\(G\)</span>, <span class="math inline">\(g\)</span>
-be a flow in <span class="math inline">\(G_f\)</span>, then an another
-flow of <span class="math inline">\(h\)</span> in <span
-class="math inline">\(G\)</span> is <span class="math display">\[
-h(u, v) = f(u, v) + g(u, v) - g(v, u), (u, v) \in E
-\]</span></p>
-<p><strong>Note</strong>: <span class="math inline">\(h\)</span> is
-larger than <span class="math inline">\(f\)</span>.</p>
-<p><img
-src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753206729.webp"
-alt="1766753206729" /><br />
-<img src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753220452.webp"
-alt="1766753220452" /></p>
-<h2
-id="ford-fulkerson-algorithm-solving-max-flow-problem">Ford-Fulkerson
-Algorithm Solving Max-Flow Problem</h2>
+<h2 id="Combining-Flows">Combining Flows</h2>
+<p>Let $f$ be a flow in $G$, $g$ be a flow in $G_f$, then an another flow of $h$ in $G$ is<br>
+$$<br>
+h(u, v) = f(u, v) + g(u, v) - g(v, u), (u, v) \in E<br>
+$$</p>
+<p><strong>Note</strong>: $h$ is larger than $f$.</p>
+<p><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753206729.webp" alt="1766753206729"><br>
+<img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766753220452.webp" alt="1766753220452"></p>
+<h2 id="Ford-Fulkerson-Algorithm-Solving-Max-Flow-Problem">Ford-Fulkerson Algorithm Solving Max-Flow Problem</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">algo FF(G)</span><br><span class="line">    flow = new Flow(G)</span><br><span class="line">    rn = new ResidualNetwork(G, f) // Full residual network.</span><br><span class="line"></span><br><span class="line">    while(there exists any single-path flow)</span><br><span class="line">        spf = rn.pickSinglePath() // Pick a single path flow.</span><br><span class="line">        Combine(spf, flow)</span><br><span class="line">        rn.Update()</span><br></pre></td></tr></table></figure>
-<h2 id="max-flow-min-cut">Max-Flow Min-Cut</h2>
+<h2 id="Max-Flow-Min-Cut">Max-Flow Min-Cut</h2>
 <dl>
 <dt><strong>Max-Flow Min-Cut Theorem</strong></dt>
-<dd>
-In any flow network, the <strong>size</strong> of the <strong>maximal
-flow</strong> equals the <strong>capacity</strong> of the
-<strong>minimal cut</strong>.
-</dd>
+<dd>In any flow network, the <strong>size</strong> of the <strong>maximal flow</strong> equals the <strong>capacity</strong> of the <strong>minimal cut</strong>.</dd>
 </dl>
-<p>Obvoiusly, Ford-Fulkerson algorithm finds a maximal flow, as well as
-a minimal cut in a network.</p>
+<p>Obvoiusly, Ford-Fulkerson algorithm finds a maximal flow, as well as a minimal cut in a network.</p>
 <p><br /><br /></p>
 <font size="4">
-<center>
-***
-</center>
-<center>
-<i>Elegance is not a dispensable luxury but a factor that decides
-between success and failure.</i>
-</center>
+<center>***</center>
+<center><i>Elegance is not a dispensable luxury but a factor that decides between success and failure.</i></center>
 </font>
-<p style="text-align: right;">
-E. W. Dijkstra(1999)
-</p>
+<p style="text-align: right;">E. W. Dijkstra(1999)</p>
 <font size="4">
-<center>
-***
-</center>
-<p></font></p>
-<p><br /></p>
-<figure>
-<img src="/image/25-11-20-1-COMPSCI220-22-flow-net/1766754907755.webp"
-alt="1766754907755" />
-<figcaption aria-hidden="true">1766754907755</figcaption>
-</figure>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/">https://remy-campanella.github.io/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</div></div><div class="info-2"><div class="info-item-1">Tower of Babylon Problem You are \(n\) given different types of rectangular blocks. There is an unlimited supply of each type. The \(i\)-th type of block has dimensions \[ (x_i, y_i, z_i) \] A block can be rotated: any two dimensions can be chosen as the base, and the remaining dimension is the height. You want to build the tallest possible tower by stacking blocks under the following rule: A block can be placed on top of another block only if both sides of its base are strictly s...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/25/25-11-10-1-COMPSCI220-14-connectivity/" title="【COMPSCI 220】 Lecture 14 Connectivity and Components"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 14 Connectivity and Components</div></div><div class="info-2"><div class="info-item-1">Subgraph  Subgraph  Let \(E \subseteq V^2\), \(V&#39; \subseteq V\),       \(E \upharpoonright V&#39; = \{(u, v ) \in E | u, v \in V&#39;\}\)(all edges that is used by \(V&#39;\) in \(G\)).     A subgraph of \(G = (V, E)\) is a diagraph \(G&#39; = (V&#39;, E&#39;)\) where \(V&#39; \subseteq V\) and \(E&#39; \subseteq E \upharpoonright V&#39;\).     If \(E&#39; = E \upharpoonright V&#39;\), then the subgraph is an induced subgraph.    Decomposing Undirected Grap...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from \(u\) to \(v\), \(dist(u, v)\), is the length of the shortest path from \(u\) to \(v\). If there is no path, then \(dist(u, v) = \infty\). Distance Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the distance from \(u\) to \(v\).  Shortest Path Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the shortest path from \(u\) to \(v\).  Missionary and Cannibals  There are 3 missionaries and 3 cannibals co...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/" title="【COMPSCI 220】 Lecture 16 Distances in Weight Graphs"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</div></div><div class="info-2"><div class="info-item-1">Weighted Graphs  Weighted Graph  A weighted graph is \(G = (V, E, w)\) where \((V, E)\) is an undirected graph and \(w : E → \mathbf{Z}\) is a weight function that assigns each edge with an integer weight.   We extend adjacency matrix or adjacency list representations to weighted graphs. Distances Weighted Graph Goals: Compute distances in a weighted graph. If weights are integers, subdivide edges into a sequence of uni-length edges, convert a weighted graph into an unweighte...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph \(G\) is connected if it is a connected component itself. A spanning tree of \(G\) is a connected subgraph that contains all nodes in \(V\) and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem  INPUT: A weighted connected (undirected) graph \(G = (V, E, w)\). OUTPUT: A MST of \(G\).  Optimisations in a Weigh...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.        Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property        Algorithm Propert...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</div></div><div class="info-2"><div class="info-item-1">Shortest Path with Potentially Negative Edges Dijkstra’s algorithm does not work for weighted graph where the weights could be negative. If there is a “negative cycle” (a cycle whose total edge weight is negative), then the problem does not make sense. Greedy choice does not work here. Paths with Bounded Length Let \(d_k(u)\) denote the length of the shortest path from \(S\) to \(u\) that uses at most \(k\) edges. Suppose \(G\) does not contain a negative cycle. Then the distance f...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#part-i-basic-terminology"><span class="toc-number">1.</span> <span class="toc-text">Part I: Basic Terminology</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#a-shipping-problem"><span class="toc-number">1.1.</span> <span class="toc-text">A Shipping Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flow-network"><span class="toc-number">1.2.</span> <span class="toc-text">Flow Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maximal-flows-in-a-flow-network"><span class="toc-number">1.3.</span> <span class="toc-text">Maximal Flows in a Flow
-Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cuts-in-a-flow-network"><span class="toc-number">1.4.</span> <span class="toc-text">Cuts in a Flow Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flow-and-cut"><span class="toc-number">1.5.</span> <span class="toc-text">Flow and Cut</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#part-2-max-flow-min-cut"><span class="toc-number">2.</span> <span class="toc-text">Part 2: Max-Flow Min-Cut</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#problems"><span class="toc-number">2.1.</span> <span class="toc-text">Problems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#residual-network"><span class="toc-number">2.2.</span> <span class="toc-text">Residual Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combining-flows"><span class="toc-number">2.3.</span> <span class="toc-text">Combining Flows</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ford-fulkerson-algorithm-solving-max-flow-problem"><span class="toc-number">2.4.</span> <span class="toc-text">Ford-Fulkerson
-Algorithm Solving Max-Flow Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#max-flow-min-cut"><span class="toc-number">2.5.</span> <span class="toc-text">Max-Flow Min-Cut</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+<center>***</center>
+</font>
+<br />
+<p><img src="/image/icon/loading.gif" data-original="/image/25-11-20-1-COMPSCI220-22-flow-net/1766754907755.webp" alt="1766754907755"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/">https://remy-campanella.github.io/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</div></div><div class="info-2"><div class="info-item-1">Tower of Babylon Problem You are $n$ given different types of rectangular blocks. There is an unlimited supply of each type. The $i$-th type of block has dimensions $$ (x_i, y_i, z_i) $$ A block can be rotated: any two dimensions can be chosen as the base, and the remaining dimension is the height. You want to build the tallest possible tower by stacking blocks under the following rule: A block can be placed on top of another block only if both sides of its base are strictly smaller than the ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/25/25-11-10-1-COMPSCI220-14-connectivity/" title="【COMPSCI 220】 Lecture 14 Connectivity and Components"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 14 Connectivity and Components</div></div><div class="info-2"><div class="info-item-1">Subgraph  Subgraph Let $E \subseteq V^2$, $V’ \subseteq V$, :   $E \upharpoonright V’ = {(u, v ) \in E | u, v \in V’}$(all edges that is used by $V’$ in $G$).     A subgraph of $G = (V, E)$ is a diagraph $G’ = (V’, E’)$ where $V’ \subseteq V$ and $E’ \subseteq E \upharpoonright V’$.     If $E’ = E \upharpoonright V’$, then the subgraph is an induced subgraph.    Decomposing Undirected Graphs We may decompose the graph into equivalence classes: Two nodes are in the same class if they are reach...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from $u$ to $v$, $dist(u, v)$, is the length of the shortest path from $u$ to $v$. If there is no path, then $dist(u, v) = \infty$. Distance Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the distance from $u$ to $v$.   Shortest Path Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the shortest path from $u$ to $v$.   Missionary and Cannibals  There are 3 missionaries and 3 cannibals coming to a river with only one boat that ...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/" title="【COMPSCI 220】 Lecture 16 Distances in Weight Graphs"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</div></div><div class="info-2"><div class="info-item-1">Weighted Graphs  Weighted Graph A weighted graph is $G = (V, E, w)$ where $(V, E)$ is an undirected graph and $w : E → \mathbf{Z}$ is a weight function that assigns each edge with an integer weight.  We extend adjacency matrix or adjacency list representations to weighted graphs. Distances Weighted Graph Goals: Compute distances in a weighted graph. If weights are integers, subdivide edges into a sequence of uni-length edges, convert a weighted graph into an unweighted graph. However, the tim...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph $G$ is connected if it is a connected component itself. A spanning tree of $G$ is a connected subgraph that contains all nodes in $V$ and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem   INPUT: A weighted connected (undirected) graph $G = (V, E, w)$.   OUTPUT: A MST of $G$.   Optimisations in a Weighted Graph  Optimisation Prob...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-13-2-COMPSCI220-18-kruskal-disjoint/" title="【COMPSCI 220】 Lecture 18 Kruskal&#39;s Algorithm and Disjoint Sets"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 18 Kruskal&#39;s Algorithm and Disjoint Sets</div></div><div class="info-2"><div class="info-item-1">Cut Property 2.0 Revisit Let $G = (V, E, w)$ be a weighted graph. A partial MSF(Minimal Spanning Forest) if $G$ is subsets of edges that could lead to an MST.   Suppose a partial MSF $X$.   Let $e$ be the lightest edge across any two trees in this partial MSF.   Then $X \cup {e}$ is also a partial MSF.   Kruskal’s Algorithm Simplify Prim’s algorithm   We do not need to make a traversal.   In other words, we do not need to keep the known region connected.   Eventually, all the disconnected par...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.    Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property    Algorithm Property     Dijkstra’s A subtree $X$ is a partial short...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Part I: Basic Terminology</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-Shipping-Problem"><span class="toc-number">1.1.</span> <span class="toc-text">A Shipping Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flow-Network"><span class="toc-number">1.2.</span> <span class="toc-text">Flow Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maximal-Flows-in-a-Flow-Network"><span class="toc-number">1.3.</span> <span class="toc-text">Maximal Flows in a Flow Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cuts-in-a-Flow-Network"><span class="toc-number">1.4.</span> <span class="toc-text">Cuts in a Flow Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flow-and-Cut"><span class="toc-number">1.5.</span> <span class="toc-text">Flow and Cut</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Part 2: Max-Flow Min-Cut</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Problems"><span class="toc-number">2.1.</span> <span class="toc-text">Problems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Residual-Network"><span class="toc-number">2.2.</span> <span class="toc-text">Residual Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Combining-Flows"><span class="toc-number">2.3.</span> <span class="toc-text">Combining Flows</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ford-Fulkerson-Algorithm-Solving-Max-Flow-Problem"><span class="toc-number">2.4.</span> <span class="toc-text">Ford-Fulkerson Algorithm Solving Max-Flow Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Max-Flow-Min-Cut"><span class="toc-number">2.5.</span> <span class="toc-text">Max-Flow Min-Cut</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
   var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
   mermaid.initialize(options);
 }</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {

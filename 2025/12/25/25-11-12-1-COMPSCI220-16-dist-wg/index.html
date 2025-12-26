@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 16 Distances in Weight Graphs | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Weighted Graphs  Weighted Graph  A weighted graph is \(G &#x3D; (V, E, w)\) where \((V, E)\) is an undirected graph and \(w : E → \mathbf{Z}\) is a weight function that assigns each edge with an in">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 16 Distances in Weight Graphs | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Weighted Graphs  Weighted Graph A weighted graph is $G &#x3D; (V, E, w)$ where $(V, E)$ is an undirected graph and $w : E → \mathbf{Z}$ is a weight function that assigns each edge with an integer weight.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【COMPSCI 220】 Lecture 16 Distances in Weight Graphs">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="Weighted Graphs  Weighted Graph  A weighted graph is \(G &#x3D; (V, E, w)\) where \((V, E)\) is an undirected graph and \(w : E → \mathbf{Z}\) is a weight function that assigns each edge with an in">
+<meta property="og:description" content="Weighted Graphs  Weighted Graph A weighted graph is $G &#x3D; (V, E, w)$ where $(V, E)$ is an undirected graph and $w : E → \mathbf{Z}$ is a weight function that assigns each edge with an integer weight.">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-12-25T10:23:54.000Z">
@@ -164,185 +164,146 @@
   pageType: 'post'
 }</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
     <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-25T10:23:54.000Z" title="发表于 2025-12-25 18:23:54">2025-12-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-25T12:07:44.217Z" title="更新于 2025-12-25 20:07:44">2025-12-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-220-Algorithms-and-Data-Structures/">COMPSCI 220 Algorithms and Data Structures</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="weighted-graphs">Weighted Graphs</h2>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-25T10:23:54.000Z" title="发表于 2025-12-25 18:23:54">2025-12-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-25T12:07:44.217Z" title="更新于 2025-12-25 20:07:44">2025-12-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-220-Algorithms-and-Data-Structures/">COMPSCI 220 Algorithms and Data Structures</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="Weighted-Graphs">Weighted Graphs</h2>
 <dl>
 <dt><strong>Weighted Graph</strong></dt>
-<dd>
-A weighted graph is <span class="math inline">\(G = (V, E, w)\)</span>
-where <span class="math inline">\((V, E)\)</span> is an
-<strong>undirected graph</strong> and <span class="math inline">\(w : E
-→ \mathbf{Z}\)</span> is a weight function that assigns each edge with
-an integer weight.
-</dd>
+<dd>A weighted graph is $G = (V, E, w)$ where $(V, E)$ is an <strong>undirected graph</strong> and $w : E → \mathbf{Z}$ is a weight function that assigns each edge with an integer weight.</dd>
 </dl>
-<p>We extend adjacency matrix or adjacency list representations to
-weighted graphs.</p>
-<h2 id="distances-weighted-graph">Distances Weighted Graph</h2>
+<p>We extend adjacency matrix or adjacency list representations to weighted graphs.</p>
+<h2 id="Distances-Weighted-Graph">Distances Weighted Graph</h2>
 <p><strong>Goals</strong>: Compute distances in a weighted graph.</p>
-<p>If weights are integers, <strong>subdivide edges</strong> into a
-sequence of uni-length edges, convert a weighted graph into an
-unweighted graph.</p>
-<p>However, the time complexity of BFS would depend on the sum of all
-weights.</p>
-<h2 id="a-lazy-way-for-finding-distances">A “Lazy” Way for Finding
-Distances</h2>
-<p>We don’t care about the distances on these auxiliary nodes. We could
-just “go to sleep” when BFS visits these auxiliary nodes, But we need to
-“wake up” when BFS visits an original node.</p>
-<h3 id="setting-the-alarm-clock">Setting the Alarm Clock</h3>
+<p>If weights are integers, <strong>subdivide edges</strong> into a sequence of uni-length edges, convert a weighted graph into an unweighted graph.</p>
+<p>However, the time complexity of BFS would depend on the sum of all weights.</p>
+<h2 id="A-“Lazy”-Way-for-Finding-Distances">A “Lazy” Way for Finding Distances</h2>
+<p>We don’t care about the distances on these auxiliary nodes. We could just “go to sleep” when BFS visits these auxiliary nodes, But we need to “wake up” when BFS visits an original node.</p>
+<h3 id="Setting-the-Alarm-Clock">Setting the Alarm Clock</h3>
 <p><strong>Strategy</strong></p>
-<ul>
-<li>Maintain an “alarm clock” for each node. The time we set on an alarm
-clock is an expected time for visiting this node.</li>
-<li>Whenever an alarm clock goes off, wake up and check which node is
-reached. Then reset the other clocks.</li>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>Maintain an “alarm clock” for each node. The time we set on an alarm clock is an expected time for visiting this node.</p>
+</li>
+<li class="lvl-2">
+<p>Whenever an alarm clock goes off, wake up and check which node is reached. Then reset the other clocks.</p>
+</li>
 </ul>
-<h3 id="implementing-the-alarm-clocks">Implementing the Alarm
-Clocks</h3>
+<h3 id="Implementing-the-Alarm-Clocks">Implementing the Alarm Clocks</h3>
 <p>Find a data structure that stimulates the alarm clock system.</p>
 <dl>
 <dt><strong>Priority queue</strong></dt>
+<dd>A data structure that stores a collection of <code>(element, key)</code> pairs where the key of an element is an <strong>integer value</strong> and allows the following operations:<br>
+:</dd>
 <dd>
-A data structure that stores a collection of <code>(element, key)</code>
-pairs where the key of an element is an <strong>integer value</strong>
-and allows the following operations:
-</dd>
-<dd>
-
-</dd>
-<dd>
-<ul>
-<li><code>Insert(e, k)</code>: Add a new element <code>e</code> with key
-<code>k</code> to the collection.</li>
+<ul class="lvl-2">
+<li class="lvl-4"><code>Insert(e, k)</code>: Add a new element <code>e</code> with key <code>k</code> to the collection.</li>
 </ul>
 </dd>
 <dd>
-<ul>
-<li><code>DeleteMin()</code>: Return the element with <strong>the
-smallest key</strong>, and remove it from the collection.</li>
+<ul class="lvl-2">
+<li class="lvl-4"><code>DeleteMin()</code>: Return the element with <strong>the smallest key</strong>, and remove it from the collection.</li>
 </ul>
 </dd>
 <dd>
-<ul>
-<li><code>ResetKey(e, k)</code>: Reset the key value of element
-<code>e</code> to <strong>a smaller value</strong> <code>k</code>.</li>
+<ul class="lvl-2">
+<li class="lvl-4"><code>ResetKey(e, k)</code>: Reset the key value of element <code>e</code> to <strong>a smaller value</strong> <code>k</code>.</li>
 </ul>
 </dd>
 <dt><strong>Binary Heap</strong></dt>
+<dd>A special heap data structure that is often used to implement priority queues. It is a <strong>complete binary tree</strong>, that is, every layer except the bottom is completely filled, and the bottom nodes are arranged as far to the left as possible.<br>
+:</dd>
 <dd>
-A special heap data structure that is often used to implement priority
-queues. It is a <strong>complete binary tree</strong>, that is, every
-layer except the bottom is completely filled, and the bottom nodes are
-arranged as far to the left as possible.
-</dd>
-<dd>
-
-</dd>
-<dd>
-<ul>
-<li><strong>Max Heap</strong>: The key value of each parent node is
-greater than or equal to the key value of all its child nodes.</li>
+<ul class="lvl-2">
+<li class="lvl-4"><strong>Max Heap</strong>: The key value of each parent node is greater than or equal to the key value of all its child nodes.</li>
 </ul>
 </dd>
 <dd>
-<ul>
-<li><strong>Min Heap</strong>: The key value of each parent node is less
-than or equal to the key value of all its child nodes.</li>
+<ul class="lvl-2">
+<li class="lvl-4"><strong>Min Heap</strong>: The key value of each parent node is less than or equal to the key value of all its child nodes.</li>
 </ul>
 </dd>
 </dl>
-<h2 id="dijkstras-algorithm">Dijkstra’s Algorithm</h2>
-<p>Implementing the “Alarm Clocks” using <strong>priority
-queue</strong>:</p>
-<ul>
-<li>Maintain a priority key set for each node</li>
-<li>Maintain a set of confirmed nodes</li>
-</ul>
-<h3 id="pseudocode">Pseudocode</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">algo Dijkstra(G, s)</span><br><span class="line">    s.dist = 0</span><br><span class="line">    Reach = new Set(&#123;s&#125;)</span><br><span class="line">    P = new PriorityQueue(&#123;(s, 0)&#125;)</span><br><span class="line"></span><br><span class="line">    for u in V &amp;&amp; u != s do</span><br><span class="line">        u.dist = INF</span><br><span class="line">        u.prev = NULL</span><br><span class="line">        P.Insert(u, INF)</span><br><span class="line"></span><br><span class="line">    while P.isEmpty() != false do</span><br><span class="line">        u = P.DeleteMin()</span><br><span class="line">        Reach.add(u)</span><br><span class="line"></span><br><span class="line">        for (u, v) in E &amp;&amp; v not in Reach do</span><br><span class="line">            if u.dist + w(u, v) &lt; v.dist do</span><br><span class="line">                P.ResetKey(v, dist(v))</span><br><span class="line">                v.prev = u</span><br><span class="line">    </span><br><span class="line">    return all v.dist in G</span><br></pre></td></tr></table></figure>
-<h3 id="correctness">Correctness</h3>
-<h3 id="complexity">Complexity</h3>
-<p>The running time of the algorithm depends on the running time of
-<strong>priority queue implementations</strong>.</p>
-<ul>
-<li>Let <span class="math inline">\(T_{in}(n)\)</span> be the time it
-takes to <strong>insert elements</strong> to the priority queue.<br />
+<h2 id="Dijkstra’s-Algorithm">Dijkstra’s Algorithm</h2>
+<p>Implementing the “Alarm Clocks” using <strong>priority queue</strong>:</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>Maintain a priority key set for each node</p>
 </li>
-<li>Let <span class="math inline">\(T_{re}(n)\)</span> be the time it
-takes to <strong>reset key</strong> for an element in the priority
-queue.</li>
-<li>Let <span class="math inline">\(T_{de}(n)\)</span> be the time it
-takes to <strong>delete min element</strong> from the priority
-queue.</li>
+<li class="lvl-2">
+<p>Maintain a set of confirmed nodes</p>
+</li>
 </ul>
-<p>Running time <span class="math inline">\(nT_{in}(n) + mT_{re}(n) +
-nT_{de}(n)\)</span>.</p>
+<h3 id="Pseudocode">Pseudocode</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">algo Dijkstra(G, s)</span><br><span class="line">    s.dist = 0</span><br><span class="line">    Reach = new Set(&#123;s&#125;)</span><br><span class="line">    P = new PriorityQueue(&#123;(s, 0)&#125;)</span><br><span class="line"></span><br><span class="line">    for u in V &amp;&amp; u != s do</span><br><span class="line">        u.dist = INF</span><br><span class="line">        u.prev = NULL</span><br><span class="line">        P.Insert(u, INF)</span><br><span class="line"></span><br><span class="line">    while P.isEmpty() != false do</span><br><span class="line">        u = P.DeleteMin()</span><br><span class="line">        Reach.add(u)</span><br><span class="line"></span><br><span class="line">        for (u, v) in E &amp;&amp; v not in Reach do</span><br><span class="line">            if u.dist + w(u, v) &lt; v.dist do</span><br><span class="line">                P.ResetKey(v, dist(v))</span><br><span class="line">                v.prev = u</span><br><span class="line">    </span><br><span class="line">    return all v.dist in G</span><br></pre></td></tr></table></figure>
+<h3 id="Correctness">Correctness</h3>
+<h3 id="Complexity">Complexity</h3>
+<p>The running time of the algorithm depends on the running time of <strong>priority queue implementations</strong>.</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>Let $T_{in}(n)$ be the time it takes to <strong>insert elements</strong> to the priority queue.</p>
+</li>
+<li class="lvl-2">
+<p>Let $T_{re}(n)$ be the time it takes to <strong>reset key</strong> for an element in the priority queue.</p>
+</li>
+<li class="lvl-2">
+<p>Let $T_{de}(n)$ be the time it takes to <strong>delete min element</strong> from the priority queue.</p>
+</li>
+</ul>
+<p>Running time $nT_{in}(n) + mT_{re}(n) + nT_{de}(n)$.</p>
 <p>For different data structure for priority queue,</p>
-<ul>
-<li><strong>Linked list</strong>: <span
-class="math inline">\(O(n^2)\)</span>.<br />
-Preferred when there are lots of edges, <span class="math inline">\(m
-\geq \frac{n^2}{\log n}\)</span>.</li>
-<li><strong>Binary heap</strong>: <span class="math inline">\(O((m + n)
-\log n)\)</span>.<br />
-Preferred when there aren’t lots of edges, <span class="math inline">\(m
-&lt; \frac{n^2}{\log n}\)</span>.</li>
-<li><strong>Fibonacci Heap</strong>: <span class="math inline">\(O(n
-\log n + m)\)</span>.<br />
-Better, but too complicated for implement.</li>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>Linked list</strong>: $O(n^2)$.<br>
+Preferred when there are lots of edges, $m \geq \frac{n^2}{\log n}$.</p>
+</li>
+<li class="lvl-2">
+<p><strong>Binary heap</strong>: $O((m + n) \log n)$.<br>
+Preferred when there aren’t lots of edges, $m &lt; \frac{n^2}{\log n}$.</p>
+</li>
+<li class="lvl-2">
+<p><strong>Fibonacci Heap</strong>: $O(n \log n + m)$.<br>
+Better, but too complicated for implement.</p>
+</li>
 </ul>
-<h2 id="graph-exploration">Graph Exploration</h2>
-<p>A <strong>graph exploration algorithm</strong> traverses the
-graph:</p>
-<ul>
-<li>The algorithm maintains a <strong>known region</strong> of
-nodes.</li>
-<li>Each time it picks an edge that <strong>goes out</strong> from the
-known region, exploring a node outside and expanding its known
-region.</li>
-<li>It stops when no more edge can be explored.</li>
+<h2 id="Graph-Exploration">Graph Exploration</h2>
+<p>A <strong>graph exploration algorithm</strong> traverses the graph:</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>The algorithm maintains a <strong>known region</strong> of nodes.</p>
+</li>
+<li class="lvl-2">
+<p>Each time it picks an edge that <strong>goes out</strong> from the known region, exploring a node outside and expanding its known region.</p>
+</li>
+<li class="lvl-2">
+<p>It stops when no more edge can be explored.</p>
+</li>
 </ul>
-<h3 id="relationship-between-three-algorithms">Relationship Between
-Three Algorithms</h3>
+<h3 id="Relationship-Between-Three-Algorithms">Relationship Between Three Algorithms</h3>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Algorithm</th>
 <th>Edge Picking Order</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>DFS</td>
 <td>stack order</td>
 </tr>
-<tr class="even">
+<tr>
 <td>BFS</td>
 <td>queue order</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Dijkstra’s Algorithm</td>
 <td>priority order</td>
 </tr>
 </tbody>
 </table>
-<h2 id="question">Question</h2>
-<p>Suppose you would like to find the longest path from a given node to
-other nodes in a weighted directed acyclic graph. Someone suggests that
-maybe we can try modifying Dijkstra’s algorithm, so that instead of
-using a min-heap (as we do for Dijkstra’s algorithm), we use a max-heap,
-<em>i.e.</em>, a priority queue where we have <code>DeleteMax</code>
-operation that returns and removes the maximum element, and update the
-value <code>v.dist</code> for a node <code>v</code> whenever we find a
-longer path to <code>v</code>. Do you think this algorithm would
-correctly compute the longest distance from the starting node to other
-nodes in a dag? Explain why.</p>
-<hr />
+<h2 id="Question">Question</h2>
+<p>Suppose you would like to find the longest path from a given node to other nodes in a weighted directed acyclic graph. Someone suggests that maybe we can try modifying Dijkstra’s algorithm, so that instead of using a min-heap (as we do for Dijkstra’s algorithm), we use a max-heap, <em>i.e.</em>, a priority queue where we have <code>DeleteMax</code> operation that returns and removes the maximum element, and update the value <code>v.dist</code> for a node <code>v</code> whenever we find a longer path to <code>v</code>. Do you think this algorithm would correctly compute the longest distance from the starting node to other nodes in a dag? Explain why.</p>
+<hr>
 <p><strong>No, it cannot.</strong></p>
-<p>If a node is removed from the priority queue, it means that this is
-the final distance of the shortest path, which will not be affected by
-the following iterations. However, for the longest path, distances can
-increase as the algorithm iterates.</p>
+<p>If a node is removed from the priority queue, it means that this is the final distance of the shortest path, which will not be affected by the following iterations. However, for the longest path, distances can increase as the algorithm iterates.</p>
 <p>Consider a small graph.</p>
 <pre class="mermaid">flowchart LR
 a(("0")) -->|10| b(("1"))
@@ -351,7 +312,7 @@ c -->|10| b</pre>
 <p>Iteration table(start from 0)</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Iteration</th>
 <th>0</th>
 <th>1</th>
@@ -359,19 +320,19 @@ c -->|10| b</pre>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td>0</td>
 <td>INF</td>
 <td>INF</td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td>(dequeued)</td>
 <td>10(01)</td>
 <td>1(02)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td></td>
 <td><font color="red">(dequeued)/11(021)?</font></td>
@@ -379,13 +340,8 @@ c -->|10| b</pre>
 </tr>
 </tbody>
 </table>
-<p><strong>Contradiction</strong>: From step 2 to 3, node 1 should be
-removed with the distance 10. But path 021 has the longer path distance
-11, affected the result we’ve made.</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/">https://remy-campanella.github.io/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from \(u\) to \(v\), \(dist(u, v)\), is the length of the shortest path from \(u\) to \(v\). If there is no path, then \(dist(u, v) = \infty\). Distance Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the distance from \(u\) to \(v\).  Shortest Path Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the shortest path from \(u\) to \(v\).  Missionary and Cannibals  There are 3 missionaries and 3 cannibals co...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph \(G\) is connected if it is a connected component itself. A spanning tree of \(G\) is a connected subgraph that contains all nodes in \(V\) and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem  INPUT: A weighted connected (undirected) graph \(G = (V, E, w)\). OUTPUT: A MST of \(G\).  Optimisations in a Weigh...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/25/25-11-10-1-COMPSCI220-14-connectivity/" title="【COMPSCI 220】 Lecture 14 Connectivity and Components"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 14 Connectivity and Components</div></div><div class="info-2"><div class="info-item-1">Subgraph  Subgraph  Let \(E \subseteq V^2\), \(V&#39; \subseteq V\),       \(E \upharpoonright V&#39; = \{(u, v ) \in E | u, v \in V&#39;\}\)(all edges that is used by \(V&#39;\) in \(G\)).     A subgraph of \(G = (V, E)\) is a diagraph \(G&#39; = (V&#39;, E&#39;)\) where \(V&#39; \subseteq V\) and \(E&#39; \subseteq E \upharpoonright V&#39;\).     If \(E&#39; = E \upharpoonright V&#39;\), then the subgraph is an induced subgraph.    Decomposing Undirected Grap...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from \(u\) to \(v\), \(dist(u, v)\), is the length of the shortest path from \(u\) to \(v\). If there is no path, then \(dist(u, v) = \infty\). Distance Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the distance from \(u\) to \(v\).  Shortest Path Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the shortest path from \(u\) to \(v\).  Missionary and Cannibals  There are 3 missionaries and 3 cannibals co...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph \(G\) is connected if it is a connected component itself. A spanning tree of \(G\) is a connected subgraph that contains all nodes in \(V\) and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem  INPUT: A weighted connected (undirected) graph \(G = (V, E, w)\). OUTPUT: A MST of \(G\).  Optimisations in a Weigh...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.        Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property        Algorithm Propert...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</div></div><div class="info-2"><div class="info-item-1">Shortest Path with Potentially Negative Edges Dijkstra’s algorithm does not work for weighted graph where the weights could be negative. If there is a “negative cycle” (a cycle whose total edge weight is negative), then the problem does not make sense. Greedy choice does not work here. Paths with Bounded Length Let \(d_k(u)\) denote the length of the shortest path from \(S\) to \(u\) that uses at most \(k\) edges. Suppose \(G\) does not contain a negative cycle. Then the distance f...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 21 Dynamic Programming</div></div><div class="info-2"><div class="info-item-1">Optimization An optimisation problem contains a solution set where each solution has a value. The problem asks to find the solution with the maximal/minimal value (The optimal solution). Dynamic Programming Dynamic programming is a method for solving complex optimisation problems by breaking them down into simpler subproblems. It is applicable to problems exhibiting the properties of overlapping subproblems and optimal substructure. Dynamic programming solves the subproblems from s...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#weighted-graphs"><span class="toc-number">1.</span> <span class="toc-text">Weighted Graphs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#distances-weighted-graph"><span class="toc-number">2.</span> <span class="toc-text">Distances Weighted Graph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-lazy-way-for-finding-distances"><span class="toc-number">3.</span> <span class="toc-text">A “Lazy” Way for Finding
-Distances</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#setting-the-alarm-clock"><span class="toc-number">3.1.</span> <span class="toc-text">Setting the Alarm Clock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#implementing-the-alarm-clocks"><span class="toc-number">3.2.</span> <span class="toc-text">Implementing the Alarm
-Clocks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dijkstras-algorithm"><span class="toc-number">4.</span> <span class="toc-text">Dijkstra’s Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pseudocode"><span class="toc-number">4.1.</span> <span class="toc-text">Pseudocode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#correctness"><span class="toc-number">4.2.</span> <span class="toc-text">Correctness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#complexity"><span class="toc-number">4.3.</span> <span class="toc-text">Complexity</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#graph-exploration"><span class="toc-number">5.</span> <span class="toc-text">Graph Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#relationship-between-three-algorithms"><span class="toc-number">5.1.</span> <span class="toc-text">Relationship Between
-Three Algorithms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#question"><span class="toc-number">6.</span> <span class="toc-text">Question</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+<p><strong>Contradiction</strong>: From step 2 to 3, node 1 should be removed with the distance 10. But path 021 has the longer path distance 11, affected the result we’ve made.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/">https://remy-campanella.github.io/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from $u$ to $v$, $dist(u, v)$, is the length of the shortest path from $u$ to $v$. If there is no path, then $dist(u, v) = \infty$. Distance Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the distance from $u$ to $v$.   Shortest Path Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the shortest path from $u$ to $v$.   Missionary and Cannibals  There are 3 missionaries and 3 cannibals coming to a river with only one boat that ...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph $G$ is connected if it is a connected component itself. A spanning tree of $G$ is a connected subgraph that contains all nodes in $V$ and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem   INPUT: A weighted connected (undirected) graph $G = (V, E, w)$.   OUTPUT: A MST of $G$.   Optimisations in a Weighted Graph  Optimisation Prob...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/25/25-11-10-1-COMPSCI220-14-connectivity/" title="【COMPSCI 220】 Lecture 14 Connectivity and Components"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 14 Connectivity and Components</div></div><div class="info-2"><div class="info-item-1">Subgraph  Subgraph Let $E \subseteq V^2$, $V’ \subseteq V$, :   $E \upharpoonright V’ = {(u, v ) \in E | u, v \in V’}$(all edges that is used by $V’$ in $G$).     A subgraph of $G = (V, E)$ is a diagraph $G’ = (V’, E’)$ where $V’ \subseteq V$ and $E’ \subseteq E \upharpoonright V’$.     If $E’ = E \upharpoonright V’$, then the subgraph is an induced subgraph.    Decomposing Undirected Graphs We may decompose the graph into equivalence classes: Two nodes are in the same class if they are reach...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from $u$ to $v$, $dist(u, v)$, is the length of the shortest path from $u$ to $v$. If there is no path, then $dist(u, v) = \infty$. Distance Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the distance from $u$ to $v$.   Shortest Path Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the shortest path from $u$ to $v$.   Missionary and Cannibals  There are 3 missionaries and 3 cannibals coming to a river with only one boat that ...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph $G$ is connected if it is a connected component itself. A spanning tree of $G$ is a connected subgraph that contains all nodes in $V$ and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem   INPUT: A weighted connected (undirected) graph $G = (V, E, w)$.   OUTPUT: A MST of $G$.   Optimisations in a Weighted Graph  Optimisation Prob...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-13-2-COMPSCI220-18-kruskal-disjoint/" title="【COMPSCI 220】 Lecture 18 Kruskal&#39;s Algorithm and Disjoint Sets"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 18 Kruskal&#39;s Algorithm and Disjoint Sets</div></div><div class="info-2"><div class="info-item-1">Cut Property 2.0 Revisit Let $G = (V, E, w)$ be a weighted graph. A partial MSF(Minimal Spanning Forest) if $G$ is subsets of edges that could lead to an MST.   Suppose a partial MSF $X$.   Let $e$ be the lightest edge across any two trees in this partial MSF.   Then $X \cup {e}$ is also a partial MSF.   Kruskal’s Algorithm Simplify Prim’s algorithm   We do not need to make a traversal.   In other words, we do not need to keep the known region connected.   Eventually, all the disconnected par...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.    Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property    Algorithm Property     Dijkstra’s A subtree $X$ is a partial short...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 21 Dynamic Programming</div></div><div class="info-2"><div class="info-item-1">Optimization An optimisation problem contains a solution set where each solution has a value. The problem asks to find the solution with the maximal/minimal value (The optimal solution). Dynamic Programming Dynamic programming is a method for solving complex optimisation problems by breaking them down into simpler subproblems. It is applicable to problems exhibiting the properties of overlapping subproblems and optimal substructure. Dynamic programming solves the subproblems from small to lar...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Weighted-Graphs"><span class="toc-number">1.</span> <span class="toc-text">Weighted Graphs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Distances-Weighted-Graph"><span class="toc-number">2.</span> <span class="toc-text">Distances Weighted Graph</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#A-%E2%80%9CLazy%E2%80%9D-Way-for-Finding-Distances"><span class="toc-number">3.</span> <span class="toc-text">A “Lazy” Way for Finding Distances</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-the-Alarm-Clock"><span class="toc-number">3.1.</span> <span class="toc-text">Setting the Alarm Clock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementing-the-Alarm-Clocks"><span class="toc-number">3.2.</span> <span class="toc-text">Implementing the Alarm Clocks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dijkstra%E2%80%99s-Algorithm"><span class="toc-number">4.</span> <span class="toc-text">Dijkstra’s Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode"><span class="toc-number">4.1.</span> <span class="toc-text">Pseudocode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Correctness"><span class="toc-number">4.2.</span> <span class="toc-text">Correctness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Complexity"><span class="toc-number">4.3.</span> <span class="toc-text">Complexity</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Graph-Exploration"><span class="toc-number">5.</span> <span class="toc-text">Graph Exploration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Relationship-Between-Three-Algorithms"><span class="toc-number">5.1.</span> <span class="toc-text">Relationship Between Three Algorithms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Question"><span class="toc-number">6.</span> <span class="toc-text">Question</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
   var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
   mermaid.initialize(options);
 }</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {

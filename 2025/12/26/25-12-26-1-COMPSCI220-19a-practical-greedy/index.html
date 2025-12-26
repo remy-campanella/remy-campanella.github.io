@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Woodsticks  Special thanks to Bingxian Yang.  Problem There are \(n\) wooden sticks, each with a known length and weight. A woodworking machine is used to process these sticks one by one. Durin">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Woodsticks  Special thanks to Bingxian Yang.  Problem There are $n$ wooden sticks, each with a known length and weight. A woodworking machine is used to process these sticks one by one. During process">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/12/26/25-12-26-1-COMPSCI220-19a-practical-greedy/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="Woodsticks  Special thanks to Bingxian Yang.  Problem There are \(n\) wooden sticks, each with a known length and weight. A woodworking machine is used to process these sticks one by one. Durin">
+<meta property="og:description" content="Woodsticks  Special thanks to Bingxian Yang.  Problem There are $n$ wooden sticks, each with a known length and weight. A woodworking machine is used to process these sticks one by one. During process">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-12-26T06:11:26.000Z">
@@ -164,225 +164,189 @@
   pageType: 'post'
 }</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
     <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-26T06:11:26.000Z" title="发表于 2025-12-26 14:11:26">2025-12-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-26T06:11:26.949Z" title="更新于 2025-12-26 14:11:26">2025-12-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-220-Algorithms-and-Data-Structures/">COMPSCI 220 Algorithms and Data Structures</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="woodsticks">Woodsticks</h2>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 220】 Lecture 19a Practical Exercises of Greedy Algorithms</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-26T06:11:26.000Z" title="发表于 2025-12-26 14:11:26">2025-12-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-26T06:11:26.949Z" title="更新于 2025-12-26 14:11:26">2025-12-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-220-Algorithms-and-Data-Structures/">COMPSCI 220 Algorithms and Data Structures</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="Woodsticks">Woodsticks</h2>
 <blockquote>
 <p>Special thanks to Bingxian Yang.</p>
 </blockquote>
-<h3 id="problem">Problem</h3>
-<p>There are <span class="math inline">\(n\)</span> wooden sticks, each
-with a known length and weight. A woodworking machine is used to process
-these sticks one by one. During processing, the machine may require some
-<strong>setup time</strong>, which is used for cleaning the machine and
-adjusting tools and templates. The required setup time is defined as
-follows:</p>
-<p>Before processing the first stick, the machine needs <strong>1
-minute</strong> of setup time.</p>
-<p>After processing a stick of length <span
-class="math inline">\(l\)</span> and weight <span
-class="math inline">\(w\)</span>, if the next stick has length <span
-class="math inline">\(l&#39;\)</span> and weight <span
-class="math inline">\(w&#39;\)</span> satisfying <span
-class="math inline">\(l&#39; \geq l\)</span> and <span
-class="math inline">\(w&#39; \geq w\)</span>, then no setup time is
-needed. Otherwise, <strong>1 minute</strong> of setup time is
-required.</p>
-<p>Given <span class="math inline">\(n\)</span> sticks, you are to
-determine the <strong>minimum total setup time</strong> needed.</p>
-<p>For example, suppose we have five sticks with <span
-class="math inline">\((length, weight)\)</span> pairs:</p>
-<p><span class="math display">\[
-(4,9), (5,2), (2,1), (3,5), (1,4)
-\]</span></p>
-<p>Then the minimum required setup time is 2 minutes, achieved by
-processing them in the order:</p>
-<p><span class="math display">\[
-(1,4), (3,5), (4,9), (2,1), (5,2).
-\]</span></p>
+<h3 id="Problem">Problem</h3>
+<p>There are $n$ wooden sticks, each with a known length and weight. A woodworking machine is used to process these sticks one by one. During processing, the machine may require some <strong>setup time</strong>, which is used for cleaning the machine and adjusting tools and templates. The required setup time is defined as follows:</p>
+<p>Before processing the first stick, the machine needs <strong>1 minute</strong> of setup time.</p>
+<p>After processing a stick of length $l$ and weight $w$, if the next stick has length $l’$ and weight $w’$ satisfying $l’ \geq l$ and $w’ \geq w$, then no setup time is needed. Otherwise, <strong>1 minute</strong> of setup time is required.</p>
+<p>Given $n$ sticks, you are to determine the <strong>minimum total setup time</strong> needed.</p>
+<p>For example, suppose we have five sticks with $(length, weight)$ pairs:</p>
+<p>$$<br>
+(4,9), (5,2), (2,1), (3,5), (1,4)<br>
+$$</p>
+<p>Then the minimum required setup time is 2 minutes, achieved by processing them in the order:</p>
+<p>$$<br>
+(1,4), (3,5), (4,9), (2,1), (5,2).<br>
+$$</p>
 <p>Design a <strong>greedy algorithm</strong> to solve this problem.</p>
-<h3 id="analysis-and-solution">Analysis and Solution</h3>
-<ol type="1">
-<li><p><strong>Why use greedy algorithm?</strong></p>
+<h3 id="Analysis-and-Solution">Analysis and Solution</h3>
+<ol>
+<li class="lvl-3">
+<p><strong>Why use greedy algorithm?</strong></p>
 <blockquote>
-<p>A global optimum could be achieved by series of local optimization
-value.</p>
+<p>A global optimum could be achieved by series of local optimization value.</p>
 </blockquote>
-<p>In this question, we need to maximize arrays of woodsticks that do
-not need setups(both <span class="math inline">\(l\)</span> and <span
-class="math inline">\(w\)</span> are in increasing order). This can be
-achieved locally by keep appending a stick satisfying <span
-class="math inline">\(l&#39; \geq l\)</span> and <span
-class="math inline">\(w&#39; \geq w\)</span> but <span
-class="math inline">\(l&#39;\)</span> and <span
-class="math inline">\(w&#39;\)</span> are the smallest.</p>
+<p>In this question, we need to maximize arrays of woodsticks that do not need setups(both $l$ and $w$ are in increasing order). This can be achieved locally by keep appending a stick satisfying $l’ \geq l$ and $w’ \geq w$ but $l’$ and $w’$ are the smallest.</p>
 <blockquote>
-<p>The optimized solution of the problem includes the optimized solution
-of the subproblem.</p>
+<p>The optimized solution of the problem includes the optimized solution of the subproblem.</p>
 </blockquote>
-<p>Look in the middle of the process. The subproblem is “Given a part of
-the sequence of sequenced sticks, and a set of open processing batches,
-each with its current minimum weight limit, calculate the minimum setup
-time required to process the remaining sticks.”</p></li>
-<li><p><strong>How to solve?</strong></p>
-<ul>
-<li><p><strong>Sort the sticks.</strong></p>
-<ul>
-<li>Sort in the increasing order of <span
-class="math inline">\(l\)</span>.</li>
-<li>For sticks with the same <span class="math inline">\(l\)</span>,
-sort in the increasing order of <span
-class="math inline">\(w\)</span>.</li>
+<p>Look in the middle of the process. The subproblem is “Given a part of the sequence of sequenced sticks, and a set of open processing batches, each with its current minimum weight limit, calculate the minimum setup time required to process the remaining sticks.”</p>
+</li>
+<li class="lvl-3">
+<p><strong>How to solve?</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">
+<p><strong>Sort the sticks.</strong></p>
+<ul class="lvl-4">
+<li class="lvl-7">Sort in the increasing order of $l$.</li>
+<li class="lvl-7">For sticks with the same $l$, sort in the increasing order of $w$.</li>
 </ul>
-<p>Get a general array of all sticks.</p></li>
-<li><p><strong>Greedy Choice</strong></p>
-<ul>
-<li>Start from the first stick.</li>
-<li>Keep inspecting the next stick.
-<ul>
-<li>If it is appendable without a setup(<span
-class="math inline">\(l&#39; \geq l\)</span>, <span
-class="math inline">\(w&#39; \geq w\)</span>), append it to the batch
-array.</li>
-<li>If it can’t, skip it.</li>
-</ul></li>
-<li>When reaching the end, see whether the general array is empty.
-<ul>
-<li>If not, start a new batch array, with 1 minute of setup, and repeat
-step 2.</li>
-<li>If so, terminate.</li>
-</ul></li>
-</ul></li>
-</ul></li>
+<p>Get a general array of all sticks.</p>
+</li>
+<li class="lvl-5">
+<p><strong>Greedy Choice</strong></p>
+<ul class="lvl-4">
+<li class="lvl-7">Start from the first stick.</li>
+<li class="lvl-7">Keep inspecting the next stick.
+<ul class="lvl-6">
+<li class="lvl-9">If it is appendable without a setup($l’ \geq l$, $w’ \geq w$), append it to the batch array.</li>
+<li class="lvl-9">If it can’t, skip it.</li>
+</ul>
+</li>
+<li class="lvl-7">When reaching the end, see whether the general array is empty.
+<ul class="lvl-6">
+<li class="lvl-9">If not, start a new batch array, with 1 minute of setup, and repeat step 2.</li>
+<li class="lvl-9">If so, terminate.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ol>
-<h3 id="pseudocode">Pseudocode</h3>
+<h3 id="Pseudocode">Pseudocode</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">algo woodstick(sticks[0..n - 1])</span><br><span class="line">    // INPUT: An array of woodsticks.</span><br><span class="line">    // OUTPUT: Minimal setup time.</span><br><span class="line"></span><br><span class="line">    sort(sticks.begin, sticks.end, cmpSticks)</span><br><span class="line"></span><br><span class="line">    setupTime = 0</span><br><span class="line"></span><br><span class="line">    for i in 0..n - 1 do</span><br><span class="line">        if(sticks[i].isVisited == true) then // If the stick is visited,</span><br><span class="line">            continue // Skip the stick.</span><br><span class="line">        </span><br><span class="line">        setupTime++ // Start a new batch.</span><br><span class="line">        stick[i].isProcessed = true // Mark the first stick in this batch is visited.</span><br><span class="line"></span><br><span class="line">        currentStick = stick[i] // Mark down the current stick.</span><br><span class="line"></span><br><span class="line">        for j in i + 1..n - 1 do</span><br><span class="line">            if(</span><br><span class="line">                stick[j].isProcessed == false &amp;&amp; </span><br><span class="line">                stick[j].length &gt;= currentStick.length &amp;&amp; </span><br><span class="line">                currentStick.weight &gt;= stick[i].weight</span><br><span class="line">            ) do // The unprocessed stick is processable without setup.</span><br><span class="line">                stick[j].isProcessed = true // Process the stick.</span><br><span class="line">                currentStick = stick[j] // Next choice should based on this stick.</span><br><span class="line">    </span><br><span class="line">    return setupTime</span><br><span class="line"></span><br><span class="line">algo cmpSticks(Stick a, Stick b)</span><br><span class="line">    if(a.length != b.length) then</span><br><span class="line">        return a.length &lt; b.length // Shorter stick goes first.</span><br><span class="line"></span><br><span class="line">    if(a.weight != b.weight) then</span><br><span class="line">        return a.weight &lt; b.weight // Lighter stick goes first.</span><br></pre></td></tr></table></figure>
-<h3 id="time-complexity">Time Complexity</h3>
-<ol type="1">
-<li><p><strong>Sorting(<span class="math inline">\(O(n \log
-n)\)</span>)</strong></p></li>
-<li><p><strong>Choosing(<span
-class="math inline">\(O(n^2)\)</span>)</strong></p>
-<ul>
-<li>After starting a batch, we should visit all the sticks remaining.
-<span class="math inline">\(O(n)\)</span></li>
-<li>Before starting a batch, sequetially find the first unprocessed
-sticks to start a batch. <span class="math inline">\(O(n)\)</span></li>
-</ul></li>
+<h3 id="Time-Complexity">Time Complexity</h3>
+<ol>
+<li class="lvl-3">
+<p><strong>Sorting($O(n \log n)$)</strong></p>
+</li>
+<li class="lvl-3">
+<p><strong>Choosing($O(n^2)$)</strong></p>
+<ul class="lvl-2">
+<li class="lvl-5">After starting a batch, we should visit all the sticks remaining. $O(n)$</li>
+<li class="lvl-5">Before starting a batch, sequetially find the first unprocessed sticks to start a batch. $O(n)$</li>
+</ul>
+</li>
 </ol>
-<p>Overall, <span class="math display">\[
-T(n) = O(n \log n) + O(n^2) = O(n^2)
-\]</span></p>
-<h2 id="knapsack-problem">Knapsack Problem</h2>
+<p>Overall,<br>
+$$<br>
+T(n) = O(n \log n) + O(n^2) = O(n^2)<br>
+$$</p>
+<h2 id="Knapsack-Problem">Knapsack Problem</h2>
 <blockquote>
 <p>Special thanks to Chenghui Zhu.</p>
 </blockquote>
-<p><a href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/">【COMPSCI
-220】 Lecture 19 Greedy Algorithms</a></p>
-<p>By the way, his file is corrupted. :(</p>
-<h2 id="deleting-degits">Deleting Degits</h2>
+<p><a href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/">【COMPSCI 220】 Lecture 19 Greedy Algorithms</a></p>
+<p>By the way, his file is corrupted. 😦</p>
+<h2 id="Deleting-Degits">Deleting Degits</h2>
 <blockquote>
 <p>Special thanks to Yanhong Cai.</p>
 </blockquote>
-<h3 id="problem-1">Problem</h3>
-<p>There is a number <span class="math inline">\(K\)</span>. For this
-question, we would like to delete exactly <span
-class="math inline">\(N\)</span> digits from <span
-class="math inline">\(K\)</span> so that <strong>the remaining digits
-form the largest possible number</strong>(the relative order of the
-remaining digits must stay the same).</p>
-<h3 id="analysis">Analysis</h3>
-<ol type="1">
-<li><p><strong>Why use greedy algorithm?</strong></p>
+<h3 id="Problem-2">Problem</h3>
+<p>There is a number $K$. For this question, we would like to delete exactly $N$ digits from $K$ so that <strong>the remaining digits form the largest possible number</strong>(the relative order of the remaining digits must stay the same).</p>
+<h3 id="Analysis">Analysis</h3>
+<ol>
+<li class="lvl-3">
+<p><strong>Why use greedy algorithm?</strong></p>
 <blockquote>
-<p>A global optimum could be achieved by series of local optimization
-value.</p>
+<p>A global optimum could be achieved by series of local optimization value.</p>
 </blockquote>
-<p>In this question, the local optimal choice is to delete the first
-“decreasing” number(delete <code>K[i]</code> when
-<code>K[i] &lt; K[i + 1]</code>).</p>
+<p>In this question, the local optimal choice is to delete the first “decreasing” number(delete <code>K[i]</code> when <code>K[i] &lt; K[i + 1]</code>).</p>
 <blockquote>
-<p>The optimized solution of the problem includes the optimized solution
-of the subproblem.</p>
+<p>The optimized solution of the problem includes the optimized solution of the subproblem.</p>
 </blockquote>
-<p>If we remove a digit from <span class="math inline">\(K\)</span>, the
-subproblem is “deleting <span class="math inline">\(N - 1\)</span>
-digits in a string with <span class="math inline">\(K - 1\)</span>
-digits”. We still need to use the same algorithm to solve it.</p></li>
-<li><p><strong>How to solve it?</strong><br />
-To ensure the result number is as big as possible, we should let big
-digits be as far forward as possible.</p>
-<ul>
-<li>Maintain a stack to store the result.</li>
-<li>Iterate the digits.
-<ul>
-<li>When encountered with a digit larger than the stack top and there
-are still chances to delete, then pop the stack top.</li>
-<li>Push the digit into the stack.</li>
-</ul></li>
-</ul></li>
+<p>If we remove a digit from $K$, the subproblem is “deleting $N - 1$ digits in a string with $K - 1$ digits”. We still need to use the same algorithm to solve it.</p>
+</li>
+<li class="lvl-3">
+<p><strong>How to solve it?</strong><br>
+To ensure the result number is as big as possible, we should let big digits be as far forward as possible.</p>
+<ul class="lvl-2">
+<li class="lvl-5">Maintain a stack to store the result.</li>
+<li class="lvl-5">Iterate the digits.
+<ul class="lvl-4">
+<li class="lvl-7">When encountered with a digit larger than the stack top and there are still chances to delete, then pop the stack top.</li>
+<li class="lvl-7">Push the digit into the stack.</li>
+</ul>
+</li>
+</ul>
+</li>
 </ol>
-<h3 id="pseudocode-1">Pseudocode</h3>
+<h3 id="Pseudocode-2">Pseudocode</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">algo deleteDigits(K[0..n - 1], N)</span><br><span class="line">    result = new Stack()</span><br><span class="line"></span><br><span class="line">    for digit in K do</span><br><span class="line">        while(result.isEmpty() == false &amp;&amp; digit &gt;= K.top &amp;&amp; N != 0) then</span><br><span class="line">            result.pop()</span><br><span class="line">            N--</span><br><span class="line">        result.push(digit)</span><br></pre></td></tr></table></figure>
-<p>When <span class="math inline">\(K = &quot;642893&quot;\)</span>,
-<span class="math inline">\(N = 3\)</span>,</p>
+<p>When $K = “642893”$, $N = 3$,</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Iteration</th>
 <th><code>K[i]</code></th>
-<th><span class="math inline">\(N\)</span></th>
+<th>$N$</th>
 <th><code>result(-&gt; top)</code></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>0</td>
 <td>6</td>
 <td>3</td>
 <td>6</td>
 </tr>
-<tr class="even">
+<tr>
 <td>1</td>
 <td>4</td>
 <td>3</td>
 <td>64</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>2</td>
 <td>2</td>
 <td>3</td>
 <td>642</td>
 </tr>
-<tr class="even">
+<tr>
 <td>3</td>
 <td>8</td>
 <td>2</td>
 <td>64</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td>8</td>
 <td>1</td>
 <td>6</td>
 </tr>
-<tr class="even">
+<tr>
 <td>3</td>
 <td>8</td>
 <td>0</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td>8</td>
 <td>0</td>
 <td>8</td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td>9</td>
 <td>0(no chance for deletion)</td>
 <td>89</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>5</td>
 <td>3</td>
 <td>0</td>
@@ -390,7 +354,7 @@ are still chances to delete, then pop the stack top.</li>
 </tr>
 </tbody>
 </table>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/26/25-12-26-1-COMPSCI220-19a-practical-greedy/">https://remy-campanella.github.io/2025/12/26/25-12-26-1-COMPSCI220-19a-practical-greedy/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.        Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property        Algorithm Propert...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</div></div><div class="info-2"><div class="info-item-1">Shortest Path with Potentially Negative Edges Dijkstra’s algorithm does not work for weighted graph where the weights could be negative. If there is a “negative cycle” (a cycle whose total edge weight is negative), then the problem does not make sense. Greedy choice does not work here. Paths with Bounded Length Let \(d_k(u)\) denote the length of the shortest path from \(S\) to \(u\) that uses at most \(k\) edges. Suppose \(G\) does not contain a negative cycle. Then the distance f...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/25/25-11-10-1-COMPSCI220-14-connectivity/" title="【COMPSCI 220】 Lecture 14 Connectivity and Components"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 14 Connectivity and Components</div></div><div class="info-2"><div class="info-item-1">Subgraph  Subgraph  Let \(E \subseteq V^2\), \(V&#39; \subseteq V\),       \(E \upharpoonright V&#39; = \{(u, v ) \in E | u, v \in V&#39;\}\)(all edges that is used by \(V&#39;\) in \(G\)).     A subgraph of \(G = (V, E)\) is a diagraph \(G&#39; = (V&#39;, E&#39;)\) where \(V&#39; \subseteq V\) and \(E&#39; \subseteq E \upharpoonright V&#39;\).     If \(E&#39; = E \upharpoonright V&#39;\), then the subgraph is an induced subgraph.    Decomposing Undirected Grap...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from \(u\) to \(v\), \(dist(u, v)\), is the length of the shortest path from \(u\) to \(v\). If there is no path, then \(dist(u, v) = \infty\). Distance Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the distance from \(u\) to \(v\).  Shortest Path Problem  INPUT: a graph \(G\), and two nodes \(u\), \(v\). OUTPUT: the shortest path from \(u\) to \(v\).  Missionary and Cannibals  There are 3 missionaries and 3 cannibals co...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/" title="【COMPSCI 220】 Lecture 16 Distances in Weight Graphs"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</div></div><div class="info-2"><div class="info-item-1">Weighted Graphs  Weighted Graph  A weighted graph is \(G = (V, E, w)\) where \((V, E)\) is an undirected graph and \(w : E → \mathbf{Z}\) is a weight function that assigns each edge with an integer weight.   We extend adjacency matrix or adjacency list representations to weighted graphs. Distances Weighted Graph Goals: Compute distances in a weighted graph. If weights are integers, subdivide edges into a sequence of uni-length edges, convert a weighted graph into an unweighte...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph \(G\) is connected if it is a connected component itself. A spanning tree of \(G\) is a connected subgraph that contains all nodes in \(V\) and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem  INPUT: A weighted connected (undirected) graph \(G = (V, E, w)\). OUTPUT: A MST of \(G\).  Optimisations in a Weigh...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.        Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property        Algorithm Propert...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</div></div><div class="info-2"><div class="info-item-1">Shortest Path with Potentially Negative Edges Dijkstra’s algorithm does not work for weighted graph where the weights could be negative. If there is a “negative cycle” (a cycle whose total edge weight is negative), then the problem does not make sense. Greedy choice does not work here. Paths with Bounded Length Let \(d_k(u)\) denote the length of the shortest path from \(S\) to \(u\) that uses at most \(k\) edges. Suppose \(G\) does not contain a negative cycle. Then the distance f...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#woodsticks"><span class="toc-number">1.</span> <span class="toc-text">Woodsticks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#problem"><span class="toc-number">1.1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#analysis-and-solution"><span class="toc-number">1.2.</span> <span class="toc-text">Analysis and Solution</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pseudocode"><span class="toc-number">1.3.</span> <span class="toc-text">Pseudocode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#time-complexity"><span class="toc-number">1.4.</span> <span class="toc-text">Time Complexity</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#knapsack-problem"><span class="toc-number">2.</span> <span class="toc-text">Knapsack Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deleting-degits"><span class="toc-number">3.</span> <span class="toc-text">Deleting Degits</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#problem-1"><span class="toc-number">3.1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#analysis"><span class="toc-number">3.2.</span> <span class="toc-text">Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pseudocode-1"><span class="toc-number">3.3.</span> <span class="toc-text">Pseudocode</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/26/25-12-26-1-COMPSCI220-19a-practical-greedy/">https://remy-campanella.github.io/2025/12/26/25-12-26-1-COMPSCI220-19a-practical-greedy/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">算法分析与设计</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.    Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property    Algorithm Property     Dijkstra’s A subtree $X$ is a partial short...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</div></div><div class="info-2"><div class="info-item-1">Shortest Path with Potentially Negative Edges Dijkstra’s algorithm does not work for weighted graph where the weights could be negative. If there is a “negative cycle” (a cycle whose total edge weight is negative), then the problem does not make sense. Greedy choice does not work here. Paths with Bounded Length Let $d_k(u)$ denote the length of the shortest path from $S$ to $u$ that uses at most $k$ edges. Suppose $G$ does not contain a negative cycle. Then the distance from $S$ to $u$ is $d_...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/12/25/25-11-10-1-COMPSCI220-14-connectivity/" title="【COMPSCI 220】 Lecture 14 Connectivity and Components"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 14 Connectivity and Components</div></div><div class="info-2"><div class="info-item-1">Subgraph  Subgraph Let $E \subseteq V^2$, $V’ \subseteq V$, :   $E \upharpoonright V’ = {(u, v ) \in E | u, v \in V’}$(all edges that is used by $V’$ in $G$).     A subgraph of $G = (V, E)$ is a diagraph $G’ = (V’, E’)$ where $V’ \subseteq V$ and $E’ \subseteq E \upharpoonright V’$.     If $E’ = E \upharpoonright V’$, then the subgraph is an induced subgraph.    Decomposing Undirected Graphs We may decompose the graph into equivalence classes: Two nodes are in the same class if they are reach...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-10-2-COMPSCI220-15-bfs/" title="【COMPSCI 220】 Lecture 15 Breadth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 15 Breadth First Search</div></div><div class="info-2"><div class="info-item-1">Distance Between Nodes The distance from $u$ to $v$, $dist(u, v)$, is the length of the shortest path from $u$ to $v$. If there is no path, then $dist(u, v) = \infty$. Distance Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the distance from $u$ to $v$.   Shortest Path Problem   INPUT: a graph $G$, and two nodes $u$, $v$.   OUTPUT: the shortest path from $u$ to $v$.   Missionary and Cannibals  There are 3 missionaries and 3 cannibals coming to a river with only one boat that ...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-16-dist-wg/" title="【COMPSCI 220】 Lecture 16 Distances in Weight Graphs"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 16 Distances in Weight Graphs</div></div><div class="info-2"><div class="info-item-1">Weighted Graphs  Weighted Graph A weighted graph is $G = (V, E, w)$ where $(V, E)$ is an undirected graph and $w : E → \mathbf{Z}$ is a weight function that assigns each edge with an integer weight.  We extend adjacency matrix or adjacency list representations to weighted graphs. Distances Weighted Graph Goals: Compute distances in a weighted graph. If weights are integers, subdivide edges into a sequence of uni-length edges, convert a weighted graph into an unweighted graph. However, the tim...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-12-1-COMPSCI220-17-min-span-tree/" title="【COMPSCI 220】 Lecture 17 Minimal Spanning Tree"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 17 Minimal Spanning Tree</div></div><div class="info-2"><div class="info-item-1">Spanning Trees  A graph $G$ is connected if it is a connected component itself. A spanning tree of $G$ is a connected subgraph that contains all nodes in $V$ and no cycles. A minimal spanning tree of a weighted graph is a spanning tree whose total weight is minimal.   Note: Minimal spanning trees may not be unique.  Minimal Spanning Tree(MST) Problem   INPUT: A weighted connected (undirected) graph $G = (V, E, w)$.   OUTPUT: A MST of $G$.   Optimisations in a Weighted Graph  Optimisation Prob...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-13-2-COMPSCI220-18-kruskal-disjoint/" title="【COMPSCI 220】 Lecture 18 Kruskal&#39;s Algorithm and Disjoint Sets"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-25</div><div class="info-item-2">【COMPSCI 220】 Lecture 18 Kruskal&#39;s Algorithm and Disjoint Sets</div></div><div class="info-2"><div class="info-item-1">Cut Property 2.0 Revisit Let $G = (V, E, w)$ be a weighted graph. A partial MSF(Minimal Spanning Forest) if $G$ is subsets of edges that could lead to an MST.   Suppose a partial MSF $X$.   Let $e$ be the lightest edge across any two trees in this partial MSF.   Then $X \cup {e}$ is also a partial MSF.   Kruskal’s Algorithm Simplify Prim’s algorithm   We do not need to make a traversal.   In other words, we do not need to keep the known region connected.   Eventually, all the disconnected par...</div></div></div></a><a class="pagination-related" href="/2025/12/26/25-11-17-1-COMPSCI220-19-greedy/" title="【COMPSCI 220】 Lecture 19 Greedy Algorithms"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-26</div><div class="info-item-2">【COMPSCI 220】 Lecture 19 Greedy Algorithms</div></div><div class="info-2"><div class="info-item-1">Dijkstra, Prim and Kruskal All these algorithm can be seen as greedy monsters: At each iteration, make a decision that seems best at this instance.    Algorithm Strategy     Dijkstra’s Always choose the node with lowest estimated distance.   Prim’s Always choose the edge with lowest weight and connected to the known region.   Kruskal’s Always choose the edge with lowest weight and not form a cycle.    Greedy Choice Property    Algorithm Property     Dijkstra’s A subtree $X$ is a partial short...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Woodsticks"><span class="toc-number">1.</span> <span class="toc-text">Woodsticks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Problem"><span class="toc-number">1.1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis-and-Solution"><span class="toc-number">1.2.</span> <span class="toc-text">Analysis and Solution</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode"><span class="toc-number">1.3.</span> <span class="toc-text">Pseudocode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Time-Complexity"><span class="toc-number">1.4.</span> <span class="toc-text">Time Complexity</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Knapsack-Problem"><span class="toc-number">2.</span> <span class="toc-text">Knapsack Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deleting-Degits"><span class="toc-number">3.</span> <span class="toc-text">Deleting Degits</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Problem-2"><span class="toc-number">3.1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis"><span class="toc-number">3.2.</span> <span class="toc-text">Analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode-2"><span class="toc-number">3.3.</span> <span class="toc-text">Pseudocode</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
   var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
   mermaid.initialize(options);
 }</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
