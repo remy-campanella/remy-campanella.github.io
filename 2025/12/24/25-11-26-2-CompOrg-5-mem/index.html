@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理】 第五章 存储系统 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="5.1 存储系统的组成 5.1.1 存储器分类   按存储器在计算机中的作用分    名称 作用 成本 性能     高速存储缓冲器（Cache） 位于主存与 CPU 之间，存放正在执行的程序段与数据 高 速度与 CPU 匹配，容量小   主存储器 存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写  速度较高，具有一定容量   辅助存储器（外存储器、后援存储器） 存放当前暂不运行的程序">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理】 第五章 存储系统 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="5.1 存储系统的组成 5.1.1 存储器分类  按存储器在计算机中的作用分          名称 作用 成本 性能     高速存储缓冲器（Cache） 位于主存与 CPU 之间，存放正在执行的程序段与数据 高 速度与 CPU 匹配，容量小   主存储器 存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写  速度较高，具有一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【计算机组成原理】 第五章 存储系统">
 <meta property="og:url" content="https://remy-campanella.github.io/2025/12/24/25-11-26-2-CompOrg-5-mem/index.html">
 <meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="5.1 存储系统的组成 5.1.1 存储器分类   按存储器在计算机中的作用分    名称 作用 成本 性能     高速存储缓冲器（Cache） 位于主存与 CPU 之间，存放正在执行的程序段与数据 高 速度与 CPU 匹配，容量小   主存储器 存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写  速度较高，具有一定容量   辅助存储器（外存储器、后援存储器） 存放当前暂不运行的程序">
+<meta property="og:description" content="5.1 存储系统的组成 5.1.1 存储器分类  按存储器在计算机中的作用分          名称 作用 成本 性能     高速存储缓冲器（Cache） 位于主存与 CPU 之间，存放正在执行的程序段与数据 高 速度与 CPU 匹配，容量小   主存储器 存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写  速度较高，具有一">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2025-12-24T07:55:36.000Z">
@@ -163,14 +163,19 @@
   pageType: 'post'
 }</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
     <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理】 第五章 存储系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理】 第五章 存储系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-24T07:55:36.000Z" title="发表于 2025-12-24 15:55:36">2025-12-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-24T12:55:51.014Z" title="更新于 2025-12-24 20:55:51">2025-12-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="5-1-存储系统的组成">5.1 存储系统的组成</h2>
-<h3 id="5-1-1-存储器分类">5.1.1 存储器分类</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>按存储器在计算机中的作用分</strong></p>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理】 第五章 存储系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理】 第五章 存储系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-24T07:55:36.000Z" title="发表于 2025-12-24 15:55:36">2025-12-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-24T12:55:51.014Z" title="更新于 2025-12-24 20:55:51">2025-12-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="存储系统的组成">5.1 存储系统的组成</h2>
+<h3 id="存储器分类">5.1.1 存储器分类</h3>
+<ol type="1">
+<li><p><strong>按存储器在计算机中的作用分</strong></p>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>名称</th>
 <th>作用</th>
 <th>成本</th>
@@ -178,67 +183,77 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>高速存储缓冲器（Cache）</td>
 <td>位于主存与 CPU 之间，存放正在执行的程序段与数据</td>
 <td>高</td>
 <td>速度与 CPU 匹配，容量小</td>
 </tr>
-<tr>
+<tr class="even">
 <td>主存储器</td>
 <td>存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写</td>
 <td></td>
 <td>速度较高，具有一定容量</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>辅助存储器（外存储器、后援存储器）</td>
 <td>存放当前暂不运行的程序和数据以及永久保存的信息</td>
 <td>很低</td>
 <td>容量大，速度较慢</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li class="lvl-3">
-<p><strong>按存取方式分类</strong></p>
+</table></li>
+<li><p><strong>按存取方式分类</strong></p>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>名称</th>
 <th>特性</th>
 <th>用途</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>随机存取存储器（RAM）</td>
-<td>CPU 对存储器内容<strong>随机读取</strong>，对任何一个单元<strong>读写时间相同</strong>，使用灵活</td>
+<td>CPU
+对存储器内容<strong>随机读取</strong>，对任何一个单元<strong>读写时间相同</strong>，使用灵活</td>
 <td>主存、高速缓冲存储器</td>
 </tr>
-<tr>
+<tr class="even">
 <td>只读存储器（ROM）</td>
 <td>内容<strong>只读不写</strong>，<strong>断电不消失</strong></td>
 <td>BIOS、存入固定子程序、函数发生器、字符发生器、微程序控制器的控制存储器</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>顺序存储存储器（SAM）</td>
 <td>内容只能按<strong>某种顺序</strong>读取，读写时间与位置有关</td>
 <td>磁带机</td>
 </tr>
-<tr>
+<tr class="even">
 <td>直接存取存储器（DAM）</td>
-<td>访问时先指向存储器的<strong>某区域</strong>，再<strong>顺序检索</strong>这个区域，比 SAM 快</td>
+<td>访问时先指向存储器的<strong>某区域</strong>，再<strong>顺序检索</strong>这个区域，比
+SAM 快</td>
 <td>磁盘机</td>
 </tr>
 </tbody>
 </table>
-<p>SAM 和 DAM 的存取时间与物理位置有关，又统称<strong>串行访问存储器</strong>。</p>
-</li>
-<li class="lvl-3">
-<p><strong>按存储介质分类</strong></p>
+<p>SAM 和 DAM
+的存取时间与物理位置有关，又统称<strong>串行访问存储器</strong>。</p></li>
+<li><p><strong>按存储介质分类</strong></p>
 <table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>名称</th>
 <th>原理</th>
 <th>特性</th>
@@ -246,70 +261,88 @@
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>磁芯存储器</td>
 <td>使用磁芯剩磁状态表示二进制数</td>
 <td>长期存储，断电不丢失；破坏性读出，需要重写；各方面性能较差</td>
 <td>早期主存</td>
 </tr>
-<tr>
+<tr class="even">
 <td>半导体存储器</td>
 <td>使用 MOS 型存储器和双极型存储器</td>
-<td>MOS 型存储器集成度高、功耗低、价格便宜、存取慢；双极型存储器相反；半导体 RAM 断电丢失</td>
+<td>MOS
+型存储器集成度高、功耗低、价格便宜、存取慢；双极型存储器相反；半导体 RAM
+断电丢失</td>
 <td>替代磁芯存储器主存</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>磁表面存储器</td>
 <td>在基体上涂覆磁性材料</td>
 <td>容量大、价格低、存取慢</td>
 <td>辅助存储器</td>
 </tr>
-<tr>
+<tr class="even">
 <td>光存储器</td>
 <td>采用激光技术控制访问</td>
 <td>有只读式、一次写入式、可改写式；容量较大</td>
 <td>辅助存储器</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ol>
-<h3 id="5-1-2-存储系统结构">5.1.2 存储系统结构</h3>
+<h3 id="存储系统结构">5.1.2 存储系统结构</h3>
 <p>为了解决存储容量、存取速度和价格之间的矛盾，通常把各种不同存储容量、不同存取速度的存储器按一定的体系结构组织起来，形成一个统一整体的存储系统，形成<strong>多级存储层次</strong>。</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1764235985781.webp" alt="1764235985781"></p>
-<p>整个系统具有<strong>接近 $M_1$ 的速度</strong>、<strong>$M_n$ 的容量</strong>。离 CPU 越远，速度越慢，容量越大，数据常用程度越低。</p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1764235985781.webp"
+alt="1764235985781" />
+<figcaption aria-hidden="true">1764235985781</figcaption>
+</figure>
+<p>整个系统具有<strong>接近 <span class="math inline">\(M_1\)</span>
+的速度</strong>、<strong><span class="math inline">\(M_n\)</span>
+的容量</strong>。离 CPU 越远，速度越慢，容量越大，数据常用程度越低。</p>
 <dl>
 <dt><strong>命中率</strong></dt>
-<dd>CPU 逻辑地址能在 $M_1$ 中访问到的概率。</dd>
+<dd>
+CPU 逻辑地址能在 <span class="math inline">\(M_1\)</span>
+中访问到的概率。
+</dd>
 </dl>
-<p>设一个两级存储层次结构。 $N_1$ 为访问 $M_1$ 次数，时间 $T_{A1}$，$N_2$ 为访问 $M_2$ 次数，时间 $T_{A2}$，则命中率 $H$ 为<br>
-$$<br>
-H = \frac{N_1}{N_1 + N_2}<br>
-$$</p>
-<p>两级存储层次等效访问时间为 $T_A$，</p>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p>$M_1$ 访问和 $M_2$ 访问同时启动<br>
-$$<br>
-T_A = HT_{A1} + (1 - H)T_{A2}<br>
-$$</p>
-</li>
-<li class="lvl-2">
-<p>$M_1$ 未命中时 $M_2$ 访问启动<br>
-$$<br>
-T_A = T_{A1} + (1 - H)T_{A2}<br>
-$$</p>
-</li>
+<p>设一个两级存储层次结构。 <span class="math inline">\(N_1\)</span>
+为访问 <span class="math inline">\(M_1\)</span> 次数，时间 <span
+class="math inline">\(T_{A1}\)</span>，<span
+class="math inline">\(N_2\)</span> 为访问 <span
+class="math inline">\(M_2\)</span> 次数，时间 <span
+class="math inline">\(T_{A2}\)</span>，则命中率 <span
+class="math inline">\(H\)</span> 为 <span class="math display">\[
+H = \frac{N_1}{N_1 + N_2}
+\]</span></p>
+<p>两级存储层次等效访问时间为 <span class="math inline">\(T_A\)</span>，
+- <span class="math inline">\(M_1\)</span> 访问和 <span
+class="math inline">\(M_2\)</span> 访问同时启动 <span
+class="math display">\[
+  T_A = HT_{A1} + (1 - H)T_{A2}
+  \]</span></p>
+<ul>
+<li><span class="math inline">\(M_1\)</span> 未命中时 <span
+class="math inline">\(M_2\)</span> 访问启动 <span
+class="math display">\[
+T_A = T_{A1} + (1 - H)T_{A2}
+\]</span></li>
 </ul>
-<p>存储层次访问效率<br>
-$$<br>
-e = \frac{T_{A1}}{T_A}<br>
-$$</p>
-<p>由高速缓冲存储器、主存储器、辅助存储器构成的三级存储系统可以分为两个层次，其中高速缓存和主存间称为 <strong>Cache-主存存储层次（Cache 存储系统）</strong>；主存和辅存间称为<strong>主存-辅存存储层次（虚拟存储系统）</strong>。</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1764236769824.webp" alt="1764236769824"></p>
+<p>存储层次访问效率 <span class="math display">\[
+e = \frac{T_{A1}}{T_A}
+\]</span></p>
+<p>由高速缓冲存储器、主存储器、辅助存储器构成的三级存储系统可以分为两个层次，其中高速缓存和主存间称为
+<strong>Cache-主存存储层次（Cache
+存储系统）</strong>；主存和辅存间称为<strong>主存-辅存存储层次（虚拟存储系统）</strong>。</p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1764236769824.webp"
+alt="1764236769824" />
+<figcaption aria-hidden="true">1764236769824</figcaption>
+</figure>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>存储系统</th>
 <th>速度</th>
 <th>容量</th>
@@ -317,13 +350,13 @@ $$</p>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Cache 存储系统</td>
 <td>Cache</td>
 <td>主存</td>
 <td>主存</td>
 </tr>
-<tr>
+<tr class="even">
 <td>虚拟存储系统</td>
 <td>主存</td>
 <td>虚拟地址空间</td>
@@ -331,699 +364,688 @@ $$</p>
 </tr>
 </tbody>
 </table>
-<h2 id="5-2-主存储器的组织">5.2 主存储器的组织</h2>
-<h3 id="5-2-1-主存储器的基本结构">5.2.1 主存储器的基本结构</h3>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1764237123518.webp" alt="1764237123518"></p>
+<h2 id="主存储器的组织">5.2 主存储器的组织</h2>
+<h3 id="主存储器的基本结构">5.2.1 主存储器的基本结构</h3>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1764237123518.webp"
+alt="1764237123518" />
+<figcaption aria-hidden="true">1764237123518</figcaption>
+</figure>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>组成部分</th>
 <th>作用</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>存储器</td>
 <td>存放数据与程序</td>
 </tr>
-<tr>
+<tr class="even">
 <td>地址译码驱动电路</td>
 <td><strong>译码器</strong>将总线输入的地址译为译码输出的有效电平，表示<strong>选中单元</strong>，<strong>驱动器</strong>提供驱动电流进行<strong>读写</strong></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>I/O 和读写电路</td>
 <td>包括读出放大器、写入电路、读写控制电路，完成<strong>读写操作</strong></td>
 </tr>
 </tbody>
 </table>
-<h3 id="5-2-2-主存储器的存储单元">5.2.2 主存储器的存储单元</h3>
+<h3 id="主存储器的存储单元">5.2.2 主存储器的存储单元</h3>
 <p>位是二进制数的最基本单位，也是存储器存储信息的最小单位。</p>
 <p>一个存储单元可能存放一个字，也可能存放一个字节，这是由计算机的结构确定的。</p>
-<p>对于字节编址的计算机，最小寻址单位是<strong>一个字节</strong>，相邻的存储单元地址指向相邻的存储字节；对于字编址的计算机，最小寻址单位是<strong>一个字</strong>，相邻的存储单元地址指向相邻的存储字。所以，<strong>存储单元是 CPU 对主存可访问操作的最小存储单位</strong>。</p>
+<p>对于字节编址的计算机，最小寻址单位是<strong>一个字节</strong>，相邻的存储单元地址指向相邻的存储字节；对于字编址的计算机，最小寻址单位是<strong>一个字</strong>，相邻的存储单元地址指向相邻的存储字。所以，<strong>存储单元是
+CPU 对主存可访问操作的最小存储单位</strong>。</p>
 <blockquote>
-<p><strong>存储单元数、寻址范围</strong><br>
-总的来讲，寻址范围从 0 开始，上限为<br>
-$$<br>
-上限 = 存储单元数 - 1 = \frac{总容量}{单元大小} - 1<br>
-$$</p>
+<p><strong>存储单元数、寻址范围</strong><br />
+总的来讲，寻址范围从 0 开始，上限为 <span class="math display">\[
+上限 = 存储单元数 - 1 = \frac{总容量}{单元大小} - 1
+\]</span></p>
 </blockquote>
-<ol>
-<li class="lvl-3">
-<p><strong>大端方案</strong><br>
-如 IBM 370 机（32 位），主存按<strong>字节编址</strong>，每一个存储字包含 4 个单独编址的存储字节。字地址等于<strong>最高有效字节地址</strong>，字地址总为 4 的整数倍。用地址码的最末两位区分同一字的 4 字节。</p>
-</li>
-<li class="lvl-3">
-<p><strong>小端方案</strong><br>
-如 PDP-11 机（16 位），主存按<strong>字节编址</strong>，每个存储字包含 2 个单独编址的存储字节。字地址等于<strong>最低有效字节地址</strong>，字地址总为 2 的整数倍，用地址码的最末一位区分同一字的两字节。</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766577526402.webp" alt="1766577526402"></p>
-</li>
+<ol type="1">
+<li><p><strong>大端方案</strong><br />
+如 IBM 370 机（32
+位），主存按<strong>字节编址</strong>，每一个存储字包含 4
+个单独编址的存储字节。字地址等于<strong>最高有效字节地址</strong>，字地址总为
+4 的整数倍。用地址码的最末两位区分同一字的 4 字节。</p></li>
+<li><p><strong>小端方案</strong><br />
+如 PDP-11 机（16 位），主存按<strong>字节编址</strong>，每个存储字包含 2
+个单独编址的存储字节。字地址等于<strong>最低有效字节地址</strong>，字地址总为
+2 的整数倍，用地址码的最末一位区分同一字的两字节。</p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766577526402.webp"
+alt="1766577526402" />
+<figcaption aria-hidden="true">1766577526402</figcaption>
+</figure></li>
 </ol>
-<h3 id="5-2-3-主存储器的主要技术指标">5.2.3 主存储器的主要技术指标</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>存储容量</strong><br>
+<h3 id="主存储器的主要技术指标">5.2.3 主存储器的主要技术指标</h3>
+<ol type="1">
+<li><p><strong>存储容量</strong><br />
 对于<strong>字节编址</strong>的计算机，以<strong>字节数</strong>表示存储容量；对于<strong>字编址</strong>的计算机，以<b>字数乘字长（一字所含位数）</b>表示存储容量。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>编址方式</th>
 <th>容量</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>字编址</td>
-<td>$\rm 64 K \times 16$</td>
+<td><span class="math inline">\(\rm 64 K \times 16\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>字节编址</td>
-<td>$\rm 128 KB$</td>
+<td><span class="math inline">\(\rm 128 KB\)</span></td>
 </tr>
 </tbody>
-</table>
-</li>
-<li class="lvl-3">
-<p><strong>存取速度</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>存取时间 $T_a$</strong><br>
-又称<strong>访问时间</strong>或<strong>读写时间</strong>。从<strong>启动一次存储器操作</strong>到<strong>完成该操作所需时间</strong>。$T_a$ 越小，存取速度越快。</p>
-</li>
-<li class="lvl-5">
-<p><strong>存取周期 $T_m$</strong><br>
-又称<strong>读写周期</strong>、<strong>访问周期</strong>。主存进行一次<strong>完整读写操作</strong>的全部时间，即<strong>连续两次访问存储器操作之间</strong>所需最短时间。一般 $T_m &gt; T_a$。</p>
-</li>
-<li class="lvl-5">
-<p><strong>主存带宽 $B_m$</strong><br>
-又称<strong>数据传输率</strong>。每秒从主存<strong>进出</strong>信息的最大数量。主存带宽与储存等效工作频率与主存位宽有关系<br>
-$$<br>
-B_m(\rm{B/s}) = 主存等效工作频率(\rm{/s}) \times 主存位宽(\rm{/B}) \div 8<br>
-$$</p>
-<p>目前，主存速度还跟不上 CPU 速度。为提高 $B_m$，可以</p>
-<ul class="lvl-4">
-<li class="lvl-7">
-<p>缩短存取周期</p>
-</li>
-<li class="lvl-7">
-<p>增加存储字长</p>
-</li>
-<li class="lvl-7">
-<p>增加存储体</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>可靠性</strong><br>
-规定时间内，存储器<strong>无故障读写</strong>的概率。用<strong>平均故障间隔时间</strong>（Mean Time Between Failures，MTBF）衡量。MTBF 越长，说明可靠性越高。</p>
-</li>
-<li class="lvl-3">
-<p><strong>功耗</strong><br>
-反映存储器耗电多少和发热情况。通常希望功耗小。大多数半导体存储器工作功耗<strong>远小于</strong>维持功耗。</p>
-</li>
+</table></li>
+<li><p><strong>存取速度</strong></p>
+<ul>
+<li><p><strong>存取时间 <span
+class="math inline">\(T_a\)</span></strong><br />
+又称<strong>访问时间</strong>或<strong>读写时间</strong>。从<strong>启动一次存储器操作</strong>到<strong>完成该操作所需时间</strong>。<span
+class="math inline">\(T_a\)</span> 越小，存取速度越快。</p></li>
+<li><p><strong>存取周期 <span
+class="math inline">\(T_m\)</span></strong><br />
+又称<strong>读写周期</strong>、<strong>访问周期</strong>。主存进行一次<strong>完整读写操作</strong>的全部时间，即<strong>连续两次访问存储器操作之间</strong>所需最短时间。一般
+<span class="math inline">\(T_m &gt; T_a\)</span>。</p></li>
+<li><p><strong>主存带宽 <span
+class="math inline">\(B_m\)</span></strong><br />
+又称<strong>数据传输率</strong>。每秒从主存<strong>进出</strong>信息的最大数量。主存带宽与储存等效工作频率与主存位宽有关系
+<span class="math display">\[
+B_m(\rm{B/s}) = 主存等效工作频率(\rm{/s}) \times 主存位宽(\rm{/B}) \div
+8
+\]</span></p>
+<p>目前，主存速度还跟不上 CPU 速度。为提高 <span
+class="math inline">\(B_m\)</span>，可以</p>
+<ul>
+<li>缩短存取周期</li>
+<li>增加存储字长</li>
+<li>增加存储体</li>
+</ul></li>
+</ul></li>
+<li><p><strong>可靠性</strong><br />
+规定时间内，存储器<strong>无故障读写</strong>的概率。用<strong>平均故障间隔时间</strong>（Mean
+Time Between Failures，MTBF）衡量。MTBF 越长，说明可靠性越高。</p></li>
+<li><p><strong>功耗</strong><br />
+反映存储器耗电多少和发热情况。通常希望功耗小。大多数半导体存储器工作功耗<strong>远小于</strong>维持功耗。</p></li>
 </ol>
-<h3 id="5-2-4-数据在主存中的存放">5.2.4 数据在主存中的存放</h3>
-<p>目前大多数存储器采用<strong>字节编址</strong>。假设读写数据的长度有字节（8 位）、半字（16 位）、单字（32 位）和双字（64 位）。</p>
+<h3 id="数据在主存中的存放">5.2.4 数据在主存中的存放</h3>
+<p>目前大多数存储器采用<strong>字节编址</strong>。假设读写数据的长度有字节（8
+位）、半字（16 位）、单字（32 位）和双字（64 位）。</p>
 <blockquote>
 <p>数据字长（32 位）不等于存储字长（64 位）。</p>
 </blockquote>
 <p>如图所示有三种数据存储方法。</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766401740390.webp" alt="1766401740390"></p>
-<ol>
-<li class="lvl-3">
-<p><strong>不浪费</strong>：无论何种长度的数据，均为一个接一个存放。这样省空间但是工作速度慢、读写控制麻烦。</p>
-</li>
-<li class="lvl-3">
-<p><strong>过于浪费</strong>：无论何种长度数据，都从第一个存储字处开始存放。这样读写控制虽然简单，但有一般空间被浪费。</p>
-</li>
-<li class="lvl-3">
-<p><strong>边界对齐</strong>：对于不同长度的数据存放有如下要求</p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766401740390.webp"
+alt="1766401740390" />
+<figcaption aria-hidden="true">1766401740390</figcaption>
+</figure>
+<ol type="1">
+<li><p><strong>不浪费</strong>：无论何种长度的数据，均为一个接一个存放。这样省空间但是工作速度慢、读写控制麻烦。</p></li>
+<li><p><strong>过于浪费</strong>：无论何种长度数据，都从第一个存储字处开始存放。这样读写控制虽然简单，但有一般空间被浪费。</p></li>
+<li><p><strong>边界对齐</strong>：对于不同长度的数据存放有如下要求</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>长度</th>
 <th>地址末几位数字</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>8 字节（双字）</td>
 <td>000（8 的倍数）</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4 字节（单字）</td>
 <td>00（4 的倍数）</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>2 字节（半字）</td>
 <td>0（2 的倍数）</td>
 </tr>
 </tbody>
 </table>
 <p>这样既能节省部分资源，又能在一个存取周期内完成访问。</p>
-<p><a href="/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/">【操作系统原理】 Lecture 5 物理内存管理：连续内存分配</a></p>
-</li>
+<p><a href="/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/">【操作系统原理】
+Lecture 5 物理内存管理：连续内存分配</a></p></li>
 </ol>
-<h2 id="5-3-半导体存储器和只读存储器">5.3 半导体存储器和只读存储器</h2>
-<h3 id="5-3-1-RAM-记忆单元电路">5.3.1 RAM 记忆单元电路</h3>
-<p>通常把存放<strong>一个二进制位</strong>的物理器件称为<strong>记忆单元</strong>，通常由 MOS 制成。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>6 管 SRAM 记忆单元电路</strong><br>
+<h2 id="半导体存储器和只读存储器">5.3 半导体存储器和只读存储器</h2>
+<h3 id="ram-记忆单元电路">5.3.1 RAM 记忆单元电路</h3>
+<p>通常把存放<strong>一个二进制位</strong>的物理器件称为<strong>记忆单元</strong>，通常由
+MOS 制成。</p>
+<ol type="1">
+<li><p><strong>6 管 SRAM 记忆单元电路</strong><br />
 在该记忆单元未被选中或读出时电路处于双稳态触发器工作状态，电源不断供电以存储信息。一旦断电，信息丢失，称为<strong>易失性</strong>。</p>
-<p>SRAM 存取快，但集成度低、功耗大。用于<strong>高速缓冲器</strong>和<strong>小容量主存系统</strong>。</p>
-</li>
-<li class="lvl-3">
-<p><strong>4 管 DRAM 记忆单元电路</strong><br>
-DRAM 记忆单元的刷新过程是对栅极电容补充电荷，也是一种读出过程，但目的不是未来读出信息，称为“假读”。</p>
-<p>DRAM 集成度高、功耗小、存取慢，用于<strong>大容量主存系统</strong>。</p>
-</li>
-<li class="lvl-3">
-<p><strong>单管 DRAM 记忆单元电路</strong><br>
-同样需要刷新操作，相比 4 管 DRAM 记忆单元电路功耗更小、集成度更高。</p>
-</li>
+<p>SRAM
+存取快，但集成度低、功耗大。用于<strong>高速缓冲器</strong>和<strong>小容量主存系统</strong>。</p></li>
+<li><p><strong>4 管 DRAM 记忆单元电路</strong><br />
+DRAM
+记忆单元的刷新过程是对栅极电容补充电荷，也是一种读出过程，但目的不是未来读出信息，称为“假读”。</p>
+<p>DRAM
+集成度高、功耗小、存取慢，用于<strong>大容量主存系统</strong>。</p></li>
+<li><p><strong>单管 DRAM 记忆单元电路</strong><br />
+同样需要刷新操作，相比 4 管 DRAM
+记忆单元电路功耗更小、集成度更高。</p></li>
 </ol>
-<h3 id="5-3-2-动态-RAM-的刷新">5.3.2 动态 RAM 的刷新</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>刷新间隔</strong><br>
-主要由<strong>栅极电容电荷泄放速度</strong>决定。在规定时间内（如 2 ms），将全部存储体刷新一遍。</p>
+<h3 id="动态-ram-的刷新">5.3.2 动态 RAM 的刷新</h3>
+<ol type="1">
+<li><p><strong>刷新间隔</strong><br />
+主要由<strong>栅极电容电荷泄放速度</strong>决定。在规定时间内（如 2
+ms），将全部存储体刷新一遍。</p>
 <blockquote>
 <p>刷新与<strong>重写</strong>完全不同。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>属性</th>
 <th>重写</th>
 <th>刷新</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>时机</td>
 <td>随机，破坏性读出后</td>
 <td>定时，为长期未访问记忆单元补充电荷</td>
 </tr>
-<tr>
+<tr class="even">
 <td>单位</td>
 <td>存储单元</td>
 <td>存储矩阵的一行</td>
 </tr>
 </tbody>
 </table>
-</blockquote>
-</li>
-<li class="lvl-3">
-<p><strong>刷新方式</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>集中刷新方式</strong><br>
+</blockquote></li>
+<li><p><strong>刷新方式</strong></p>
+<ul>
+<li><p><strong>集中刷新方式</strong><br />
 在允许的最大时间间隔内，按存储芯片容量大小安排几个刷新周期，期间<strong>停止读写操作</strong>。</p>
-<p>$$<br>
-刷新时间 = 存储矩阵行数 \times 刷新周期<br>
-$$</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766404036069.webp" alt="1766404036069"></p>
-<p>集中刷新停止读写期间被称为“死区”，存储容量越大，死区越长。死时间率为<br>
-$$<br>
-死时间率 = \frac{刷新时间}{最大刷新间隔}<br>
-$$</p>
-</li>
-<li class="lvl-5">
-<p><strong>分散刷新方式</strong><br>
-把刷新操作<strong>分散到每个存取周期</strong>。存取周期前一半用于读写或保持，后一半用于刷新，一周期刷新一行。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766404263492.webp" alt="1766404263492"></p>
-<p>这样没有死区，但是加长系统存取周期，降低整机速度；刷新过于频繁，当存储容量较小时，没有充分利用允许的最大刷新间隔。</p>
-</li>
-<li class="lvl-5">
-<p><strong>异步刷新方式</strong><br>
-前两种方法的结合，把刷新操作平均分配到整个最大刷新间隔时间内进行。<br>
-$$<br>
-相邻两行刷新间隔 = \frac{最大刷新间隔时间}{行数}<br>
-$$</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766404574933.webp" alt="1766404574933"><br>
-对于 32 × 32 矩阵，2 ms 每刷新 32 行，一个刷新周期为 62.5 μs，刷新时封锁读写。</p>
-<p>这样虽然也有死区，但是小得多，且减少刷新次数。</p>
-</li>
+<p><span class="math display">\[
+刷新时间 = 存储矩阵行数 \times 刷新周期
+\]</span></p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766404036069.webp"
+alt="1766404036069" />
+<figcaption aria-hidden="true">1766404036069</figcaption>
+</figure>
+<p>集中刷新停止读写期间被称为“死区”，存储容量越大，死区越长。死时间率为
+<span class="math display">\[
+死时间率 = \frac{刷新时间}{最大刷新间隔}
+\]</span></p></li>
+<li><p><strong>分散刷新方式</strong><br />
+把刷新操作<strong>分散到每个存取周期</strong>。存取周期前一半用于读写或保持，后一半用于刷新，一周期刷新一行。<br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766404263492.webp"
+alt="1766404263492" /></p>
+<p>这样没有死区，但是加长系统存取周期，降低整机速度；刷新过于频繁，当存储容量较小时，没有充分利用允许的最大刷新间隔。</p></li>
+<li><p><strong>异步刷新方式</strong><br />
+前两种方法的结合，把刷新操作平均分配到整个最大刷新间隔时间内进行。 <span
+class="math display">\[
+相邻两行刷新间隔 = \frac{最大刷新间隔时间}{行数}
+\]</span></p>
+<p><img src="/image/25-11-26-2-CompOrg-5-mem/1766404574933.webp"
+alt="1766404574933" /><br />
+对于 32 × 32 矩阵，2 ms 每刷新 32 行，一个刷新周期为 62.5
+μs，刷新时封锁读写。</p>
+<p>这样虽然也有死区，但是小得多，且减少刷新次数。</p></li>
 </ul>
-<p>为消除死区，还可采用<strong>不定期刷新</strong>，即把刷新操作安排在 CPU 不访问存储器的时间里。这样既无死区，又不会降低存储速度。但控制困难。</p>
-</li>
-<li class="lvl-3">
-<p><strong>刷新控制</strong><br>
-刷新控制电路的任务时解决刷新任务与 CPU 访问间的矛盾。通常优先进行刷新操作。</p>
-<ul class="lvl-2">
-<li class="lvl-5">刷新控制无论是由芯片外部完成还是内部完成，都对 CPU <strong>透明</strong>。</li>
-<li class="lvl-5">刷新操作<strong>按行进行</strong>，<strong>不需列地址</strong>。</li>
-<li class="lvl-5">刷新操作与读出操作不同，刷新<strong>不需要片选信号</strong>。</li>
-<li class="lvl-5">考虑刷新问题时应从单个芯片存储容量着手，不是整个存储器。</li>
-</ul>
-</li>
+<p>为消除死区，还可采用<strong>不定期刷新</strong>，即把刷新操作安排在
+CPU
+不访问存储器的时间里。这样既无死区，又不会降低存储速度。但控制困难。</p></li>
+<li><p><strong>刷新控制</strong><br />
+刷新控制电路的任务时解决刷新任务与 CPU
+访问间的矛盾。通常优先进行刷新操作。</p>
+<ul>
+<li>刷新控制无论是由芯片外部完成还是内部完成，都对 CPU
+<strong>透明</strong>。</li>
+<li>刷新操作<strong>按行进行</strong>，<strong>不需列地址</strong>。</li>
+<li>刷新操作与读出操作不同，刷新<strong>不需要片选信号</strong>。</li>
+<li>考虑刷新问题时应从单个芯片存储容量着手，不是整个存储器。</li>
+</ul></li>
 </ol>
-<h3 id="5-3-3-RAM-芯片分析">5.3.3 RAM 芯片分析</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>RAM 芯片</strong><br>
+<h3 id="ram-芯片分析">5.3.3 RAM 芯片分析</h3>
+<ol type="1">
+<li><p><strong>RAM 芯片</strong><br />
 各种 RAM 芯片的外引脚主要有</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>名称</th>
 <th>符号</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>地址线</td>
-<td>$A_i$</td>
+<td><span class="math inline">\(A_i\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>数据线</td>
-<td>$D_i$</td>
+<td><span class="math inline">\(D_i\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>片选线</td>
-<td>$\overline{CE}$ 或 $\overline{CS}$</td>
+<td><span class="math inline">\(\overline{CE}\)</span> 或 <span
+class="math inline">\(\overline{CS}\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>读写控制线</td>
-<td>$\overline{WE}$ 或 $\overline{OE} / \overline{WE}$</td>
+<td><span class="math inline">\(\overline{WE}\)</span> 或 <span
+class="math inline">\(\overline{OE} / \overline{WE}\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>工作电源</td>
-<td>$V_{CC}$，+5 V</td>
+<td><span class="math inline">\(V_{CC}\)</span>，+5 V</td>
 </tr>
-<tr>
+<tr class="even">
 <td>地线</td>
 <td>GND</td>
 </tr>
 </tbody>
-</table>
-</li>
-<li class="lvl-3">
-<p><strong>地址译码方式</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>单译码方式</strong><br>
-又称<strong>字选法</strong>，适用于<strong>字结构</strong>存储器。结构简单，但是外围电路多，成本高。</p>
-</li>
-<li class="lvl-5">
-<p><strong>双译码方式</strong><br>
-又称<strong>重合法</strong>，存储芯片可以是位结构或字段结构的。与单译码方式相比，减少了选择线和驱动器数目。存储容量越大，两种方法的差异越明显。</p>
-</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>RAM 的读写时序</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>SRAM 读写时序</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766406704372.webp" alt="1766406704372"></p>
-</li>
-<li class="lvl-5">
-<p><strong>DRAM 读写时序</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766406839548.webp" alt="1766406839548"></p>
-</li>
-</ul>
-</li>
+</table></li>
+<li><p><strong>地址译码方式</strong></p>
+<ul>
+<li><p><strong>单译码方式</strong><br />
+又称<strong>字选法</strong>，适用于<strong>字结构</strong>存储器。结构简单，但是外围电路多，成本高。</p></li>
+<li><p><strong>双译码方式</strong><br />
+又称<strong>重合法</strong>，存储芯片可以是位结构或字段结构的。与单译码方式相比，减少了选择线和驱动器数目。存储容量越大，两种方法的差异越明显。</p></li>
+</ul></li>
+<li><p><strong>RAM 的读写时序</strong></p>
+<ul>
+<li><p><strong>SRAM 读写时序</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766406704372.webp"
+alt="1766406704372" /></p></li>
+<li><p><strong>DRAM 读写时序</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766406839548.webp"
+alt="1766406839548" /></p></li>
+</ul></li>
 </ol>
-<h3 id="5-3-4-半导体只读存储器">5.3.4 半导体只读存储器</h3>
+<h3 id="半导体只读存储器">5.3.4 半导体只读存储器</h3>
 <p>ROM 的优点具有<strong>非易失性</strong>，断电后信息不丢失。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>ROM 的类型</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>掩膜式 ROM（MROM）</strong><br>
+<ol type="1">
+<li><p><strong>ROM 的类型</strong></p>
+<ul>
+<li><p><strong>掩膜式 ROM（MROM）</strong><br />
 内容由制造厂在生产过程种写入，无法改变。</p>
-<p>MROM 可靠性高，集成度高，价格便宜；但灵活性差。</p>
-</li>
-<li class="lvl-5">
-<p><strong>一次性可编程 ROM（PROM）</strong><br>
-允许用户利用专门的这杯写入自己的程序，写入后内容不可变。双极型 PROM 有熔丝烧断型和 PN 结击穿型，写入都是不可逆的。</p>
-</li>
-<li class="lvl-5">
-<p><strong>可擦除可编程 ROM（EPROM）</strong><br>
+<p>MROM 可靠性高，集成度高，价格便宜；但灵活性差。</p></li>
+<li><p><strong>一次性可编程 ROM（PROM）</strong><br />
+允许用户利用专门的这杯写入自己的程序，写入后内容不可变。双极型 PROM
+有熔丝烧断型和 PN 结击穿型，写入都是不可逆的。</p></li>
+<li><p><strong>可擦除可编程 ROM（EPROM）</strong><br />
 允许用户利用专门的这杯写入自己的程序，还可<strong>多次写入</strong>。</p>
-<ul class="lvl-4">
-<li class="lvl-7">UVEPROM：用紫外线照射透明窗口，为整芯片擦除。还需不透明黑纸防止阳光干扰。</li>
-<li class="lvl-7">EEPROM：采用电气方法擦除，在联机条件下既可以字擦除，也可以数据块擦除。</li>
+<ul>
+<li>UVEPROM：用紫外线照射透明窗口，为整芯片擦除。还需不透明黑纸防止阳光干扰。</li>
+<li>EEPROM：采用电气方法擦除，在联机条件下既可以字擦除，也可以数据块擦除。</li>
 </ul>
 <p>EPROM 不能取代 RAM。</p>
-<ul class="lvl-4">
-<li class="lvl-7">
-<p>EPROM 编程次数有限。</p>
-</li>
-<li class="lvl-7">
-<p>写入时间较长。</p>
-</li>
-</ul>
-</li>
-<li class="lvl-5">
-<p><strong>闪速存储器（Flash Memory）</strong><br>
+<ul>
+<li>EPROM 编程次数有限。</li>
+<li>写入时间较长。</li>
+</ul></li>
+<li><p><strong>闪速存储器（Flash Memory）</strong><br />
 简称闪存。可以在操作种被多次读写擦除，兼备 EEPROM 与 RAM 的优点。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>种类</th>
 <th>特性</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>NOR 型</td>
 <td>擦写时间长，允许随机存取任何区域</td>
 </tr>
-<tr>
+<tr class="even">
 <td>NAND 型</td>
 <td>擦鞋时间短，以区块为单位读取</td>
 </tr>
 </tbody>
 </table>
-<p>大多数微型计算机采用<strong>闪存</strong>存储 BIOS 程序。</p>
-</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>ROM 芯片</strong><br>
+<p>大多数微型计算机采用<strong>闪存</strong>存储 BIOS 程序。</p></li>
+</ul></li>
+<li><p><strong>ROM 芯片</strong><br />
 ROM 中使用最多的是 EPROM。引脚主要有</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>名称</th>
 <th>符号</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>地址线</td>
-<td>$A_i$</td>
+<td><span class="math inline">\(A_i\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>数据线</td>
-<td>$D_i$</td>
+<td><span class="math inline">\(D_i\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>片选线</td>
-<td>$\overline{CE}$ 或 $\overline{CS}$</td>
+<td><span class="math inline">\(\overline{CE}\)</span> 或 <span
+class="math inline">\(\overline{CS}\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>编程线</td>
-<td>$\overline{PGM}$</td>
+<td><span class="math inline">\(\overline{PGM}\)</span></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>工作电源、编程电源</td>
-<td>$V_{CC}$、$V_{PP}$</td>
+<td><span class="math inline">\(V_{CC}\)</span>、<span
+class="math inline">\(V_{PP}\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>地线</td>
 <td>GND</td>
 </tr>
 </tbody>
-</table>
-</li>
+</table></li>
 </ol>
-<h3 id="5-3-5-半导体存储器的封装">5.3.5 半导体存储器的封装</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>DIP 存储芯片</strong><br>
-过去，一般存储芯片都是<strong>双列直插封装</strong>（Dual In-line Package，DIP）的。这种内存芯片必须焊接在主板上才能使用，一旦某一块芯片坏了，必须焊下来才能更换。</p>
-</li>
-<li class="lvl-3">
-<p><strong>内存条</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">单列直插存储模块（Single In-line Memory Module，SIMM）</li>
-<li class="lvl-5">双列直插存储模块（Dual In-line Memory Module，DIMM）</li>
-<li class="lvl-5">Rambus 直插存储模块（Rambus In-line Memory Module，RIMM）</li>
+<h3 id="半导体存储器的封装">5.3.5 半导体存储器的封装</h3>
+<ol type="1">
+<li><p><strong>DIP 存储芯片</strong><br />
+过去，一般存储芯片都是<strong>双列直插封装</strong>（Dual In-line
+Package，DIP）的。这种内存芯片必须焊接在主板上才能使用，一旦某一块芯片坏了，必须焊下来才能更换。</p></li>
+<li><p><strong>内存条</strong></p>
+<ul>
+<li>单列直插存储模块（Single In-line Memory Module，SIMM）</li>
+<li>双列直插存储模块（Dual In-line Memory Module，DIMM）</li>
+<li>Rambus 直插存储模块（Rambus In-line Memory Module，RIMM）</li>
 </ul>
-<p>大多数主板不允许用户将不同容量的内存条混用。</p>
-</li>
+<p>大多数主板不允许用户将不同容量的内存条混用。</p></li>
 </ol>
-<h2 id="5-4-主存储器的连接与控制">5.4 主存储器的连接与控制</h2>
-<h3 id="5-4-1-主存容量的扩展">5.4.1 主存容量的扩展</h3>
-<p>在扩展容量之前，通过要求容量与单个存储芯片容量计算芯片数<br>
-$$<br>
-总片数 = \frac{总容量}{容量/片} \\<br>
-\frac{8 \rm{K} \times 8}{1 \rm{K} \times 4} = 16<br>
-$$</p>
-<ol>
-<li class="lvl-3">
-<p><strong>位扩展</strong><br>
-在<strong>位数</strong>方向上扩展（加大<strong>字长</strong>）。将各存储芯片的<strong>地址线</strong>、<strong>片选线</strong>、<strong>读写线</strong>相应<strong>并联</strong>，将<strong>数据线</strong>单独列出。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766408832344.webp" alt="1766408832344"></p>
-</li>
-<li class="lvl-3">
-<p><strong>字扩展</strong><br>
-在<strong>字数</strong>方向上扩展。将各存储芯片的<strong>地址线</strong>、<strong>数据线</strong>、<strong>读写线</strong>相应<strong>并联</strong>，由<strong>片选信号</strong>区分各芯片。<br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766409006906.webp" alt="1766409006906"></p>
-</li>
-<li class="lvl-3">
-<p><strong>字和位同时扩展</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766409047770.webp" alt="1766409047770"></p>
-</li>
+<h2 id="主存储器的连接与控制">5.4 主存储器的连接与控制</h2>
+<h3 id="主存容量的扩展">5.4.1 主存容量的扩展</h3>
+<p>在扩展容量之前，通过要求容量与单个存储芯片容量计算芯片数 <span
+class="math display">\[
+总片数 = \frac{总容量}{容量/片} \\\\
+\frac{8 \rm{K} \times 8}{1 \rm{K} \times 4} = 16
+\]</span></p>
+<ol type="1">
+<li><p><strong>位扩展</strong><br />
+在<strong>位数</strong>方向上扩展（加大<strong>字长</strong>）。将各存储芯片的<strong>地址线</strong>、<strong>片选线</strong>、<strong>读写线</strong>相应<strong>并联</strong>，将<strong>数据线</strong>单独列出。<br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766408832344.webp"
+alt="1766408832344" /></p></li>
+<li><p><strong>字扩展</strong><br />
+在<strong>字数</strong>方向上扩展。将各存储芯片的<strong>地址线</strong>、<strong>数据线</strong>、<strong>读写线</strong>相应<strong>并联</strong>，由<strong>片选信号</strong>区分各芯片。
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766409006906.webp"
+alt="1766409006906" /></p></li>
+<li><p><strong>字和位同时扩展</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766409047770.webp"
+alt="1766409047770" /></p></li>
 </ol>
-<h3 id="5-4-2-存储芯片的地址分配和片选">5.4.2 存储芯片的地址分配和片选</h3>
-<p>CPU 要实现对存储单元的访问，首先要选择存储芯片，即进行<strong>片选</strong>；然后再从选中的芯片中依地址码选择出相应的存储单元，以进行数据的存取，这称为<strong>字选</strong>。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>线选法</strong><br>
-线选法就是用除片内寻址外的高位地址线直接（或经反相器）分别接至各个存储芯片的片选端，当某地址线信息为 0 时，就选中与之对应的存储芯片。</p>
+<h3 id="存储芯片的地址分配和片选">5.4.2 存储芯片的地址分配和片选</h3>
+<p>CPU
+要实现对存储单元的访问，首先要选择存储芯片，即进行<strong>片选</strong>；然后再从选中的芯片中依地址码选择出相应的存储单元，以进行数据的存取，这称为<strong>字选</strong>。</p>
+<ol type="1">
+<li><p><strong>线选法</strong><br />
+线选法就是用除片内寻址外的高位地址线直接（或经反相器）分别接至各个存储芯片的片选端，当某地址线信息为
+0 时，就选中与之对应的存储芯片。</p>
 <blockquote>
 <p>每次寻址时只能有一位有效，每次只选中一个芯片。</p>
 </blockquote>
-<p>线选法无需译码器，线路简单，适用于芯片较少的场合。线选法不能重复利用存储器空间，把地址空间<strong>相互隔离</strong>，不利于编程。</p>
-</li>
-<li class="lvl-3">
-<p><strong>全译码法</strong><br>
-全译码法将除片内寻址外的全部高位地址线都作为地址译码器的输入，译码器的输出作为各芯片的片选信号，接到片选端。</p>
-</li>
-<li class="lvl-3">
-<p><strong>部分译码法</strong><br>
-所谓部分译码就是用除片内寻址外的高位地址的一部分来译码产生片选信号。令未用到的高位地址全为 0，这样确定的存储器地址称为基本地址。部分译码法较全译码法简单，但存在<strong>地址重叠区</strong>。</p>
-</li>
+<p>线选法无需译码器，线路简单，适用于芯片较少的场合。线选法不能重复利用存储器空间，把地址空间<strong>相互隔离</strong>，不利于编程。</p></li>
+<li><p><strong>全译码法</strong><br />
+全译码法将除片内寻址外的全部高位地址线都作为地址译码器的输入，译码器的输出作为各芯片的片选信号，接到片选端。</p></li>
+<li><p><strong>部分译码法</strong><br />
+所谓部分译码就是用除片内寻址外的高位地址的一部分来译码产生片选信号。令未用到的高位地址全为
+0，这样确定的存储器地址称为基本地址。部分译码法较全译码法简单，但存在<strong>地址重叠区</strong>。</p></li>
 </ol>
-<h3 id="5-4-3-主存储器和-CPU-的连接">5.4.3 主存储器和 CPU 的连接</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>主存和 CPU 的硬连接</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766410161444.webp" alt="1766410161444"></p>
-<p>主存与 CPU 有 3 组硬连线：<strong>地址总线 （AB）</strong>、<strong>数据总线 （DB）</strong>、<strong>控制总线 （CB）</strong>。此时，把主存看作一个黑盒子，<b>存储器地址寄存器（MAR）</b>和<b>存储器数据寄存器（MDR）</b>是主存和 CPU 之间的接口。MAR 可以接受来自程序计数器（PC）的指令地址或来自地址形成部件的操作数地址，以确定要访问的单元。MDR 是向主存写入数据或从主存读出数据的缓冲部件。MAR 和 MDR 从功能上看属于主存，但在小型计算机、微型计算机中常放在 CPU 内。</p>
-</li>
-<li class="lvl-3">
-<p><strong>CPU 对主存的基本操作</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">
-<p><strong>读</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766410550360.webp" alt="1766410550360"></p>
-</li>
-<li class="lvl-5">
-<p><strong>写</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766410571592.webp" alt="1766410571592"></p>
-</li>
-</ul>
-</li>
+<h3 id="主存储器和-cpu-的连接">5.4.3 主存储器和 CPU 的连接</h3>
+<ol type="1">
+<li><p><strong>主存和 CPU 的硬连接</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766410161444.webp"
+alt="1766410161444" /></p>
+<p>主存与 CPU 有 3 组硬连线：<strong>地址总线
+（AB）</strong>、<strong>数据总线 （DB）</strong>、<strong>控制总线
+（CB）</strong>。此时，把主存看作一个黑盒子，<b>存储器地址寄存器（MAR）</b>和<b>存储器数据寄存器（MDR）</b>是主存和
+CPU 之间的接口。MAR
+可以接受来自程序计数器（PC）的指令地址或来自地址形成部件的操作数地址，以确定要访问的单元。MDR
+是向主存写入数据或从主存读出数据的缓冲部件。MAR 和 MDR
+从功能上看属于主存，但在小型计算机、微型计算机中常放在 CPU 内。</p></li>
+<li><p><strong>CPU 对主存的基本操作</strong></p>
+<ul>
+<li><p><strong>读</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766410550360.webp"
+alt="1766410550360" /></p></li>
+<li><p><strong>写</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766410571592.webp"
+alt="1766410571592" /></p></li>
+</ul></li>
 </ol>
-<h3 id="5-4-4-主存的校验">5.4.4 主存的校验</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>主存的奇偶校验</strong><br>
-每个存储单元存储 8 位数据、1 位校验位。</p>
-</li>
-<li class="lvl-3">
-<p><strong>错误验证与校正（ECC）</strong><br>
-ECC 可以检测错误、在不打扰计算机工作的情况下纠正错误。</p>
-</li>
+<h3 id="主存的校验">5.4.4 主存的校验</h3>
+<ol type="1">
+<li><p><strong>主存的奇偶校验</strong><br />
+每个存储单元存储 8 位数据、1 位校验位。</p></li>
+<li><p><strong>错误验证与校正（ECC）</strong><br />
+ECC 可以检测错误、在不打扰计算机工作的情况下纠正错误。</p></li>
 </ol>
-<h3 id="5-4-5-PC-系列微型计算机的存储接口">5.4.5 PC 系列微型计算机的存储接口</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>8 位存储接口</strong></p>
-</li>
-<li class="lvl-3">
-<p><strong>16 位存储接口</strong></p>
-</li>
-<li class="lvl-3">
-<p><strong>32 位存储接口</strong></p>
-</li>
-<li class="lvl-3">
-<p><strong>64 位存储接口</strong></p>
-</li>
+<h3 id="pc-系列微型计算机的存储接口">5.4.5 PC
+系列微型计算机的存储接口</h3>
+<ol type="1">
+<li><p><strong>8 位存储接口</strong></p></li>
+<li><p><strong>16 位存储接口</strong></p></li>
+<li><p><strong>32 位存储接口</strong></p></li>
+<li><p><strong>64 位存储接口</strong></p></li>
 </ol>
-<h2 id="5-5-提高主存读写速度的技术">5.5 提高主存读写速度的技术</h2>
-<h3 id="5-5-1-主存与-CPU-速度的匹配">5.5.1 主存与 CPU 速度的匹配</h3>
-<h3 id="5-5-2-FPM-DRAM">5.5.2 FPM DRAM</h3>
-<p>快速页模式随机存储器（Fast Page Mode DRAM）。通过保持行地址不变而只改变列地址，可以对给定行的所有数据进行更快的访问。</p>
-<h3 id="5-5-3-EDO-DRAM">5.5.3 EDO DRAM</h3>
-<p>扩展数据输出 DRAM（Extended Data Output DRAM）。EDO 不必等待当前的读写周期完成即可启动下一个读写周期，即可以在输出一个数据的过程中准备下一个数据的输出。</p>
-<h3 id="5-5-4-SDRAM">5.5.4 SDRAM</h3>
-<p>同步动态随机存储器（Synchronous DRAM，SDRAM）是一种与主存总线运行同步的<br>
-DRAM。 SDRAM 在同步脉冲的控制下工作，取消了主存等待时间，减少了数据传送的延迟时间，因而加快了系统速度。</p>
-<h3 id="5-5-5-DDR-SDRAM">5.5.5 DDR SDRAM</h3>
-<p>双数据传输率同步动态随机存储器（Double Data Rate SDRAM）。DDR SDRAM不仅能在时钟脉冲的上升沿读出数据而且还能在下降沿读出数据，不需要提高时钟频率就能加倍提高 SDRAM 的速度。</p>
-<h3 id="5-5-6-DDR2、DDR3、DDR4-和-DDR5-SDRAM">5.5.6 DDR2、DDR3、DDR4 和 DDR5 SDRAM</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>DDR2 SDRAM</strong><br>
-DDR2 SDRAIM 拥有两倍于上一代 DDR SDRAM 的预读取能力（即 4 位数据读预取）。</p>
-</li>
-<li class="lvl-3">
-<p><strong>DDR3 SDRAM</strong><br>
-DDR3 的预取设计位数提升至 8 位。</p>
-</li>
-<li class="lvl-3">
-<p><strong>DDR4 SDRAM</strong><br>
-DDR4 推出了 bank group 设计。每个 bank group 可独立读写数据，使得内部的数据吞吐率大大提升。</p>
-</li>
-<li class="lvl-3">
-<p><strong>DDR5 SDRAM</strong><br>
-DDR5 的变化不仅是频率的提高，因为充许加入内部 ECC 来制造16Gb、32Gb颗粒，单条容量也会大大提升。</p>
-</li>
+<h2 id="提高主存读写速度的技术">5.5 提高主存读写速度的技术</h2>
+<h3 id="主存与-cpu-速度的匹配">5.5.1 主存与 CPU 速度的匹配</h3>
+<h3 id="fpm-dram">5.5.2 FPM DRAM</h3>
+<p>快速页模式随机存储器（Fast Page Mode
+DRAM）。通过保持行地址不变而只改变列地址，可以对给定行的所有数据进行更快的访问。</p>
+<h3 id="edo-dram">5.5.3 EDO DRAM</h3>
+<p>扩展数据输出 DRAM（Extended Data Output DRAM）。EDO
+不必等待当前的读写周期完成即可启动下一个读写周期，即可以在输出一个数据的过程中准备下一个数据的输出。</p>
+<h3 id="sdram">5.5.4 SDRAM</h3>
+<p>同步动态随机存储器（Synchronous
+DRAM，SDRAM）是一种与主存总线运行同步的 DRAM。 SDRAM
+在同步脉冲的控制下工作，取消了主存等待时间，减少了数据传送的延迟
+时间，因而加快了系统速度。</p>
+<h3 id="ddr-sdram">5.5.5 DDR SDRAM</h3>
+<p>双数据传输率同步动态随机存储器（Double Data Rate SDRAM）。DDR
+SDRAM不仅能在时钟脉冲的上升沿读出数据而且还能在下降沿读出数据，不需要提高时钟频率就能加倍提高
+SDRAM 的速度。</p>
+<h3 id="ddr2ddr3ddr4-和-ddr5-sdram">5.5.6 DDR2、DDR3、DDR4 和 DDR5
+SDRAM</h3>
+<ol type="1">
+<li><p><strong>DDR2 SDRAM</strong><br />
+DDR2 SDRAIM 拥有两倍于上一代 DDR SDRAM 的预读取能力（即 4
+位数据读预取）。</p></li>
+<li><p><strong>DDR3 SDRAM</strong><br />
+DDR3 的预取设计位数提升至 8 位。</p></li>
+<li><p><strong>DDR4 SDRAM</strong><br />
+DDR4 推出了 bank group 设计。每个 bank group
+可独立读写数据，使得内部的数据吞吐率大大提升。</p></li>
+<li><p><strong>DDR5 SDRAM</strong><br />
+DDR5 的变化不仅是频率的提高，因为充许加入内部 ECC
+来制造16Gb、32Gb颗粒，单条容量也会大大提升。</p></li>
 </ol>
-<h3 id="5-5-7-Rambus-DRAM">5.5.7 Rambus DRAM</h3>
-<p>美国 Rambus 公司研发的 RDRAM 在内部结构上进行了重新设计，并采用了新的信号接口技术，其对外接口也不同于以前的 DRAM。</p>
-<h3 id="5-5-8-多通道内存技术">5.5.8 多通道内存技术</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>双通道内存技术</strong><br>
-在北桥芯片组里制作两个内存控制器，这两个内存控制器是可以相互独立工作的。在这两个内存通道上，CPU 可以分别寻址、读取数据，从而可以使内存的带宽增加一倍，理论上数据存取速度也相应增加一倍。</p>
-</li>
-<li class="lvl-3">
-<p><strong>三通道内存技术</strong><br>
-对于支持三通道内存的主板，无论是 4 根内存插槽还是 6 根内存插槽的产品，要想实现三通道模式，只要将同色的三根内存插槽插上内存条即可，系统便会自动识别并进入三通道模式。但是，如果插上非 3 条或者非 6 条的内存，系统会自动进入单通道模式。</p>
-</li>
+<h3 id="rambus-dram">5.5.7 Rambus DRAM</h3>
+<p>美国 Rambus 公司研发的 RDRAM
+在内部结构上进行了重新设计，并采用了新的信号接口技术，其对外接口也不同于以前的
+DRAM。</p>
+<h3 id="多通道内存技术">5.5.8 多通道内存技术</h3>
+<ol type="1">
+<li><p><strong>双通道内存技术</strong><br />
+在北桥芯片组里制作两个内存控制器，这两个内存控制器是可以相互独立工作的。在这两个内存通道上，CPU
+可以分别寻址、读取数据，从而可以使内存的带宽增加一倍，理论上数据存取速度也相应增加一倍。</p></li>
+<li><p><strong>三通道内存技术</strong><br />
+对于支持三通道内存的主板，无论是 4 根内存插槽还是 6
+根内存插槽的产品，要想实现三通道模式，只要将同色的三根内存插槽插上内存条即可，系统便会自动识别并进入三通道模式。但是，如果插上非
+3 条或者非 6 条的内存，系统会自动进入单通道模式。</p></li>
 </ol>
-<h2 id="5-6-多体交叉存储技术">5.6 多体交叉存储技术</h2>
-<h3 id="5-6-1-并行访问存储器">5.6.1 并行访问存储器</h3>
-<p>在高速的计算机中，普遍采用并行主存系统，即在一个存取周期内可以并行读出多个字，依靠整体信息吞吐率的提高，以解决 CPU 与主存之间的速度匹配问题。</p>
-<h3 id="5-6-2-交叉访问存储器">5.6.2 交叉访问存储器</h3>
+<h2 id="多体交叉存储技术">5.6 多体交叉存储技术</h2>
+<h3 id="并行访问存储器">5.6.1 并行访问存储器</h3>
+<p>在高速的计算机中，普遍采用并行主存系统，即在一个存取周期内可以并行读出多个字，依靠整体信息吞吐率的提高，以解决
+CPU 与主存之间的速度匹配问题。</p>
+<h3 id="交叉访问存储器">5.6.2 交叉访问存储器</h3>
 <p>交叉访问存储器中有多个容量相同的存储模块（存储体），而且各存储模块具有各自独立的地址寄存器、读写电路和数据寄存器，这就是多体系统。各个存储体能并行工作，又能交叉工作。</p>
 <blockquote>
-<p>交叉访问存储器要求存储体的个数是 2 的整数幂，即必须是 2、4、8、16 个，而且任一分体出现故障都将影响整个地址空间的所有区域。</p>
+<p>交叉访问存储器要求存储体的个数是 2 的整数幂，即必须是 2、4、8、16
+个，而且任一分体出现故障都将影响整个地址空间的所有区域。</p>
 </blockquote>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766580702375.webp" alt="1766580702375"></p>
-<h2 id="5-7-高速缓冲存储器">5.7 高速缓冲存储器</h2>
-<h3 id="5-7-1-高速缓存工作原理">5.7.1 高速缓存工作原理</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>程序局部性原理</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5"><strong>时间局部性</strong>：如果一个存储单元被访问，则可能该单元会<strong>很快被再次访问</strong>。这是因为程序存在着循环。</li>
-<li class="lvl-5"><strong>空间局部性</strong>：如果一个存储单元被访问，则<strong>该单元邻近的单元</strong>也可能很快被访问。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>Cache 基本结构</strong><br>
-<img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766558526634.webp" alt="1766558526634"></p>
-<p>Cache 保存主存中最急需的若干块的副本。用主存地址的块号字段访问 <strong>Cache 标记</strong>，并将取出的标记和主存地址的标记字段相比较，若相等，说明访问 Cache 有效，称 Cache <strong>命中</strong>；若不相等，说明访问 Cache 无效，称 Cache <strong>不命中</strong>或失效。</p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766580702375.webp"
+alt="1766580702375" />
+<figcaption aria-hidden="true">1766580702375</figcaption>
+</figure>
+<h2 id="高速缓冲存储器">5.7 高速缓冲存储器</h2>
+<h3 id="高速缓存工作原理">5.7.1 高速缓存工作原理</h3>
+<ol type="1">
+<li><p><strong>程序局部性原理</strong></p>
+<ul>
+<li><strong>时间局部性</strong>：如果一个存储单元被访问，则可能该单元会<strong>很快被再次访问</strong>。这是因为程序存在着循环。</li>
+<li><strong>空间局部性</strong>：如果一个存储单元被访问，则<strong>该单元邻近的单元</strong>也可能很快被访问。</li>
+</ul></li>
+<li><p><strong>Cache 基本结构</strong><br />
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766558526634.webp"
+alt="1766558526634" /></p>
+<p>Cache 保存主存中最急需的若干块的副本。用主存地址的块号字段访问
+<strong>Cache
+标记</strong>，并将取出的标记和主存地址的标记字段相比较，若相等，说明访问
+Cache 有效，称 Cache <strong>命中</strong>；若不相等，说明访问 Cache
+无效，称 Cache <strong>不命中</strong>或失效。</p>
 <blockquote>
-<p><strong>数量关系</strong><br>
-$$<br>
-主存地址数 = 主存总字数 = 主存块数 \times 块大小 \\<br>
-主存地址位数 = 主存地址标记位数 + {\rm Cache \ 地址位数} = 主存地址标记位数 + 块号位数 + 块内地址位数<br>
-$$</p>
-</blockquote>
-</li>
+<p><strong>数量关系</strong><br />
+<span class="math display">\[
+主存地址数 = 主存总字数 = 主存块数 \times 块大小 \\\\
+主存地址位数 = 主存地址标记位数 + {\rm Cache \\ 地址位数} =
+主存地址标记位数 + 块号位数 + 块内地址位数
+\]</span></p>
+</blockquote></li>
 </ol>
-<h3 id="5-7-2-Cache-的读写操作">5.7.2 Cache 的读写操作</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>Cache 的读操作</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5">当 CPU 发出读请求时，如果 Cache 命中，就直接对 Cache 进行读操作，与主存无关</li>
-<li class="lvl-5">如果 Cache 不命中 ，则仍需访问主存，并把该块信息一次从主存调入 Cache 内。</li>
-<li class="lvl-5">若此时 Cache 已满，则必须根据某种替换算法，用这个块替换掉 Cache 中原来的某块信息。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>Cache 的写操作</strong><br>
-如果 Cache 命中，需要进行一定的写处理，处理的方法有：<strong>写直达法</strong>和<strong>写回法</strong>，详见 5.7.5 节。如果写 Cache 不命中，就直接把信息写入主存，并有两种处理方法：</p>
-<ul class="lvl-2">
-<li class="lvl-5">不按写分配法，即只把所要写的信息写入主存。</li>
-<li class="lvl-5">按写分配法，即在把所要写的信息写入主存后<strong>还把这个块从主存中读入 Cache</strong>。</li>
-</ul>
-</li>
+<h3 id="cache-的读写操作">5.7.2 Cache 的读写操作</h3>
+<ol type="1">
+<li><strong>Cache 的读操作</strong>
+<ul>
+<li>当 CPU 发出读请求时，如果 Cache 命中，就直接对 Cache
+进行读操作，与主存无关</li>
+<li>如果 Cache 不命中 ，则仍需访问主存，并把该块信息一次从主存调入 Cache
+内。</li>
+<li>若此时 Cache 已满，则必须根据某种替换算法，用这个块替换掉 Cache
+中原来的某块信息。</li>
+</ul></li>
+<li><strong>Cache 的写操作</strong><br />
+如果 Cache
+命中，需要进行一定的写处理，处理的方法有：<strong>写直达法</strong>和<strong>写回法</strong>，详见
+5.7.5 节。如果写 Cache 不命中，就直接把信息写入主存，并有两种处理方法：
+<ul>
+<li>不按写分配法，即只把所要写的信息写入主存。</li>
+<li>按写分配法，即在把所要写的信息写入主存后<strong>还把这个块从主存中读入
+Cache</strong>。</li>
+</ul></li>
 </ol>
-<h3 id="5-7-3-地址映像">5.7.3 地址映像</h3>
+<h3 id="地址映像">5.7.3 地址映像</h3>
 <p>把主存地址空间映像到 Cache 地址空间。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>全相联映像</strong><br>
-让主存中任何一个块均可映像装入到 Cache 中任何一个块上。这样 Cache 冲突概率最低、空间利用率最高；但变换速度慢、成本高、实现困难。</p>
-</li>
-<li class="lvl-3">
-<p><strong>直接映像</strong><br>
-主存中的每一块只能被放置到 Cache 中<strong>唯一的一个指定位置</strong>。若原来有内容，则发生<strong>冲突</strong>，无条件替换掉原来的块。这样做简单、成本低、易实现；但冲突概率高空间利用率低。<br>
-$$<br>
-K = I \bmod 2^c<br>
-$$</p>
-<p>$K$ 为 Cache 块号；$I$ 为主存块号；$2^c$ 为 Cache 块数。</p>
-</li>
-<li class="lvl-3">
-<p><strong>$n$ 路组相联映像</strong><br>
-将 Cache 空间分为 $n$ 个大小相同的组，让主存中的一块直接映像入 Cache 对应组的任何一块上，<strong>组间采取直接映像，组内采取全相联映像。</strong><br>
-$$<br>
-J = I \bmod Q<br>
-$$</p>
-<p>$J$ 为 Cache 的组号；$I$ 为主存的块号；$Q$ 为 Cache 的组数。</p>
-</li>
+<ol type="1">
+<li><p><strong>全相联映像</strong><br />
+让主存中任何一个块均可映像装入到 Cache 中任何一个块上。这样 Cache
+冲突概率最低、空间利用率最高；但变换速度慢、成本高、实现困难。</p></li>
+<li><p><strong>直接映像</strong><br />
+主存中的每一块只能被放置到 Cache
+中<strong>唯一的一个指定位置</strong>。若原来有内容，则发生<strong>冲突</strong>，无条件替换掉原来的块。这样做简单、成本低、易实现；但冲突概率高空间利用率低。
+<span class="math display">\[
+K = I \bmod 2^c
+\]</span></p>
+<p><span class="math inline">\(K\)</span> 为 Cache 块号；<span
+class="math inline">\(I\)</span> 为主存块号；<span
+class="math inline">\(2^c\)</span> 为 Cache 块数。</p></li>
+<li><p><strong><span class="math inline">\(n\)</span>
+路组相联映像</strong><br />
+将 Cache 空间分为 <span class="math inline">\(n\)</span>
+个大小相同的组，让主存中的一块直接映像入 Cache
+对应组的任何一块上，<strong>组间采取直接映像，组内采取全相联映像。</strong>
+<span class="math display">\[
+J = I \bmod Q
+\]</span></p>
+<p><span class="math inline">\(J\)</span> 为 Cache 的组号；<span
+class="math inline">\(I\)</span> 为主存的块号；<span
+class="math inline">\(Q\)</span> 为 Cache 的组数。</p></li>
 </ol>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766559456628.webp" alt="1766559456628"></p>
-<h3 id="5-7-4-替换算法">5.7.4 替换算法</h3>
-<p>在采用全相联映像和组相联映像方式从主存向 Cache 传送一个新块，而 Cache 中的空间<strong>已被占满</strong>时，就需要把原来存储的一块替换掉。</p>
-<ol>
-<li class="lvl-3">
-<p><strong>随机算法</strong><br>
-简单根据一个随机数选择一个块替换。</p>
-</li>
-<li class="lvl-3">
-<p><strong>先进先出（FIFO）算法</strong><br>
-按调入 Cache 的先后决定淘汰的顺序，即在需要更新时，将<strong>最先进入 Cache 的块</strong>作为被替换的块。</p>
-</li>
-<li class="lvl-3">
-<p><strong>近期最少使用（LRU）算法</strong><br>
-把 CPU <strong>近期最少使用的块</strong>作为被替换的块。</p>
-</li>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766559456628.webp"
+alt="1766559456628" />
+<figcaption aria-hidden="true">1766559456628</figcaption>
+</figure>
+<h3 id="替换算法">5.7.4 替换算法</h3>
+<p>在采用全相联映像和组相联映像方式从主存向 Cache 传送一个新块，而 Cache
+中的空间<strong>已被占满</strong>时，就需要把原来存储的一块替换掉。</p>
+<ol type="1">
+<li><p><strong>随机算法</strong><br />
+简单根据一个随机数选择一个块替换。</p></li>
+<li><p><strong>先进先出（FIFO）算法</strong><br />
+按调入 Cache 的先后决定淘汰的顺序，即在需要更新时，将<strong>最先进入
+Cache 的块</strong>作为被替换的块。</p></li>
+<li><p><strong>近期最少使用（LRU）算法</strong><br />
+把 CPU <strong>近期最少使用的块</strong>作为被替换的块。</p></li>
 </ol>
-<h3 id="5-7-5-更新策略">5.7.5 更新策略</h3>
-<ul class="lvl-0">
-<li class="lvl-2">
-<p><strong>写直达法</strong><br>
-CPU 在执行写操作时，必须<strong>把数据同时写入 Cache 和主存</strong>。当某一块需要替换时，不必写回主存，<strong>直接覆盖</strong>。</p>
-</li>
-<li class="lvl-2">
-<p><strong>写回法</strong><br>
-CPU 在执行写操作时，被写数据<strong>只写入 Cache，不写入主存</strong>。仅当需要替换时，才把<strong>已经修改过的 Cache 块</strong>写回到主存。</p>
-<p>采用此策略，每一个 Cache 块有一个标志位，称为<strong>脏位</strong>。当脏位为 1 时，标明此块已被修改过，欲覆盖此块需先写回主存；当脏位为 0 时，标明此块未被修改过，可以直接覆盖。</p>
-</li>
+<h3 id="更新策略">5.7.5 更新策略</h3>
+<ul>
+<li><p><strong>写直达法</strong><br />
+CPU 在执行写操作时，必须<strong>把数据同时写入 Cache
+和主存</strong>。当某一块需要替换时，不必写回主存，<strong>直接覆盖</strong>。</p></li>
+<li><p><strong>写回法</strong><br />
+CPU 在执行写操作时，被写数据<strong>只写入
+Cache，不写入主存</strong>。仅当需要替换时，才把<strong>已经修改过的
+Cache 块</strong>写回到主存。</p>
+<p>采用此策略，每一个 Cache
+块有一个标志位，称为<strong>脏位</strong>。当脏位为 1
+时，标明此块已被修改过，欲覆盖此块需先写回主存；当脏位为 0
+时，标明此块未被修改过，可以直接覆盖。</p></li>
 </ul>
-<h3 id="5-7-6-微机中-Cache-的实现">5.7.6 微机中 Cache 的实现</h3>
-<ol>
-<li class="lvl-3">
-<p><strong>单一缓存与多级缓存</strong></p>
-<ul class="lvl-2">
-<li class="lvl-5"><strong>单一缓存</strong>：CPU 与主存之间只有一个 Cache。</li>
-<li class="lvl-5"><strong>多级缓存</strong>：CPU 访存时首先查找 L1 Cache，如果 L1 Cache 不命中，则访问 L2 Cache……直到所有级别的 Cache 都不命中时，才访问主存。</li>
-</ul>
-</li>
-<li class="lvl-3">
-<p><strong>统一缓存与分开缓存</strong><br>
-统一缓存是指指令和数据都存放在同一个 Cache 中。而分开缓存是指指令和数据分别存放在两个 Cache 中，一个称为<strong>指令 Cache</strong>，另一个称为<strong>数据 Cache</strong>。</p>
-</li>
+<h3 id="微机中-cache-的实现">5.7.6 微机中 Cache 的实现</h3>
+<ol type="1">
+<li><strong>单一缓存与多级缓存</strong>
+<ul>
+<li><strong>单一缓存</strong>：CPU 与主存之间只有一个 Cache。</li>
+<li><strong>多级缓存</strong>：CPU 访存时首先查找 L1 Cache，如果 L1
+Cache 不命中，则访问 L2 Cache……直到所有级别的 Cache
+都不命中时，才访问主存。</li>
+</ul></li>
+<li><strong>统一缓存与分开缓存</strong><br />
+统一缓存是指指令和数据都存放在同一个 Cache
+中。而分开缓存是指指令和数据分别存放在两个 Cache
+中，一个称为<strong>指令 Cache</strong>，另一个称为<strong>数据
+Cache</strong>。</li>
 </ol>
-<h2 id="5-8-虚拟存储器">5.8 虚拟存储器</h2>
-<h3 id="5-8-1-虚拟存储器的基本概念">5.8.1 虚拟存储器的基本概念</h3>
+<h2 id="虚拟存储器">5.8 虚拟存储器</h2>
+<h3 id="虚拟存储器的基本概念">5.8.1 虚拟存储器的基本概念</h3>
 <p>虚拟存储器将主存或辅存的地址空间<strong>统一编址</strong>，形成一个庞大的存储空间。在这个大空间里，用户可以<strong>自由编程</strong>，完全不必考虑程序在主存是否装得下以及这些程序将来在主存中的实际存放位置。</p>
 <p>用户编程的地址称为<strong>虚地址</strong>或<strong>逻辑地址</strong>，实际的<strong>主存单元地址</strong>称为<strong>实地址</strong>或<strong>物理地址</strong>。显然，虚地址要比实地址大得多。</p>
-<h3 id="5-8-2-页式虚拟存储器">5.8.2 页式虚拟存储器</h3>
+<h3 id="页式虚拟存储器">5.8.2 页式虚拟存储器</h3>
 <p>主存空间和虚存空间都划分成若干个<strong>大小相等</strong>的页。</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766560262795.webp" alt="1766560262795"></p>
-<h3 id="5-8-3-段式虚拟存储器">5.8.3 段式虚拟存储器</h3>
-<p>段式虚拟存储器中的段是按照程序的逻辑结构划分的，各个段的长度因程序而异。为了把程序虚地址变换成主存实地址，需要一个段表。段表中每一行记录了某个段对应的若十信息，包括段号、装入位、段起点和段长等。段表一般驻留在主存中。</p>
-<p><img src="/image/icon/loading.gif" data-original="/image/25-11-26-2-CompOrg-5-mem/1766560396463.webp" alt="1766560396463"></p>
-<h3 id="5-8-4-段页式虚拟存储器">5.8.4 段页式虚拟存储器</h3>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766560262795.webp"
+alt="1766560262795" />
+<figcaption aria-hidden="true">1766560262795</figcaption>
+</figure>
+<h3 id="段式虚拟存储器">5.8.3 段式虚拟存储器</h3>
+<p>段式虚拟存储器中的段是按照程序的逻辑结构划分的，各个段的长度因程序而异。为
+了把程序虚地址变换成主存实地址，需要一个段表。段表中每一行记录了某个段对应的若
+十信息，包括段号、装入位、段起点和段长等。段表一般驻留在主存中。</p>
+<figure>
+<img src="/image/25-11-26-2-CompOrg-5-mem/1766560396463.webp"
+alt="1766560396463" />
+<figcaption aria-hidden="true">1766560396463</figcaption>
+</figure>
+<h3 id="段页式虚拟存储器">5.8.4 段页式虚拟存储器</h3>
 <p>将程序按其逻辑结构分段，每段再划分为若干大小相等的页；主存空间也划分为若干同样大小的页。</p>
-<h3 id="5-8-5-快表与慢表">5.8.5 快表与慢表</h3>
+<h3 id="快表与慢表">5.8.5 快表与慢表</h3>
 <p>在一段时间内，对页表的访向只是局限在少数几个存储器字内。为了将访向页表的时间降低到最低限度，许多计算机将页表分为快表和慢表两种。将当前最常用的页表信息存放在一个小容量的高速存储器中，称为“快表”（TLB），当快表中查不到时，再从存放在主存中的页表中查找实页号。与快表相对应，存放在主存中的页表称为“慢表”。快表只是慢表的一个副本，而且只存放了慢表中很少的一部分。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/24/25-11-26-2-CompOrg-5-mem/">https://remy-campanella.github.io/2025/12/24/25-11-26-2-CompOrg-5-mem/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</div></div><div class="info-2"><div class="info-item-1">Graphs  A graph is … A directed graph (or simply called a digraph) is …  Variants of Graphs   Multigraph.   Weighted (di)graph.   Terminology   For undirected graph    Terminology Definition     order of a graph The number of nodes in $G$, $   adjacent, neighbours If $(u, v) \in E$, then $u$ and $v$ are adjacent or neighbours.   endpoints of an edge If $(u, v) \in E$, then $u$ and $v$ are endpoints of edge $(u, v)$.   degree of a vertex The number of its adjacent vertices.   walk A sequence o...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-6-1-COMPSCI220-12-dfs/" title="【COMPSCI 220】 Lecture 12 Depth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 12 Depth First Search</div></div><div class="info-2"><div class="info-item-1">Graph Traverse Graph Traversal refers to the process of starting from a vertex in the graph and accessing all vertices in the graph according to a certain rule, and each vertex is accessed only once. It is the basis for many graph algorithms such as shortest path, connected component detection, etc. Depth First Search Problem   INPUT: A (representation of) digraph $G$.   OUTPUT: Enumeration of all nodes in the digraph following arcs of the digraph.   Stategy Each node is proceed in two stages...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/" title="【计算机组成原理】 第四章 数值的机器运算"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第四章 数值的机器运算</div></div><div class="info-2"><div class="info-item-1">4.1 基本算数运算的实现 4.1.1 加法器   全加器逻辑与真值表 （略）   逻辑表达式 $$ S_i = A_i \oplus B_i \oplus C_{i - 1} \\ C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1} $$   串行与并行    种类 方法 优点 缺点     串行加法器 数据逐位送入一个加法器进行计算 器件少、成本低 速度慢   并行加法器 由多个全加器组成，位数多少取决于字长 速度高 加法运算最长时间问题      4.2.2 进位的产生与传递 设进位传递函数 $$ P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\ G_i = A_iB_i $$ 则 $$ C_n = G_n + P_nC_{n - 1} $$ 串行进位加法器的总延迟时间与字长成正比。设一级与门、或门的延迟时间为$ty$，每一级全加器延迟为$2ty$，从$C_0$到$C_N$的最长时间为$2nty$。 4.1.3 并行加法器的快速进位   并行进位 又称先行进位、同时进位，各级信号同时形成。 $$ C_n = ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-1-intro/" title="【计算机组成原理】 第一章 概论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制   存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。   存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。    1.2 计算机的硬件组成   计算机的主要部件          输入设备 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件   输出设备 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备   存储器 用于存放程序和数据的部件   运算器 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU）   控制器 按照人们预先确定的操作步骤，控制整个计算机各部件有条不紊地自动工作地部件      ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-3-CompOrg-3-command-system/" title="【计算机组成原理】 第三章 指令系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第三章 指令系统</div></div><div class="info-2"><div class="info-item-1">3.1 指令格式   基本格式          操作码字段 地址码字段      地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 $A_1$， 第二操作数地址 $A_2$， 操作结果存放地址 $A_3$， 下一条指令地址 $A_4$。    指令结构   四地址指令  含义：$(A_1) OP (A_2) \rightarrow A_3$ 直观，但太长，不实际。    三地址指令  含义：$(A_1) OP (A_2) \rightarrow A_3$，$(PC) + 1 \rightarrow PC$ 每执行一条指令，程序计数器（PC） 自增。 仍然较长，在大、中型计算机使用。 适用于向量、矩阵运算。    二地址指令  含义：$(A_1) OP (A_2) \rightarrow A_1$，$\rm (PC) + 1 \rightarrow PC$ $A_1$ 为目的操作数地址，$A_2$为源操作数地址。$A_1$中原内容会被破坏。 至少需要访问四次主存。    一地址指令  含义：$(Acc) OP (A_1)...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示   无符号数 整个机器字长全部二进制位位数值位。 范围$[0, 2^n - 1]$。   原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，$[+0]_原 = 00000$，$[-0]_原 = 10000$。 原码实现乘除简单，实现加减复杂。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。其中，$[+0]_补 = [-0]_补 = 00000$。 范围$[-2^{n - 1}, 2^{n - 1} - 1]$。   反码 正数反码与原码相同，负数补码为真值数值按位取反。其中，$[+0]_原 = 00000$，$[-0]_原 = 11111$。 范围$[-(2^{n - 1} - 1), 2^{n - 1} - 1]$。   2.2 机器数的定点表示与浮点表示   定点小数 即纯小数（$-1 &lt; x &lt; 1$），小数点位置固定，整数位被取代为符号位。设机器字长$n + 1$位，原码、反码范围$[-(1 - 2^{-n}), 1 - ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-2-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">2.1 可行性研究的任务   任务 并非任何问题都有简单明显的解决办法。如果问题没有可行的解，那么花费在这项工程上的任何时间、人力、软硬件资源和经费，都是无谓的浪费。可行性研究的目的，就是用最小的代价在尽可能短的时间内确定问题是否能够解决。   分析过程  分析和澄清问题定义。 导出系统逻辑模型。 探索若干种可选的主要解法。    2.2 可行性研究过程    步骤      复查系统规模和目标 实质上是为了确保分析员正在解决的问题确实是要求他解决的问题。   研究目前正在使用的系统 新系统必须要完成旧系统的基本功能；新系统必须要解决旧系统的问题。   导出新系统的高层逻辑模型 参考现有系统的逻辑模型，设想目标系统的逻辑模型，最后根据目标系统的逻辑模型建造新的物理系统。   进一步定义问题 在之前的基础上再次定义问题，构成循环，直到提出的逻辑模型完全符合系统目标。   导出和评价供选择的解法 为每个解法考虑操作、经济方面的可行性，制定实现进度表。   推荐行动方针    草拟开发计划书 制定工程进度表，资源需要情况，系统生命周期每个阶段的成本。   写文档提交审查 应该把上述可行...</div></div></div></a><a class="pagination-related" href="/2025/10/31/25-10-16-1-STATS330-1-synthesis-glm/" title="【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-31</div><div class="info-item-2">【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models</div></div><div class="info-2"><div class="info-item-1">Linear Regression Simple linear regression model is: $$ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\ \epsilon_i \sim {\rm iid \ Normal(0, \sigma^2)} $$ Poisson Linear Regression Macrorhabdus Ornithogaster Chicken Analysis Textbook Page 23:  Macrorhabdus Ornithogaster Chicken Data Data Suitable for Using Poisson Distribution The Poisson distribution better reflects the nature of the response:   It is a discrete distribution   It is right skewed (but almost symmetric when µ is large)   It does n...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">5.1 存储系统的组成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-1-%E5%AD%98%E5%82%A8%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">5.1.1 存储器分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-2-%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">5.1.2 存储系统结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E7%BB%84%E7%BB%87"><span class="toc-number">2.</span> <span class="toc-text">5.2 主存储器的组织</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-1-%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">5.2.1 主存储器的基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-2-%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83"><span class="toc-number">2.2.</span> <span class="toc-text">5.2.2 主存储器的存储单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-3-%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E4%B8%BB%E8%A6%81%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="toc-number">2.3.</span> <span class="toc-text">5.2.3 主存储器的主要技术指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-4-%E6%95%B0%E6%8D%AE%E5%9C%A8%E4%B8%BB%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E6%94%BE"><span class="toc-number">2.4.</span> <span class="toc-text">5.2.4 数据在主存中的存放</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%AD%98%E5%82%A8%E5%99%A8%E5%92%8C%E5%8F%AA%E8%AF%BB%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">5.3 半导体存储器和只读存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-1-RAM-%E8%AE%B0%E5%BF%86%E5%8D%95%E5%85%83%E7%94%B5%E8%B7%AF"><span class="toc-number">3.1.</span> <span class="toc-text">5.3.1 RAM 记忆单元电路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-2-%E5%8A%A8%E6%80%81-RAM-%E7%9A%84%E5%88%B7%E6%96%B0"><span class="toc-number">3.2.</span> <span class="toc-text">5.3.2 动态 RAM 的刷新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-3-RAM-%E8%8A%AF%E7%89%87%E5%88%86%E6%9E%90"><span class="toc-number">3.3.</span> <span class="toc-text">5.3.3 RAM 芯片分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-4-%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%8F%AA%E8%AF%BB%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">5.3.4 半导体只读存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-5-%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B0%81%E8%A3%85"><span class="toc-number">3.5.</span> <span class="toc-text">5.3.5 半导体存储器的封装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%8E%A7%E5%88%B6"><span class="toc-number">4.</span> <span class="toc-text">5.4 主存储器的连接与控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-1-%E4%B8%BB%E5%AD%98%E5%AE%B9%E9%87%8F%E7%9A%84%E6%89%A9%E5%B1%95"><span class="toc-number">4.1.</span> <span class="toc-text">5.4.1 主存容量的扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-2-%E5%AD%98%E5%82%A8%E8%8A%AF%E7%89%87%E7%9A%84%E5%9C%B0%E5%9D%80%E5%88%86%E9%85%8D%E5%92%8C%E7%89%87%E9%80%89"><span class="toc-number">4.2.</span> <span class="toc-text">5.4.2 存储芯片的地址分配和片选</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-3-%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E5%92%8C-CPU-%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.3.</span> <span class="toc-text">5.4.3 主存储器和 CPU 的连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-4-%E4%B8%BB%E5%AD%98%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.4.</span> <span class="toc-text">5.4.4 主存的校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-5-PC-%E7%B3%BB%E5%88%97%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.5.</span> <span class="toc-text">5.4.5 PC 系列微型计算机的存储接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E6%8F%90%E9%AB%98%E4%B8%BB%E5%AD%98%E8%AF%BB%E5%86%99%E9%80%9F%E5%BA%A6%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">5.</span> <span class="toc-text">5.5 提高主存读写速度的技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-1-%E4%B8%BB%E5%AD%98%E4%B8%8E-CPU-%E9%80%9F%E5%BA%A6%E7%9A%84%E5%8C%B9%E9%85%8D"><span class="toc-number">5.1.</span> <span class="toc-text">5.5.1 主存与 CPU 速度的匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-2-FPM-DRAM"><span class="toc-number">5.2.</span> <span class="toc-text">5.5.2 FPM DRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-3-EDO-DRAM"><span class="toc-number">5.3.</span> <span class="toc-text">5.5.3 EDO DRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-4-SDRAM"><span class="toc-number">5.4.</span> <span class="toc-text">5.5.4 SDRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-5-DDR-SDRAM"><span class="toc-number">5.5.</span> <span class="toc-text">5.5.5 DDR SDRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-6-DDR2%E3%80%81DDR3%E3%80%81DDR4-%E5%92%8C-DDR5-SDRAM"><span class="toc-number">5.6.</span> <span class="toc-text">5.5.6 DDR2、DDR3、DDR4 和 DDR5 SDRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-7-Rambus-DRAM"><span class="toc-number">5.7.</span> <span class="toc-text">5.5.7 Rambus DRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-8-%E5%A4%9A%E9%80%9A%E9%81%93%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF"><span class="toc-number">5.8.</span> <span class="toc-text">5.5.8 多通道内存技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-6-%E5%A4%9A%E4%BD%93%E4%BA%A4%E5%8F%89%E5%AD%98%E5%82%A8%E6%8A%80%E6%9C%AF"><span class="toc-number">6.</span> <span class="toc-text">5.6 多体交叉存储技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-1-%E5%B9%B6%E8%A1%8C%E8%AE%BF%E9%97%AE%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">6.1.</span> <span class="toc-text">5.6.1 并行访问存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-2-%E4%BA%A4%E5%8F%89%E8%AE%BF%E9%97%AE%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">6.2.</span> <span class="toc-text">5.6.2 交叉访问存储器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-7-%E9%AB%98%E9%80%9F%E7%BC%93%E5%86%B2%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">7.</span> <span class="toc-text">5.7 高速缓冲存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-1-%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">7.1.</span> <span class="toc-text">5.7.1 高速缓存工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-2-Cache-%E7%9A%84%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="toc-number">7.2.</span> <span class="toc-text">5.7.2 Cache 的读写操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-3-%E5%9C%B0%E5%9D%80%E6%98%A0%E5%83%8F"><span class="toc-number">7.3.</span> <span class="toc-text">5.7.3 地址映像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-4-%E6%9B%BF%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="toc-number">7.4.</span> <span class="toc-text">5.7.4 替换算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-5-%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.5.</span> <span class="toc-text">5.7.5 更新策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-6-%E5%BE%AE%E6%9C%BA%E4%B8%AD-Cache-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.6.</span> <span class="toc-text">5.7.6 微机中 Cache 的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-8-%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.</span> <span class="toc-text">5.8 虚拟存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-1-%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">8.1.</span> <span class="toc-text">5.8.1 虚拟存储器的基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-2-%E9%A1%B5%E5%BC%8F%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.2.</span> <span class="toc-text">5.8.2 页式虚拟存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-3-%E6%AE%B5%E5%BC%8F%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.3.</span> <span class="toc-text">5.8.3 段式虚拟存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-4-%E6%AE%B5%E9%A1%B5%E5%BC%8F%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.4.</span> <span class="toc-text">5.8.4 段页式虚拟存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-5-%E5%BF%AB%E8%A1%A8%E4%B8%8E%E6%85%A2%E8%A1%A8"><span class="toc-number">8.5.</span> <span class="toc-text">5.8.5 快表与慢表</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/12/24/25-11-26-2-CompOrg-5-mem/">https://remy-campanella.github.io/2025/12/24/25-11-26-2-CompOrg-5-mem/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/12/22/25-11-5-15-COMPSCI220-11-graph-intro/" title="【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 11 Graphs: A Brief Recap</div></div><div class="info-2"><div class="info-item-1">Graphs  A graph is … A directed graph (or simply called a digraph) is …  Variants of Graphs  Multigraph. Weighted (di)graph.  Terminology  For undirected graph        Terminology Definition     order of a graph The number of nodes in \(G\), \(|V|\).   adjacent, neighbours If \((u, v) \in E\), then \(u\) and \(v\) are adjacent or neighbours.   endpoints of an edge If \((u, v) \in E\), then \(u\) and \(v\) are endpoints of edge \((u, v)\).   degree of a ve...</div></div></div></a><a class="pagination-related" href="/2025/12/25/25-11-6-1-COMPSCI220-12-dfs/" title="【COMPSCI 220】 Lecture 12 Depth First Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 220】 Lecture 12 Depth First Search</div></div><div class="info-2"><div class="info-item-1">Graph Traverse Graph Traversal refers to the process of starting from a vertex in the graph and accessing all vertices in the graph according to a certain rule, and each vertex is accessed only once. It is the basis for many graph algorithms such as shortest path, connected component detection, etc. Depth First Search Problem  INPUT: A (representation of) digraph \(G\). OUTPUT: Enumeration of all nodes in the digraph following arcs of the digraph.  Stategy Each node is proceed i...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/" title="【计算机组成原理】 第四章 数值的机器运算"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第四章 数值的机器运算</div></div><div class="info-2"><div class="info-item-1">4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i = A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行          种类 方法 优点 缺点     串行加法器 数据逐位送入一个加法器进行计算 器件少、成本低 速度慢   并行加法器 由多个全加器组成，位数多少取决于字长 速度高 加法运算最长时间问题     4.2.2 进位的产生与传递 设进位传递函数 \[ P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\\\ G_i = A_iB_i \] 则 \[ C_n = G_n + P_nC_{n - 1} \] 串行进位加法器的总延迟时间与字长成正比。设一级与门、或门的延迟时间为\(ty\)，每一级全加器延迟为\(2ty\)，从\(C_0\)到\(C_N\)的最长时间为\...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-1-intro/" title="【计算机组成原理】 第一章 概论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制  存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。 早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。 存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。   1.2 计算机的硬件组成  计算机的主要部件 | | | | — | — | | 输入设备 | 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件 | | 输出设备 | 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备 | | 存储器 | 用于存放程序和数据的部件 | | 运算器 | 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU） | |...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示  无符号数 整个机器字长全部二进制位位数值位。 范围\([0, 2^n - 1]\)。 原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 10000\)。 原码实现乘除简单，实现加减复杂。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。 补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，\([+0]_补 = [-0]_补 = 00000\)。 范围\([-2^{n - 1}, 2^{n - 1} - 1]\)。 反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 11111\)。 范围\([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。  2.2 机器数的定点表示与浮点表示  定点小数 即纯小数（\(-1 &lt; x &lt; 1\)），小数点位置固定，整数位被取代为符号位。设机器...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-3-CompOrg-3-command-system/" title="【计算机组成原理】 第三章 指令系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第三章 指令系统</div></div><div class="info-2"><div class="info-item-1">3.1 指令格式  基本格式 | | | | — | — | | 操作码字段 | 地址码字段 | 地址码结构 对于一般的双操作数运算指令，除去操作码（Operation Code），还包含  第一操作数地址 \(A_1\)， 第二操作数地址 \(A_2\)， 操作结果存放地址 \(A_3\)， 下一条指令地址 \(A_4\)。  指令结构  四地址指令  含义：\((A_1) OP (A_2) \rightarrow A_3\) 直观，但太长，不实际。  三地址指令  含义：\((A_1) OP (A_2) \rightarrow A_3\)，\((PC) + 1 \rightarrow PC\) 每执行一条指令，程序计数器（PC） 自增。 仍然较长，在大、中型计算机使用。 适用于向量、矩阵运算。  二地址指令  含义：\((A_1) OP (A_2) \rightarrow A_1\)，\(\rm (PC) + 1 \rightarrow PC\) \(A_1\) 为目的操作数地址，\(A_2\)为源操作数...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-1-SoftEng-1-intro/" title="【软件工程学习】 第一章 软件工程概述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第一章 软件工程概述</div></div><div class="info-2"><div class="info-item-1">一、软件工程的价值与应用场景  实际用途：  国家考试（如软考）、工作面试（如亚麻面试）、毕业设计、读研。 参与需求分析、撰写需求/设计报告、招标书/投标书、项目申请书。 开发原型（需掌握原型工具）、开发软件（需学习开发框架）。 绘制模型图/流程图、AI开发APP等。  工作场景：  文档撰写、模型设计、原型开发、前后端分离开发、系统设计等。   二、软件工程学科与教材分析  经典教材：  《Software Engineering: A Practitioner’s Approach》（2020年）：涵盖软件过程、建模、质量、项目管理等。 《软件工程导论》（2013年）：传统生命周期与面向对象方法。 《面向对象软件工程：敏捷统一方法》（2014/2023年）：强调领域建模、架构设计、交互建模等。 《软件工程：谷歌的实践》（2022年）：聚焦文化、流程、工具（如代码评审、CI/CD）。  学科演变：  从传统软件工程→面向对象→敏捷开发→系统工程。 新趋势：低代码、AI开发、产品化（从Project到Product）。  ...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-15-2-SoftEng-2-feasibility/" title="【软件工程学习】 第二章 可行性研究"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【软件工程学习】 第二章 可行性研究</div></div><div class="info-2"><div class="info-item-1">2.1 可行性研究的任务  任务 并非任何问题都有简单明显的解决办法。如果问题没有可行的解，那么花费在这项工程上的任何时间、人力、软硬件资源和经费，都是无谓的浪费。可行性研究的目的，就是用最小的代价在尽可能短的时间内确定问题是否能够解决。 分析过程  分析和澄清问题定义。 导出系统逻辑模型。 探索若干种可选的主要解法。   2.2 可行性研究过程        步骤      复查系统规模和目标 实质上是为了确保分析员正在解决的问题确实是要求他解决的问题。   研究目前正在使用的系统 新系统必须要完成旧系统的基本功能；新系统必须要解决旧系统的问题。   导出新系统的高层逻辑模型 参考现有系统的逻辑模型，设想目标系统的逻辑模型，最后根据目标系统的逻辑模型建造新的物理系统。   进一步定义问题 在之前的基础上再次定义问题，构成循环，直到提出的逻辑模型完全符合系统目标。   导出和评价供选择的解法 为每个解法考虑操作、经济方面的可行性，制定实现进度表。   推荐行动方针    草拟开发计划...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">5.1 存储系统的组成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">5.1.1 存储器分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">5.1.2 存储系统结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E7%BB%84%E7%BB%87"><span class="toc-number">2.</span> <span class="toc-text">5.2 主存储器的组织</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">5.2.1 主存储器的基本结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83"><span class="toc-number">2.2.</span> <span class="toc-text">5.2.2 主存储器的存储单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E4%B8%BB%E8%A6%81%E6%8A%80%E6%9C%AF%E6%8C%87%E6%A0%87"><span class="toc-number">2.3.</span> <span class="toc-text">5.2.3 主存储器的主要技术指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%9C%A8%E4%B8%BB%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E6%94%BE"><span class="toc-number">2.4.</span> <span class="toc-text">5.2.4 数据在主存中的存放</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%AD%98%E5%82%A8%E5%99%A8%E5%92%8C%E5%8F%AA%E8%AF%BB%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">5.3 半导体存储器和只读存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ram-%E8%AE%B0%E5%BF%86%E5%8D%95%E5%85%83%E7%94%B5%E8%B7%AF"><span class="toc-number">3.1.</span> <span class="toc-text">5.3.1 RAM 记忆单元电路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81-ram-%E7%9A%84%E5%88%B7%E6%96%B0"><span class="toc-number">3.2.</span> <span class="toc-text">5.3.2 动态 RAM 的刷新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ram-%E8%8A%AF%E7%89%87%E5%88%86%E6%9E%90"><span class="toc-number">3.3.</span> <span class="toc-text">5.3.3 RAM 芯片分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%8F%AA%E8%AF%BB%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">5.3.4 半导体只读存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B0%81%E8%A3%85"><span class="toc-number">3.5.</span> <span class="toc-text">5.3.5 半导体存储器的封装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%8E%A7%E5%88%B6"><span class="toc-number">4.</span> <span class="toc-text">5.4 主存储器的连接与控制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%AE%B9%E9%87%8F%E7%9A%84%E6%89%A9%E5%B1%95"><span class="toc-number">4.1.</span> <span class="toc-text">5.4.1 主存容量的扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%8A%AF%E7%89%87%E7%9A%84%E5%9C%B0%E5%9D%80%E5%88%86%E9%85%8D%E5%92%8C%E7%89%87%E9%80%89"><span class="toc-number">4.2.</span> <span class="toc-text">5.4.2 存储芯片的地址分配和片选</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E5%82%A8%E5%99%A8%E5%92%8C-cpu-%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.3.</span> <span class="toc-text">5.4.3 主存储器和 CPU 的连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E7%9A%84%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.4.</span> <span class="toc-text">5.4.4 主存的校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pc-%E7%B3%BB%E5%88%97%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%AD%98%E5%82%A8%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.5.</span> <span class="toc-text">5.4.5 PC
+系列微型计算机的存储接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E9%AB%98%E4%B8%BB%E5%AD%98%E8%AF%BB%E5%86%99%E9%80%9F%E5%BA%A6%E7%9A%84%E6%8A%80%E6%9C%AF"><span class="toc-number">5.</span> <span class="toc-text">5.5 提高主存读写速度的技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E5%AD%98%E4%B8%8E-cpu-%E9%80%9F%E5%BA%A6%E7%9A%84%E5%8C%B9%E9%85%8D"><span class="toc-number">5.1.</span> <span class="toc-text">5.5.1 主存与 CPU 速度的匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fpm-dram"><span class="toc-number">5.2.</span> <span class="toc-text">5.5.2 FPM DRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#edo-dram"><span class="toc-number">5.3.</span> <span class="toc-text">5.5.3 EDO DRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sdram"><span class="toc-number">5.4.</span> <span class="toc-text">5.5.4 SDRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ddr-sdram"><span class="toc-number">5.5.</span> <span class="toc-text">5.5.5 DDR SDRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ddr2ddr3ddr4-%E5%92%8C-ddr5-sdram"><span class="toc-number">5.6.</span> <span class="toc-text">5.5.6 DDR2、DDR3、DDR4 和 DDR5
+SDRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rambus-dram"><span class="toc-number">5.7.</span> <span class="toc-text">5.5.7 Rambus DRAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E9%80%9A%E9%81%93%E5%86%85%E5%AD%98%E6%8A%80%E6%9C%AF"><span class="toc-number">5.8.</span> <span class="toc-text">5.5.8 多通道内存技术</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E4%BD%93%E4%BA%A4%E5%8F%89%E5%AD%98%E5%82%A8%E6%8A%80%E6%9C%AF"><span class="toc-number">6.</span> <span class="toc-text">5.6 多体交叉存储技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E8%AE%BF%E9%97%AE%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">6.1.</span> <span class="toc-text">5.6.1 并行访问存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%A4%E5%8F%89%E8%AE%BF%E9%97%AE%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">6.2.</span> <span class="toc-text">5.6.2 交叉访问存储器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E9%80%9F%E7%BC%93%E5%86%B2%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">7.</span> <span class="toc-text">5.7 高速缓冲存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">7.1.</span> <span class="toc-text">5.7.1 高速缓存工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cache-%E7%9A%84%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="toc-number">7.2.</span> <span class="toc-text">5.7.2 Cache 的读写操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E6%98%A0%E5%83%8F"><span class="toc-number">7.3.</span> <span class="toc-text">5.7.3 地址映像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%BF%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="toc-number">7.4.</span> <span class="toc-text">5.7.4 替换算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.5.</span> <span class="toc-text">5.7.5 更新策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AE%E6%9C%BA%E4%B8%AD-cache-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">7.6.</span> <span class="toc-text">5.7.6 微机中 Cache 的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.</span> <span class="toc-text">5.8 虚拟存储器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">8.1.</span> <span class="toc-text">5.8.1 虚拟存储器的基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E5%BC%8F%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.2.</span> <span class="toc-text">5.8.2 页式虚拟存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AE%B5%E5%BC%8F%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.3.</span> <span class="toc-text">5.8.3 段式虚拟存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AE%B5%E9%A1%B5%E5%BC%8F%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8"><span class="toc-number">8.4.</span> <span class="toc-text">5.8.4 段页式虚拟存储器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E8%A1%A8%E4%B8%8E%E6%85%A2%E8%A1%A8"><span class="toc-number">8.5.</span> <span class="toc-text">5.8.5 快表与慢表</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 22 Flow Network"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-20-1-COMPSCI220-22-flow-net/" title="【COMPSCI 220】 Lecture 22 Flow Network">【COMPSCI 220】 Lecture 22 Flow Network</a><time datetime="2025-12-26T13:22:55.000Z" title="发表于 2025-12-26 21:22:55">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-3-COMPSCI220-21a-practical-dyn-prog/" title="【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming">【COMPSCI 220】 Lecture 21a Practical Exercises of Dynamic Programming</a><time datetime="2025-12-26T12:03:44.000Z" title="发表于 2025-12-26 20:03:44">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 21 Dynamic Programming"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-19-3-COMPSCI220-21-dyn-prog/" title="【COMPSCI 220】 Lecture 21 Dynamic Programming">【COMPSCI 220】 Lecture 21 Dynamic Programming</a><time datetime="2025-12-26T09:56:12.000Z" title="发表于 2025-12-26 17:56:12">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph"/></a><div class="content"><a class="title" href="/2025/12/26/25-12-26-2-COMPSCI220-20a-practical-graph/" title="【COMPSCI 220】 Lecture 20a Practical Exercises of Graph">【COMPSCI 220】 Lecture 20a Practical Exercises of Graph</a><time datetime="2025-12-26T08:18:47.000Z" title="发表于 2025-12-26 16:18:47">2025-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited"/></a><div class="content"><a class="title" href="/2025/12/26/25-11-17-2-COMPSCI220-20-short-path/" title="【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited">【COMPSCI 220】 Lecture 20 Shortest Paths, Revisited</a><time datetime="2025-12-26T07:16:53.000Z" title="发表于 2025-12-26 15:16:53">2025-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
   var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
   mermaid.initialize(options);
 }</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
