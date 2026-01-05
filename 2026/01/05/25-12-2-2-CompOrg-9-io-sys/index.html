@@ -1,0 +1,755 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【计算机组成原理】 第九章 输入输出系统 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="9.1 主机与外部设备的连接 9.1.1 输入输出接口 主机与外设的连接方式有辐射型连接、总线型连接等。书记与外设各有自己的工作特点，必须通过 I&#x2F;O 接口进行信息交换。 9.1.2 接口的功能与基本组成  接口的功能  实现主机与外设的通信联络控制。 进行地址译码与设备选择。 实现数据缓冲。 数据格式的变换。 传递控制命令和状态信息。  接口的基本组成 端口是接口电路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【计算机组成原理】 第九章 输入输出系统">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/01/05/25-12-2-2-CompOrg-9-io-sys/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="9.1 主机与外部设备的连接 9.1.1 输入输出接口 主机与外设的连接方式有辐射型连接、总线型连接等。书记与外设各有自己的工作特点，必须通过 I&#x2F;O 接口进行信息交换。 9.1.2 接口的功能与基本组成  接口的功能  实现主机与外设的通信联络控制。 进行地址译码与设备选择。 实现数据缓冲。 数据格式的变换。 传递控制命令和状态信息。  接口的基本组成 端口是接口电路">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2026-01-05T03:03:19.257Z">
+<meta property="article:modified_time" content="2026-01-05T03:04:31.464Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="计算机组成原理">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="基础知识">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【计算机组成原理】 第九章 输入输出系统",
+  "url": "https://remy-campanella.github.io/2026/01/05/25-12-2-2-CompOrg-9-io-sys/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2026-01-05T03:03:19.257Z",
+  "dateModified": "2026-01-05T03:04:31.464Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/01/05/25-12-2-2-CompOrg-9-io-sys/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【计算机组成原理】 第九章 输入输出系统',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【计算机组成原理】 第九章 输入输出系统</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【计算机组成原理】 第九章 输入输出系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-05T03:03:19.257Z" title="发表于 2026-01-05 11:03:19">2026-01-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-05T03:04:31.464Z" title="更新于 2026-01-05 11:04:31">2026-01-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="主机与外部设备的连接">9.1 主机与外部设备的连接</h2>
+<h3 id="输入输出接口">9.1.1 输入输出接口</h3>
+<p>主机与外设的连接方式有辐射型连接、总线型连接等。书记与外设各有自己的工作特点，必须通过 I/O 接口进行信息交换。</p>
+<h3 id="接口的功能与基本组成">9.1.2 接口的功能与基本组成</h3>
+<ol type="1">
+<li><p><strong>接口的功能</strong></p>
+<ul>
+<li>实现主机与外设的通信联络控制。</li>
+<li>进行地址译码与设备选择。</li>
+<li>实现数据缓冲。</li>
+<li>数据格式的变换。</li>
+<li>传递控制命令和状态信息。</li>
+</ul></li>
+<li><p><strong>接口的基本组成</strong><br />
+端口是接口电路中<strong>可以直接被 CPU 访问的寄存器</strong>。一个接口一般包含<strong>数据端口</strong>、<strong>命令端口</strong>和<strong>状态端口</strong>。<br />
+<img src="/image/icon/loading.gif" data-original="/image/25-12-2-2-CompOrg-9-io-sys/1764682361532.webp" alt="1764682361532" /><br />
+为了节省硬件，状态信息和控制信息可共用一个端口。</p></li>
+<li><p><strong>接口的类型</strong></p>
+<ul>
+<li><strong>按数据传送方式</strong>
+<ul>
+<li>串行接口</li>
+<li>并行接口</li>
+</ul></li>
+<li><strong>按主机访问 I/O 设备的控制方式分类</strong>
+<ul>
+<li>程序查询式接口</li>
+<li>程序中断接口</li>
+<li>DMA 接口</li>
+<li>复杂通道控制器</li>
+</ul></li>
+<li><strong>按功能选择的灵活性分类</strong>
+<ul>
+<li>可编程接口</li>
+<li>不可编程接口</li>
+</ul></li>
+<li><strong>按通用性分类</strong>
+<ul>
+<li>通用接口：可供多种外设使用的标准接口。</li>
+<li>专用接口：为某类用途或外设专门设计。</li>
+</ul></li>
+<li><strong>按输入输出的信号分类</strong>
+<ul>
+<li>数字接口</li>
+<li>模拟接口</li>
+</ul></li>
+<li><strong>按应用分类</strong>
+<ul>
+<li>运行辅助接口</li>
+<li>用户交互接口</li>
+<li>传感接口</li>
+<li>控制接口</li>
+</ul></li>
+</ul></li>
+</ol>
+<h3 id="外设的识别与端口寻址">9.1.3 外设的识别与端口寻址</h3>
+<ol type="1">
+<li><strong>端口地址编址方式</strong>
+<ul>
+<li><strong>独立编址</strong><br />
+另设 I/O 读写控制线，设置专门的 I/O 指令。</li>
+<li><strong>统一编址</strong><br />
+I/O 端口与主存统一编址，不设置专门的 I/O 指令。</li>
+</ul></li>
+<li><strong>独立编址方式的端口访问</strong><br />
+80x86 的专用 I/O 指令 <code>IN</code> 和 <code>OUT</code> 有<strong>直接寻址</strong>和<strong>间接寻址</strong>两种类型 。</li>
+</ol>
+<h3 id="输入输出信息的控制方式">9.1.4 输入输出信息的控制方式</h3>
+<ol type="1">
+<li><p><strong>程序查询方式</strong><br />
+一旦某一外设被选中并启动之后，主机将查询这个外设的某些状态位，看其是否准备就绪？若外设未准备就绪，主机将再次查询；若外设已准备就绪，则执行一次 I/O 操作。</p>
+<p>外设和主机不能同时工作，各外设也不能同时工作，</p></li>
+<li><p><strong>程序中断方式</strong><br />
+外设在做好输入输出准备时，向主机发中断请求，主机接到请求后就暂时中止原来执行的程序，转去执行中断服务程序对外部请求进行处理，在中断处理完毕后返回原来的程序继续执行。</p></li>
+<li><p><strong>直接存储器读取（DMA）方式</strong><br />
+在主存与外设件开辟直接的数据通路，无需 CPU 介入。</p></li>
+<li><p><strong>I/O 通道控制方式</strong><br />
+执行 I/O 操作时，执行启动相关通道，通道执行通道程序。通道时一个育有特殊功能的从属于 CPU 的<strong>专用处理器</strong>。</p></li>
+</ol>
+<p>目前，小型和微型计算机大多采用程序查询方式、程序中断方式和 DMA 方式；大型和中型计算机多采用通道方式。</p>
+<h2 id="程序查询方式及其接口">9.2 程序查询方式及其接口</h2>
+<p>程序查询方式的核心问题在于需要不断地查询 I/O 设备是否准备就绪。</p>
+<h3 id="程序查询方式">9.2.1 程序查询方式</h3>
+<ol type="1">
+<li><p><strong>程序查询的基本思想</strong><br />
+由 CPU 执行一段<strong>输入输出程序</strong>来实现主机与外设之间数据传送的方式称为程序直接控制方式。根据外设的不同性质，这种传送方式又可分为<strong>无条件传送</strong>和<strong>程序查询方式</strong>两种。</p></li>
+<li><p><strong>工作流程</strong></p>
+<ul>
+<li>预置传送参数</li>
+<li>向外设接口发出命令字</li>
+<li>从外设接口取回状态字</li>
+<li>查询外设标志
+<ul>
+<li>如果外设未准备就绪，CPU 踏步等待，执行第 3 步，直至设备就绪。</li>
+</ul></li>
+<li>传送数据</li>
+<li>修改传送参数</li>
+<li>判断传送是否结束
+<ul>
+<li>如果传送个数计数器不为 0，回到第 3 步，继续传送，直到计数器为 0。</li>
+</ul></li>
+</ul></li>
+</ol>
+<h3 id="程序查询方式接口">9.2.2 程序查询方式接口</h3>
+<p>接口中至少有两个寄存器</p>
+<ul>
+<li>数据缓冲寄存器（数据端口）</li>
+<li>设备状态寄存器（状态端口）</li>
+</ul>
+<ol type="1">
+<li><p><strong>输入接口</strong><br />
+<img src="/image/icon/loading.gif" data-original="/image/25-12-2-2-CompOrg-9-io-sys/1765280779564.webp" alt="1765280779564" /></p></li>
+<li><p><strong>输出接口</strong></p></li>
+</ol>
+<h2 id="中断系统和程序中断方式">9.3 中断系统和程序中断方式</h2>
+<h3 id="中断的基本概念">9.3.1 中断的基本概念</h3>
+<ol type="1">
+<li><p><strong>中断的提出</strong><br />
+一旦外设完成数据传送的准备工作（输入设备的数据准备好或输出设备的数据缓冲器空）时，便主动向 CPU 发出一个中断请求。在可以响应中断的条件下，CPU <strong>暂时中止</strong>正在执行的程序，转去执行中断服务程序为中断请求者服务，在中断服务程序中完成一次主机与外设之间的数据传送，传送完成后，CPU 仍返回原来的程序，从断点处继续执行。</p>
+<p>中断系统是计算机实现中断功能的软、硬件总称。<br />
+<img src="/image/icon/loading.gif" data-original="/image/25-12-2-2-CompOrg-9-io-sys/1765282785172.webp" alt="1765282785172" /></p></li>
+<li><p><strong>程序中断与调用子程序的区别</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>区别</th>
+<th>子程序调用</th>
+<th>中断服务程序</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>触发</td>
+<td>由程序员安排</td>
+<td>由随机中断事件引起</td>
+</tr>
+<tr class="even">
+<td>控制</td>
+<td>主程序或上层子程序</td>
+<td>与现行程序无关系</td>
+</tr>
+<tr class="odd">
+<td>并行性</td>
+<td>一般不能同时调用多个</td>
+<td>多个外设同时请求 CPU 服务是可能的</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>中断的类型</strong></p>
+<ul>
+<li><strong>自愿中断和强迫中断</strong></li>
+<li><strong>程序中断和简单中断（DMA 方式）</strong></li>
+<li><strong>内中断和外中断</strong></li>
+<li><strong>向量中断和非向量中断</strong></li>
+<li><strong>单重中断和多重中断</strong></li>
+</ul></li>
+</ol>
+<h3 id="中断请求和中断判优">9.3.2 中断请求和中断判优</h3>
+<ol type="1">
+<li><p><strong>中断源与中断请求信号</strong><br />
+中断源即引起计算机中断的事件。可采用具有存储功能的<strong>中断请求触发器（INTR）</strong>。</p></li>
+<li><p><strong>中断请求信号的传送</strong></p>
+<ul>
+<li><strong>独立请求线</strong><br />
+</li>
+<li><strong>公共请求线</strong><br />
+</li>
+<li><strong>二维结构</strong></li>
+</ul></li>
+<li><p><strong>中断优先级与判优方法</strong></p>
+<ul>
+<li>对那些提出中断请求后<strong>需要立刻处理</strong>，否则就会<strong>造成严重后果</strong>的中断源规定为最高的优先级。</li>
+<li>而对那些可以延迟响应和处理的中断源规定为较低的优先级。</li>
+</ul>
+<p>故障中断一般优先级较高，其次是简单中断，接着是 I/O 中断。</p>
+<ul>
+<li><p><strong>软件判优法</strong><br />
+CPU 接到中断请求后，逐个检测中断请求寄存器的各位状态。检测顺序按优先级大小排列，最先检测的中断源具有最高优先级。</p></li>
+<li><p><strong>硬件判优法</strong><br />
+采用硬件判优电路。优先级别高的中断请求将封锁优先级别低的中断请求处理。</p></li>
+</ul></li>
+</ol>
+<h3 id="中断响应与中断处理">9.3.3 中断响应与中断处理</h3>
+<ol type="1">
+<li><p><strong>CPU 响应中断的条件</strong></p>
+<ul>
+<li><strong>CPU 收到中断信号</strong></li>
+<li><strong>CPU 允许中断</strong><br />
+中断允许触发器 <code>EINT = 0</code>，由开中断指令置位，关中断指令或硬件复位。</li>
+<li><strong>一条指令执行完毕</strong></li>
+</ul></li>
+<li><p><strong>中断隐指令</strong><br />
+CPU 响应中断后转到中断服务程序由硬件实现。中断隐指令<strong>不是真正的指令</strong>，<strong>无操作码</strong>，<strong>不可能由用户使用</strong>。</p>
+<p>中断隐指令的作用：</p>
+<ul>
+<li><strong>保存断点</strong><br />
+</li>
+<li><strong>暂不允许中断</strong><br />
+即关中断。为保护中断现场期间<strong>不被新的中断打断</strong>。</li>
+<li><strong>引出中断服务程序</strong></li>
+</ul></li>
+<li><p><strong>中断周期</strong></p></li>
+<li><p><strong>进入中断服务程序</strong></p>
+<ul>
+<li><strong>软件方法</strong></li>
+<li><strong>硬件向量中断法</strong>
+<ul>
+<li>向量地址是中断服务程序的入口地址。</li>
+<li>向量地址是中断服务表的指针。</li>
+</ul></li>
+</ul></li>
+<li><p><strong>中断现场的保护与恢复</strong></p></li>
+</ol>
+<h3 id="多重中断与中断屏蔽">9.3.4 多重中断与中断屏蔽</h3>
+<ol type="1">
+<li><p><strong>中断嵌套</strong><br />
+中断嵌套的层次可以有多层，越在<strong>里层</strong>的中断请求越急迫，优先级越高，因此优先得到 CPU 的服务。</p>
+<p>计算机需要能<strong>保护多个断点</strong>。在 CPU 进入某个中断服务程序时，系统必须处于<strong>开中断状态</strong>。</p></li>
+<li><p><strong>允许与禁止中断</strong></p>
+<ul>
+<li><strong>开中断的情况</strong><br />
+</li>
+<li><strong>关中断的情况</strong></li>
+</ul></li>
+<li><p><strong>中断屏蔽</strong><br />
+中断可以用程序方式有选择地封锁部分中断。如果给每个中断源都相应地配备一个中断屏蔽触发器（MASK），则每个中断请求信号在送往判优电路之前，还要受到屏蔽触发器的控制。当<code>MASK = 1</code>，表示对应中断源的请求被屏蔽，可见中断请求触发器和中断屏蔽触发器是成对出现的，只有当 <code>INTR = 1</code>（中断源有中断请求），<code>MASK = 0</code>（该级中断未被屏蔽）时，才充许对应的中断请求送往 CPU。</p></li>
+<li><p><strong>中断升级</strong><br />
+中断响应次序由硬件决定，但中断处理次序可由屏蔽码改变。</p></li>
+</ol>
+<h3 id="中断全过程">9.3.5 中断全过程</h3>
+<p>这里所说的中断全过程，指的是从中断源发出中断请求开始，CPU 响应这个请求，现行程序被中断，转至中断服务程序，直到中断服务程序执行完毕，CPU 再返回原来的程序继续执行的整个过程。</p>
+<h2 id="dma-方式及其接口">9.4 DMA 方式及其接口</h2>
+<h3 id="dma-方式的基本概念">9.4.1 DMA 方式的基本概念</h3>
+<ol type="1">
+<li><p><strong>DMA 方式的特点</strong><br />
+直接存储器访问（Direct Memory Access，DMA）方式是在外设和主存之间开辟一条“直接数据通道”，在<strong>不需要 CPU 干预</strong>也<strong>不需要软件介入</strong>的情况下在两者之间进行的<strong>高速数据传送</strong>方式。</p>
+<p>在 DMA 传送方式中，对数据传送过程进行控制的硬件称为 <strong>DMA 控制器</strong>。设置通过 DMA 控制器项 CPU 发出请求，CPU 响应之后<strong>让出系统总线</strong>给 DMA 控制器。</p>
+<ul>
+<li>主存可被 CPU 与外设访问。</li>
+<li>数据块传送时，主存地址的确定、传送数据的计数等由<strong>硬件</strong>实现。</li>
+<li>主存中有<strong>专用缓冲区</strong>，调配主存与外设的速度。</li>
+<li>CPU 与外设并行，提高效率。</li>
+<li>传送前需要程序<strong>预处理</strong>，结束通过<strong>中断</strong>进行<strong>后处理</strong>。</li>
+</ul></li>
+<li><p><strong>DMA 与中断的区别</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>区别</th>
+<th>DMA</th>
+<th>中断</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>资源</td>
+<td>程序切换、现场</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>CPU 干预</td>
+<td>无需</td>
+<td>需要</td>
+</tr>
+<tr class="odd">
+<td>响应</td>
+<td>每个机器周期结束</td>
+<td>每条指令执行完毕</td>
+</tr>
+<tr class="even">
+<td>优先级</td>
+<td>更高</td>
+<td>更低</td>
+</tr>
+<tr class="odd">
+<td>能力</td>
+<td>可处理异常事件</td>
+<td>只能传送数据块 I/O</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>DMA 方式的应用</strong><br />
+DMA 方式一般应用于<strong>主存</strong>与<strong>高速外设</strong>间的<strong>简单数据传送</strong>。</p></li>
+</ol>
+<h3 id="dma-接口">9.4.2 DMA 接口</h3>
+<ol type="1">
+<li><p><strong>DMA 控制器的功能</strong><br />
+控制系统总线的能力，像 CPU 一样输出地址信号，收发控制、数据信号。</p>
+<ul>
+<li>接受 DMA 请求，发出总线请求。</li>
+<li>CPU 响应总线请求，发出响应信号。</li>
+<li>确定传送数据的主存单元地址和传送长度自动修改地址计数与传送长度计数。</li>
+<li>规定数据在主存与外设间的传送方向执行数据传送。</li>
+<li>向 CPU 报告 DMA 操作结束。</li>
+</ul></li>
+<li><p><strong>DMA 控制器的基本组成</strong></p>
+<ul>
+<li>主存地址计数器</li>
+<li>传送长度计数器</li>
+<li>数据缓冲寄存器</li>
+<li>DMA 请求触发器</li>
+<li>控制状态逻辑</li>
+<li>中断机构</li>
+</ul></li>
+<li><p><strong>DMA 控制线的引出线</strong></p>
+<ul>
+<li>地址总线</li>
+<li>数据总线</li>
+<li>控制数据传送方式的信号线
+<ul>
+<li>存储器读 <span class="math inline">\(\overline{MEMR}\)</span></li>
+<li>存储器写 <span class="math inline">\(\overline{MEMW}\)</span></li>
+<li>外设读 <span class="math inline">\(\overline{IOR}\)</span></li>
+<li>外设写 <span class="math inline">\(\overline{IOW}\)</span></li>
+</ul></li>
+<li>控制器与外设间的联络信号线
+<ul>
+<li>DMA 请求信号 DREQ</li>
+<li>DMA 响应信号 DACK</li>
+</ul></li>
+<li>控制器与 CPU 间的联络信号线
+<ul>
+<li>总线请求信号 HRQ</li>
+<li>总线响应信号 HLDA</li>
+</ul></li>
+</ul></li>
+<li><p><strong>DMA 控制器的连接与传送</strong><br />
+<img src="/image/icon/loading.gif" data-original="/image/25-12-2-2-CompOrg-9-io-sys/1765886352149.webp" alt="1765886352149" /></p></li>
+</ol>
+<h3 id="dma-传送方法与传送过程">9.4.3 DMA 传送方法与传送过程</h3>
+<ol type="1">
+<li><strong>DMA 传送方法</strong>
+<ul>
+<li><p><strong>CPU 停止访问主存法</strong><br />
+使用 DMA 信号迫使 CPU 让出总线。</p></li>
+<li><p><strong>存储器分时法</strong><br />
+把原来的存储周期分为两个时间片，一个给 CPU，一个给 DMA。</p></li>
+<li><p><strong>周期挪用法</strong></p>
+<ul>
+<li>当外部无 DMA 请求时，CPU 按程序要求访问主存。</li>
+<li>有 DMA 请求时，CPU 让出一个周期给 DMA。</li>
+<li>高速主机常用。</li>
+</ul></li>
+</ul></li>
+<li><strong>DMA 传送过程</strong>
+<ul>
+<li><p><strong>DMA 预处理</strong><br />
+CPU 执行 I/O 指令测试外设状态、寄存器置初值、规定传送方向、启动外设等。</p></li>
+<li><p><strong>数据传送</strong><br />
+</p></li>
+<li><p><strong>DMA 后处理</strong><br />
+长度计数器为 0 时，DMA 控制器向 CPU 发出中断请求。</p></li>
+</ul></li>
+</ol>
+<h2 id="通道控制方式">9.5 通道控制方式</h2>
+<ol type="1">
+<li><p><strong>与 DMA 的区别</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>区别</th>
+<th>通道</th>
+<th>DMA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>本质</td>
+<td>具有特殊功能的处理器</td>
+<td>纯硬件控制逻辑</td>
+</tr>
+<tr class="even">
+<td>能力</td>
+<td>许多设备</td>
+<td>少数设备</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>通道的功能</strong></p>
+<ul>
+<li>接收 CPU I/O 指令，与外设进行联系。</li>
+<li>取出通道程序通道指令，译码后向设备与设备控制器发送命令。</li>
+<li>实施主存与外设间数据传送。</li>
+<li>从外设获取状态信息，形成并保存通道状态信息，送到主存指定单元供 CPU 使用。</li>
+<li>报告外设与通道的中断次序给 CPU。</li>
+</ul></li>
+</ol>
+<h3 id="通道类型与结构">9.5.2 通道类型与结构</h3>
+<ol type="1">
+<li><p><strong>通道类型</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>结合型通道</td>
+<td>与 CPU 共用某些设备</td>
+</tr>
+<tr class="even">
+<td>独立型通道</td>
+<td>与 CPU 独立，功能更强，更昂贵</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>字节多路通道</td>
+<td>连接与管理多台低速设备，以<strong>字节交叉方式</strong>传输信息</td>
+</tr>
+<tr class="even">
+<td>选择通道</td>
+<td>在一段时间内通道只能选择<strong>一台设备</strong>进行数据传送</td>
+</tr>
+<tr class="odd">
+<td>数组多路通道</td>
+<td>当某设备进行数据传送时，通道只为该设备服务；当设备在执行辅助操作时，通道暂时断开与这个设备的连接，<strong>挂起该设备的通道程序</strong>，去为其他设备服务</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>通道的结构</strong><br />
+| 结构 | 作用 | CPU 类似部件 |<br />
+| — | — | — |<br />
+| CCWR（通道命令字寄存器） | 存放 CCW（通道命令字） | IR |<br />
+| CAWR（通道地址字寄存器） | 指出 CCW 在主存中的地址 | MAR |<br />
+| CSWR（通道状态字寄存器） | 记录通道程序执行后的通道与响应设备信息，称为 CSW（通道状态字） | PSWR |</p></li>
+</ol>
+<h3 id="通道程序">9.5.3 通道程序</h3>
+<h3 id="通道工作过程">9.5.4 通道工作过程</h3>
+<ul>
+<li>用户使用访管指令进入管道程序，CPU 通过管理程序启动一个通道程序，启动通道。</li>
+<li>通道执行通道程序，完成指定数据输入输出。</li>
+<li>程序结束后向 CPU 发出中断请求，CPU 响应后进入操作系统调用管理程序。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/01/05/25-12-2-2-CompOrg-9-io-sys/">https://remy-campanella.github.io/2026/01/05/25-12-2-2-CompOrg-9-io-sys/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/01/05/25-12-2-2-CompOrg-8-ext-device/" title="【计算机组成原理】 第八章 外部设备"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【计算机组成原理】 第八章 外部设备</div></div><div class="info-2"><div class="info-item-1">8.1 外部设备概述 8.1.1 外部设备的分类  输入输出设备 如键盘、鼠标、显示器、打印机等。此外还有复合型的输入输出设备。 辅助存储器 如硬盘。 终端设备 由输入设备、输出设备、终端控制器组成。可进行输入输出，与计算机通信线路通信，有的可进行数据处理。 过程控制设备 如 AD/DA 与相应检测设备。  8.1.2 外部设备的地位和作用 教材 232 / 250 页慢走不送~ ¯\_(ツ)_/¯ </div></div></div></a><a class="pagination-related" href="/2026/01/05/25-12-16-1-CompOrg-10-review/" title="【计算机组成原理】 复习要点"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【计算机组成原理】 复习要点</div></div><div class="info-2"><div class="info-item-1">题型 简答题、计算题。 选一些计算题练习，课后习题。 闭卷考试。 实验报告：期末之前。 难度 较难，低于考研。 第一章 概论  冯 · 诺伊曼计算机 计算机基本组成  第二章 数据的机器层次表示  原码补码反码真值，互相转换 定点数、浮点数范围与典型值 浮点数进制与格式转换（IEEE 754） 字符编码 十进制数编码 奇偶校验  第三章 指令系统  指令格式 寻址方式 扩展操作码 自底向上的堆栈  第四章 数值的及其运算  8 种加减法 溢出检测 先行进位加法器的原理推导与设计 十进制数的加减法运算原理  第五章 存储系统和结构  RAM、ROM 的概念与类型 数据在主存中的存放方法 主存储器的连接、控制、寻址、扩展、刷新 主存的校验 存储系统的扩展  第六章 中央处理器  控制器的基本组成 时序系统 指令执行的过程 微程序的执行过程 取指周期的微操作，CPU 的数据通路图  第七章 总线  总线仲裁 总线定时控制  第八章 外部设备  滚木  第九章 输入输出...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/" title="【计算机组成原理】 第四章 数值的机器运算"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第四章 数值的机器运算</div></div><div class="info-2"><div class="info-item-1">4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i = A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行          种类 方法 优点 缺点     串行加法器 数据逐位送入一个加法器进行计算 器件少、成本低 速度慢   并行加法器 由多个全加器组成，位数多少取决于字长 速度高 加法运算最长时间问题     4.2.2 进位的产生与传递 设进位传递函数 \[ P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\\\ G_i = A_iB_i \] 则 \[ C_n = G_n + P_nC_{n - 1} \] 串行进位加法器的总延迟时间与字长成正比。设一级与门、或门的延迟时间为\(ty\)，每一级全加器延迟为\(2ty\)，从\(C_0\)到\(C_N\)的最长时间...</div></div></div></a><a class="pagination-related" href="/2026/01/05/25-11-11-1-CompOrg-6-cpu/" title="【计算机组成原理】 第六章 中央处理器"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-05</div><div class="info-item-2">【计算机组成原理】 第六章 中央处理器</div></div><div class="info-2"><div class="info-item-1">6.1 中央处理器的功能和组成 6.1.1 CPU 的功能 程序运行过程中，在计算机的各部分之间流动的指令和数据形成指令流和数据流。  指令流：CPU 的指令序列。 数据流：根据指令操作要求依次存取的数据的序列。  6.1.2 CPU 中的主要寄存器  通用寄存器  累加寄存器（Acc） Acc 用于暂时存放 ALU 运算的结果信息。  专用寄存器  程序计数器（PC）  顺序执行时，PC 内容每次自增（自动或运算器实现）。 改变执行顺序时，将转移的目标地址送往寄存器。有时还要保留改变前的内容，以便返回时使用。  指令寄存器（IR） 存放从存储器中取出的指令。 执行指令时，IR 内容不可变。 存储器数据寄存器（MDR） 暂存由主存储器读出（或将写入主存）的一条指令或数据字。 存储器地址寄存器（MAR） 当前 CPU 访问的主存单元地址。CPU 与主存有速度差别，MAR 可用于调和速度差异。 程序状态字寄存器（状态标志寄存器，PSWR） 存放程序状态字（PSR）。PSR 的位数往往等于机器字长。   6.1.3 CPU...</div></div></div></a><a class="pagination-related" href="/2026/01/05/25-11-25-1-CompOrg-7-bus/" title="【计算机组成原理】 第七章 总线"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-05</div><div class="info-item-2">【计算机组成原理】 第七章 总线</div></div><div class="info-2"><div class="info-item-1">7.1 总线概述 总线是一组能为多个部件分时共享的公共信息传送线路。  共享  总线上可挂载多个部件  分时  同一时刻总线上只能有一个部件发送信息。   7.1.1 总线的基本概念  分时共享的过程  总线空闲，所有部件处于高阻态。 通信时，  三态门和总线电路 三态门有逻辑 0、逻辑 1、高阻态（开路）三态。三态门有一个控制端 \(G\)/\(\bar{G}\)，控制端有效时功能正常，否则为高阻态。 总线事务 总线上一对设备间一次信息交换称为一次总线事务。 总线使用权  7.1.2 总线的分类  按功能层次分类 按数据线的多少分类  并行总线 串行总线   7.1.3 总线的组成与性能指标  总线结构  单总线 双总线 三总线  总线特性 总线的性能指标  总线宽度 总线的线数，影响地址线与数据线的数量。 总线带宽 最大数据传输速率（字节/秒）。 \[ B = \frac{WF}{N} \] \(W\)—数据总线宽度；\(F\)—时钟频率；\(N\)—一次数据传输的时钟周期...</div></div></div></a><a class="pagination-related" href="/2025/12/24/25-11-26-2-CompOrg-5-mem/" title="【计算机组成原理】 第五章 存储系统"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-24</div><div class="info-item-2">【计算机组成原理】 第五章 存储系统</div></div><div class="info-2"><div class="info-item-1">5.1 存储系统的组成 5.1.1 存储器分类  按存储器在计算机中的作用分          名称 作用 成本 性能     高速存储缓冲器（Cache） 位于主存与 CPU 之间，存放正在执行的程序段与数据 高 速度与 CPU 匹配，容量小   主存储器 存放计算机运行期间所需要的程序和数据，CPU 和直接随机读写  速度较高，具有一定容量   辅助存储器（外存储器、后援存储器） 存放当前暂不运行的程序和数据以及永久保存的信息 很低 容量大，速度较慢    按存取方式分类         名称 特性 用途     随机存取存储器（RAM） CPU 对存储器内容随机读取，对任何一个单元读写时间相同，使用灵活 主存、高速缓冲存储器   只读存储器（ROM） 内容只读不写，断电不消失 BIOS、存入固定子程序、函数发生器、字符发生器、微程序控制器的控制存储器   顺序存储存储器（SAM） 内容只能按某种顺序读取，读写时间与位置有关 磁带机  ...</div></div></div></a><a class="pagination-related" href="/2026/01/05/25-12-16-1-CompOrg-10-review/" title="【计算机组成原理】 复习要点"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-05</div><div class="info-item-2">【计算机组成原理】 复习要点</div></div><div class="info-2"><div class="info-item-1">题型 简答题、计算题。 选一些计算题练习，课后习题。 闭卷考试。 实验报告：期末之前。 难度 较难，低于考研。 第一章 概论  冯 · 诺伊曼计算机 计算机基本组成  第二章 数据的机器层次表示  原码补码反码真值，互相转换 定点数、浮点数范围与典型值 浮点数进制与格式转换（IEEE 754） 字符编码 十进制数编码 奇偶校验  第三章 指令系统  指令格式 寻址方式 扩展操作码 自底向上的堆栈  第四章 数值的及其运算  8 种加减法 溢出检测 先行进位加法器的原理推导与设计 十进制数的加减法运算原理  第五章 存储系统和结构  RAM、ROM 的概念与类型 数据在主存中的存放方法 主存储器的连接、控制、寻址、扩展、刷新 主存的校验 存储系统的扩展  第六章 中央处理器  控制器的基本组成 时序系统 指令执行的过程 微程序的执行过程 取指周期的微操作，CPU 的数据通路图  第七章 总线  总线仲裁 总线定时控制  第八章 外部设备  滚木  第九章 输入输出...</div></div></div></a><a class="pagination-related" href="/2026/01/05/25-12-2-2-CompOrg-8-ext-device/" title="【计算机组成原理】 第八章 外部设备"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-05</div><div class="info-item-2">【计算机组成原理】 第八章 外部设备</div></div><div class="info-2"><div class="info-item-1">8.1 外部设备概述 8.1.1 外部设备的分类  输入输出设备 如键盘、鼠标、显示器、打印机等。此外还有复合型的输入输出设备。 辅助存储器 如硬盘。 终端设备 由输入设备、输出设备、终端控制器组成。可进行输入输出，与计算机通信线路通信，有的可进行数据处理。 过程控制设备 如 AD/DA 与相应检测设备。  8.1.2 外部设备的地位和作用 教材 232 / 250 页慢走不送~ ¯\_(ツ)_/¯ </div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">70</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站介绍帖、自我介绍帖内容已移至“关于”页面，目录帖内容已移至“分类”页面。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E4%B8%8E%E5%A4%96%E9%83%A8%E8%AE%BE%E5%A4%87%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.</span> <span class="toc-text">9.1 主机与外部设备的连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.1.</span> <span class="toc-text">9.1.1 输入输出接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%8A%9F%E8%83%BD%E4%B8%8E%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90"><span class="toc-number">1.2.</span> <span class="toc-text">9.1.2 接口的功能与基本组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%96%E8%AE%BE%E7%9A%84%E8%AF%86%E5%88%AB%E4%B8%8E%E7%AB%AF%E5%8F%A3%E5%AF%BB%E5%9D%80"><span class="toc-number">1.3.</span> <span class="toc-text">9.1.3 外设的识别与端口寻址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E4%BF%A1%E6%81%AF%E7%9A%84%E6%8E%A7%E5%88%B6%E6%96%B9%E5%BC%8F"><span class="toc-number">1.4.</span> <span class="toc-text">9.1.4 输入输出信息的控制方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%85%B6%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">9.2 程序查询方式及其接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">9.2.1 程序查询方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E6%9F%A5%E8%AF%A2%E6%96%B9%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.2.</span> <span class="toc-text">9.2.2 程序查询方式接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F%E5%92%8C%E7%A8%8B%E5%BA%8F%E4%B8%AD%E6%96%AD%E6%96%B9%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">9.3 中断系统和程序中断方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text">9.3.1 中断的基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E8%AF%B7%E6%B1%82%E5%92%8C%E4%B8%AD%E6%96%AD%E5%88%A4%E4%BC%98"><span class="toc-number">3.2.</span> <span class="toc-text">9.3.2 中断请求和中断判优</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%93%8D%E5%BA%94%E4%B8%8E%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text">9.3.3 中断响应与中断处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E9%87%8D%E4%B8%AD%E6%96%AD%E4%B8%8E%E4%B8%AD%E6%96%AD%E5%B1%8F%E8%94%BD"><span class="toc-number">3.4.</span> <span class="toc-text">9.3.4 多重中断与中断屏蔽</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%85%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">3.5.</span> <span class="toc-text">9.3.5 中断全过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dma-%E6%96%B9%E5%BC%8F%E5%8F%8A%E5%85%B6%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.</span> <span class="toc-text">9.4 DMA 方式及其接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dma-%E6%96%B9%E5%BC%8F%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">4.1.</span> <span class="toc-text">9.4.1 DMA 方式的基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dma-%E6%8E%A5%E5%8F%A3"><span class="toc-number">4.2.</span> <span class="toc-text">9.4.2 DMA 接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dma-%E4%BC%A0%E9%80%81%E6%96%B9%E6%B3%95%E4%B8%8E%E4%BC%A0%E9%80%81%E8%BF%87%E7%A8%8B"><span class="toc-number">4.3.</span> <span class="toc-text">9.4.3 DMA 传送方法与传送过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E6%8E%A7%E5%88%B6%E6%96%B9%E5%BC%8F"><span class="toc-number">5.</span> <span class="toc-text">9.5 通道控制方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%BB%93%E6%9E%84"><span class="toc-number">5.1.</span> <span class="toc-text">9.5.2 通道类型与结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E7%A8%8B%E5%BA%8F"><span class="toc-number">5.2.</span> <span class="toc-text">9.5.3 通道程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B"><span class="toc-number">5.3.</span> <span class="toc-text">9.5.4 通道工作过程</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/01/05/25-12-16-1-CompOrg-10-review/" title="【计算机组成原理】 复习要点"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 复习要点"/></a><div class="content"><a class="title" href="/2026/01/05/25-12-16-1-CompOrg-10-review/" title="【计算机组成原理】 复习要点">【计算机组成原理】 复习要点</a><time datetime="2026-01-05T03:05:13.000Z" title="发表于 2026-01-05 11:05:13">2026-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/05/25-12-2-2-CompOrg-9-io-sys/" title="【计算机组成原理】 第九章 输入输出系统"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 第九章 输入输出系统"/></a><div class="content"><a class="title" href="/2026/01/05/25-12-2-2-CompOrg-9-io-sys/" title="【计算机组成原理】 第九章 输入输出系统">【计算机组成原理】 第九章 输入输出系统</a><time datetime="2026-01-05T03:03:19.257Z" title="发表于 2026-01-05 11:03:19">2026-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/05/25-12-2-2-CompOrg-8-ext-device/" title="【计算机组成原理】 第八章 外部设备"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 第八章 外部设备"/></a><div class="content"><a class="title" href="/2026/01/05/25-12-2-2-CompOrg-8-ext-device/" title="【计算机组成原理】 第八章 外部设备">【计算机组成原理】 第八章 外部设备</a><time datetime="2026-01-05T02:47:29.000Z" title="发表于 2026-01-05 10:47:29">2026-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/05/25-11-25-1-CompOrg-7-bus/" title="【计算机组成原理】 第七章 总线"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 第七章 总线"/></a><div class="content"><a class="title" href="/2026/01/05/25-11-25-1-CompOrg-7-bus/" title="【计算机组成原理】 第七章 总线">【计算机组成原理】 第七章 总线</a><time datetime="2026-01-05T02:47:06.000Z" title="发表于 2026-01-05 10:47:06">2026-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/01/05/25-11-11-1-CompOrg-6-cpu/" title="【计算机组成原理】 第六章 中央处理器"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 第六章 中央处理器"/></a><div class="content"><a class="title" href="/2026/01/05/25-11-11-1-CompOrg-6-cpu/" title="【计算机组成原理】 第六章 中央处理器">【计算机组成原理】 第六章 中央处理器</a><time datetime="2026-01-05T02:46:54.000Z" title="发表于 2026-01-05 10:46:54">2026-01-05</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.4.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
