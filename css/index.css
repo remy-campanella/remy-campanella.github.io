@@ -2015,7 +2015,7 @@ figure.highlight pre .javascript .function {
 }
 .container pre,
 .container code {
-  font-size: var(--global-font-size);
+  font-size: 100%;
   font-family: Cascadia Code, Noto Serif CJK, sans-serif !important;
   border-radius: 6px;
 }
@@ -2045,7 +2045,7 @@ figure.highlight pre .javascript .function {
 .container figure.highlight figcaption,
 .container figure.highlight .caption {
   padding: 6px 0 2px 14px;
-  font-size: var(--global-font-size);
+  font-size: 100%;
   line-height: 1em;
 }
 .container figure.highlight figcaption a,
@@ -2090,7 +2090,7 @@ figure.highlight pre .javascript .function {
   height: 2.15em;
   background: var(--hltools-bg);
   color: var(--hltools-color);
-  font-size: var(--global-font-size);
+  font-size: 100%;
   overflow: hidden;
 }
 .container .highlight-tools > * {

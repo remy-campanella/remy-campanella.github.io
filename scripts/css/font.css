@@ -6,6 +6,14 @@ body, p {
     font-family: "ZSFT-603", "Noto Serif CJK", serif;
 }
 
+.container {
+    font-size: 17px;
+}
+
+.toc-link {
+    font-size: 17px;
+}
+
 code, pre {
     font-family: "Cascadia Code", "Noto Serif CJK", sans-serif;
     font-variant-ligatures: none;
