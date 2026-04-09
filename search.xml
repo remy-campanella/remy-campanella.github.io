@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>【本站】 本站 Twikoo 评论系统用户协议（Terms of Service）</title>
+      <link href="/2026/04/09/26-4-9-1-HexoDev-twikoo-tos/"/>
+      <url>/2026/04/09/26-4-9-1-HexoDev-twikoo-tos/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>本协议更新于 2026 年 4 月 9 日。</p><p>This agreement was updated on April 9, 2026.</p></blockquote><h2 id="用户协议">用户协议</h2><h3 id="接受条款">1. 接受条款</h3><p>欢迎访问 <a href="/">remy-campanella.github.io</a>（以下简称“本网站”）。本网站由 <strong>Remy Campanella</strong>（以下简称“我们”或“运营方”）运营。</p><p>当你使用本网站的评论功能时，即表示你已阅读、理解并同意受本协议所有条款的约束。如果你不同意本协议的任何内容，请勿使用评论功能。</p><h3 id="服务描述">2. 服务描述</h3><p>本网站提供技术博客、个人随笔等内容分享服务，并允许用户在文章下方发表评论（以下简称“本服务”）。评论功能通过 <strong>Twikoo</strong> 系统实现，评论数据存储于 <strong>MongoDB Atlas</strong> 数据库，网站托管于 <strong>GitHub Pages</strong> 及 <strong>Vercel</strong> 平台。</p><h3 id="用户提供的信息">3. 用户提供的信息</h3><p>使用评论功能时，你需要提供以下信息：</p><ul><li><strong>昵称</strong>（必填）：用于在评论区显示你的身份。</li><li><strong>邮箱地址</strong>（必填）：用于接收回复通知（如开启该功能）及生成 Gravatar 头像。</li><li><strong>评论内容</strong>（必填）：你发表的文字信息。</li></ul><p>此外，系统会自动收集你的 <strong>IP 地址</strong>、浏览器类型、操作系统、评论时间及所在文章页面 URL，用于识别垃圾评论和保障网站安全。</p><h3 id="用户行为规范">4. 用户行为规范</h3><p>你使用本服务时，必须遵守中国法律法规、社会主义制度、国家利益、公民合法权益、公共秩序、社会道德风尚和信息真实性等“七条底线”及公序良俗。</p><p>你不得利用本服务制作、复制、发布、传播含有下列内容的信息：</p><ul><li>反对宪法所确定的基本原则的；</li><li>危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；</li><li>损害国家荣誉和利益的；</li><li>煽动民族仇恨、民族歧视，破坏民族团结的；</li><li>破坏国家宗教政策，宣扬邪教和封建迷信的；</li><li>散布谣言，扰乱社会秩序，破坏社会稳定的；</li><li>散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；</li><li>侮辱或者诽谤他人，侵害他人合法权益的；</li><li>含有法律、行政法规禁止的其他内容的。</li></ul><p>同时，你不得发布任何形式的垃圾信息、广告、恶意代码，或进行任何可能破坏本网站正常运行的行为。</p><h3 id="内容审核与管理">5. 内容审核与管理</h3><p>我们会对评论内容进行审核。对于违反本协议的评论，我们有权在不通知用户的情况下采取<strong>删除、隐藏</strong>等处理措施。对于情节严重的用户（如多次发布违规内容），我们有权<strong>屏蔽其 IP 地址</strong>或<strong>拒绝其后续评论</strong>。</p><h3 id="账号与身份说明">6. 账号与身份说明</h3><p>本评论系统<strong>不设传统账号注册与登录</strong>。你的身份由<strong>昵称 + 邮箱地址</strong>共同标识。同一昵称和邮箱组合可被视为同一“身份”。你需对自己使用的昵称和邮箱组合下的所有评论行为负责。</p><p><strong>请注意</strong>：由于没有密码或手机号验证机制，任何人使用与你相同的昵称和邮箱都可能“冒充”你。我们不对因昵称/邮箱被他人冒用而产生的后果承担责任。</p><h3 id="知识产权">7. 知识产权</h3><ul><li>你保留你在评论中发布的内容的所有权。</li><li>当你发布评论，即表示你授予本网站一个全球范围内、免许可费、非独家、可再许可（通过托管平台和 CDN 分发）的权利，以使用、复制、修改、改编、发布、翻译你发布的内容，以便在网站上展示和传播。</li><li>本网站的整体设计、源代码等内容的知识产权归运营方所有。</li></ul><h3 id="免责声明">8. 免责声明</h3><ul><li>评论内容仅代表用户个人观点，不代表本网站立场。</li><li>我们不对评论的准确性、可靠性或完整性作任何保证。</li><li>由于技术架构涉及 GitHub Pages、Vercel、MongoDB Atlas 等第三方平台，我们将尽商业上合理努力保障服务稳定，但不保证服务不会中断或完全没有错误。</li><li>在法律允许的最大范围内，我们不对因使用或无法使用本服务而产生的任何间接、附带、特殊或后果性损害承担责任。</li></ul><h3 id="协议修改">9. 协议修改</h3><p>我们有权根据需要修改本协议。修改后的协议会在本页面发布，并注明最后更新日期。如你在修改后继续使用服务，即视为你接受修改。</p><h3 id="法律适用与争议解决">10. 法律适用与争议解决</h3><p>本协议的订立、执行和解释均适用中华人民共和国法律。因本协议产生的任何争议，双方应友好协商；协商不成的，任何一方均可将争议提交至运营方所在地有管辖权的人民法院诉讼解决。</p><h3 id="联系我们">11. 联系我们</h3><p>如有任何疑问，请通过以下方式联系我们：</p><ul><li>邮箱：<a href="mailto:remy_campanella@yeah.net">remy_campanella@yeah.net</a></li></ul><hr /><h2 id="配套的隐私政策">配套的隐私政策</h2><h3 id="我们收集的信息">1. 我们收集的信息</h3><p>当您使用本网站评论功能时，我们会收集：</p><ul><li><strong>您主动提供的信息</strong>：昵称、邮箱地址、评论内容。</li><li><strong>自动收集的信息</strong>：IP 地址、浏览器类型、操作系统、评论时间、评论所在文章 URL。</li></ul><h3 id="信息的使用">2. 信息的使用</h3><ul><li>昵称和邮箱用于显示评论者身份及生成头像。</li><li>邮箱地址可用于发送回复通知（如果启用）。</li><li>IP 地址等信息用于识别和拦截垃圾评论、防止恶意攻击。</li></ul><h3 id="信息的存储">3. 信息的存储</h3><p>所有数据存储在 <strong>MongoDB Atlas</strong> 数据库中，该数据库可能部署在全球多个区域。您的信息可能会被传输至您所在国家/地区以外的服务器。</p><h3 id="您的权利">4. 您的权利</h3><p>您可以随时要求删除您发布的评论。如需彻底删除与您邮箱关联的所有数据，请通过上述邮箱联系我们。</p><h3 id="联系我们-1">5. 联系我们</h3><p>邮箱：<a href="mailto:remy_campanella@yeah.net">remy_campanella@yeah.net</a></p><hr /><h2 id="terms-of-service">Terms of Service</h2><h3 id="acceptance-of-terms">1. Acceptance of Terms</h3><p>Welcome to <a href="/">remy-campanella.github.io</a> (the “Website”). The Website is operated by <strong>Remy Campanella</strong> (“we”, “us”, or “our”). By using the comment feature on this Website, you agree to be bound by all terms of this Agreement. If you do not agree to any part of these terms, please do not use the comment feature.</p><h3 id="service-description">2. Service Description</h3><p>The Website provides technical blogs, personal essays, and other content, and allows users to post comments below articles (the “Service”). The comment feature is powered by <strong>Twikoo</strong>, comment data is stored in a <strong>MongoDB Atlas</strong> database, and the Website is hosted on <strong>GitHub Pages</strong> and <strong>Vercel</strong>.</p><h3 id="information-you-provide">3. Information You Provide</h3><p>To use the comment feature, you need to provide the following information:</p><ul><li><strong>Nickname</strong> (required): displayed as your identity in the comment section.</li><li><strong>Email address</strong> (required): used to send reply notifications (if enabled) and to generate a Gravatar avatar.</li><li><strong>Comment content</strong> (required): the text you post.</li></ul><p>Additionally, the system automatically collects your <strong>IP address</strong>, browser type, operating system, timestamp of the comment, and the URL of the article where the comment is posted. This information is used to identify spam and ensure the security of the Website.</p><h3 id="user-conduct">4. User Conduct</h3><p>When using the Service, you must comply with all applicable laws and regulations, as well as generally accepted social norms and public order. You must not use the Service to post, transmit, or disseminate any content that:</p><ul><li>violates any applicable law or regulation;</li><li>infringes any intellectual property or other rights of any third party;</li><li>contains hate speech, harassment, defamation, obscenity, or incitement to violence;</li><li>contains spam, malware, or any material that could disrupt the normal operation of the Website.</li></ul><p>We reserve the right to remove any content that violates this Agreement.</p><h3 id="content-moderation">5. Content Moderation</h3><p>We review comment content. For comments that violate this Agreement, we have the right to <strong>delete or hide</strong> them without prior notice. For serious or repeated violations (e.g., repeatedly posting prohibited content), we may <strong>block your IP address</strong> or <strong>refuse future comments</strong> from you.</p><h3 id="account-and-identity-explanation">6. Account and Identity Explanation</h3><p>This comment system <strong>does not have traditional account registration or login</strong>. Your identity is identified by the combination of <strong>nickname + email address</strong>. The same nickname‑email combination can be considered the same “identity”. You are responsible for all comments made using your nickname and email address combination.</p><p><strong>Please note</strong>: Because there is no password or phone verification, anyone using the same nickname and email as you may impersonate you. We are not responsible for any consequences arising from the misuse of your nickname/email by others.</p><h3 id="intellectual-property">7. Intellectual Property</h3><ul><li>You retain ownership of the content you post in comments.</li><li>By posting a comment, you grant the Website a worldwide, royalty‑free, non‑exclusive, sub‑licensable (through hosting platforms and CDNs) license to use, reproduce, modify, adapt, publish, and translate your content for the purpose of displaying and distributing it on the Website.</li><li>The overall design and source code of the Website are owned by us.</li></ul><h3 id="disclaimer">8. Disclaimer</h3><ul><li>Comments reflect only the views of their authors and do not represent our views or those of the Website.</li><li>We do not warrant the accuracy, reliability, or completeness of any comment.</li><li>Due to the technical architecture involving third‑party platforms such as GitHub Pages, Vercel, and MongoDB Atlas, we will use commercially reasonable efforts to ensure service stability, but do not guarantee that the Service will be uninterrupted or error‑free.</li><li>To the maximum extent permitted by law, we are not liable for any indirect, incidental, special, or consequential damages arising from the use or inability to use the Service.</li></ul><h3 id="modification-of-terms">9. Modification of Terms</h3><p>We may revise this Agreement from time to time. Revised terms will be posted on this page with an updated “last modified” date. Your continued use of the Service after any changes constitutes your acceptance of the new terms.</p><h3 id="governing-law-and-dispute-resolution">10. Governing Law and Dispute Resolution</h3><p>This Agreement is governed by and construed in accordance with the laws of the People’s Republic of China. Any dispute arising from or relating to this Agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may submit the dispute to the competent court in the jurisdiction where we are located.</p><h3 id="contact-us">11. Contact Us</h3><p>If you have any questions, please contact us at:</p><ul><li>Email: <a href="mailto:remy_campanella@yeah.net">remy_campanella@yeah.net</a></li></ul><hr /><h2 id="privacy-policy">Privacy Policy</h2><h3 id="information-we-collect">1. Information We Collect</h3><p>When you use the comment feature on this Website, we collect:</p><ul><li><strong>Information you provide voluntarily</strong>: nickname, email address, comment content.</li><li><strong>Information collected automatically</strong>: IP address, browser type, operating system, timestamp of the comment, URL of the article where the comment is posted.</li></ul><h3 id="how-we-use-your-information">2. How We Use Your Information</h3><ul><li>Nickname and email address are used to identify commenters and generate avatars.</li><li>Email address may be used to send reply notifications (if enabled).</li><li>IP address and similar data are used to identify and block spam, as well as to prevent malicious attacks.</li></ul><h3 id="storage-of-your-information">3. Storage of Your Information</h3><p>All data is stored in a <strong>MongoDB Atlas</strong> database, which may be deployed in multiple regions around the world. Your information may be transferred to servers outside your country of residence.</p><h3 id="your-rights">4. Your Rights</h3><p>You may request deletion of any comment you have posted at any time. If you wish to have all data associated with your email address permanently removed, please contact us using the email address below.</p><h3 id="contact-us-1">5. Contact Us</h3><p>Email: <a href="mailto:remy_campanella@yeah.net">remy_campanella@yeah.net</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 本站 </category>
+          
+          <category> 更新 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【实习实训】 第五节 MapReduce 编程模型</title>
       <link href="/2026/04/02/26-4-1-1-Intern-5-mapred/"/>
       <url>/2026/04/02/26-4-1-1-Intern-5-mapred/</url>
@@ -24,13 +45,13 @@
       
         <tags>
             
-            <tag> Hadoop </tag>
-            
-            <tag> 大数据 </tag>
-            
             <tag> 实习实训 </tag>
             
             <tag> MapReduce </tag>
+            
+            <tag> Hadoop </tag>
+            
+            <tag> 大数据 </tag>
             
             <tag> 分布式计算 </tag>
             
@@ -110,21 +131,21 @@
       
         <tags>
             
-            <tag> HDFS </tag>
+            <tag> 实习实训 </tag>
             
             <tag> Hadoop </tag>
             
-            <tag> 分布式存储 </tag>
-            
             <tag> 大数据 </tag>
+            
+            <tag> HDFS </tag>
+            
+            <tag> 分布式存储 </tag>
             
             <tag> HDFS 架构 </tag>
             
             <tag> NameNode </tag>
             
             <tag> HDFS Shell </tag>
-            
-            <tag> 实习实训 </tag>
             
         </tags>
       
@@ -155,8 +176,6 @@
             
             <tag> Python </tag>
             
-            <tag> 实习实训 </tag>
-            
             <tag> 网络爬虫 </tag>
             
             <tag> 数据采集 </tag>
@@ -166,6 +185,8 @@
             <tag> requests </tag>
             
             <tag> HTML解析 </tag>
+            
+            <tag> 实习实训 </tag>
             
         </tags>
       
@@ -313,9 +334,9 @@
             
             <tag> 学习笔记 </tag>
             
-            <tag> 编译原理 </tag>
-            
             <tag> Python </tag>
+            
+            <tag> 编译原理 </tag>
             
             <tag> 词法分析 </tag>
             
