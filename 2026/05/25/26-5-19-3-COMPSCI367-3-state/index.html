@@ -1,0 +1,584 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Example 1: Robot in Grid World A robot is navigating a room. The space in which the robot can move is depicted as a “grid” (turning a continuous space into a discrete set of coordinates). The robot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/05/25/26-5-19-3-COMPSCI367-3-state/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Example 1: Robot in Grid World A robot is navigating a room. The space in which the robot can move is depicted as a “grid” (turning a continuous space into a discrete set of coordinates). The robot">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci367.webp">
+<meta property="article:published_time" content="2026-05-25T12:02:18.000Z">
+<meta property="article:modified_time" content="2026-05-25T12:10:28.420Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="奥克兰大学—西南大学合作课程">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="状态空间搜索">
+<meta property="article:tag" content="问题求解">
+<meta property="article:tag" content="状态表示">
+<meta property="article:tag" content="转换模型">
+<meta property="article:tag" content="目标测试">
+<meta property="article:tag" content="路径成本">
+<meta property="article:tag" content="机器人导航">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci367.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search",
+  "url": "https://remy-campanella.github.io/2026/05/25/26-5-19-3-COMPSCI367-3-state/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci367.webp",
+  "datePublished": "2026-05-25T12:02:18.000Z",
+  "dateModified": "2026-05-25T12:10:28.420Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/05/25/26-5-19-3-COMPSCI367-3-state/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">97</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">106</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci367.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-25T12:02:18.000Z" title="发表于 2026-05-25 20:02:18">2026-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-25T12:10:28.420Z" title="更新于 2026-05-25 20:10:28">2026-05-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-367-Artificial-Intelligence/">COMPSCI 367 Artificial Intelligence</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="example-1-robot-in-grid-world">Example 1: Robot in Grid World</h2>
+<p>A robot is navigating a room. The space in which the robot can move is depicted as a “grid” (turning a continuous space into a discrete set<br />
+of coordinates).</p>
+<p>The robot starts at location <span class="math inline">\(S\)</span> and must reach location <span class="math inline">\(G\)</span>. The robot can move forward, backward, turn left or right, but cannot pass through walls or obstacles.</p>
+<p>Suppose the robot knows the layout of the room. How can the robot perform its task?</p>
+<p>Question: How can we model the task abstractly?</p>
+<h2 id="problem-solving-by-search">Problem Solving by Search</h2>
+<pre class="mermaid">graph LR
+
+A["Real-world problem"] 
+B["State-space model"] 
+C["Search algorithm"] 
+D["Solution path"]
+
+A --> B --> C --> D</pre>
+<p><strong>Representation</strong> is a fundamental AI task: choosing what information the algorithm will be allowed to reason about.</p>
+<p>Formulating AI problems as <strong>states</strong>, <strong>actions</strong>, <strong>transitions</strong>, <strong>goal tests</strong>, and <strong>path costs</strong>.</p>
+<h2 id="the-search-problem">The Search Problem</h2>
+<dl>
+<dt>Search Problem</dt>
+<dd>
+A search problem is specified by a <strong>state representation</strong>, an <strong>initial state</strong>, <strong>actions</strong>, a <strong>transition model</strong>, a <strong>goal test</strong>, and a <strong>path-cost function</strong>.
+</dd>
+</dl>
+<h3 id="state">State</h3>
+<dl>
+<dt>State</dt>
+<dd>
+A state is an abstraction of the <strong>relevant information</strong> needed to describe the <strong>current situation</strong> for the purpose of solving the problem.
+</dd>
+</dl>
+<p>A state is only <strong>an abstraction</strong> of the world. It encodes the information that the model needs.</p>
+<h3 id="transition-model">Transition Model</h3>
+<dl>
+<dt>Transcition Model</dt>
+<dd>
+The transition model specifies the state that results from taking an action in a state<br />
+<span class="math display">\[
+\mathsf{Result}(s, a) = s&#39;
+\]</span>
+</dd>
+</dl>
+<h3 id="goal-test">Goal Test</h3>
+<dl>
+<dt>Goal Test</dt>
+<dd>
+The goal test checks whether a state is successful.<br />
+<span class="math display">\[
+\mathsf{GoalTest}(s) \in \{\text{True}, \text{False}\}
+\]</span>
+</dd>
+</dl>
+<h3 id="path-cost">Path Cost</h3>
+<dl>
+<dt>Path Cost</dt>
+<dd>
+The path cost measures the total cost of an action sequence.<br />
+<span class="math display">\[
+\sum_i \mathsf{StepCost}(s_i,a_i, s_{i + 1})
+\]</span>
+</dd>
+</dl>
+<blockquote>
+<p>Do not define the state, goal, or cost before understanding what problem the agent is actually solving.</p>
+</blockquote>
+<h2 id="example-2-route-planning">Example 2: Route Planning</h2>
+<p>A route planner can also be viewed as state-space search problem. The city consists of roads and intersections.</p>
+<p>A user using the route planner starts at a location, and hoping to reach a destination location.</p>
+<p>The user may traverse on specified roads.</p>
+<p>The cost is measured by time, distance, toll, fuel, or risk, etc.</p>
+<blockquote>
+<p>A route planner becomes a precise problem only after we choose the state variables and cost function.</p>
+</blockquote>
+<h2 id="example-3-water-jug-problem">Example 3: Water-Jug Problem</h2>
+<p>You have a 3-litre jug and a 5-litre jug. Initially both are empty. You may fill a jug, empty a jug, or pour from one jug into the other. The goal is to obtain exactly 4 litres in the 5-litre jug.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th>Formulation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State</td>
+<td><span class="math inline">\((x, y)\)</span>, <span class="math inline">\(x\)</span> is the amount of the 3-litre jug and <span class="math inline">\(y\)</span> isthe amount of 5-litre jug. <span class="math inline">\(0 &lt; x &lt; 3\)</span>, <span class="math inline">\(0 &lt; y &lt; 5\)</span>.</td>
+</tr>
+<tr class="even">
+<td>Initial State</td>
+<td><span class="math inline">\((x, y) = (0, 0)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td>Actions</td>
+<td>Fill 3L, fill 5L, empty 3L, empty 5L, pour 3L to 5L, pour 5L to 3L.</td>
+</tr>
+<tr class="even">
+<td>Transcition Model</td>
+<td>Update water amounts according to the selected action.</td>
+</tr>
+<tr class="odd">
+<td>Goal Test</td>
+<td><span class="math inline">\(y = 4\)</span>.</td>
+</tr>
+<tr class="even">
+<td>Path Cost</td>
+<td><span class="math inline">\(1\)</span> per action by default.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example-4-the-8-puzzle">Example 4: The 8-Puzzle</h2>
+<figure>
+<img src="/image/icon/loading.gif" data-original="/image/26-5-19-3-COMPSCI367-3-state/1779709486496.webp" alt="1779709486496" />
+<figcaption aria-hidden="true">1779709486496</figcaption>
+</figure>
+<blockquote>
+<p>For the 8-puzzle, the robot-location idea is not enough: the whole configuration is the state.</p>
+</blockquote>
+<h2 id="example-5-delivery-robot-with-a-package">Example 5: Delivery Robot with a Package</h2>
+<p>A delivery robot starts at R. A package is at P. The destination is<br />
+D. The robot must pick up the package and deliver it.</p>
+<p><strong>Question</strong>: Is the state only the robot’s cell?</p>
+<h2 id="state-sufficiency-the-key-test">State Sufficiency: The Key Test</h2>
+<dl>
+<dt>Sufficiency</dt>
+<dd>
+A state representation is sufficient if it <strong>contains enough information</strong> to determine legal actions, successor states, goal status, and path costs.
+</dd>
+</dl>
+<h2 id="example-6-missionaries-and-cannibals">Example 6: Missionaries and Cannibals</h2>
+<p>Three missionaries and three cannibals must cross a river using a boat that carries at most two people. On either bank, if missionaries are present, they must not be outnumbered by cannibals.</p>
+<h2 id="state-space">State Space</h2>
+<dl>
+<dt>State Space</dt>
+<dd>
+Once the model is defined, the state space graph is the <strong>graph</strong> of <strong>all reachable states and transitions</strong>.
+</dd>
+</dl>
+<ul>
+<li>Vertices are states.</li>
+<li>Edges are transitions by actions.</li>
+<li>A solution is a path from the initial state to goal state.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-original="/image/26-5-19-3-COMPSCI367-3-state/1779709843964.webp" alt="1779709843964" />
+<figcaption aria-hidden="true">1779709843964</figcaption>
+</figure>
+<h3 id="state-space-size">State Space Size</h3>
+<p>Adding each variable can multiply the number of states.</p>
+Suppose a grid has <span class="math inline">\(N\)</span> reachable cells.<br />
+
+<pre class="mermaid">graph TD
+
+A("Position: (row, col) -> N")
+B("+ Key: (rol, col, has_key) -> 2N")
+C("+ Battery(0-100): (rol, col, has_key, battery) -> 202N")
+
+A --> B --> C</pre>
+<p><strong>Good representation is sufficient, but not unnecessarily large.</strong></p>
+<h3 id="search-node">Search Node</h3>
+<dl>
+<dt>Search Node</dt>
+<dd>
+A node stores a <strong>state</strong> plus information about <strong>how the search reached it</strong>: parent node, action, depth, and path cost.
+</dd>
+</dl>
+<p>A node tells us how the search got there.</p>
+<h2 id="modelling-workflow">Modelling Workflow</h2>
+<ul>
+<li>What is the objective?</li>
+<li>What information affects future actions and costs?</li>
+<li>What actions are legal in each state?</li>
+<li>What does each action change?</li>
+<li>What is the goal test?</li>
+<li>What is the path cost?</li>
+</ul>
+<h2 id="quality-criteria-for-state-representations">Quality Criteria for State Representations</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sufficient</td>
+<td>Contains enough information to determine legal actions, costs, successor states, and goal status.</td>
+</tr>
+<tr class="even">
+<td>Compact</td>
+<td>Avoids irrelevant details that unnecessarily enlarge the state space.</td>
+</tr>
+<tr class="odd">
+<td>Computable</td>
+<td>Allows successor states and costs to be generated efficiently.</td>
+</tr>
+<tr class="even">
+<td>Appropriate</td>
+<td>Matches the objective, constraints, and cost function of the actual problem.</td>
+</tr>
+</tbody>
+</table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/05/25/26-5-19-3-COMPSCI367-3-state/">https://remy-campanella.github.io/2026/05/25/26-5-19-3-COMPSCI367-3-state/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="post-meta__tags" href="/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%90%9C%E7%B4%A2/">状态空间搜索</a><a class="post-meta__tags" href="/tags/%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3/">问题求解</a><a class="post-meta__tags" href="/tags/%E7%8A%B6%E6%80%81%E8%A1%A8%E7%A4%BA/">状态表示</a><a class="post-meta__tags" href="/tags/%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%9E%8B/">转换模型</a><a class="post-meta__tags" href="/tags/%E7%9B%AE%E6%A0%87%E6%B5%8B%E8%AF%95/">目标测试</a><a class="post-meta__tags" href="/tags/%E8%B7%AF%E5%BE%84%E6%88%90%E6%9C%AC/">路径成本</a><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AF%BC%E8%88%AA/">机器人导航</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci367.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【程序设计语言 编译原理】 第三章 词法分析</div></div><div class="info-2"><div class="info-item-1">3.1 对于词法分析器的要求 3.1.1 词法分析器的功能和输出形式 词法分析器的功能时输入源程序，输出单词符号。单词符号一般分为：  关键字：有程序语言定义的具有固定意义的标识符。 标识符：用于表示各种名字。 常数 运算符 界符  在程序语言中，关键字、运算符、界符通常固定且数目不大。标识符和常数只有构成规则，使用数目不存在限制。 词法分析器输出的单词符号形式为   (单词种别, 单词符号属性值)   单词种别通常使用整数编码。它主要取决于处理上的方便。  标识符一般统归为一种。 常数则宜按类型（整、实、布尔等）分种。 关键字可将其全体视为一种，也可以一字一种。采用一字一种的分法实际处理起来较为方便。 运算符可采用一符一种的分法，但也可以把具有一定共性的运算符视为一种。 至于界符一般用一符一种的分法。  若一个种别含有多个单词符号，那么应给出种别编码和单词符号属性信息。 3.1.2 词法分析器作为独立子程序 3.2 词法分析器的设计 3.2.1 输入、预处理 词法分析器工作的第一步是输入源程序文本。输入串一般是放在一个缓...</div></div></div></a><a class="pagination-related" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS</div></div><div class="info-2"><div class="info-item-1">The Search Problem graph LR  A("Real-world problem") B("State-space search") C("Frontier search") D("Solution path")  A --> B --> C --> D This lecture We ask how a search algorithm explores the state space once the model has been defined. Generic Graph Search A search problem tells us what can happen. A search algorithm tells us which possible path to examine next. A template for generic graph search  The search begins at the start state. Expanding a node generates successor n...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/12/26-5-12-3-COMPSCI367-1-intro/" title="【COMPSCI 367】 Lecture 1 What is Artificial Intelligence"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">【COMPSCI 367】 Lecture 1 What is Artificial Intelligence</div></div><div class="info-2"><div class="info-item-1">AI in the World Today In-class Quiz: Why Do We Call These Systems Intelligent? There Is No Single Definition of AI Working view for this course: AI is a scientific field that studies the mechanisms of intelligent behaviour and thinking-like problem solving, especially through the analysis and design of agents. What Makes AI Different from Ordinary Software? Agent as an Unifying Framework of AI An agent is a system that perceives its environment and acts upon that environment in pursuit ...</div></div></div></a><a class="pagination-related" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="info-item-2">【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS</div></div><div class="info-2"><div class="info-item-1">The Search Problem graph LR  A("Real-world problem") B("State-space search") C("Frontier search") D("Solution path")  A --> B --> C --> D This lecture We ask how a search algorithm explores the state space once the model has been defined. Generic Graph Search A search problem tells us what can happen. A search algorithm tells us which possible path to examine next. A template for generic graph search  The search begins at the start state. Expanding a node generates successor n...</div></div></div></a><a class="pagination-related" href="/2026/05/12/26-5-12-4-COMPSCI367-2-history/" title="【COMPSCI 367】 W02 Data Visualisation with {ggplot2}"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">【COMPSCI 367】 W02 Data Visualisation with {ggplot2}</div></div><div class="info-2"><div class="info-item-1">Symbolic Logic: The “Rule-based” Intelligence The Birth of Neural-Based Computation The Turing Test If the judge cannot reliably distinguish the machine from the human, the machine is said to pass the Turing Test. The Dartmouth Workshop: The Birth of AI In 1956, the Dartmouth Workshop helped establish Artificial Intelligence as a research field with a bold scientific goal: to study how machines might use language, form abstractions, solve problems, reason, learn, and improve themselves....</div></div></div></a><a class="pagination-related" href="/2025/10/31/25-10-16-1-STATS330-1-synthesis-glm/" title="【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-31</div><div class="info-item-2">【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models</div></div><div class="info-2"><div class="info-item-1">Linear Regression Simple linear regression model is: \[ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\\\ \epsilon_i \sim {\rm iid \ Normal(0, \sigma^2)} \] Poisson Linear Regression Macrorhabdus Ornithogaster Chicken Analysis Textbook Page 23:      Macrorhabdus Ornithogaster Chicken Data    Data Suitable for Using Poisson Distribution The Poisson distribution better reflects the nature of the response: - It is a discrete distribution - It is right skewed (but almost symmetri...</div></div></div></a><a class="pagination-related" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-20</div><div class="info-item-2">【STATS 330】 Introduction</div></div><div class="info-2"><div class="info-item-1">This course is about statistical modelling. We will expand on the generalised linear model (GLM) encountered in STATS 201/8. It comprises four parts:  Generalised linear models Simulation and bootstrapping Regression models for prediction Regression models for explanation  This course provides a versatile statistical toolbox that is useful in a range of fields, including almost all subjects in business and economics, along with experimental or social science. Course Link Prof. Jing L...</div></div></div></a><a class="pagination-related" href="/2025/11/02/25-10-31-1-STATS330-2-explanatory/" title="【STATS 330】 Handout 2 Explanatory Terms and Interpretation"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="info-item-2">【STATS 330】 Handout 2 Explanatory Terms and Interpretation</div></div><div class="info-2"><div class="info-item-1">Intepretation: Numeric Explanatory Variables Linear Regression \[ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\\\ \epsilon \sim {\rm iid \ Normal}(0, \sigma_i^2) \]  When \(x\) is zero, the expected value of the response is \(\beta_0\). For every one-unit increase in \(x\), the expected value of the response increases by \(\beta_1\).  Poisson Regression \[ \log(\mu_i) = \beta_0 + \beta_1 x_i \\\\ Y_i \sim {\rm Poisson}(\mu_i) \]  When \(x\) is zero, the expected value of the res...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">97</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">106</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#example-1-robot-in-grid-world"><span class="toc-number">1.</span> <span class="toc-text">Example 1: Robot in Grid World</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#problem-solving-by-search"><span class="toc-number">2.</span> <span class="toc-text">Problem Solving by Search</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-search-problem"><span class="toc-number">3.</span> <span class="toc-text">The Search Problem</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#state"><span class="toc-number">3.1.</span> <span class="toc-text">State</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#transition-model"><span class="toc-number">3.2.</span> <span class="toc-text">Transition Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#goal-test"><span class="toc-number">3.3.</span> <span class="toc-text">Goal Test</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#path-cost"><span class="toc-number">3.4.</span> <span class="toc-text">Path Cost</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-2-route-planning"><span class="toc-number">4.</span> <span class="toc-text">Example 2: Route Planning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-3-water-jug-problem"><span class="toc-number">5.</span> <span class="toc-text">Example 3: Water-Jug Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-4-the-8-puzzle"><span class="toc-number">6.</span> <span class="toc-text">Example 4: The 8-Puzzle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-5-delivery-robot-with-a-package"><span class="toc-number">7.</span> <span class="toc-text">Example 5: Delivery Robot with a Package</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state-sufficiency-the-key-test"><span class="toc-number">8.</span> <span class="toc-text">State Sufficiency: The Key Test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-6-missionaries-and-cannibals"><span class="toc-number">9.</span> <span class="toc-text">Example 6: Missionaries and Cannibals</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state-space"><span class="toc-number">10.</span> <span class="toc-text">State Space</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#state-space-size"><span class="toc-number">10.1.</span> <span class="toc-text">State Space Size</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#search-node"><span class="toc-number">10.2.</span> <span class="toc-text">Search Node</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#modelling-workflow"><span class="toc-number">11.</span> <span class="toc-text">Modelling Workflow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#quality-criteria-for-state-representations"><span class="toc-number">12.</span> <span class="toc-text">Quality Criteria for State Representations</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"/></a><div class="content"><a class="title" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS">【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS</a><time datetime="2026-05-25T13:17:04.000Z" title="发表于 2026-05-25 21:17:04">2026-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/25/26-5-19-3-COMPSCI367-3-state/" title="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search"/></a><div class="content"><a class="title" href="/2026/05/25/26-5-19-3-COMPSCI367-3-state/" title="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search">【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search</a><time datetime="2026-05-25T12:02:18.000Z" title="发表于 2026-05-25 20:02:18">2026-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第三章 词法分析"/></a><div class="content"><a class="title" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析">【程序设计语言 编译原理】 第三章 词法分析</a><time datetime="2026-05-21T13:29:47.000Z" title="发表于 2026-05-21 21:29:47">2026-05-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/20/26-5-6-1-RSM-7a-cassette/" title="【RSM】 Interval 1 Cassette"><img src="/image/icon/loading.gif" data-original="/album/rsm/rsm_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【RSM】 Interval 1 Cassette"/></a><div class="content"><a class="title" href="/2026/05/20/26-5-6-1-RSM-7a-cassette/" title="【RSM】 Interval 1 Cassette">【RSM】 Interval 1 Cassette</a><time datetime="2026-05-19T16:42:10.000Z" title="发表于 2026-05-20 00:42:10">2026-05-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/19/26-5-12-2-ACR2-7/" title="【ACR2】 Lesson 7"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【ACR2】 Lesson 7"/></a><div class="content"><a class="title" href="/2026/05/19/26-5-12-2-ACR2-7/" title="【ACR2】 Lesson 7">【ACR2】 Lesson 7</a><time datetime="2026-05-19T08:32:19.000Z" title="发表于 2026-05-19 16:32:19">2026-05-19</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.6.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
