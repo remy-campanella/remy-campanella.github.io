@@ -1,0 +1,836 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="From Frontier Search to Heuristic Search This lecture We ask how the search can use domain knowledge to estimate which frontier nodes look promising. UCS is safe but unguided. Heuristic search adds">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="From Frontier Search to Heuristic Search This lecture We ask how the search can use domain knowledge to estimate which frontier nodes look promising. UCS is safe but unguided. Heuristic search adds">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci367.webp">
+<meta property="article:published_time" content="2026-06-06T09:55:43.000Z">
+<meta property="article:modified_time" content="2026-06-06T11:35:12.535Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="奥克兰大学—西南大学合作课程">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="A*">
+<meta property="article:tag" content="启发式搜索">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci367.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm",
+  "url": "https://remy-campanella.github.io/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci367.webp",
+  "datePublished": "2026-06-06T09:55:43.000Z",
+  "dateModified": "2026-06-06T11:35:12.535Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">99</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">108</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci367.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-06T09:55:43.000Z" title="发表于 2026-06-06 17:55:43">2026-06-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-06T11:35:12.535Z" title="更新于 2026-06-06 19:35:12">2026-06-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-367-Artificial-Intelligence/">COMPSCI 367 Artificial Intelligence</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="from-frontier-search-to-heuristic-search">From Frontier Search to Heuristic Search</h2>
+<p><strong>This lecture</strong></p>
+<p>We ask how the search can use domain knowledge to estimate which frontier nodes look promising.</p>
+<p>UCS is safe but <strong>unguided</strong>. Heuristic search adds <strong>advice</strong> about the cost <strong>still needed</strong> to reach a goal.</p>
+<h2 id="uninformed-search-and-informed-search">Uninformed Search and Informed Search</h2>
+<dl>
+<dt>Uniformed Search</dt>
+<dd>
+A search strategy is uninformed if its frontier ordering uses only the <strong>formal problem definition</strong>.
+</dd>
+<dt>Informed search</dt>
+<dd>
+A search strategy is informed if its frontier ordering also uses <strong>problem-specific knowledge</strong> about which states are <strong>likely</strong> to lead to a goal.
+</dd>
+</dl>
+<ul>
+<li>Heuristic function <span class="math inline">\(h(n)\)</span>.</li>
+<li>It tries to search more directionally.</li>
+</ul>
+<p>The difference is whether the algorithm uses an <strong>estimate of future promise</strong>.</p>
+<h2 id="heuristics">Heuristics</h2>
+<dl>
+<dt>Heuristic</dt>
+<dd>
+A heuristic is a <strong>practical</strong> rule, estimate, or piece of advice that helps an agent choose among many possibilities without solving the whole problem exactly.
+</dd>
+</dl>
+<p>A heuristic function <span class="math inline">\(h(n)\)</span> estimates the remaining cost from node n to a goal.<br />
+<span class="math display">\[
+h(n) \approx \text{cost of a cheapest path from \ } n \text{\ to a goal}
+\]</span></p>
+<ul>
+<li><strong>It is not exact</strong>: The remaining cost must be unknown, or the problem is solved.</li>
+<li><strong>It is useful</strong>: A heuristic function gives <strong>quick</strong>, <strong>simplified</strong>, <strong>domain-specific</strong> information about which state look promising.</li>
+</ul>
+<p>A* is only as useful as the <strong>heuristic information</strong> we give it.</p>
+<h2 id="choosing-a-heuristic">Choosing a Heuristic</h2>
+<p>A useful heuristic</p>
+<ul>
+<li>is <strong>cheap</strong> to compute;</li>
+<li>reflects the <strong>path-cost</strong> objective;</li>
+<li>gives <strong>useful direction</strong> toward the goal;</li>
+<li>is not confused by <strong>irrelevant</strong> surface<br />
+similarity.</li>
+</ul>
+<p>The heuristic should estimate <strong>the same kind</strong> of cost that <span class="math inline">\(g(n)\)</span> has already accumulated.</p>
+<p>A heuristic is often obtained by solving a <strong>simplified</strong> or <strong>relaxed</strong> version of the original problem.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-original="/image/26-5-25-4-COMPSCI367-5-heuristic/1779715858663.webp" alt="1779715858663" />
+<figcaption aria-hidden="true">1779715858663</figcaption>
+</figure>
+<p><strong>Design Recipe for a Heuristic</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source of heuristic</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Geometry</td>
+<td>Use <strong>spatial</strong> distance: Manhattan distance, Euclidean distance.</td>
+</tr>
+<tr class="even">
+<td>Relaxation</td>
+<td>Remove <strong>constraints</strong> such as walls, traffic, locked doors, or object interactions.</td>
+</tr>
+<tr class="odd">
+<td>Abstraction</td>
+<td>Group many detailed states into <strong>simpler abstract states</strong>.</td>
+</tr>
+<tr class="even">
+<td>Domain knowledge</td>
+<td>Use expert rules, lower-bound estimates, or learned predictive information.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example-1-grid-navigation-and-manhattan-distance">Example 1: Grid Navigation and Manhattan Distance</h2>
+<h2 id="example-2-route-planning-heuristics">Example 2: Route Planning Heuristics</h2>
+<h2 id="example-3-8-puzzle-heuristics">Example 3: 8-Puzzle Heuristics</h2>
+<h2 id="example-4-delivery-robot-with-floors">Example 4: Delivery Robot with Floors</h2>
+<h2 id="greedy-best-first-search">Greedy Best-First Search</h2>
+<p>Greedy best-first search always expands the frontier node with the <strong>smallest heuristic value</strong> <span class="math inline">\(h(n)\)</span>.</p>
+<ul>
+<li><strong>Priority</strong>: <span class="math inline">\(\text{priority}(n) = h(n)\)</span>.</li>
+<li><strong>Risk</strong>: It ignores the actual cost already paid.</li>
+</ul>
+<p><strong>Pseudocode</strong><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Create the initial node representing path (s)</span><br><span class="line">Put (s) into priority queue Frontier with priority h(s)</span><br><span class="line"></span><br><span class="line">while Frontier is not empty do</span><br><span class="line">    Remove a path (s, ..., n) with smallest h(n)</span><br><span class="line">    </span><br><span class="line">    if n is a goal state then</span><br><span class="line">        return path (s, ..., n)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">    for each successor n&#x27; of n do</span><br><span class="line">        Create the extended path (s, ..., n, n&#x27;)</span><br><span class="line">        Insert into Frontier with priority h(n&#x27;)</span><br><span class="line">    end for</span><br><span class="line">end while</span><br><span class="line"></span><br><span class="line">return FAILURE</span><br></pre></td></tr></table></figure></p>
+<h2 id="running-example-route-planning-agent">Running Example: Route Planning Agent</h2>
+<p>Assume a coarse coordinate map with goal coordinate <span class="math inline">\(G = (6, 0)\)</span>.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-original="/image/26-5-25-4-COMPSCI367-5-heuristic/1780735300216.webp" alt="1780735300216" />
+<figcaption aria-hidden="true">1780735300216</figcaption>
+</figure>
+<p>We use<br />
+<span class="math display">\[
+h(n) = |x_n - 6| + |y_n - 0|
+\]</span></p>
+<p>Greedy expands the node that <strong>looks</strong> closest to the goal:<br />
+<span class="math display">\[
+S \rightarrow A \rightarrow G
+\]</span></p>
+<p>GBFS <strong>misled</strong> because it ignores the expensive edge <span class="math inline">\(A \rightarrow G\)</span>.</p>
+<h2 id="a-search">A* Search</h2>
+<p>A* expands the frontier node with the smallest estimated total solution cost<br />
+<span class="math display">\[
+f(n) = g(n) + h(n)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(g(n)\)</span>: Actual cost from the initial state to <span class="math inline">\(n\)</span>.</li>
+<li><span class="math inline">\(h(n)\)</span>: Estimated remaining cost from <span class="math inline">\(n\)</span> to goal.</li>
+<li><span class="math inline">\(f(n)\)</span>: Estimated total cost of a solution path through <span class="math inline">\(n\)</span>.</li>
+</ul>
+<blockquote>
+<p>If <span class="math inline">\(h(n) = 0\)</span> for every node, then <span class="math inline">\(f(n) = g(n)\)</span>, A* acts the same as UCS.</p>
+</blockquote>
+<p><strong>Pseudocode</strong><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Create the initial node representing path (s)</span><br><span class="line">Set g(s) = 0, f(s) = h(s)</span><br><span class="line">Put (s) into priority queue Frontier with priority f(s)</span><br><span class="line">Initialise Explored as empty</span><br><span class="line"></span><br><span class="line">while Frontier is not empty do</span><br><span class="line">    Remove a path (s, ..., n) with smallest f(n)</span><br><span class="line"></span><br><span class="line">    if n is a goal state then</span><br><span class="line">        return path (s, ..., n)</span><br><span class="line">    end if</span><br><span class="line"></span><br><span class="line">    Add n to Explored</span><br><span class="line"></span><br><span class="line">    for each successor n&#x27; of n do</span><br><span class="line">        g_new = g(n) + cost(n, n&#x27;)</span><br><span class="line">        f_new = g_new + h(n&#x27;)</span><br><span class="line"></span><br><span class="line">        if n&#x27; is new, or this path gives a smaller g(n&#x27;) then</span><br><span class="line">            record the better path to n&#x27;</span><br><span class="line">            insert or update n&#x27; in Frontier with priority f_new</span><br><span class="line">        end if</span><br><span class="line"></span><br><span class="line">    end for</span><br><span class="line">end while</span><br><span class="line"></span><br><span class="line">return FAILURE</span><br></pre></td></tr></table></figure></p>
+<p><strong>Route Planning Agent</strong></p>
+<figure>
+<img src="/image/icon/loading.gif" data-original="/image/26-5-25-4-COMPSCI367-5-heuristic/1780736412286.webp" alt="1780736412286" />
+<figcaption aria-hidden="true">1780736412286</figcaption>
+</figure>
+<p><strong>Step 1, Expand <span class="math inline">\(S\)</span></strong><br />
+Start<br />
+<span class="math display">\[
+g(S) = 0, h(S) = 6, f(S) = 6
+\]</span></p>
+<p>Generate frontier entries:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Node</th>
+<th>Path</th>
+<th><span class="math inline">\(g\)</span></th>
+<th><span class="math inline">\(h\)</span></th>
+<th><span class="math inline">\(f\)</span>(sort by)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(A\)</span></td>
+<td><span class="math inline">\(S \rightarrow A\)</span></td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D\)</span></td>
+<td><span class="math inline">\(S \to D\)</span></td>
+<td>2</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(B\)</span></td>
+<td><span class="math inline">\(S \to B\)</span></td>
+<td>4</td>
+<td>8</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(U\)</span></td>
+<td><span class="math inline">\(S \to U\)</span></td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+<p>Remove <span class="math inline">\(A\)</span>, because it has the smallest <span class="math inline">\(f\)</span> value.</p>
+<p><strong>Step 2, Expand <span class="math inline">\(A\)</span></strong><br />
+Expanding <span class="math inline">\(A\)</span>(first one in the priority queue) generates a path to <span class="math inline">\(G\)</span>.<br />
+<span class="math display">\[
+S \to A \to G, g(G) = 21, h(G) = 0, f(G) = 21
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Frontier path</th>
+<th>End</th>
+<th><span class="math inline">\(g\)</span></th>
+<th><span class="math inline">\(h\)</span></th>
+<th><span class="math inline">\(f\)</span>(sort by)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(S \to D\)</span></td>
+<td><span class="math inline">\(D\)</span></td>
+<td>2</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to B\)</span></td>
+<td><span class="math inline">\(B\)</span></td>
+<td>4</td>
+<td>8</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S \to U\)</span></td>
+<td><span class="math inline">\(U\)</span></td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to A \to G\)</span></td>
+<td>G</td>
+<td>21</td>
+<td>0</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>A generated goal is only a <strong>candidate</strong> solution. A* stops when(or the moment) the goal is removed from the priority queue.</p>
+</blockquote>
+<p><strong>Step 3, Expand <span class="math inline">\(D\)</span></strong><br />
+Remove <span class="math inline">\(D\)</span>. Expand <span class="math inline">\(D\)</span> and generates <span class="math inline">\(E\)</span>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Frontier path</th>
+<th>End</th>
+<th><span class="math inline">\(g\)</span></th>
+<th><span class="math inline">\(h\)</span></th>
+<th><span class="math inline">\(f\)</span>(sort by)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(S \to D \to E\)</span></td>
+<td><span class="math inline">\(E\)</span></td>
+<td>4</td>
+<td>2</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to B\)</span></td>
+<td><span class="math inline">\(B\)</span></td>
+<td>4</td>
+<td>8</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S \to U\)</span></td>
+<td><span class="math inline">\(U\)</span></td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to A \to G\)</span></td>
+<td>G</td>
+<td>21</td>
+<td>0</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 4, Expand <span class="math inline">\(E\)</span></strong><br />
+Remove <span class="math inline">\(E\)</span>. Expand <span class="math inline">\(E\)</span> and generates <span class="math inline">\(G\)</span>.<br />
+<span class="math display">\[
+S \to D \to E \to G, g(G) = 14, h(G) = 0, f(G) = 14
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Frontier path</th>
+<th>End</th>
+<th><span class="math inline">\(g\)</span></th>
+<th><span class="math inline">\(h\)</span></th>
+<th><span class="math inline">\(f\)</span>(sort by)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(S \to B\)</span></td>
+<td><span class="math inline">\(B\)</span></td>
+<td>4</td>
+<td>8</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to U\)</span></td>
+<td><span class="math inline">\(U\)</span></td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S \to D \to E \to G\)</span></td>
+<td><span class="math inline">\(G\)</span></td>
+<td>14</td>
+<td>0</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to A \to G\)</span></td>
+<td>G</td>
+<td>21</td>
+<td>0</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 5, Expand <span class="math inline">\(B\)</span></strong><br />
+Remove <span class="math inline">\(B\)</span>. Expand <span class="math inline">\(B\)</span> and generates <span class="math inline">\(C\)</span>.<br />
+<span class="math display">\[
+S \to B \to C, g(C) = 8, h(C) = 4, f(C) = 12
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Frontier path</th>
+<th>End</th>
+<th><span class="math inline">\(g\)</span></th>
+<th><span class="math inline">\(h\)</span></th>
+<th><span class="math inline">\(f\)</span>(sort by)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(S \to B \to C\)</span></td>
+<td><span class="math inline">\(C\)</span></td>
+<td>8</td>
+<td>4</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to U\)</span></td>
+<td><span class="math inline">\(U\)</span></td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S \to D \to E \to G\)</span></td>
+<td><span class="math inline">\(G\)</span></td>
+<td>14</td>
+<td>0</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to A \to G\)</span></td>
+<td>G</td>
+<td>21</td>
+<td>0</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Step 6, Expand <span class="math inline">\(C\)</span></strong><br />
+Remove <span class="math inline">\(C\)</span>. Expand <span class="math inline">\(C\)</span> and generates <span class="math inline">\(G\)</span>.<br />
+<span class="math display">\[
+S \to B \to C \to G, g(G) = 12, h(G) = 0, f(G) = 12
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>Frontier path</th>
+<th>End</th>
+<th><span class="math inline">\(g\)</span></th>
+<th><span class="math inline">\(h\)</span></th>
+<th><span class="math inline">\(f\)</span>(sort by)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(S \to B \to C \to G\)</span></td>
+<td><span class="math inline">\(G\)</span></td>
+<td>12</td>
+<td>0</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to U\)</span></td>
+<td><span class="math inline">\(U\)</span></td>
+<td>1</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S \to D \to E \to G\)</span></td>
+<td><span class="math inline">\(G\)</span></td>
+<td>14</td>
+<td>0</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S \to A \to G\)</span></td>
+<td>G</td>
+<td>21</td>
+<td>0</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p>Now A* removes <span class="math inline">\(G\)</span> with cost 12 and returns <span class="math inline">\(S \to B \to C \to G\)</span>.</p>
+<p><strong>What did A* avoid?</strong><br />
+A* avoids cheap but unpromising detours.<br />
+<span class="math display">\[
+S \to U \to V \to W \to G
+\]</span></p>
+<h2 id="comparing-the-three-strategies">Comparing the Three Strategies</h2>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 25%" />
+<col style="width: 12%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Strategy</th>
+<th>Priority</th>
+<th>Returned path</th>
+<th>Cost</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>UCS</td>
+<td><span class="math inline">\(g(n)\)</span></td>
+<td><span class="math inline">\(S \to B \to C \to G\)</span></td>
+<td>12</td>
+<td>Safe, but explores cheap detours first.</td>
+</tr>
+<tr class="even">
+<td>GBFS</td>
+<td><span class="math inline">\(h(n)\)</span></td>
+<td><span class="math inline">\(S \to A \to G\)</span></td>
+<td>21</td>
+<td>Fast, but misled bt small <span class="math inline">\(h(A)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td>A*</td>
+<td><span class="math inline">\(g(n) + h(n)\)</span></td>
+<td><span class="math inline">\(S \to  B \to C \to G\)</span></td>
+<td>12</td>
+<td>Balances cost already paid with remaining-cost estimate.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Important Detail</strong><br />
+Compare path by <span class="math inline">\(g\)</span>, order frontier by <span class="math inline">\(f\)</span>.</p>
+<ul>
+<li><strong>Frontier ordering</strong>: A* removes the node with smallest <span class="math inline">\(f\)</span>.</li>
+<li><strong>Path update</strong>: If a new path reaches the same state, compare the actual path costs.</li>
+</ul>
+<p>If <span class="math inline">\(A\)</span> is already in the frontier with <span class="math inline">\(g(A) = 5\)</span>,<br />
+and the search later finds <span class="math inline">\(g(A) = 2\)</span>, what<br />
+should A* do?</p>
+<ul>
+<li>Update the frontier entry for A, or insert the cheaper copy and ignore the stale expensive copy when it is later removed.</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/">https://remy-campanella.github.io/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="post-meta__tags" href="/tags/A/">A*</a><a class="post-meta__tags" href="/tags/%E5%90%AF%E5%8F%91%E5%BC%8F%E6%90%9C%E7%B4%A2/">启发式搜索</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci367.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS</div></div><div class="info-2"><div class="info-item-1">The Search Problem graph LR  A("Real-world problem") B("State-space search") C("Frontier search") D("Solution path")  A --> B --> C --> D This lecture We ask how a search algorithm explores the state space once the model has been defined. Generic Graph Search A search problem tells us what can happen. A search algorithm tells us which possible path to examine next. A template for generic graph search  The search begins at the start state. Expanding a node generates successor n...</div></div></div></a><a class="pagination-related" href="/2026/06/06/26-6-6-1-COMPSCI367-6-ag-wa/" title="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*</div></div><div class="info-2"><div class="info-item-1">Recall: A* Algorithm The performance of A* algorithm greatly relies on the heuristic function h. So what \(h(n)\) should we design?  Admissibility: Optimal solution guarantee Informedness: More useful heuristic Consistency: Efficient implementation guarantee Weighted A*: Making A* more greedy  Admissibility: Optimal Heuristic A heuristic h is admissible if it never overestimates the true cheapest remaining cost. \[ h(n) \leq h^*(n), \text{for every node \ } n \]         S...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/12/26-5-12-3-COMPSCI367-1-intro/" title="【COMPSCI 367】 Lecture 1 What is Artificial Intelligence"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">【COMPSCI 367】 Lecture 1 What is Artificial Intelligence</div></div><div class="info-2"><div class="info-item-1">AI in the World Today In-class Quiz: Why Do We Call These Systems Intelligent? There Is No Single Definition of AI Working view for this course: AI is a scientific field that studies the mechanisms of intelligent behaviour and thinking-like problem solving, especially through the analysis and design of agents. What Makes AI Different from Ordinary Software? Agent as an Unifying Framework of AI An agent is a system that perceives its environment and acts upon that environment in pursuit ...</div></div></div></a><a class="pagination-related" href="/2026/05/12/26-5-12-4-COMPSCI367-2-history/" title="【COMPSCI 367】 W02 Data Visualisation with {ggplot2}"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">【COMPSCI 367】 W02 Data Visualisation with {ggplot2}</div></div><div class="info-2"><div class="info-item-1">Symbolic Logic: The “Rule-based” Intelligence The Birth of Neural-Based Computation The Turing Test If the judge cannot reliably distinguish the machine from the human, the machine is said to pass the Turing Test. The Dartmouth Workshop: The Birth of AI In 1956, the Dartmouth Workshop helped establish Artificial Intelligence as a research field with a bold scientific goal: to study how machines might use language, form abstractions, solve problems, reason, learn, and improve themselves....</div></div></div></a><a class="pagination-related" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="info-item-2">【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS</div></div><div class="info-2"><div class="info-item-1">The Search Problem graph LR  A("Real-world problem") B("State-space search") C("Frontier search") D("Solution path")  A --> B --> C --> D This lecture We ask how a search algorithm explores the state space once the model has been defined. Generic Graph Search A search problem tells us what can happen. A search algorithm tells us which possible path to examine next. A template for generic graph search  The search begins at the start state. Expanding a node generates successor n...</div></div></div></a><a class="pagination-related" href="/2026/05/25/26-5-19-3-COMPSCI367-3-state/" title="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="info-item-2">【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search</div></div><div class="info-2"><div class="info-item-1">Example 1: Robot in Grid World A robot is navigating a room. The space in which the robot can move is depicted as a “grid” (turning a continuous space into a discrete set of coordinates). The robot starts at location \(S\) and must reach location \(G\). The robot can move forward, backward, turn left or right, but cannot pass through walls or obstacles. Suppose the robot knows the layout of the room. How can the robot perform its task? Question: How can we model the task abstractly? Pro...</div></div></div></a><a class="pagination-related" href="/2026/06/06/26-6-6-1-COMPSCI367-6-ag-wa/" title="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-06</div><div class="info-item-2">【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*</div></div><div class="info-2"><div class="info-item-1">Recall: A* Algorithm The performance of A* algorithm greatly relies on the heuristic function h. So what \(h(n)\) should we design?  Admissibility: Optimal solution guarantee Informedness: More useful heuristic Consistency: Efficient implementation guarantee Weighted A*: Making A* more greedy  Admissibility: Optimal Heuristic A heuristic h is admissible if it never overestimates the true cheapest remaining cost. \[ h(n) \leq h^*(n), \text{for every node \ } n \]         S...</div></div></div></a><a class="pagination-related" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-20</div><div class="info-item-2">【STATS 330】 Introduction</div></div><div class="info-2"><div class="info-item-1">This course is about statistical modelling. We will expand on the generalised linear model (GLM) encountered in STATS 201/8. It comprises four parts:  Generalised linear models Simulation and bootstrapping Regression models for prediction Regression models for explanation  This course provides a versatile statistical toolbox that is useful in a range of fields, including almost all subjects in business and economics, along with experimental or social science. Course Link Prof. Jing L...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">99</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">108</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#from-frontier-search-to-heuristic-search"><span class="toc-number">1.</span> <span class="toc-text">From Frontier Search to Heuristic Search</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#uninformed-search-and-informed-search"><span class="toc-number">2.</span> <span class="toc-text">Uninformed Search and Informed Search</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#heuristics"><span class="toc-number">3.</span> <span class="toc-text">Heuristics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#choosing-a-heuristic"><span class="toc-number">4.</span> <span class="toc-text">Choosing a Heuristic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-1-grid-navigation-and-manhattan-distance"><span class="toc-number">5.</span> <span class="toc-text">Example 1: Grid Navigation and Manhattan Distance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-2-route-planning-heuristics"><span class="toc-number">6.</span> <span class="toc-text">Example 2: Route Planning Heuristics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-3-8-puzzle-heuristics"><span class="toc-number">7.</span> <span class="toc-text">Example 3: 8-Puzzle Heuristics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-4-delivery-robot-with-floors"><span class="toc-number">8.</span> <span class="toc-text">Example 4: Delivery Robot with Floors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#greedy-best-first-search"><span class="toc-number">9.</span> <span class="toc-text">Greedy Best-First Search</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#running-example-route-planning-agent"><span class="toc-number">10.</span> <span class="toc-text">Running Example: Route Planning Agent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-search"><span class="toc-number">11.</span> <span class="toc-text">A* Search</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#comparing-the-three-strategies"><span class="toc-number">12.</span> <span class="toc-text">Comparing the Three Strategies</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/06/26-6-6-1-COMPSCI367-6-ag-wa/" title="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*"/></a><div class="content"><a class="title" href="/2026/06/06/26-6-6-1-COMPSCI367-6-ag-wa/" title="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*">【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*</a><time datetime="2026-06-06T12:29:28.000Z" title="发表于 2026-06-06 20:29:28">2026-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/" title="【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm"/></a><div class="content"><a class="title" href="/2026/06/06/26-5-25-4-COMPSCI367-5-heuristic/" title="【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm">【COMPSCI 367】 Lecture 5 Heuristic Search and A* Algorithm</a><time datetime="2026-06-06T09:55:43.000Z" title="发表于 2026-06-06 17:55:43">2026-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS"/></a><div class="content"><a class="title" href="/2026/05/25/26-5-25-3-COMPSCI367-4-search/" title="【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS">【COMPSCI 367】 Lecture 4 The Search Problem—BFS, DFS and UCS</a><time datetime="2026-05-25T13:17:04.000Z" title="发表于 2026-05-25 21:17:04">2026-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/25/26-5-19-3-COMPSCI367-3-state/" title="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search"/></a><div class="content"><a class="title" href="/2026/05/25/26-5-19-3-COMPSCI367-3-state/" title="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search">【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search</a><time datetime="2026-05-25T12:02:18.000Z" title="发表于 2026-05-25 20:02:18">2026-05-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第三章 词法分析"/></a><div class="content"><a class="title" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析">【程序设计语言 编译原理】 第三章 词法分析</a><time datetime="2026-05-21T13:29:47.000Z" title="发表于 2026-05-21 21:29:47">2026-05-21</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.7.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
