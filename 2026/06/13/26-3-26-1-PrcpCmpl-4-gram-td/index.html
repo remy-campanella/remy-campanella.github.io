@@ -1,0 +1,978 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【程序设计语言 编译原理】 第四章 自顶向下的语法分析 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="4.1 语法介绍 文法提供了一种形式化的方法来定义编程语言的语法规则。这使得编译器能够识别和解析程序代码中的结构。 编译原理中的文法是一组规则，用来描述词法单元（tokens）如何组合成短语（phrases）以及这些短语如何组合成更复杂的结构，最终形成有效的程序代码。 文法通常用来定义编程语言的语法结构。编译原理使用文法来检查语句、单词是否合法。 4.1.1 0 型文法 若文法 \(G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【程序设计语言 编译原理】 第四章 自顶向下的语法分析">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="4.1 语法介绍 文法提供了一种形式化的方法来定义编程语言的语法规则。这使得编译器能够识别和解析程序代码中的结构。 编译原理中的文法是一组规则，用来描述词法单元（tokens）如何组合成短语（phrases）以及这些短语如何组合成更复杂的结构，最终形成有效的程序代码。 文法通常用来定义编程语言的语法结构。编译原理使用文法来检查语句、单词是否合法。 4.1.1 0 型文法 若文法 \(G">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2026-06-13T03:55:45.000Z">
+<meta property="article:modified_time" content="2026-06-13T03:57:04.296Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="编译原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【程序设计语言 编译原理】 第四章 自顶向下的语法分析",
+  "url": "https://remy-campanella.github.io/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2026-06-13T03:55:45.000Z",
+  "dateModified": "2026-06-13T03:57:04.296Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【程序设计语言 编译原理】 第四章 自顶向下的语法分析',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">103</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">119</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-original="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【程序设计语言 编译原理】 第四章 自顶向下的语法分析</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【程序设计语言 编译原理】 第四章 自顶向下的语法分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-13T03:55:45.000Z" title="发表于 2026-06-13 11:55:45">2026-06-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-13T03:57:04.296Z" title="更新于 2026-06-13 11:57:04">2026-06-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">程序设计语言 编译原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="语法介绍">4.1 语法介绍</h2>
+<p>文法提供了一种<strong>形式化</strong>的方法来定义编程语言的语法规则。这使得编译器能够识别和解析程序代码中的结构。</p>
+<p>编译原理中的文法是一组规则，用来描述<strong>词法单元（tokens）</strong>如何组合成<strong>短语（phrases）</strong>以及这些短语如何组合成<strong>更复杂的结构</strong>，最终形成<strong>有效的程序代码</strong>。</p>
+<p>文法通常用来定义编程语言的语法结构。编译原理使用文法来检查<strong>语句、单词是否合法</strong>。</p>
+<h3 id="型文法">4.1.1 0 型文法</h3>
+<p>若文法 <span class="math inline">\(G = (V_T, V_N, S, \mathcal{P})\)</span> 的每个产生式 <span class="math inline">\(\alpha \to \beta\)</span> 满足左部 <span class="math inline">\(\alpha \in (V_T \cup V_N)\)</span>，且 <span class="math inline">\(\alpha\)</span> 至少含有一个非终结符，右部 <span class="math inline">\(\beta \in (V_T \cup V_N)^*\)</span>，则称 <span class="math inline">\(G\)</span> 为 <strong>0 型文法</strong>。</p>
+<p>0 型文法又称<strong>短语文法</strong>，能力相当于 <strong>Turing 机</strong>。</p>
+<h3 id="型文法-1">4.1.2 1 型文法</h3>
+<p>若 <span class="math inline">\(G\)</span> 是 0 型文法，且除 <span class="math inline">\(S \to \varepsilon\)</span> 外，<span class="math inline">\(G\)</span> 的任何产生式均满足 <span class="math inline">\(|\alpha| &gt; |\beta|\)</span>，则称 <span class="math inline">\(G\)</span> 是 <strong>1 型文法</strong>。</p>
+<p>1 型文法也称<strong>上下文有关法</strong>，即在对非终结符使用产生式进行替换时必须考虑上下文。</p>
+<p>若 1 型文法有 <span class="math inline">\(\alpha A \beta \to \alpha \gamma \beta\)</span>，<span class="math inline">\(\alpha\)</span>、<span class="math inline">\(\beta\)</span> 不全为空字，则 <span class="math inline">\(A\)</span> 只有在上下文 <span class="math inline">\(\alpha\)</span>、<span class="math inline">\(\beta\)</span> 才能被替换为 <span class="math inline">\(\gamma\)</span>。</p>
+<h3 id="型文法-2">4.1.2 2 型文法</h3>
+<p>若文法 <span class="math inline">\(G = (V_T, V_N, S, \mathcal{P})\)</span> 的每个产生式为 <span class="math inline">\(A \to \beta\)</span>，<span class="math inline">\(A \in V_N\)</span>，<span class="math inline">\(\alpha \in V_T^*\)</span>，则称 <span class="math inline">\(G\)</span> 为 <strong>2 型文法</strong>。</p>
+<p>2 文法又称为<strong>上下文无关法</strong>。在对非终结符使用产生式进行替换时无需考虑上下文。</p>
+<h3 id="型文法-3">4.1.3 3 型文法</h3>
+<p>若文法 <span class="math inline">\(G = (V_T, V_N, S, \mathcal{P})\)</span> 的每个产生式为 <span class="math inline">\(A \to \alpha B\)</span> 或 <span class="math inline">\(A \to \alpha\)</span>，其中 <span class="math inline">\(A, B \in V_N\)</span>，<span class="math inline">\(\alpha \in V_T^*\)</span>，则 <span class="math inline">\(G\)</span> 称为 <strong>3 型文法</strong>。</p>
+<p>3 型文法也称为<strong>正规文法</strong>或<strong>正则文法</strong>。这又分为<strong>左线性文法</strong>和<strong>右线性文法</strong>。上面的定义为<strong>右线性</strong>形式。</p>
+<h2 id="自顶向下的语法分析介绍">4.2 自顶向下的语法分析介绍</h2>
+<p>自顶向下的语法分析是一种从文法的<strong>起始符号</strong>开始尝试<strong>匹配输入字符串</strong>的方法，旨在构建语法树的顶端逐步向下进行。这种方法试图通过<strong>递归地替换非终结符</strong>来生成与输入相匹配的句子。</p>
+<h3 id="基本概念">4.2.1 基本概念</h3>
+<p>两种自顶向下的分析方法：</p>
+<ul>
+<li>回溯法：简单递归。</li>
+<li>预测分析：最简单的自顶向下分析方法是使用<strong>预测分析程序</strong>，它能够处理没有左递归和公共左因子的文法。预测分析程序使用一张<strong>预测分析表</strong>和一个<strong>栈</strong>来进行工作。LL(1) 文法是一种适合顶向下分析的文法类型，要求对于每一个非终结符 <span class="math inline">\(A\)</span> 和任意两个不同的产生式<span class="math inline">\(A \to \alpha\)</span> 和 <span class="math inline">\(A \to \beta\)</span>，它们的选择集合 <span class="math inline">\(SELECT\)</span> 不能相交。同时，<span class="math inline">\(FIRST\)</span> 集和 <span class="math inline">\(FOLLOW\)</span> 集在分析过程中起到重要作用。</li>
+</ul>
+<h3 id="分析器过程">4.2.2 分析器过程</h3>
+<ol type="1">
+<li><p><strong>初始化</strong>：将文法起始符号压入栈中。</p></li>
+<li><p><strong>匹配过程</strong></p>
+<ul>
+<li><p>如果栈顶是<strong>非终结符</strong>，则根据当前输入符号查看<strong>预测分析表</strong>，选择<strong>合适的产生式</strong>展开非终结符。</p></li>
+<li><p>如果栈顶是<strong>终结符</strong>，则将其与当前输入符号比较。</p>
+<ul>
+<li>如果匹配，则两者都前进。</li>
+<li>如果不匹配，回溯法将选择其他产生式继续进行。LL1 方法报错。</li>
+</ul></li>
+<li><p>遇到<strong>空串（<span class="math inline">\(\varepsilon\)</span>）</strong>时，直接<strong>弹出栈顶元素</strong>继续下一循环。</p></li>
+</ul></li>
+<li><p><strong>结束条件</strong>：当<strong>输入串完全读取</strong>且<strong>栈为空</strong>，说明输入串被识别为该语言的一个句子。</p></li>
+</ol>
+<h3 id="文法预处理">4.2.3 文法预处理</h3>
+<ul>
+<li><strong>消除左递归</strong>：自顶向下解析器不能直接处理含有左递归的文法。</li>
+<li><strong>提取左公因子</strong>：处理回溯问题，提高效率。</li>
+</ul>
+<p><strong>提取左公因子</strong><br />
+假定关于 <span class="math inline">\(A\)</span> 的规则是<br />
+<span class="math display">\[
+A \to \delta \beta_1 | \delta \beta_2 | \ldots | \delta \beta_n | \gamma_1 | \gamma_2 | \ldots | \gamma_n
+\]</span></p>
+<p>其中<strong>所有 <span class="math inline">\(\gamma\)</span> 不以 <span class="math inline">\(\delta\)</span> 开头</strong>。</p>
+<p>那么规则可改写为<br />
+<span class="math display">\[
+A \to \delta A&#39; | \gamma_1 | \gamma_2 | \ldots | \gamma_n \\
+A&#39; \to \beta_1 | \beta_2 | \ldots | \beta_n
+\]</span></p>
+<p>通过反复提取左公因子，就可将非终结符的所有候选 <span class="math inline">\(FIRST\)</span> 集变为两两不相交。代价是引进新的非终结符和 <span class="math inline">\(\varepsilon\)</span> 产生式。</p>
+<p>例如<br />
+<span class="math display">\[
+E \to T + E | T - E | T
+\]</span></p>
+<p>这里 <span class="math inline">\(E \to T\)</span> 相当于 <span class="math inline">\(E \to T \varepsilon\)</span>，所以<br />
+<span class="math display">\[
+E \to TE&#39; \\
+E&#39; \to +E | -E | \varepsilon
+\]</span></p>
+<p><strong>消除直接左递归</strong><br />
+假定关于非终结符 <span class="math inline">\(P\)</span> 的规则为<br />
+<span class="math display">\[
+P \to P \alpha | \beta
+\]</span></p>
+<p>其中 <strong><span class="math inline">\(\beta\)</span> 不以 <span class="math inline">\(P\)</span> 开头</strong>。那么规则可改写为<br />
+<span class="math display">\[
+P \to \beta P&#39; \\
+P&#39; \to \alpha P&#39;| \varepsilon
+\]</span></p>
+<p>更一般地，假定关于 <span class="math inline">\(P\)</span> 地产生式为<br />
+<span class="math display">\[
+P \to P\alpha_1 | P\alpha_2 | \ldots | P\alpha_m | \beta_1 | \beta_2 | \ldots | \beta_n
+\]</span></p>
+<p>所有 <strong><span class="math inline">\(\alpha\)</span> 不为空串</strong>，所有 <strong><span class="math inline">\(\beta\)</span> 不以 <span class="math inline">\(P\)</span> 开头</strong>，则规则可改写为<br />
+<span class="math display">\[
+P \to \beta_1P&#39; | \beta_2P&#39; | \ldots | \beta_nP&#39; \\
+P&#39; \to \alpha_1P&#39; | \alpha_2P&#39; | \ldots | \alpha_mP&#39; | \varepsilon
+\]</span></p>
+<p><strong>消除间接左递归</strong><br />
+例如<br />
+<span class="math display">\[
+S \to Qc | c \\
+Q \to Rb | b \\
+R \to Sa | a
+\]</span></p>
+<p>具有间接左递归性<br />
+<span class="math display">\[
+S \Rightarrow Qc \Rightarrow Rbc \Rightarrow Sabc
+\]</span></p>
+<ul>
+<li><p>把文法 <span class="math inline">\(G\)</span> 所有终结符按任一顺序排列 <span class="math inline">\(P_1, P_2, \ldots, P_n\)</span>。</p></li>
+<li><p>计算<br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for i = 1 to n do</span><br><span class="line">    for j = 1 to n do</span><br><span class="line">        把形如 Pi -&gt; Pj gamma 的产生式改写为</span><br><span class="line">        Pi -&gt; delta1 gamma | delta2 gamma | ... | deltak gamma, 其中 Pj -&gt; delta1 | delta2 | ... | deltak 是关于 Pj 的所有产生式</span><br><span class="line">        消除 Pi 的直接左递归</span><br></pre></td></tr></table></figure></p></li>
+<li><p>化简上面得到的文法，去除那些从开始符号出发永远无法到达的非终结符的产生式。</p></li>
+</ul>
+<p>例如<br />
+<span class="math display">\[
+A \rightarrow Bx | a \\
+B \rightarrow Cy | b \\
+C \rightarrow Az | c 
+\]</span></p>
+<p>排列所有非终结符 <span class="math inline">\(A\)</span>，<span class="math inline">\(B\)</span>，<span class="math inline">\(C\)</span>。<span class="math inline">\(n = 3\)</span>。</p>
+<p><span class="math inline">\(i = 1, j = 0\)</span>，不处理。</p>
+<p><span class="math inline">\(i = 2, j = 1\)</span>，没有 <span class="math inline">\(B \rightarrow A\)</span>，不处理。</p>
+<p><span class="math inline">\(i = 3, j = 1\)</span>，将 <span class="math inline">\(A\)</span> 代入 <span class="math inline">\(C\)</span>，<br />
+<span class="math display">\[
+C \rightarrow Bxz | az | c
+\]</span></p>
+<p><span class="math inline">\(i = 3, j = 2\)</span>，将 <span class="math inline">\(B\)</span> 代入 <span class="math inline">\(C \rightarrow Bxz\)</span>，<br />
+<span class="math display">\[
+C \rightarrow Cyxz | bxz | az | c
+\]</span></p>
+<p>化简 <span class="math inline">\(C\)</span> 的直接左递归，<br />
+<span class="math display">\[
+\alpha = yxz \\
+\beta_1 = bxz \\
+\beta_2 = az \\
+\beta_3 = c
+\]</span></p>
+<p><span class="math display">\[
+A \rightarrow Bx | a \\
+B \rightarrow Cy | b \\
+C \rightarrow bxzC&#39; | azC&#39; | cC&#39; \\
+C&#39; \rightarrow yxzC&#39; | \varepsilon
+\]</span></p>
+<p>无需化简。</p>
+<h2 id="回溯法">4.3 回溯法</h2>
+<p>回溯法是一种解决问题的算法策略，它尝试<strong>分步地</strong>去解决一个问题。在每一步中，算法选择一个可能的选项，并继续进行。如果发现这个选择最终会导致失败，算法会<strong>回退</strong>到上一步，放弃当前的选择，并尝试另一个选项。</p>
+<p>回溯法在处理<strong>复杂的文法和长输入</strong>时可能会变得低效，因为它可能需要大量的尝试和回退操作。因此，在实际应用中，通常会结合其他技术来减少回溯，提高语法分析的效率。</p>
+<p>在应用回溯法之前还需要消除左递归、提取左公因子。</p>
+<ul>
+<li><strong>初始化</strong>：将符号串压入符号栈中；将栈文法的起始符号压入推导栈中。</li>
+<li><strong>匹配过程</strong>：
+<ul>
+<li>如果栈顶是非终结符，则根据当前输入符号查看<strong>预测分析表</strong>，选择合适的产生式展开该非终结符，压入推导栈中。</li>
+<li>如果栈顶是终结符，则将其<strong>与当前输入符号比较</strong>。如果匹配，都<strong>出栈</strong>；如果不匹配，回溯法则<strong>选择其他产生式继续进行</strong>。</li>
+</ul></li>
+<li><strong>结束条件</strong>：当<strong>输入串完全读取</strong>且<strong>栈为空</strong>时，说明输入串被成功识别为属于该语言的一个句子。</li>
+</ul>
+<h2 id="ll1-分析法">4.4 LL1 分析法</h2>
+<h3 id="引言">4.4.1 引言</h3>
+<p><strong>从左（L）向右</strong>读入程序，<strong>最左（L）推导</strong>，采用 <strong>1 个前看符号</strong>，<strong>不需要回溯</strong>。算法基本思想为<strong>表驱动的分析算法</strong>。</p>
+<h3 id="ll-分析器架构">4.4.2 LL 分析器架构</h3>
+<figure>
+<img src="/image/icon/loading.gif" data-original="/image/26-3-26-1-PrcpCmpl-4-gram-td/1781314050176.webp" alt="1781314050176" />
+<figcaption aria-hidden="true">1781314050176</figcaption>
+</figure>
+<h3 id="示例语法">4.4.3 示例语法</h3>
+<p><span class="math display">\[
+E \rightarrow T E&#39;\\
+E&#39; \rightarrow + T E&#39; | \varepsilon  \\
+T \rightarrow F T&#39;  \\
+T&#39; \rightarrow * F T&#39; | \varepsilon  \\
+F \rightarrow ( E ) | \text{id}
+\]</span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">grammar2 = &#123;</span><br><span class="line">    <span class="string">&quot;terminals&quot;</span> : &#123;<span class="string">&quot;+&quot;</span>, <span class="string">&quot;(&quot;</span>, <span class="string">&quot;)&quot;</span>, <span class="string">&quot;id&quot;</span>, <span class="string">&quot;*&quot;</span>, <span class="string">&quot;epsilon&quot;</span>&#125;,</span><br><span class="line">    <span class="string">&quot;non_terminals&quot;</span>: &#123;<span class="string">&quot;E&quot;</span>, <span class="string">&quot;E&#x27;&quot;</span>, <span class="string">&quot;T&quot;</span>, <span class="string">&quot;T&#x27;&quot;</span>, <span class="string">&quot;F&quot;</span>&#125;,</span><br><span class="line">    <span class="string">&quot;start&quot;</span>: <span class="string">&quot;E&quot;</span>,</span><br><span class="line">    <span class="string">&quot;productions&quot;</span>: [</span><br><span class="line">        (<span class="string">&quot;E&quot;</span>, [<span class="string">&quot;T&quot;</span>, <span class="string">&quot;E&#x27;&quot;</span>]),</span><br><span class="line">        (<span class="string">&quot;E&#x27;&quot;</span>, [<span class="string">&quot;+&quot;</span>, <span class="string">&quot;T&quot;</span>, <span class="string">&quot;E&#x27;&quot;</span>]),</span><br><span class="line">        (<span class="string">&quot;E&#x27;&quot;</span>, [<span class="string">&quot;epsilon&quot;</span>]),</span><br><span class="line">        (<span class="string">&quot;T&quot;</span>, [<span class="string">&quot;F&quot;</span>, <span class="string">&quot;T&#x27;&quot;</span>])</span><br><span class="line">        (<span class="string">&quot;T&#x27;&quot;</span>, [<span class="string">&quot;*&quot;</span>, <span class="string">&quot;F&quot;</span>, <span class="string">&quot;T&#x27;&quot;</span>]),</span><br><span class="line">        (<span class="string">&quot;T&#x27;&quot;</span>, [<span class="string">&quot;epsilon&quot;</span>]),</span><br><span class="line">        (<span class="string">&quot;F&quot;</span>, [<span class="string">&quot;(&quot;</span>, <span class="string">&quot;E&quot;</span>, <span class="string">&quot;)&quot;</span>]),</span><br><span class="line">        (<span class="string">&quot;F&quot;</span>, [<span class="string">&quot;id&quot;</span>])</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ll1-分析法的引入">4.4.4 LL1 分析法的引入</h3>
+<p>对于只有一个候选的非终结符去匹配输入串时，是不可能产生回溯的。</p>
+<p>回溯的产生是因为那些有多个候选的非终结符，在匹配输入串时指派了<strong>不恰当的候选式</strong>。</p>
+<p>如果这类非终结符在匹配输入串时总是一次就指派恰当的候选去执行任务，那么回溯即可避免。</p>
+<p>需要使用一个概念：候选式 <span class="math inline">\(\alpha\)</span> 的首符号集<span class="math inline">\(FIRST(\alpha)\)</span>。</p>
+<h3 id="first-集首符号集">4.4.5 FIRST 集（首符号集）</h3>
+<p>FIRST 集的主要作用是帮助确定在<strong>某个符号串的开头</strong>可能出现的<strong>终结符</strong>。</p>
+<p>假设 <span class="math inline">\(G\)</span> 是一个不含左递归的文法，对 <span class="math inline">\(G\)</span> 的所有非终结符的每个候选式 <span class="math inline">\(\alpha\)</span>，定义首符号集<br />
+<span class="math display">\[
+FIRST(\alpha) = \{t | \alpha \Rightarrow^* t\ldots, t \in V_T\}
+\]</span></p>
+<p>规定若 <span class="math inline">\(\alpha \Rightarrow^* \varepsilon\)</span>，则 <span class="math inline">\(\varepsilon \in FIRST(\alpha)\)</span>。</p>
+<p>如果非终结符 <span class="math inline">\(A\)</span> 的所有候选 <span class="math inline">\(FIRST\)</span> 集<strong>两两不相交</strong>，即不同候选 <span class="math inline">\(\alpha_i\)</span>，<span class="math inline">\(\alpha_j\)</span> 有<br />
+<span class="math display">\[
+FIRST(\alpha_i) \cap FIRST(\alpha_j) = \varnothing
+\]</span></p>
+<p>则当要求 <span class="math inline">\(A\)</span> 匹配输入串时，<span class="math inline">\(A\)</span> 就能根据它所面临的第一个输入符号 <span class="math inline">\(b\)</span>，准确地指派某一<br />
+个候选 <span class="math inline">\(\alpha_i\)</span> 去执行任务，这个<span class="math inline">\(\alpha_i\)</span>满足<span class="math inline">\(b \in FIRST(\alpha_i)\)</span>。</p>
+<p>但并非所有的文法都满足上面的要求。例如，许多程序语言都有的条件句的产生式<br />
+<span class="math display">\[
+S \to iCtSeS | iCtS
+\]</span></p>
+<p>在这种情况下。必须对文法进行改造，通过引入新的非终结符，对候选式提取公共左因子最终使得文法满足任何非终结符的所有候选的首符号集两两不相交。</p>
+<p><strong>FIRST 集合的计算规则（不动点迭代法）</strong></p>
+<ul>
+<li>初始化所有符号的 FIRST 集合为空。</li>
+<li>对于每个终结符，其 FIRST 集合就是它自身。其中 <span class="math inline">\(\varepsilon\)</span> 被视为特殊的终结符单独处<br />
+理。</li>
+<li>对于每个产生式，根据产生式的右部符号更新左部非终结符的 FIRST 集合：
+<ul>
+<li>如果右部是终结符（包括 <span class="math inline">\(\varepsilon\)</span>），直接将其加入左部的 FIRST 集合。</li>
+<li>如果右部是非终结符 <span class="math inline">\(N\)</span>，将其集合 <span class="math inline">\(FIRST(N)\)</span> 中的元素（<strong>不包括</strong> <span class="math inline">\(\varepsilon\)</span>）加入左部的 FIRST 集合。</li>
+<li>如果右部有多个符号，且前面的符号的 FIRST 集合包含 <span class="math inline">\(\varepsilon\)</span>，则继续处理后面的符号，直到遇到 FIRST 集中不含 <span class="math inline">\(\varepsilon\)</span> 的符号或处理完所有符号为止。</li>
+<li>如果处理完右部的所有符号，发现每个符号的 FIRST 集合都包含 <span class="math inline">\(\varepsilon\)</span>（即每个符号都可以推导出空字），则将 <span class="math inline">\(\varepsilon\)</span> 加入左部非终结符的 FIRST 集合。</li>
+</ul></li>
+<li>上述过程重复进行，直到没有新的元素被加入到任何 FIRST 集合中为止。具体而言：
+<ul>
+<li>每一轮遍历所有产生式，按照规则更新各非终结符的 FIRST 集。</li>
+<li>只要有任何非终结符的 FIRST 集中新增了元素（包括新增空字 <span class="math inline">\(\varepsilon\)</span>），就标记本轮发生了变化。</li>
+<li>继续下一轮遍历，直到某一轮没有任何新增元素时，算法终止。</li>
+</ul></li>
+</ul>
+<p>对于<br />
+<span class="math display">\[
+E \rightarrow T E&#39;\\
+E&#39; \rightarrow + T E&#39; | \varepsilon  \\
+T \rightarrow F T&#39;  \\
+T&#39; \rightarrow * F T&#39; | \varepsilon  \\
+F \rightarrow ( E ) | \text{id}
+\]</span></p>
+<ol type="1">
+<li><p><strong>第一轮迭代</strong></p>
+<ul>
+<li><span class="math inline">\(E \to TE&#39;\)</span>，右部第一个符号为 <span class="math inline">\(T\)</span>，<span class="math inline">\(FIRST(T) = \varnothing\)</span>，无法添加任何元素。</li>
+<li><span class="math inline">\(E&#39; \to + T E&#39;\)</span>，将 <span class="math inline">\(+\)</span> 加入 <span class="math inline">\(FIRST(E&#39;)\)</span>，<span class="math inline">\(FIRST(E&#39;) = \{+\}\)</span>。</li>
+<li><span class="math inline">\(E&#39; \rightarrow \varepsilon\)</span>，将 <span class="math inline">\(\varepsilon\)</span> 加入 <span class="math inline">\(FIRST(E&#39;)\)</span>，<span class="math inline">\(FIRST(E&#39;) = \{+, \varepsilon\}\)</span>。</li>
+<li><span class="math inline">\(T \rightarrow F T&#39;\)</span>，右部第一个符号为 <span class="math inline">\(F\)</span>，<span class="math inline">\(FIRST(F) = \varnothing\)</span>，无法添加任何元素。</li>
+<li><span class="math inline">\(T&#39; \rightarrow * F T&#39;\)</span>，将 <span class="math inline">\(*\)</span> 加入 <span class="math inline">\(FIRST(T&#39;)\)</span>，<span class="math inline">\(FIRST(T&#39;) = \{*\}\)</span>。</li>
+<li><span class="math inline">\(T&#39; \rightarrow \varepsilon\)</span>，将 <span class="math inline">\(\varepsilon\)</span> 加入 <span class="math inline">\(FIRST(T&#39;)\)</span>，<span class="math inline">\(FIRST(T&#39;) = \{*, \varepsilon\}\)</span>。</li>
+<li><span class="math inline">\(F \to (E)\)</span>，将 <span class="math inline">\((\)</span> 加入 <span class="math inline">\(FIRST(F)\)</span>，<span class="math inline">\(FIRST(F) = \{(\}\)</span>。</li>
+<li><span class="math inline">\(F \to \text{id}\)</span>，将 <span class="math inline">\(\text{id}\)</span> 加入 <span class="math inline">\(FIRST(F)\)</span>，<span class="math inline">\(FIRST(F) = \{(, \text{id}\}\)</span>。</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+FIRST(E) &amp;= \varnothing \\
+FIRST(E&#39;) &amp;= \{+, \varepsilon\} \\
+FIRST(T) &amp;= \varnothing \\
+FIRST(T&#39;) &amp;= \{*, \varepsilon\} \\
+FIRST(F) &amp;= \{(, \text{id}\}
+\end{aligned}
+\]</span></p></li>
+<li><p><strong>第二次迭代</strong></p>
+<ul>
+<li><span class="math inline">\(E \to TE&#39;\)</span>，右部第一个符号为 <span class="math inline">\(T\)</span>，<span class="math inline">\(FIRST(T) = \varnothing\)</span>，无法添加任何元素。</li>
+<li><span class="math inline">\(E&#39; \to + T E&#39;\)</span>，无新内容。</li>
+<li><span class="math inline">\(E&#39; \rightarrow \varepsilon\)</span>，无新内容。</li>
+<li><span class="math inline">\(T \rightarrow F T&#39;\)</span>，右部第一个符号为 <span class="math inline">\(F\)</span>，<span class="math inline">\(FIRST(F) = \{(, \text{id}\}\)</span>，添加到 <span class="math inline">\(FIRST(T)\)</span>，<span class="math inline">\(FIRST(T) = \{(, \text{id}\}\)</span>，没有 <span class="math inline">\(\varepsilon\)</span>。</li>
+<li><span class="math inline">\(T&#39; \rightarrow * F T&#39;\)</span>，无新内容。</li>
+<li><span class="math inline">\(T&#39; \rightarrow \varepsilon\)</span>，无新内容。</li>
+<li><span class="math inline">\(F \to (E)\)</span>，无新内容。</li>
+<li><span class="math inline">\(F \to \text{id}\)</span>，无新内容。</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+FIRST(E) &amp;= \varnothing \\
+FIRST(E&#39;) &amp;= \{+, \varepsilon\} \\
+FIRST(T) &amp;= \{(, \text{id}\} \\
+FIRST(T&#39;) &amp;= \{*, \varepsilon\} \\
+FIRST(F) &amp;= \{(, \text{id}\}
+\end{aligned}
+\]</span></p></li>
+<li><p><strong>第三轮迭代</strong></p>
+<ul>
+<li><span class="math inline">\(E \to TE&#39;\)</span>，右部第一个符号为 <span class="math inline">\(T\)</span>，<span class="math inline">\(FIRST(T) = \{(, \text{id}\}\)</span>，$FIRST(E) = {(, }。</li>
+</ul>
+<p>其余产生式无贡献。</p>
+<p><span class="math display">\[
+\begin{aligned}
+FIRST(E) &amp;= \{(, \text{id}\} \\
+FIRST(E&#39;) &amp;= \{+, \varepsilon\} \\
+FIRST(T) &amp;= \{(, \text{id}\} \\
+FIRST(T&#39;) &amp;= \{*, \varepsilon\} \\
+FIRST(F) &amp;= \{(, \text{id}\}
+\end{aligned}
+\]</span></p></li>
+<li><p><strong>第四轮迭代</strong><br />
+没有新元素加入任何 FIRST 集，停止。</p></li>
+</ol>
+<p>对于<strong>无前向依赖</strong>（依赖图无环，或经过分析后非终结符的 FIRST 可不依赖循环）的文法，可以采用<strong>依赖顺序一次推导法</strong>，由依赖从简单到复杂直接推算。</p>
+<p>计算 <span class="math inline">\(FIRST(F) = \{ \{, \text{id}\}\)</span>。</p>
+<p>计算 <span class="math inline">\(FIRST(T&#39;) = \{ *, \varepsilon\}\)</span>。</p>
+<p>计算 <span class="math inline">\(FIRST(T) = FIRST(F) = \{ \{, \text{id}\}\)</span>。</p>
+<p>计算 <span class="math inline">\(FIRST(E&#39;) = \{ +, \varepsilon \}\)</span>。</p>
+<p>计算 <span class="math inline">\(FIRST(E) = FIRST(T) = \{ \{, \text{id}\}\)</span></p>
+<h3 id="符号串的-first-集">4.4.6 符号串的 FIRST 集</h3>
+<p>一些生成式中，非终结符定义为一组字符串。</p>
+<ul>
+<li><strong>终结符</strong>
+<ul>
+<li>若 <span class="math inline">\(\alpha = b\)</span>（<span class="math inline">\(b\)</span> 为终结符），则 <span class="math inline">\(FIRST(\alpha) = \{b\}\)</span>。</li>
+</ul></li>
+<li><strong>符号串</strong>（如 <span class="math inline">\(𝛼 = X_1, X_2, \ldots, X_n\)</span>）
+<ul>
+<li>从左到右计算：
+<ul>
+<li>将 <span class="math inline">\(FIRST(X_1) - \{\varepsilon\}\)</span>加入 <span class="math inline">\(FIRST(\alpha)\)</span>。</li>
+<li>若 <span class="math inline">\(\varepsilon \in FIRST(X_1)\)</span>，则继续检查 <span class="math inline">\(X_2\)</span>，依此类推。</li>
+<li>若所有 <span class="math inline">\(X_i\)</span> 都能推导出 <span class="math inline">\(\epsilon\)</span>，则 <span class="math inline">\(\epsilon \in FIRST(\alpha)\)</span>。</li>
+</ul></li>
+</ul></li>
+<li><strong>空串</strong>
+<ul>
+<li><span class="math inline">\(FIRST(\varepsilon) = \{\varepsilon\}\)</span>。</li>
+</ul></li>
+</ul>
+<p><strong>计算规则</strong></p>
+<ol type="1">
+<li><p>如果 <span class="math inline">\(X_i\)</span> 是终结符：直接将 <span class="math inline">\(X_i\)</span> 加入 <span class="math inline">\(FIRST(X_1X_2\ldots X_N)\)</span> 集合中，并停止进一步处理该符号串。</p></li>
+<li><p>如果 <span class="math inline">\(X_i\)</span> 是非终结符：</p>
+<ul>
+<li>获取 <span class="math inline">\(FIRST(X_i)\)</span> 集合；</li>
+<li>如果 <span class="math inline">\(FIRST(X_i)\)</span> 集合中不包含空串 <span class="math inline">\(\varepsilon\)</span>，则将 <span class="math inline">\(FIRST(X_i)\)</span> 中的所有元素加入到 <span class="math inline">\(FIRST(X_1X_2\ldots X_N)\)</span> 集合中，并停止对 <span class="math inline">\(X_i\)</span> 之后的符号串的处理；</li>
+<li>如果 <span class="math inline">\(FIRST(X_i)\)</span> 集合中包含空串 <span class="math inline">\(\varepsilon\)</span>，则将 <span class="math inline">\(FIRST(X_1) - \{\varepsilon\}\)</span> 加入到 <span class="math inline">\(FIRST(X_1X_2\ldots X_N)\)</span>。集合中，并继续处理<span class="math inline">\(X_{i+1}\)</span>。若所有 <span class="math inline">\(X_i\)</span> 都能推导出 <span class="math inline">\(\varepsilon\)</span>，则<span class="math inline">\(\varepsilon \in FIRST(X_1X_2\ldots X_N)\)</span></li>
+</ul></li>
+</ol>
+<h3 id="follow-集后继符号集">4.4.7 FOLLOW 集（后继符号集）</h3>
+<p>FOLLOW 集的主要作用是帮助确定在某个非终结符的推导过程中，哪些终结符可以出现在该非终结符的后面。</p>
+<p>对于文法中的每个非终结符 <span class="math inline">\(A\)</span>，<span class="math inline">\(FOLLOW(A)\)</span> 是一个终结符集合，定义<br />
+<span class="math display">\[
+FOLLOW(A) = \{t | S \Rightarrow^* \alpha At \beta\}
+\]</span></p>
+<p><span class="math inline">\(\alpha\)</span>、<span class="math inline">\(\beta\)</span> 为任意符号串，可为空。</p>
+<p>FOLLOW 集可含结束符 <span class="math inline">\(\$\)</span> 或 <span class="math inline">\(\#\)</span>。</p>
+<p><strong>计算规则</strong></p>
+<ol type="1">
+<li>对于开始符号 <span class="math inline">\(S\)</span>，将结束符 <span class="math inline">\(\#\)</span> 加入 <span class="math inline">\(FOLLOW(S)\)</span>；</li>
+<li>如果 <span class="math inline">\(A \to \alpha B \beta\)</span> 是一个产生式，将 <span class="math inline">\(FIRST(\beta)\)</span> 除去 <span class="math inline">\(\varepsilon\)</span> 加入 <span class="math inline">\(FOLLOW(B)\)</span> 中；</li>
+<li>如果 <span class="math inline">\(A \to \alpha B\)</span> 或 <span class="math inline">\(A \to \alpha B \beta\)</span> 且 <span class="math inline">\(\beta \Rightarrow^* \varepsilon\)</span>，将 <span class="math inline">\(FOLLOW(A)\)</span> 加入 <span class="math inline">\(FOLLOW(B)\)</span>。</li>
+</ol>
+<p>对于开始符号使用 1，对每个产生式使用 2 或 3，迭代，直到所有 FOLLOW 集不再变化。</p>
+<p><span class="math display">\[
+E \rightarrow T E&#39;\\
+E&#39; \rightarrow + T E&#39; | \varepsilon  \\
+T \rightarrow F T&#39;  \\
+T&#39; \rightarrow * F T&#39; | \varepsilon  \\
+F \rightarrow ( E ) | \text{id}
+\]</span></p>
+<p>对于开始符号，<span class="math inline">\(FOLLOW(E) = \{ \# \}\)</span>。其余符号 <span class="math inline">\(FOLLOW(E&#39;) = FOLLOW(T) = FOLLOW(T&#39;) = FOLLOW(F) = \varnothing\)</span>。</p>
+<ol type="1">
+<li><p><strong>第一轮</strong><br />
+因为 <span class="math inline">\(F \rightarrow (E)\)</span>，<span class="math inline">\(A = F\)</span>，<span class="math inline">\(\alpha = (\)</span>，<span class="math inline">\(B = E\)</span>，<span class="math inline">\(\beta = )\)</span>，<br />
+<span class="math display">\[
+FOLLOW(E) = \{ \# \} \cup (FIRST()) - {\varepsilon}) = \{ \#, ) \}
+\]</span></p>
+<p>因为 <span class="math inline">\(E \rightarrow TE&#39;\)</span>，如果 <span class="math inline">\(A = E\)</span>，<span class="math inline">\(\alpha = T\)</span>，<span class="math inline">\(B = E&#39;\)</span>，<span class="math inline">\(\beta = \varepsilon\)</span>，<br />
+<span class="math display">\[
+FOLLOW(E&#39;) = \varnothing \cup FOLLOW(E) = \{ \#, ) \}
+\]</span></p>
+<p>如果 <span class="math inline">\(\alpha = \varepsilon\)</span>，<span class="math inline">\(B = T\)</span>，<span class="math inline">\(\beta = E&#39;\)</span>，<br />
+<span class="math display">\[
+FOLLOW(T) = \varnothing \cup (FIRST(E&#39;) - \{\varepsilon\}) = \{+\} (规则 2) \\
+FOLLOW(T) = \{+\} \cup FOLLOW(E) = \{+, \#, )\}(规则3)
+\]</span></p>
+<p>因为 <span class="math inline">\(E&#39; \rightarrow +TE&#39;\)</span>，<span class="math inline">\(A = E&#39;\)</span>，如果 <span class="math inline">\(\alpha = +\)</span>，<span class="math inline">\(B = T\)</span>，<span class="math inline">\(\beta = E&#39;\)</span>，<br />
+<span class="math display">\[
+FOLLOW(T) = \{+, \#, )\} \cup(FIRST(E&#39;) - \{\varepsilon\}) =  \{+, \#, )\}(规则2, 不变) \\
+FOLLOW(T) = \{+, \#, )\} \cup FOLLOW(E&#39;) = \{+, \#, )\}(规则3, 不变)
+\]</span></p>
+<p>如果 <span class="math inline">\(\alpha = +T\)</span>，<span class="math inline">\(B = E&#39;\)</span>，<span class="math inline">\(\beta = \varepsilon\)</span>，<br />
+<span class="math display">\[
+FOLLOW(E&#39;) = \{ \#, ) \} \cup FOLLOW(E&#39;) = \{ \#, ) \}(规则3, 不变)
+\]</span></p>
+<p>因为 <span class="math inline">\(T \rightarrow FT&#39;\)</span>，<span class="math inline">\(A = T\)</span>，如果 <span class="math inline">\(\alpha = \varepsilon\)</span>，<span class="math inline">\(B = F\)</span>，<span class="math inline">\(\beta = T&#39;\)</span>，<br />
+<span class="math display">\[
+FOLLOW(F) = \varnothing \cup (FIRST(T) - \{\varepsilon\}) = \{*\}(规则2) \\
+FOLLOW(F) = \{*\} \cup FOLLOW(T) = \{*, +, \#, ) \}
+\]</span></p>
+<p>如果 <span class="math inline">\(\alpha = F\)</span>，<span class="math inline">\(B = T&#39;\)</span>，<span class="math inline">\(\beta = \varepsilon\)</span>，<br />
+<span class="math display">\[
+FOLLOW(T&#39;) = \varnothing \cup FOLLOW(T) = \{+, \#, )\}
+\]</span></p>
+<p>因为 <span class="math inline">\(T&#39; \rightarrow *FT\)</span>，<span class="math inline">\(A = T&#39;\)</span>，如果 <span class="math inline">\(\alpha = *\)</span>，<span class="math inline">\(B = F\)</span>，<span class="math inline">\(\beta = T&#39;\)</span>，<br />
+<span class="math display">\[
+FOLLOW(F) = \{*, +, \#, ) \} \cup (FIRST(T) - {\varepsilon}) = \{*, +, \#, ) \}(规则2, 不变) \\
+FOLLOW(F) = \{*, +, \#, ) \} \cup FOLLOW(T&#39;) = \{*, +, \#, ) \}(规则3, 不变)
+\]</span></p>
+<p>如果 <span class="math inline">\(\alpha = *F\)</span>，<span class="math inline">\(B = T&#39;\)</span>，<span class="math inline">\(\beta = \varepsilon\)</span>，<br />
+<span class="math display">\[
+FOLLOW(T&#39;) = \{+, \#, )\} \cup FOLLOW(T&#39;) = \{+, \#, )\}(规则3, 不变)
+\]</span></p></li>
+<li><p><strong>第二轮</strong><br />
+<span class="math display">\[
+FOLLOW(E) = \{\#, )\} \\
+FOLLOW(E&#39;) = \{ \#, ) \} \\
+FOLLOW(T) = \{+, \#, )\} \\
+FOLLOW(T&#39;) = \{+, \#, )\} \\
+FOLLOW(F) = \{*, +, \#, ) \}
+\]</span></p>
+<p>均无变化，迭代结束。</p></li>
+</ol>
+<p>最终 <span class="math inline">\(FOLLOW\)</span> 集<br />
+<span class="math display">\[
+FOLLOW(E) = \{\#, )\} \\
+FOLLOW(E&#39;) = \{ \#, ) \} \\
+FOLLOW(T) = \{+, \#, )\} \\
+FOLLOW(T&#39;) = \{+, \#, )\} \\
+FOLLOW(F) = \{*, +, \#, ) \}
+\]</span></p>
+<blockquote>
+<p>长产生式需要分情况处理。右部有 <span class="math inline">\(N\)</span> 个非终结符，就对应 <span class="math inline">\(N\)</span> 种分法。不同的分法会导致规则 2 添加的终结符不同和规则 3 是否传递 <span class="math inline">\(FOLLOW(A)\)</span> 的条件不同。所以这是必要的。</p>
+</blockquote>
+<h3 id="select-集选择集">4.4.8 SELECT 集（选择集）</h3>
+<p>SELECT 集用于预测分析，特别是 LL(1) 文法的分析表构造。对于文法中的每个产生式 <span class="math inline">\(A \to \beta\)</span>，SELECT 集定义了<strong>应用该产生式</strong>时，<strong>当前输入符号必须属于的终结符集合</strong>。</p>
+<p><strong>计算规则</strong></p>
+<p>对于产生式 <span class="math inline">\(A \to \beta\)</span>，</p>
+<ol type="1">
+<li><p><span class="math inline">\(\beta\)</span> 不能推导出空字（<span class="math inline">\(\varepsilon \notin FIRST(\beta)\)</span>）<br />
+<span class="math display">\[
+SELECT(A \to \beta) = FIRST(\beta)
+\]</span></p></li>
+<li><p><span class="math inline">\(\beta\)</span> 能推导出空字（<span class="math inline">\(\varepsilon \in FIRST(\beta)\)</span>）<br />
+SELECT 集包含</p>
+<ul>
+<li><span class="math inline">\(\beta\)</span> 的 FIRST 集中所有的非空字元素</li>
+<li><span class="math inline">\(A\)</span> 的 FOLLOW 集</li>
+</ul>
+<p><span class="math display">\[
+SELECT(A \to \beta) = (FIRST(\beta) - \{\varepsilon\}) \cup FOLLOW(A)
+\]</span></p></li>
+</ol>
+<p><strong>特殊情况</strong></p>
+<ul>
+<li><p>若 <span class="math inline">\(\beta = \varepsilon\)</span>，<span class="math inline">\(FIRST(\beta) = \{\varepsilon\}\)</span>，属于<strong>规则 2</strong>，因此<br />
+<span class="math display">\[
+SELECT(A \to \varepsilon) = FOLLOW(A)
+\]</span></p></li>
+<li><p>若 <span class="math inline">\(\beta\)</span> 以终结符开头，则该终结符必属于 SELECT 集，不涉及 FOLLOW 集。</p></li>
+</ul>
+<p>依旧<br />
+<span class="math display">\[
+E \rightarrow T E&#39;\\
+E&#39; \rightarrow + T E&#39; | \varepsilon  \\
+T \rightarrow F T&#39;  \\
+T&#39; \rightarrow * F T&#39; | \varepsilon  \\
+F \rightarrow ( E ) | \text{id}
+\]</span></p>
+<p>因为 <span class="math inline">\(E \rightarrow TE&#39;\)</span>，<span class="math inline">\(\beta = TE&#39;\)</span>，<span class="math inline">\(FIRST(T) = \{(, \text{id}\}\)</span> 且 <span class="math inline">\(T\)</span> 不为空<br />
+<span class="math display">\[
+\varepsilon \notin FIRST(\beta) = FIRST(T) = \{(, \text(id)\}
+\]</span></p>
+<p>所以<br />
+<span class="math display">\[
+SELECT(E \rightarrow TE&#39;) = \{(, \text{id}\}
+\]</span></p>
+<p>因为 <span class="math inline">\(E&#39; \rightarrow +TE&#39;\)</span>，<span class="math inline">\(\beta = +TE&#39;\)</span>，<span class="math inline">\(FIRST(\beta) = \{+\}\)</span>，<br />
+<span class="math display">\[
+\varepsilon \notin FIRST(\beta)
+\]</span></p>
+<p>所以<br />
+<span class="math display">\[
+SELECT(E&#39; \rightarrow +TE&#39;) = \{+\}
+\]</span></p>
+<p>因为 <span class="math inline">\(E&#39; \rightarrow \varepsilon\)</span>，<span class="math inline">\(\beta = \varepsilon\)</span>，<span class="math inline">\(FIRST(\beta) = {\varepsilon}\)</span>，<br />
+<span class="math display">\[
+\varepsilon \in FIRST(\beta)
+\]</span></p>
+<p>为特例，所以<br />
+<span class="math display">\[
+SELECT(E&#39; \rightarrow \varepsilon) = FOLLOW(E&#39;) = \{\#, )\}
+\]</span></p>
+<p>因为 <span class="math inline">\(T \rightarrow FT&#39;\)</span>，<span class="math inline">\(\beta = FT&#39;\)</span>，<span class="math inline">\(FIRST(F) = \{(, \text{id}\}\)</span>，<span class="math inline">\(F\)</span> 不为空，<br />
+<span class="math display">\[
+\varepsilon \notin FIRST(\beta) = FIRST(F) = {(, \text(id)}
+\]</span></p>
+<p>所以<br />
+<span class="math display">\[
+SELECT(T \rightarrow FT&#39;) = \{(, \text{id}\}
+\]</span></p>
+<p>因为 <span class="math inline">\(T&#39; \rightarrow *FT&#39;\)</span>，<span class="math inline">\(\beta = *FT&#39;\)</span>，<span class="math inline">\(FIRST(\beta) = \{*\}\)</span>，<br />
+<span class="math display">\[
+\varepsilon \notin FIRST(\beta)
+\]</span></p>
+<p>所以<br />
+<span class="math display">\[
+SELECT(T&#39; \rightarrow *FT&#39;) = \{*\}
+\]</span></p>
+<p>因为 <span class="math inline">\(T&#39; \rightarrow \varepsilon\)</span>，<span class="math inline">\(\beta = \varepsilon\)</span>，<span class="math inline">\(FIRST(\beta) = {\varepsilon}\)</span>，<br />
+<span class="math display">\[
+\varepsilon \in FIRST(\beta)
+\]</span></p>
+<p>为特例，所以<br />
+<span class="math display">\[
+SELECT(T&#39; \rightarrow \varepsilon) = FOLLOW(T&#39;) = \{+, \#, )\}
+\]</span></p>
+<p>因为 <span class="math inline">\(F \rightarrow (E)\)</span>，<span class="math inline">\(\beta = (E)\)</span>，<span class="math inline">\(FIRST(\beta) = \{(\}\)</span>，<br />
+<span class="math display">\[
+\varepsilon \notin FIRST(\beta)
+\]</span></p>
+<p>所以<br />
+<span class="math display">\[
+SELECT(F \rightarrow (E)) = \{(\}
+\]</span></p>
+<p>因为 <span class="math inline">\(F \rightarrow \text{id}\)</span>，<span class="math inline">\(\beta = \text{id}\)</span>，<span class="math inline">\(FIRST(\beta) = \{\text{id}\}\)</span>，<br />
+<span class="math display">\[
+\varepsilon \notin FIRST(\beta)
+\]</span></p>
+<p>所以<br />
+<span class="math display">\[
+SELECT(F \rightarrow \text{id}) = \{\text{id}\}
+\]</span></p>
+<p>所有产生式 <span class="math inline">\(SELECT\)</span> 集<br />
+<span class="math display">\[
+SELECT(E \rightarrow TE&#39;) = \{(, \text{id}\} \\
+SELECT(E&#39; \rightarrow +TE&#39;) = \{+\} \\
+SELECT(E&#39; \rightarrow \varepsilon) = \{\#, )\} \\
+SELECT(T \rightarrow FT&#39;) = \{(, \text{id}\} \\
+SELECT(T&#39; \rightarrow *FT&#39;) = \{*\} \\
+SELECT(T&#39; \rightarrow \varepsilon) = \{+, \#, )\} \\
+SELECT(F \rightarrow (E)) = \{(\} \\
+SELECT(F \rightarrow \text{id}) = \{\text{id}\}
+\]</span></p>
+<h3 id="构造预测分析表">4.4.9 构造预测分析表</h3>
+<p>预测分析表是一个二维表，行表示非终结符，列表示终结符（包括结束符号 <span class="math inline">\(\#\)</span> 或 <span class="math inline">\(\$\)</span>）。表中的每个条目指示在<strong>某个非终结符</strong>和<strong>某个输入符号</strong>下，应该使用<strong>哪个产生式</strong>进行推导。</p>
+<p><strong>构造步骤</strong></p>
+<ul>
+<li>初始化一个二维表，行表示非终结符，列表示终结符（包括结束符号 <span class="math inline">\(\#\)</span> 或 <span class="math inline">\(\$\)</span>）</li>
+<li>对于每个产生式 <span class="math inline">\(A \to \beta\)</span>：<br />
+对于 <span class="math inline">\(SELECT(A \to \beta)\)</span>中的每个终结符 <span class="math inline">\(t\)</span>，在表的 <span class="math inline">\((A, t)\)</span> 位置填入产生式 <span class="math inline">\(A \to \beta\)</span>；</li>
+<li>如果某个<span class="math inline">\((A, t)\)</span>位置<strong>已经有条目</strong>，说明文法<strong>不是 LL(1) 文法</strong>，存在<strong>冲突</strong>。</li>
+</ul>
+<p>如果在填充预测分析表时发现某个<span class="math inline">\((A, t)\)</span>位置有多个产生式，说明文法不是 LL(1) 文法。此时需要<strong>修改文法</strong>或使用<strong>更强大的分析器</strong>（如 LR 分析器）。</p>
+<p>同时，文法满足对于同一个非终结符，所有产生式的 <span class="math inline">\(SELECT\)</span> 集两两不相交，则是 LL(1) 文法。</p>
+<p>依旧<br />
+<span class="math display">\[
+E \rightarrow T E&#39;\\
+E&#39; \rightarrow + T E&#39; | \varepsilon  \\
+T \rightarrow F T&#39;  \\
+T&#39; \rightarrow * F T&#39; | \varepsilon  \\
+F \rightarrow ( E ) | \text{id}
+\]</span></p>
+<p>已知 SELECT 集<br />
+<span class="math display">\[
+SELECT(E \rightarrow TE&#39;) = \{(, \text{id}\} \\
+SELECT(E&#39; \rightarrow +TE&#39;) = \{+\} \\
+SELECT(E&#39; \rightarrow \varepsilon) = \{\#, )\} \\
+SELECT(T \rightarrow FT&#39;) = \{(, \text{id}\} \\
+SELECT(T&#39; \rightarrow *FT&#39;) = \{*\} \\
+SELECT(T&#39; \rightarrow \varepsilon) = \{+, \#, )\} \\
+SELECT(F \rightarrow (E)) = \{(\} \\
+SELECT(F \rightarrow \text{id}) = \{\text{id}\}
+\]</span></p>
+<p>构造预测分析表如下</p>
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(+\)</span></th>
+<th><span class="math inline">\(*\)</span></th>
+<th><span class="math inline">\((\)</span></th>
+<th><span class="math inline">\()\)</span></th>
+<th><span class="math inline">\(\text{id}\)</span></th>
+<th><span class="math inline">\(\#\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(E\)</span></td>
+<td></td>
+<td></td>
+<td><span class="math inline">\(E \rightarrow TE&#39;\)</span></td>
+<td></td>
+<td><span class="math inline">\(E \rightarrow TE&#39;\)</span></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(E&#39;\)</span></td>
+<td><span class="math inline">\(E&#39; \rightarrow +TE&#39;\)</span></td>
+<td></td>
+<td></td>
+<td><span class="math inline">\(E&#39; \rightarrow \varepsilon\)</span></td>
+<td></td>
+<td><span class="math inline">\(E&#39; \rightarrow \varepsilon\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(T\)</span></td>
+<td></td>
+<td></td>
+<td><span class="math inline">\(T \rightarrow FT&#39;\)</span></td>
+<td></td>
+<td><span class="math inline">\(T \rightarrow FT&#39;\)</span></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(T&#39;\)</span></td>
+<td><span class="math inline">\(T&#39; \rightarrow \varepsilon\)</span></td>
+<td><span class="math inline">\(T&#39; \rightarrow *FT&#39;\)</span></td>
+<td></td>
+<td><span class="math inline">\(T&#39; \rightarrow \varepsilon\)</span></td>
+<td></td>
+<td><span class="math inline">\(T&#39; \rightarrow \varepsilon\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(F\)</span></td>
+<td></td>
+<td></td>
+<td><span class="math inline">\(F \rightarrow (E)\)</span></td>
+<td></td>
+<td><span class="math inline">\(F \rightarrow \text{id}\)</span></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ll1-语法分析程序">4.4.10 LL1 语法分析程序</h3>
+<p>LL1 语法分析步骤</p>
+<ul>
+<li>构造文法；</li>
+<li>改造文法：消除二义性、消除左递归、消除回溯；</li>
+<li>求每个符号的 FIRST 集和 FOLLOW 集，字符串的 FIRST 集。从而求得每个候选式的 SELECT 集；</li>
+<li>检查是不是 LL1 文法。若是，构造预测分析表；</li>
+<li>开发表驱动的预测分析算法的程序。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/">https://remy-campanella.github.io/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/12/26-6-12-1-COMPSCI367-9-adv-srh/" title="【COMPSCI 367】 Lecture 9 Adversial Search—Minimax and Alpha-Beta Pruning"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 9 Adversial Search—Minimax and Alpha-Beta Pruning</div></div><div class="info-2"><div class="info-item-1">From Single-Agent to Adversial Search          Single Agent Search Adversial Search     Action One agent choose a sequence of actions to reach the goal. Two players alternate moves. MAX tries to maximize the outcome; MIN tries to minimise it.   Objective Find a path that leads to the goal according to a utility function. Choose moves that miximise your outcome assuming the opponent plays optimally.    From Search to Games Game Specification \[ (S, A, s_0, F, \mat...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/14/26-3-12-1-PrcpCmpl-2-high-lang/" title="【程序设计语言 编译原理】 第二章 高级语言及其语法描述"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-14</div><div class="info-item-2">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</div></div><div class="info-2"><div class="info-item-1">2.1 程序语言的定义 一个程序语言是一个记号系统。程序语法由语法、语义两方面定义。  语法：规定描述形式。 语义：语法成分实际意义。  2.1.1 语法 任何语言程序都可看作是一定字符集（字母表）上的一字符串（有限序列）。有一组用于生成合式程序的规则，这组规则就是语法。这些规则的一部分称为词法规则，另一部分称为语法规则。  单词符号：语言中具有独立意义的最基本结构。 词法规则：单词符号的形成规则。规定了字母表中什么样的字符串是单词符号。 语法规则：规定如何从单词符号形成更大的语法单位。 语法范畴/语法单位：由单词符号组成的表达式，如 \(a * 114.514 + c\)。  在现今多数程序语言中，常用上下文无关文法描述语法规则。语言的词法规则与语法规则规定了程序的结构，可以判断程序是否合式。合式程序仅表示词法与语法形式正确，语义不一定正确。 2.1.2 语义 语义是是各个单词符号与语法单位的意义，可以定义一个程序的意义。语义缺乏形式化的描述工具，主要采用自然语言阐释语义。运用属性文法进行语法制导翻译。 程序本质上是对某一问题以及处理问题的办法...</div></div></div></a><a class="pagination-related" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-21</div><div class="info-item-2">【程序设计语言 编译原理】 第三章 词法分析</div></div><div class="info-2"><div class="info-item-1">3.1 对于词法分析器的要求 3.1.1 词法分析器的功能和输出形式 词法分析器的功能时输入源程序，输出单词符号。单词符号一般分为：  关键字：有程序语言定义的具有固定意义的标识符。 标识符：用于表示各种名字。 常数 运算符 界符  在程序语言中，关键字、运算符、界符通常固定且数目不大。标识符和常数只有构成规则，使用数目不存在限制。 词法分析器输出的单词符号形式为   (单词种别, 单词符号属性值)   单词种别通常使用整数编码。它主要取决于处理上的方便。  标识符一般统归为一种。 常数则宜按类型（整、实、布尔等）分种。 关键字可将其全体视为一种，也可以一字一种。采用一字一种的分法实际处理起来较为方便。 运算符可采用一符一种的分法，但也可以把具有一定共性的运算符视为一种。 至于界符一般用一符一种的分法。  若一个种别含有多个单词符号，那么应给出种别编码和单词符号属性信息。 3.1.2 词法分析器作为独立子程序 3.2 词法分析器的设计 3.2.1 输入、预处理 词法分析器工作的第一步是输入源程序文本。输入串一般是放在一个缓...</div></div></div></a><a class="pagination-related" href="/2026/03/09/26-3-5-1-PrcpCmpl-1-intro/" title="【程序设计语言 编译原理】 第一章 引论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-09</div><div class="info-item-2">【程序设计语言 编译原理】 第一章 引论</div></div><div class="info-2"><div class="info-item-1">       语言 特征     机器语言 早期编程直接使用含有 0、1 的机器语言。   汇编语言 将一些助记符与机器码直接对应。   高级程序语言 为提升效率设计，采用类自然语言语法，与机器语言无直接对应关系，需要编译。    1.1 什么是编译程序  编译程序 将源语言程序翻译成目标语言程序的程序。这个翻译过程称为编译。 好的编译  目标程序的大小 代码执行效率  解释程序 不产生目标程序，而是边解释边执行源程序本身的程序。 编译程序分类        名称 作用     诊断（Diagnostic）编译程序 帮助程序开发与调试   优化（Optimizing）编译程序 着重提高目标代码效率   交叉（Cross）编译程序 产生不同于其宿主机（运行编译）机器代码   可变目标（Retargetable）编译程序 不需重写编译程序中与机器无关的部分就能改变目标机（运行程序）     1.2 编译过程概述 一般有五个阶段：词法分析、语法分析...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-1-CompOrg-1-intro/" title="【计算机组成原理】 第一章 概论"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第一章 概论</div></div><div class="info-2"><div class="info-item-1">教材 计算机组成原理（第四版） 蒋本珊 清华大学出版社 第一章 概论 1.1 电子计算机与存储程序控制  存储程序的计算机 世界上第一台数字计算机：美国 ENIAC（1946）。 早期存储程序控制的计算机：美国 EDVAC（Von Neumann, 1951），英国 EDSAC（1949）。 存储程序概念（Von Neumann, 1945）  计算机硬件应由五大基本部件组成。 计算机内部采用二进制表示指令和数据。 将程序与原始数据存入存储器中，在启动计算机工作。   1.2 计算机的硬件组成  计算机的主要部件        输入设备 将人们编好的程序和原始数据输送到计算机中，并将其转化为计算机内部所能识别和接受的信息方式的部件   输出设备 将计算机的处理结果以人或其他设备所能接收的形式送出计算机的设备   存储器 用于存放程序和数据的部件   运算器 对信息进行处理和运算的部件，又称算数逻辑运算部件（Arithmetic and Logical Unit, ALU）   控制器 按照人们预先...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-4-CompOrg-4-machine-calculation/" title="【计算机组成原理】 第四章 数值的机器运算"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第四章 数值的机器运算</div></div><div class="info-2"><div class="info-item-1">4.1 基本算数运算的实现 4.1.1 加法器  全加器逻辑与真值表 （略） 逻辑表达式 \[ S_i = A_i \oplus B_i \oplus C_{i - 1} \\\\ C_i = A_iB_i + (A_i \oplus B_i)C_{i - 1} \] 串行与并行          种类 方法 优点 缺点     串行加法器 数据逐位送入一个加法器进行计算 器件少、成本低 速度慢   并行加法器 由多个全加器组成，位数多少取决于字长 速度高 加法运算最长时间问题     4.2.2 进位的产生与传递 设进位传递函数 \[ P_i = A_i \oplus B_i  \ \text{（进位传递函数）} \\\\ G_i = A_iB_i \] 则 \[ C_n = G_n + P_nC_{n - 1} \] 串行进位加法器的总延迟时间与字长成正比。设一级与门、或门的延迟时间为\(ty\)，每一级全加器延迟为\(2ty\)，从\(C_0\)到\(C_N\)的最长时间...</div></div></div></a><a class="pagination-related" href="/2025/10/15/25-10-14-2-CompOrg-2-data-represent/" title="【计算机组成原理】 第二章 数据的机器层次表示"><img class="cover" src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-15</div><div class="info-item-2">【计算机组成原理】 第二章 数据的机器层次表示</div></div><div class="info-2"><div class="info-item-1">2.1 数值数据的表示  无符号数 整个机器字长全部二进制位位数值位。 范围 \([0, 2^n - 1]\)。 原码 将最高位设为符号位，其余位数值位，与真值相同。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 10000\)。 原码实现乘除简单，实现加减复杂。 范围 \([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。 补码 正数补码与原码相同，负数补码为真值数值按位取反，在最低位加 1。 其中，\([+0]_补 = [-0]_补 = 00000\)。 范围 \([-2^{n - 1}, 2^{n - 1} - 1]\)。 反码 正数反码与原码相同，负数补码为真值数值按位取反。 其中，\([+0]_原 = 00000\)，\([-0]_原 = 11111\)。 范围 \([-(2^{n - 1} - 1), 2^{n - 1} - 1]\)。  2.2 机器数的定点表示与浮点表示  定点小数 即纯小数（\(-1 &lt; x &lt; 1\)），小数点位置固定，整数位被取代为符号位。设机器...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-original="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">103</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">119</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">4.1 语法介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%8B%E6%96%87%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">4.1.1 0 型文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%8B%E6%96%87%E6%B3%95-1"><span class="toc-number">1.2.</span> <span class="toc-text">4.1.2 1 型文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%8B%E6%96%87%E6%B3%95-2"><span class="toc-number">1.3.</span> <span class="toc-text">4.1.2 2 型文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%8B%E6%96%87%E6%B3%95-3"><span class="toc-number">1.4.</span> <span class="toc-text">4.1.3 3 型文法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E7%9A%84%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.</span> <span class="toc-text">4.2 自顶向下的语法分析介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1 基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%99%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2 分析器过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%B3%95%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3 文法预处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E6%BA%AF%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">4.3 回溯法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ll1-%E5%88%86%E6%9E%90%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">4.4 LL1 分析法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">4.1.</span> <span class="toc-text">4.4.1 引言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ll-%E5%88%86%E6%9E%90%E5%99%A8%E6%9E%B6%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">4.4.2 LL 分析器架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E8%AF%AD%E6%B3%95"><span class="toc-number">4.3.</span> <span class="toc-text">4.4.3 示例语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ll1-%E5%88%86%E6%9E%90%E6%B3%95%E7%9A%84%E5%BC%95%E5%85%A5"><span class="toc-number">4.4.</span> <span class="toc-text">4.4.4 LL1 分析法的引入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#first-%E9%9B%86%E9%A6%96%E7%AC%A6%E5%8F%B7%E9%9B%86"><span class="toc-number">4.5.</span> <span class="toc-text">4.4.5 FIRST 集（首符号集）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%A6%E5%8F%B7%E4%B8%B2%E7%9A%84-first-%E9%9B%86"><span class="toc-number">4.6.</span> <span class="toc-text">4.4.6 符号串的 FIRST 集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#follow-%E9%9B%86%E5%90%8E%E7%BB%A7%E7%AC%A6%E5%8F%B7%E9%9B%86"><span class="toc-number">4.7.</span> <span class="toc-text">4.4.7 FOLLOW 集（后继符号集）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#select-%E9%9B%86%E9%80%89%E6%8B%A9%E9%9B%86"><span class="toc-number">4.8.</span> <span class="toc-text">4.4.8 SELECT 集（选择集）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E9%A2%84%E6%B5%8B%E5%88%86%E6%9E%90%E8%A1%A8"><span class="toc-number">4.9.</span> <span class="toc-text">4.4.9 构造预测分析表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ll1-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F"><span class="toc-number">4.10.</span> <span class="toc-text">4.4.10 LL1 语法分析程序</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/" title="【程序设计语言 编译原理】 第四章 自顶向下的语法分析"><img src="/image/icon/loading.gif" data-original="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第四章 自顶向下的语法分析"/></a><div class="content"><a class="title" href="/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/" title="【程序设计语言 编译原理】 第四章 自顶向下的语法分析">【程序设计语言 编译原理】 第四章 自顶向下的语法分析</a><time datetime="2026-06-13T03:55:45.000Z" title="发表于 2026-06-13 11:55:45">2026-06-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/12/26-6-12-1-COMPSCI367-9-adv-srh/" title="【COMPSCI 367】 Lecture 9 Adversial Search—Minimax and Alpha-Beta Pruning"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 9 Adversial Search—Minimax and Alpha-Beta Pruning"/></a><div class="content"><a class="title" href="/2026/06/12/26-6-12-1-COMPSCI367-9-adv-srh/" title="【COMPSCI 367】 Lecture 9 Adversial Search—Minimax and Alpha-Beta Pruning">【COMPSCI 367】 Lecture 9 Adversial Search—Minimax and Alpha-Beta Pruning</a><time datetime="2026-06-12T13:44:42.000Z" title="发表于 2026-06-12 21:44:42">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/12/26-6-11-2-COMPSCI367-8-popu-stoc/" title="【COMPSCI 367】 Lecture 8 Population-Based and Stochastic Search"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 8 Population-Based and Stochastic Search"/></a><div class="content"><a class="title" href="/2026/06/12/26-6-11-2-COMPSCI367-8-popu-stoc/" title="【COMPSCI 367】 Lecture 8 Population-Based and Stochastic Search">【COMPSCI 367】 Lecture 8 Population-Based and Stochastic Search</a><time datetime="2026-06-12T08:43:28.000Z" title="发表于 2026-06-12 16:43:28">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/11/26-6-11-1-COMPSCI367-7-loc-srh/" title="【COMPSCI 367】 Lecture 7 Local Search—Landscapes, Local Optima, and Global Optima"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 7 Local Search—Landscapes, Local Optima, and Global Optima"/></a><div class="content"><a class="title" href="/2026/06/11/26-6-11-1-COMPSCI367-7-loc-srh/" title="【COMPSCI 367】 Lecture 7 Local Search—Landscapes, Local Optima, and Global Optima">【COMPSCI 367】 Lecture 7 Local Search—Landscapes, Local Optima, and Global Optima</a><time datetime="2026-06-11T13:20:54.000Z" title="发表于 2026-06-11 21:20:54">2026-06-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/06/26-6-6-1-COMPSCI367-6-ag-wa/" title="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*"><img src="/image/icon/loading.gif" data-original="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*"/></a><div class="content"><a class="title" href="/2026/06/06/26-6-6-1-COMPSCI367-6-ag-wa/" title="【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*">【COMPSCI 367】 Lecture 6 A* Guarantees and Weighted A*</a><time datetime="2026-06-06T12:29:28.000Z" title="发表于 2026-06-06 20:29:28">2026-06-06</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.7.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 2,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
