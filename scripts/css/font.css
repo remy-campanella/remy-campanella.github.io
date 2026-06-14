@@ -11,6 +11,10 @@ b, strong {
 	font-family: 'ZSFT-603', "WenYuan Sans SC VF", serif;
 }
 
+dt {
+    font-weight: bold;
+}
+
 #post-info .post-title {
     font-family: "ZSFT-603", "Noto Serif CJK", serif;
 }
