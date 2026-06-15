@@ -215,7 +215,7 @@
 <p>“Actually, it’s about equality,” Snowflake started, her voice shaking slightly but gaining momentum as she entered the familiar territory of theory. “In traditional tonal music, there is a hierarchy. A ‘King’ note—the Tonic—and its subjects. But in Twelve-Tone Serialism, created by Arnold Schönberg…”</p>
 <p>She quickly drew a grid on the blackboard, writing 12 notes from C to B in a row.</p>
 
-<div id="abcjs-1781515519879-8266" class="abcjs-container" style="margin: 1em 0;"></div>
+<div id="abcjs-1781515645296-2963" class="abcjs-container" style="margin: 1em 0;"></div>
 <script>
 (function() {
   function loadAndRender() {
@@ -249,7 +249,7 @@
         
         cdnScript.onerror = function() {
           console.error('Failed to load ABCJS library from CDN as well');
-          document.getElementById('abcjs-1781515519879-8266').innerHTML = '<p style="color: red; font-family: Arial, sans-serif;">Error: Could not load ABCJS library</p>';
+          document.getElementById('abcjs-1781515645296-2963').innerHTML = '<p style="color: red; font-family: Arial, sans-serif;">Error: Could not load ABCJS library</p>';
         };
         
         document.head.appendChild(cdnScript);
@@ -273,17 +273,17 @@
 
   function doRender() {
     try {
-      ABCJS.renderAbc(document.getElementById('abcjs-1781515519879-8266'), `
+      ABCJS.renderAbc(document.getElementById('abcjs-1781515645296-2963'), `
 |C8 ^C8 D8 ^D8 E8 F8 ^F8 G8 ^G8 A8 ^A8 B8|
       `, {
         responsive: 'resize',
         generate_warnings: true,
-        warnings_element: document.getElementById('abcjs-1781515519879-8266'),
+        warnings_element: document.getElementById('abcjs-1781515645296-2963'),
         scale: 0.8
       });
     } catch (error) {
       console.error('Error rendering ABC notation:', error);
-      document.getElementById('abcjs-1781515519879-8266').innerHTML = '<p style="color: red; font-family: Arial, sans-serif;">Error rendering music notation: ' + error.message + '</p>';
+      document.getElementById('abcjs-1781515645296-2963').innerHTML = '<p style="color: red; font-family: Arial, sans-serif;">Error rendering music notation: ' + error.message + '</p>';
     }
   }
 
