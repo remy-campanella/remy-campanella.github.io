@@ -246,8 +246,8 @@ document.addEventListener('DOMContentLoaded', () => {
       sizeRange: [150, 600],
       // useResizeObserver: true,
       // observeChildren: true,
-      useTransform: true
-      // useRecycle: false
+      useTransform: true,
+      useRecycle: false
     }
 
     const ig = new InfiniteGrid.JustifiedInfiniteGrid(container, igConfig)

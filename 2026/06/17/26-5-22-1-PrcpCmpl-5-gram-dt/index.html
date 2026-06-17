@@ -1,0 +1,1180 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【程序设计语言 编译原理】 第五章 自底向上的语法分析 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="5.1 介绍 源程序经过词法分析后得到了单词符号。这些单词符号组成的语句是否符合语法规则需要进行分析。 5.2 基本问题 5.2.1 归约 基本思想  从输入串开始，逐步进行归约，直到文文法的开始符号。 归约：根据文法的产生式规则，把产生式的右部替换成左部符号。 从树末端开始，构造语法树。  例如 \[ S \to aAcBe \\ A \to b \\ A \to A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【程序设计语言 编译原理】 第五章 自底向上的语法分析">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="5.1 介绍 源程序经过词法分析后得到了单词符号。这些单词符号组成的语句是否符合语法规则需要进行分析。 5.2 基本问题 5.2.1 归约 基本思想  从输入串开始，逐步进行归约，直到文文法的开始符号。 归约：根据文法的产生式规则，把产生式的右部替换成左部符号。 从树末端开始，构造语法树。  例如 \[ S \to aAcBe \\ A \to b \\ A \to A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2026-06-17T12:12:03.000Z">
+<meta property="article:modified_time" content="2026-06-17T12:12:03.586Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="编译原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【程序设计语言 编译原理】 第五章 自底向上的语法分析",
+  "url": "https://remy-campanella.github.io/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2026-06-17T12:12:03.000Z",
+  "dateModified": "2026-06-17T12:12:03.586Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【程序设计语言 编译原理】 第五章 自底向上的语法分析',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【程序设计语言 编译原理】 第五章 自底向上的语法分析</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【程序设计语言 编译原理】 第五章 自底向上的语法分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-17T12:12:03.000Z" title="发表于 2026-06-17 20:12:03">2026-06-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-17T12:12:03.586Z" title="更新于 2026-06-17 20:12:03">2026-06-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">程序设计语言 编译原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="介绍">5.1 介绍</h2>
+<p>源程序经过词法分析后得到了单词符号。这些单词符号组成的语句是否符合语法规则需要进行分析。</p>
+<h2 id="基本问题">5.2 基本问题</h2>
+<h3 id="归约">5.2.1 归约</h3>
+<p><strong>基本思想</strong></p>
+<ul>
+<li>从输入串开始，逐步进行归约，直到文文法的开始符号。</li>
+<li>归约：根据文法的产生式规则，把产生式的<strong>右部</strong>替换成<strong>左部</strong>符号。</li>
+<li>从<strong>树末端</strong>开始，构造语法树。</li>
+</ul>
+<p>例如<br />
+<span class="math display">\[
+S \to aAcBe \\
+A \to b \\
+A \to Ab \\
+B \to d
+\]</span></p>
+<p>试对 <span class="math inline">\(abbcde\)</span> 进行移进归约分析。</p>
+<p>用<strong>栈</strong>来实现，能归约就归约，不能归约就<strong>移进</strong>。</p>
+<ul>
+<li><span class="math inline">\(a\)</span>，移进</li>
+<li><span class="math inline">\(ab\)</span>，规约</li>
+<li><span class="math inline">\(aA\)</span>，移进</li>
+<li><span class="math inline">\(aAb\)</span></li>
+</ul>
+<p>第一种选择，规约（<span class="math inline">\(A \to b\)</span>）</p>
+<ul>
+<li><span class="math inline">\(aAA\)</span>：移进</li>
+<li><span class="math inline">\(aAAc\)</span>：移进</li>
+<li><span class="math inline">\(aAAcd\)</span>：规约</li>
+<li><span class="math inline">\(aAAcB\)</span>：移进</li>
+<li><span class="math inline">\(aAAcBe\)</span>：匹配失败</li>
+</ul>
+<p>第二种选择，规约（<span class="math inline">\(A \to Ab\)</span>）</p>
+<ul>
+<li><span class="math inline">\(aA\)</span>，移进</li>
+<li><span class="math inline">\(aAc\)</span>，移进</li>
+<li><span class="math inline">\(aAcd\)</span>，规约</li>
+<li><span class="math inline">\(aAcB\)</span>，移进</li>
+<li><span class="math inline">\(aAcBe\)</span>，规约</li>
+<li><span class="math inline">\(S\)</span></li>
+</ul>
+<p>规约成功。</p>
+<p>如何能在规约的时候<strong>选对产生式</strong>，一次规约成功，是一个需要研究的问题。</p>
+<p>在自底向上的语法分析中，句柄是决定下一步归约哪个符号串的依据。研究句柄，就是为了让分析器能机械地、高效地找到这个依据。</p>
+<dl>
+<dt>短语</dt>
+<dd>
+令 <span class="math inline">\(G\)</span> 是一个文法，<span class="math inline">\(G\)</span> 是文法的开始符号，假定 <span class="math inline">\(\alpha A \gamma\)</span> 文法 <span class="math inline">\(G\)</span> 的一个句型，如果有<br />
+<span class="math display">\[
+S \Rightarrow^* \alpha A \gamma, A \Rightarrow^* \beta
+\]</span>
+</dd>
+</dl>
+<p>则 <span class="math inline">\(\beta\)</span> 称是句型 <span class="math inline">\(\alpha \beta \gamma\)</span> 相对于非终结符 <span class="math inline">\(A\)</span> 的<strong>短语</strong>。</p>
+<dl>
+<dt>直接短语</dt>
+<dd>
+特别是，如果有 <span class="math inline">\(A \Rightarrow \beta\)</span>（一步推出），则称 <span class="math inline">\(\beta\)</span> 是句型 <span class="math inline">\(\alpha A \gamma\)</span> 相对于<strong>规则</strong> <span class="math inline">\(A \Rightarrow \beta\)</span> 的<strong>直接短语</strong>。
+</dd>
+<dt>句柄</dt>
+<dd>
+一个句型的最左直接短语称为该句型的句柄。
+</dd>
+</dl>
+<p>例如<br />
+<span class="math display">\[
+E \to T | E + T \\
+T \to F | T * F \\
+F \to (E) | i
+\]</span></p>
+<p>对于 <span class="math inline">\(i_1 * i_2 + i_3\)</span>，<span class="math inline">\(E \Rightarrow^* F * i_2 + i_3\)</span>，<span class="math inline">\(F \Rightarrow i_1\)</span>，所以 <span class="math inline">\(i_1\)</span> 是 <span class="math inline">\(i_1 * i_2 + i_3\)</span>（句型）相对于该规则的<strong>短语</strong>。因为是一步直接推出的，所以是<strong>直接短语</strong>。</p>
+<p><span class="math inline">\(i_1\)</span> 是 <span class="math inline">\(i_1 * i_2 + i_3\)</span> 句型最左边的短语，所以是<strong>句柄</strong>。</p>
+<p>使用句柄进行规约 <span class="math inline">\(abbcde\)</span><br />
+<span class="math display">\[
+S \to aAcBe \\
+A \to b \\
+A \to Ab \\
+B \to d
+\]</span></p>
+<ul>
+<li>输入 <span class="math inline">\(abbcde\)</span></li>
+<li>最左直接短语：第一个 <span class="math inline">\(b\)</span>，句柄为 <span class="math inline">\(b\)</span>，使用 <span class="math inline">\(A \to b\)</span>，<span class="math inline">\(aAbcde\)</span></li>
+<li>最左直接短语：<span class="math inline">\(Ab\)</span>，句柄为 <span class="math inline">\(Ab\)</span>，使用 <span class="math inline">\(A \to Ab\)</span>，<span class="math inline">\(aAcde\)</span></li>
+<li>最左直接短语：<span class="math inline">\(d\)</span>，句柄为 <span class="math inline">\(d\)</span>，使用 <span class="math inline">\(B \to d\)</span>，<span class="math inline">\(aAcBe\)</span></li>
+<li>最左直接短语：<span class="math inline">\(aAcBe\)</span>，句柄为 <span class="math inline">\(aAcBe\)</span>，使用 <span class="math inline">\(S \to aAcBe\)</span>，<span class="math inline">\(S\)</span></li>
+</ul>
+<p>规约结束。</p>
+<dl>
+<dt>规范规约</dt>
+<dd>
+假定 <span class="math inline">\(\alpha\)</span> 是文法 <span class="math inline">\(G\)</span> 的一个句子，我们称序列 <span class="math display">\[\alpha_n, \alpha_{n - 1}, \ldots, \alpha_0\]</span> 是 <span class="math inline">\(\alpha\)</span> 的一个<strong>规范规约</strong>，如果此序列满足
+</dd>
+</dl>
+<ol type="1">
+<li><span class="math inline">\(\alpha_n = \alpha\)</span></li>
+<li><span class="math inline">\(\alpha_0\)</span> 为文法开始符号，<span class="math inline">\(\alpha_0 = S\)</span></li>
+<li>对任何 <span class="math inline">\(i\)</span>，<span class="math inline">\(0 &lt; i &lt; n\)</span>，<span class="math inline">\(\alpha_{i - 1}\)</span> 是从 <span class="math inline">\(\alpha_i\)</span> 经把<strong>句柄</strong>替换相应产生式左部符号得到的</li>
+</ol>
+<p>反过来，规范规约的逆过程就是<strong>规范推导</strong>（<strong>最右推导</strong>）。由规范推导推出的句型称为<strong>规范句型</strong>。</p>
+<h3 id="符号栈的使用">5.2.2 符号栈的使用</h3>
+<p>在知道如何归约之后，可以使用符号栈来辅助开发归约程序，<span class="math inline">\(\#\)</span> 作为栈底符号。</p>
+<p>例如输入 <span class="math inline">\(i * i + i\)</span>，<br />
+<span class="math display">\[
+E \to T | E + T \\
+T \to F | T * F \\
+F \to (E) | i
+\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th>符号栈</th>
+<th>输入串</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\#\)</span></td>
+<td><span class="math inline">\(i * i + i \#\)</span></td>
+<td>预备</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#i\)</span></td>
+<td><span class="math inline">\(* i + i \#\)</span></td>
+<td>移进</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\#F\)</span></td>
+<td><span class="math inline">\(* i + i \#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#T\)</span></td>
+<td><span class="math inline">\(* i + i \#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\#T *\)</span></td>
+<td><span class="math inline">\(i + i \#\)</span></td>
+<td>移进</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#T * i\)</span></td>
+<td><span class="math inline">\(+ i \#\)</span></td>
+<td>移进</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\#T * F\)</span></td>
+<td><span class="math inline">\(+ i \#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#T\)</span></td>
+<td><span class="math inline">\(+ i \#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\#E\)</span></td>
+<td><span class="math inline">\(+ i \#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#E +\)</span></td>
+<td><span class="math inline">\(i \#\)</span></td>
+<td>移进</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\#E + i\)</span></td>
+<td><span class="math inline">\(\#\)</span></td>
+<td>移进</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#E + F\)</span></td>
+<td><span class="math inline">\(\#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\#E + T\)</span></td>
+<td><span class="math inline">\(\#\)</span></td>
+<td>规约</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#E\)</span></td>
+<td><span class="math inline">\(\#\)</span></td>
+<td>规约</td>
+</tr>
+</tbody>
+</table>
+<h2 id="算符优先文法">5.3 算符优先文法</h2>
+<h3 id="算符文法">5.3.1 算符文法</h3>
+<p>一个文法，如果它的<strong>任一</strong>产生式的<strong>右部</strong>都不含<strong>两个相继的非终结符</strong>，即<strong>不含</strong>如下形式的产生式右部<br />
+<span class="math display">\[
+\ldots QR \ldots
+\]</span></p>
+<p>则称该文法为算符文法。</p>
+<p>考虑二义性文法<br />
+<span class="math display">\[
+E \to i | E + E | E - E | E * E | E / E | (E)
+\]</span></p>
+<p>一个句子有几种不同的规约<br />
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-22-1-PrcpCmpl-5-gram-dt/1781616798380.jpg" alt="1781616798380" /></p>
+<p>语法正确，结果正确。</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-22-1-PrcpCmpl-5-gram-dt/1781616830078.jpg" alt="1781616830078" />
+<figcaption aria-hidden="true">1781616830078</figcaption>
+</figure>
+<p>语法正确，结果错误。这是规约顺序不一样导致的。</p>
+<h3 id="算符优先文法-1">5.3.2 算符优先文法</h3>
+<p>如果规定算符的优先次序，并按这种规定进行归约，则归约过程是唯一的。</p>
+<p>修改刚才的文法，设计为算符优先<br />
+<span class="math display">\[
+E \to T | E + T \\
+T \to F | T * F \\
+F \to (E) | i
+\]</span></p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-22-1-PrcpCmpl-5-gram-dt/1781617103094.jpg" alt="1781617103094" />
+<figcaption aria-hidden="true">1781617103094</figcaption>
+</figure>
+<h3 id="算符优先级">5.3.3 算符优先级</h3>
+<p>所谓算符优先分析法就是定义算符（终结符）之间的某种优先关系，借助于这种关系寻找可归约串进行归约。</p>
+<p>为文法中的每个终结符（通常包括运算符和分隔符，如加号、乘号、左括号、右括号等）<br />
+定义三种优先关系：小于（<span class="math inline">\(\lessdot\)</span>）、等于（<span class="math inline">\(\doteq\)</span>）、大于（<span class="math inline">\(\gtrdot\)</span>）。</p>
+<p>这些关系描述了运算符之间的相对优先级。对于 <span class="math inline">\(a\)</span> 在左边、<span class="math inline">\(b\)</span> 在右边的字符串，优先关<br />
+系定义如下。</p>
+<ul>
+<li><span class="math inline">\(a \lessdot b\)</span> 表示 <span class="math inline">\(a\)</span> 的优先级低于 <span class="math inline">\(b\)</span>；</li>
+<li><span class="math inline">\(a \doteq b\)</span> 表示 <span class="math inline">\(a\)</span> 和 <span class="math inline">\(b\)</span> 具有相同的优先级；</li>
+<li><span class="math inline">\(a \gtrdot b\)</span> 表示 <span class="math inline">\(a\)</span> 的优先级高于 <span class="math inline">\(b\)</span>。</li>
+</ul>
+<p>左和右是有关系的，不能反过来。</p>
+<p>规则：</p>
+<p>假定 <span class="math inline">\(G\)</span> 是一个<strong>不含 <span class="math inline">\(\varepsilon\)</span>-产生式</strong>的算符文法。对于任一对终结符 <span class="math inline">\(a\)</span>、<span class="math inline">\(b\)</span></p>
+<ol type="1">
+<li><span class="math inline">\(a \doteq b\)</span> 当且仅当 <span class="math inline">\(G\)</span> 中含有形如 <span class="math inline">\(P \to \ldots ab \ldots\)</span> 或 <span class="math inline">\(\ldots aQb \ldots\)</span> 的产生式。</li>
+<li><span class="math inline">\(a \lessdot b\)</span> 当且仅当 <span class="math inline">\(G\)</span> 中含有形如 <span class="math inline">\(P \to \ldots aR \ldots\)</span> 的产生式，<span class="math inline">\(R \Rightarrow^* b\ldots\)</span> 或 <span class="math inline">\(R \Rightarrow^* Qb \ldots\)</span>。</li>
+<li><span class="math inline">\(a \gtrdot b\)</span> 当且仅当 <span class="math inline">\(G\)</span> 中含有形如 <span class="math inline">\(P \to \ldots Rb \ldots\)</span> 的产生式，<span class="math inline">\(R \Rightarrow^* a\ldots\)</span> 或 <span class="math inline">\(R \Rightarrow^* aQ \ldots\)</span>。</li>
+</ol>
+<p>如果一个算符文法任一对终结符 <span class="math inline">\(a\)</span>、<span class="math inline">\(b\)</span> <strong>至多</strong>满足以上三个关系<strong>之一</strong>，即称该算法为<strong>算符优先文法</strong>。</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-22-1-PrcpCmpl-5-gram-dt/1781617787950.jpg" alt="1781617787950" />
+<figcaption aria-hidden="true">1781617787950</figcaption>
+</figure>
+<h3 id="算符优先表">5.3.4 算符优先表</h3>
+<p>根据上述规则填写优先关系表。表的行和列分别代表文法中的<strong>终结符</strong>，表中的每个单元格填入相应的<strong>优先关系</strong>（小于<span class="math inline">\(\lessdot\)</span>、等于<span class="math inline">\(\doteq\)</span>、大于<span class="math inline">\(\gtrdot\)</span>）。这个表格将被语法分析器用来指导表达式的解析过程。</p>
+<p>通过这种方法构建的优先关系表能够有效地支持算符优先分析器的工作，确保表达式能够根据正确的优先级进行解析和归约。需要注意的是，该方法适用于<strong>特定类型的文法</strong>，特别是那些<strong>没有使用左递归和直接或间接的左公因子</strong>的文法。</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-22-1-PrcpCmpl-5-gram-dt/1781617968415.jpg" alt="1781617968415" />
+<figcaption aria-hidden="true">1781617968415</figcaption>
+</figure>
+<h3 id="firstvt-与-lastvt-集合">5.3.5 FirstVT 与 LastVT 集合</h3>
+<p><span class="math inline">\(FirstVT(P)\)</span> 包含所有那些可以作为 <span class="math inline">\(P\)</span> 生成的字符串的<strong>第一个符号</strong>出现的<strong>终结符</strong>。</p>
+<ul>
+<li>如果存在 <span class="math inline">\(P \to a \ldots\)</span> 或 <span class="math inline">\(A \to Qa \ldots\)</span>，则 <span class="math inline">\(a \in FirstVT(P)\)</span>。</li>
+<li>如果存在 <span class="math inline">\(P \to Q \ldots\)</span> 则把 <span class="math inline">\(FirstVT(Q)\)</span> 加到 <span class="math inline">\(FirstVT(P)\)</span> 中。</li>
+</ul>
+<p>其中 <span class="math inline">\(a\)</span> 是终结符，<span class="math inline">\(Q\)</span> 是非终结符。</p>
+<p><span class="math inline">\(LastVT(P)\)</span> 包含所有那些可以作为 <span class="math inline">\(P\)</span> 生成的字符串的<strong>最后一个符号</strong>出现的<strong>终结符</strong>。</p>
+<ul>
+<li>如果存在 <span class="math inline">\(P \to \ldots a\)</span> 或 <span class="math inline">\(A \to \ldots aQ\)</span>，则 <span class="math inline">\(a \in LastVT(P)\)</span>。</li>
+<li>如果存在 <span class="math inline">\(P \to \ldots Q\)</span> 则把 <span class="math inline">\(LastVT(Q)\)</span> 加到 <span class="math inline">\(LastVT(P)\)</span> 中。</li>
+</ul>
+<p>其中 <span class="math inline">\(a\)</span> 是终结符，<span class="math inline">\(Q\)</span> 是非终结符。</p>
+<p>计算 FirstVT 和 LastVT 集合的过程通常通过<strong>迭代算法</strong>完成，基于上述规则进行集合的逐步扩展直到<strong>没有新的元素加入</strong>为止。这个过程需要遍历文法的所有产生式，并根据上述定<br />
+义更新每个非终结符的 FirstVT 和 LastVT 集合。</p>
+<p>对每个终结符 <span class="math inline">\(P\)</span>，设 <span class="math inline">\(FirstVT(P) = \varnothing\)</span>。</p>
+<ul>
+<li>如果存在 <span class="math inline">\(P \to a \ldots\)</span> 或 <span class="math inline">\(A \to Qa \ldots\)</span>，则 <span class="math inline">\(a \in FirstVT(P)\)</span>。</li>
+<li>如果存在 <span class="math inline">\(P \to Q \ldots\)</span> 则把 <span class="math inline">\(FirstVT(Q)\)</span> 加到 <span class="math inline">\(FirstVT(P)\)</span> 中。</li>
+</ul>
+<p>迭代计算，直到所有 FirstVT 不再变化。</p>
+<p>对每个终结符 <span class="math inline">\(P\)</span>，设 <span class="math inline">\(LastVT(P) = \varnothing\)</span>。</p>
+<ul>
+<li>如果存在 <span class="math inline">\(P \to \ldots a\)</span> 或 <span class="math inline">\(A \to \ldots aQ\)</span>，则 <span class="math inline">\(a \in LastVT(P)\)</span>。</li>
+<li>如果存在 <span class="math inline">\(P \to \ldots Q\)</span> 则把 <span class="math inline">\(LastVT(Q)\)</span> 加到 <span class="math inline">\(LastVT(P)\)</span> 中。</li>
+</ul>
+<p>迭代计算，直到所有 LastVT 不再变化。</p>
+<p><strong>示例</strong><br />
+<span class="math display">\[
+E \to T | E + T \\
+T \to F | T * F \\
+F \to (E) | i
+\]</span></p>
+<p>计算 FirstVT：</p>
+<ol type="1">
+<li><p><strong>第一次迭代</strong></p>
+<ul>
+<li>因为 <span class="math inline">\(F \to (E) | i\)</span>，<span class="math inline">\(FirstVT(F) = \{(, i\}\)</span>。</li>
+<li>因为 <span class="math inline">\(T \to T * F\)</span>，<span class="math inline">\(a = *\)</span>，<span class="math inline">\(Q = F\)</span>，<span class="math inline">\(FirstVT(T) = \{*\}\)</span>。</li>
+<li>因为 <span class="math inline">\(T \to F\)</span>，<span class="math inline">\(Q = F\)</span>，<span class="math inline">\(FirstVT(T) = \{*\} \cup FirstVT(F) = \{*, (, i\}\)</span>。</li>
+<li>因为 <span class="math inline">\(E \to E + T\)</span>，<span class="math inline">\(a = +\)</span>，<span class="math inline">\(Q = T\)</span>，<span class="math inline">\(FirstVT(E) = \{+\}\)</span>。</li>
+<li>因为 <span class="math inline">\(E \to T\)</span>，<span class="math inline">\(Q = T\)</span>，<span class="math inline">\(FirstVT(T) = \{+\} \cup FirstVT(F) = \{+, *, (, i\}\)</span>。</li>
+</ul></li>
+<li><p><strong>第二次迭代</strong><br />
+无变化。</p></li>
+</ol>
+<p><span class="math display">\[
+FirstVT(F) = \{(, i\} \\
+FirstVT(T) = \{*, (, i\} \\
+FirstVT(E) = \{+, *, (, i\}
+\]</span></p>
+<p>计算 LastVT：</p>
+<ol type="1">
+<li><strong>第一次迭代</strong>
+<ul>
+<li>因为 <span class="math inline">\(F \to (E) | i\)</span>，<span class="math inline">\(LastVT(F) = \{), i\}\)</span>。</li>
+<li>因为 <span class="math inline">\(T \to T * F\)</span>，<span class="math inline">\(a = *\)</span>，<span class="math inline">\(Q = F\)</span>，<span class="math inline">\(LastVT(T) = \{*\}\)</span>。</li>
+<li>因为 <span class="math inline">\(T \to F\)</span>，<span class="math inline">\(Q = F\)</span>，<span class="math inline">\(LastVT(T) = \{*\} \cup LastVT(F) = \{*, ), i\}\)</span>。</li>
+<li>因为 <span class="math inline">\(E \to E + T\)</span>，<span class="math inline">\(a = +\)</span>，<span class="math inline">\(Q = T\)</span>，<span class="math inline">\(LastVT(E) = \{+\}\)</span>。</li>
+<li>因为 <span class="math inline">\(E \to T\)</span>，<span class="math inline">\(Q = T\)</span>，<span class="math inline">\(LastVT(T) = \{+\} \cup lastVT(F) = \{+, *, ), i\}\)</span>。</li>
+</ul></li>
+<li><strong>第二次迭代</strong><br />
+无变化。</li>
+</ol>
+<p><span class="math display">\[
+LastVT(F) = \{), i\} \\
+LastVT(T) = \{*, ), i\} \\
+LastVT(E) = \{+, *, ), i\}
+\]</span></p>
+<h3 id="构造优先关系表">5.3.6 构造优先关系表</h3>
+<p>计算出 FirstVT 和 LastVT 后就可计算<strong>算符优先关系表</strong>。</p>
+<ul>
+<li><span class="math inline">\(a \lessdot b\)</span>，如果存在 <span class="math inline">\(A \rightarrow \ldots aB \ldots\)</span> 且 <span class="math inline">\(b \in FirstVT(B)\)</span>。</li>
+<li><span class="math inline">\(a \gtrdot b\)</span>，如果存在 <span class="math inline">\(A \rightarrow \ldots Bb \ldots\)</span> 且 <span class="math inline">\(a \in LastVT(B)\)</span>。</li>
+<li><span class="math inline">\(a \doteq b\)</span>，如果存在 <span class="math inline">\(A \rightarrow \ldots ab \ldots\)</span> 或 <span class="math inline">\(\ldots aBb \ldots\)</span></li>
+<li>边界、结束符 <span class="math inline">\(\# \lessdot FirstVT(开始符 E)\)</span>，<span class="math inline">\(LastVT(开始符 E) \gtrdot \#\)</span>，<span class="math inline">\(\# \doteq \#\)</span>。</li>
+</ul>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(+\)</span></th>
+<th><span class="math inline">\(*\)</span></th>
+<th><span class="math inline">\((\)</span></th>
+<th><span class="math inline">\()\)</span></th>
+<th><span class="math inline">\(i\)</span></th>
+<th><span class="math inline">\(\#\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(+\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(*\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\((\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\doteq\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\()\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(i\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+<td></td>
+<td><span class="math inline">\(\gtrdot\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\#\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td></td>
+<td><span class="math inline">\(\lessdot\)</span></td>
+<td><span class="math inline">\(\doteq\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="构造优先关系表的程序">5.3.7 构造优先关系表的程序</h3>
+<h3 id="语法分析程序">5.3.8 语法分析程序</h3>
+<h2 id="lr-分析法">5.4 LR 分析法</h2>
+<h3 id="介绍-1">5.4.1 介绍</h3>
+<ul>
+<li>L：Left to right parsing，从左到右处理。</li>
+<li>R：Right-most derivation in reverse，最右推导。</li>
+<li>LR(<span class="math inline">\(k\)</span>)：look ahead <span class="math inline">\(k\)</span> token(s)，<span class="math inline">\(k\)</span> 个向前查看。</li>
+</ul>
+<p>LR 是目前应该广泛的一类语法分析器的自动生成器中采用的算法，包括：YACC、bison、CUP、C# YACC 等。</p>
+<p>特点是不需要回溯、运行高效。</p>
+<p>LR 系列包括 LR(0)、SLR(1)、LR(1)和 LALR(1)。</p>
+<h3 id="基本思想">5.4.2 基本思想</h3>
+<p><span class="math display">\[
+S \to E \\
+E \to E + T \\
+E \to T \\
+T \to T * F \\
+T \to F \\
+F \to n
+\]</span></p>
+<ul>
+<li>从左到右读入字符串，例如：<span class="math inline">\(2+3*4\)</span></li>
+<li>每读入一个字符后，判断是否进行归约。</li>
+<li>读入 <span class="math inline">\(2\)</span>，规约为 <span class="math inline">\(F\)</span>，再归约为 <span class="math inline">\(T\)</span>，（再归约为 <span class="math inline">\(E\)</span>、<span class="math inline">\(S\)</span>，不行）。<span class="math inline">\(T+3*4\)</span></li>
+<li>再读入 <span class="math inline">\(+\)</span>，再读入 <span class="math inline">\(3\)</span>。把 <span class="math inline">\(3\)</span> 归约为 <span class="math inline">\(F\)</span>，再归约为 <span class="math inline">\(T\)</span>。<span class="math inline">\(E+T*4\)</span></li>
+<li>再读入<span class="math inline">\(*\)</span>，再读入 <span class="math inline">\(4\)</span>。把 <span class="math inline">\(4\)</span> 规约为 <span class="math inline">\(F\)</span>。<span class="math inline">\(E+T*F\)</span></li>
+<li><span class="math inline">\(T*F\)</span> 规约为 <span class="math inline">\(T\)</span>。<span class="math inline">\(E + T\)</span></li>
+<li><span class="math inline">\(E+T\)</span> 规约为 <span class="math inline">\(E\)</span>，再归约为 <span class="math inline">\(S\)</span> 成功。<span class="math inline">\(S\)</span></li>
+</ul>
+<p>使用点号标记读入进度。左边已读入，右边未读入。<br />
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-22-1-PrcpCmpl-5-gram-dt/1781620975728.jpg" alt="1781620975728" /></p>
+<p>需要两个步骤：</p>
+<ul>
+<li>移进一个记号到栈顶上。</li>
+<li>归约栈顶上的 <span class="math inline">\(n\)</span> 个符号（某产生式的右部）到左部的非终结符。对产生式 <span class="math inline">\(A \to \beta_1 \ldots \beta_n\)</span>。如果 <span class="math inline">\(\beta_1 \ldots \beta_n\)</span> 在栈顶上，则弹出 <span class="math inline">\(\beta_1 \ldots \beta_n\)</span>，并压入 <span class="math inline">\(A\)</span>。</li>
+</ul>
+<h3 id="构建-lr0-分析表">5.4.3 构建 LR(0) 分析表</h3>
+LR0 分析法的关键在于如何构建分析表。<br />
+对于 <span class="math inline">\(A \to Ab\)</span> 有<br />
+
+<pre class="mermaid">graph LR
+
+A("A -> .Ab")
+B("A -> A.b")
+C(("A -> Ab."))
+
+A --"A"--> B --"b"--> C</pre>
+<p>对以下文法构建分析表<br />
+<span class="math display">\[
+S&#39; \rightarrow S \\
+S \rightarrow aAcBe \\
+A \rightarrow b \\
+A \rightarrow Ab \\
+B \rightarrow d
+\]</span></p>
+<p>通过 LR(0) 项目集直接构造识别活前缀的 DFA。</p>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>操作</th>
+<th>说明</th>
+<th>何时使用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>闭包(CLOSURE)</strong></td>
+<td>如果圆点后是非终结符 <span class="math inline">\(X\)</span>，加入 <span class="math inline">\(X\)</span> 的所有产生式（圆点在最前），重复直到没有新项目</td>
+<td>每创建一个新状态时</td>
+</tr>
+<tr class="even">
+<td><strong>转移(GO)</strong></td>
+<td>圆点右移一位，得到新项目，再做闭包</td>
+<td>对当前状态中每个圆点后有符号的项目</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分支产生的原因</strong></p>
+<ul>
+<li>一个状态有多个项目 → 每个项目圆点后符号不同 → 产生多条边（分支）</li>
+<li>多个项目指向同一符号 → 合并到同一个目标状态</li>
+</ul>
+<pre class="mermaid">graph LR
+
+I0["I0<br>S' -> .S<br>S -> .aAcBe"]
+I1["I1<br>S' -> S."]
+I2["I2<br>S -> a.AcBe<br>A -> .b<br>A -> .Ab"]
+I3["I3<br>S -> aA.cBe<br>A -> A.b"]
+I4["I4<br>A -> Ab."]
+I5["I5<br>S -> aAc.Be<br>B -> .d"]
+I6["I6<br>A -> Ab."]
+I7["I7<br>S -> aAcB.e"]
+I8["I8<br>B -> d."]
+I9["I9<br>S -> aAcBe."]
+
+I0 --S--> I1
+I0 --a--> I2 --A--> I3 --c--> I5 --B--> I7
+I2 --b--> I4
+I3 --b--> I6
+I5 --d--> I8
+I7 --e--> I9</pre>
+<p>LR(0) 项目分类</p>
+<ul>
+<li>移进项目：<span class="math inline">\(A \rightarrow a.b \beta\)</span></li>
+<li>待约项目：<span class="math inline">\(A \rightarrow a.X \beta\)</span></li>
+<li>规约项目：<span class="math inline">\(A \rightarrow a.\)</span></li>
+<li>接受项目：<span class="math inline">\(S&#39; \rightarrow a.\)</span></li>
+</ul>
+<p>其中 <span class="math inline">\(a, \beta \in (V_N \cup V_T)^*\)</span>，<span class="math inline">\(b \in V_T\)</span>，<span class="math inline">\(X \in V_N\)</span>。</p>
+<p>特别地，<span class="math inline">\(A \rightarrow \epsilon\)</span> 对应 <span class="math inline">\(A \rightarrow .\)</span></p>
+<p>通过状态转移可以推出分析表。</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>ACTION</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th>GOTO</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>a</td>
+<td>c</td>
+<td>e</td>
+<td>b</td>
+<td>d</td>
+<td>#</td>
+<td>S</td>
+<td>A</td>
+<td>B</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>S2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>1</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>acc</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>S4</td>
+<td></td>
+<td></td>
+<td></td>
+<td>3</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td></td>
+<td>S5</td>
+<td>S6</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td>r2</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>S8</td>
+<td></td>
+<td></td>
+<td></td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td>r3</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td></td>
+<td></td>
+<td>S9</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>r4</td>
+<td>r4</td>
+<td>r4</td>
+<td>r4</td>
+<td>r4</td>
+<td>r4</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td>r1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="语法分析算法">5.4.4 语法分析算法</h3>
+<h3 id="示例-1-程序实现">5.4.5 示例 1 程序实现</h3>
+<h3 id="示例-2-程序实现">5.4.6 示例 2 程序实现</h3>
+<h3 id="练习">5.4.7 练习</h3>
+<h3 id="冲突">5.4.8 冲突</h3>
+<p>LR0 可能会出现非正常的状态，存在冲突。</p>
+<ol type="1">
+<li><p>移进—规约冲突：项目集中同时出现移进与规约项目。<br />
+<span class="math display">\[
+A \rightarrow \alpha .a \beta \\
+B \rightarrow \gamma. 
+\]</span></p></li>
+<li><p>规约—规约冲突：项目集中同时出现多个规约项目。<br />
+<span class="math display">\[
+A \rightarrow \alpha. \\
+B \rightarrow \beta. 
+\]</span></p></li>
+</ol>
+<h2 id="slr1-分析法">5.5 SLR1 分析法</h2>
+<h3 id="介绍-2">5.5.1 介绍</h3>
+<p>LR(0) 分析法有如下缺点：</p>
+<ul>
+<li>对每一个形如 <span class="math inline">\(X \to \alpha .\)</span> 的项目，会直接把 <span class="math inline">\(\alpha\)</span> 规约为 <span class="math inline">\(X\)</span>，再紧跟一个 <code>goto</code>，不会咯偶掉错误，但会延迟错误发现时机。</li>
+<li>分析表可能包含冲突。</li>
+</ul>
+<p>不是 LR(0) 文法时，可以通过<strong>简单向后看一个输入符号</strong>的办法，解决移进—规约冲突和规约—规约冲突。</p>
+<p>假设文法 LR(0) 项目规范族有一个并存移进—规约冲突和规约—规约冲突项目集 <span class="math inline">\(I_k\)</span>，<br />
+<span class="math display">\[
+I_k = \{A \to \alpha.a\beta, A \to \gamma., B \to \delta., \ldots\}
+\]</span></p>
+<p>若 <span class="math inline">\(\{a\} \cap FOLLOW(a) \cap FOLLOW(B) = \varnothing\)</span>，则冲突可解决</p>
+<table>
+<thead>
+<tr class="header">
+<th>如果</th>
+<th>则</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>下一符号 <span class="math inline">\(a_i \in\)</span> 移入符号集</td>
+<td>移入</td>
+</tr>
+<tr class="even">
+<td>下一符号 <span class="math inline">\(a_i \in FOLLOW(A)\)</span></td>
+<td>用 <span class="math inline">\(A \to \gamma\)</span> 规约</td>
+</tr>
+<tr class="odd">
+<td>下一符号 <span class="math inline">\(a_i \in FOLLOW(B)\)</span></td>
+<td>用 <span class="math inline">\(B \to \delta\)</span> 规约</td>
+</tr>
+</tbody>
+</table>
+<p>这种方法称为 <strong>SLR(1) 分析法</strong>。</p>
+<p>SLR(1) 在构造分析表时，规约动作不再对所有输入符号执行，而只对规约项左部非终结符的 FOLLOW 集中的终结符执行。</p>
+<p>即：若状态 <span class="math inline">\(i\)</span> 包含规约项 <span class="math inline">\(A \to \alpha .\)</span>，则只在输入符号属于 <span class="math inline">\(FOLLOW(A)\)</span> 时，才填写 <span class="math inline">\(reduce A \to \alpha\)</span>；否则不填（可能是移进或报错）。</p>
+<h3 id="slr1-文法">5.5.2 SLR(1) 文法</h3>
+<p>设文法 <span class="math inline">\(G\)</span> 的 LR(0) 项目集规范族 <span class="math inline">\(C\)</span> 中任意含有 <span class="math inline">\(m\)</span> 个移进项目和 <span class="math inline">\(n\)</span> 个规约项目的冲突项目集 <span class="math inline">\(I_k\)</span> 的一般形式为<br />
+<span class="math display">\[
+I_k = \{A_1 \to \alpha_1.a_1\beta_1, A_2 \to \alpha_2.a_2\beta_2, \ldots, A_m \to \alpha_m.a_m\beta_m, B_1 \to \gamma_1., \ldots, B_n \to \gamma_n.\}
+\]</span></p>
+<p>其中 <span class="math inline">\(A_i, B_j \in V_N\)</span>，<span class="math inline">\(a_i \in V_T\)</span>，<span class="math inline">\(\alpha_i, \beta_i, \gamma_j \in (V_N \cup V_T)^*\)</span>，<span class="math inline">\(\ldots\)</span> 表示剩下待约项目。</p>
+<p>如果移进符号集 <span class="math inline">\(\{a_1, a_2, \ldots, \alpha_m\}\)</span> 和 <span class="math inline">\(FOLLOW(B_1), FOLLOW(B_2), \ldots FOLLOW(B_n)\)</span> <strong>两两不相交</strong>，则文法 <span class="math inline">\(G\)</span> 称为 <strong>SLR(1) 文法</strong>。</p>
+<ul>
+<li>SLR(1) 文法可用 SLR(1) 分析法</li>
+<li>SLR(1) 文法无二义性</li>
+<li>LR(0) 文法一定是 SLR(1) 文法</li>
+</ul>
+<h3 id="slr-分析算法的思想">5.5.3 SLR 分析算法的思想</h3>
+<h3 id="slr1-分析表的构造">5.5.4 SLR(1) 分析表的构造</h3>
+<ol type="1">
+<li><p>对于每一个 LR(0) 项目，根据下列情况填分析表</p>
+<ul>
+<li>如果移进项目 <span class="math inline">\(A \to \alpha.a\beta \in I_k\)</span>，<span class="math inline">\(f(I_k, a) = I_j\)</span>，则置 <span class="math inline">\(ACTION(k, a)\)</span> 为 <span class="math inline">\(S_j\)</span>。</li>
+<li>如果移进项目 <span class="math inline">\(A \to \alpha. \in I_k\)</span>，<span class="math inline">\(A \to \alpha\)</span> 标号为 <span class="math inline">\(i\)</span>，则置 <span class="math inline">\(ACTION[k, a] = S_i\)</span>。</li>
+<li>如果接受项目 <span class="math inline">\(S&#39; \to S. \in I_k\)</span>，则置 <span class="math inline">\(ACTION[k, \#] = acc\)</span>。</li>
+<li>如果 <span class="math inline">\(f(I_k, A = I_j)\)</span>，<span class="math inline">\(A \in V_N\)</span>，则置 <span class="math inline">\(GOTO[k, A] = j\)</span>。</li>
+</ul></li>
+<li><p>凡 1 中没有填入分析表元素 <span class="math inline">\(ACTION[k, a]\)</span> 和 <span class="math inline">\(GOTO[k, a]\)</span>，置为 <span class="math inline">\(e_t\)</span>（<span class="math inline">\(t\)</span> 为错误编号）。</p></li>
+</ol>
+<h2 id="lr1-分析法">5.6 LR1 分析法</h2>
+<p>SLR 分析算法基于 LR0 的思想，通过进一步判断一个前看符号，来决定是否执行归约动作。</p>
+<p>当且仅当后看符号 <span class="math inline">\(y \in FOLLOW(X)\)</span>，才使用 <span class="math inline">\(X \in \alpha.\)</span> 进行归约。</p>
+<p>SLR(1) 分析法存在的问题：</p>
+<ul>
+<li>SLR 只是简单考察下一输入 <span class="math inline">\(b\)</span> 是否属于归约项目 <span class="math inline">\(A \to \alpha\)</span> 相关联的 <span class="math inline">\(FOLLOW(A)\)</span>，但 <span class="math inline">\(b \in FOLLOW(A)\)</span> 只是规约 <span class="math inline">\(\alpha\)</span> 的一个必要条件而非充分条件。</li>
+<li>对于产生式 <span class="math inline">\(A \in \alpha\)</span>，在不同的使用位置，<span class="math inline">\(A\)</span> 会要求不同的后继符号。</li>
+<li>在特定位置，<span class="math inline">\(A\)</span> 的后继符号集合是 <span class="math inline">\(FOLLOW(A)\)</span> 的子集。</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>有可能减少需要归约的情况</li>
+<li>有可能去除需要移进-归约冲突到</li>
+</ul>
+<p><strong>缺点</strong>：仍然有冲突出现的可能</p>
+<p>为了解决这个冲突，LR1 采用了不同的思路。</p>
+<ul>
+<li><span class="math inline">\([X \to \alpha . \beta, a]\)</span> 的含义是
+<ul>
+<li><span class="math inline">\(\alpha\)</span> 在栈顶上</li>
+<li>甚于的输入能匹配 <span class="math inline">\(\beta a\)</span></li>
+</ul></li>
+<li>当规约 <span class="math inline">\(X \to \alpha \beta\)</span> 时，<span class="math inline">\(a\)</span> 是前看符号
+<ul>
+<li>把 <span class="math inline">\(\text {reduce by \ } X \to \alpha \beta\)</span> 填入 <span class="math inline">\(ACTION[s, a]\)</span></li>
+</ul></li>
+<li>其他与 LR(0) 相同，仅闭包的计算不同
+<ul>
+<li>对项目 <span class="math inline">\([X \to \alpha . Y \beta, a]\)</span>，添加 <span class="math inline">\(Y \to .\gamma, b\)</span> 到项目集，其中 <span class="math inline">\(b \in FIRST_S(\beta a)\)</span></li>
+</ul></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/">https://remy-campanella.github.io/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training</div></div><div class="info-2"><div class="info-item-1">Why “Neural” Networks? Opening motivation Biological nervous systems suggest that complex perception, memory, and action can arise from many simple signal-processing units connected together. Artificial neural networks are inspired by biological neurons, but they are simplified mathematical models, not faithful brain simulations. A Biological Neuron: Signal Processing Unit A biological neuron receives signals, integrates them, and may send an outgoing signal to other neurons. Signal sto...</div></div></div></a><a class="pagination-related" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</div></div><div class="info-2"><div class="info-item-1">6.1 介绍 语法分析的主要目的时检测是否有语法错误，并生成语法树。 语法分析的输入输出如下所示  graph LR  A["单词符号"] B["语法分析器"] C["语法树"]  A --> B --> C 语法分析可以很容易构造出语法树，然后对语法树进行遍历完成属性计算。因此，语法树可以作为一种合适的中间语言形式。   1780617960226  在语法树中去掉那些对翻译不必要的信息，从而获得更有效的源程序中间表示。这种经变换后的语法树称之为抽象语法树（Abstract Syntax Tree）。一个抽象语法树的示例如下图所示。 graph TD  star(("star")) fift(("15")) plus(("+")) three(("3")) four(("4"))  star --> fift star --> plus  --> three plus --> four 6.2 回溯法 6.3 LL1 方法 6.3.1 数据结构 使用 Python 字典表示普通树结构。 12345678910111...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/14/26-3-12-1-PrcpCmpl-2-high-lang/" title="【程序设计语言 编译原理】 第二章 高级语言及其语法描述"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-14</div><div class="info-item-2">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</div></div><div class="info-2"><div class="info-item-1">2.1 程序语言的定义 一个程序语言是一个记号系统。程序语法由语法、语义两方面定义。  语法：规定描述形式。 语义：语法成分实际意义。  2.1.1 语法 任何语言程序都可看作是一定字符集（字母表）上的一字符串（有限序列）。有一组用于生成合式程序的规则，这组规则就是语法。这些规则的一部分称为词法规则，另一部分称为语法规则。  单词符号：语言中具有独立意义的最基本结构。 词法规则：单词符号的形成规则。规定了字母表中什么样的字符串是单词符号。 语法规则：规定如何从单词符号形成更大的语法单位。 语法范畴/语法单位：由单词符号组成的表达式，如 \(a * 114.514 + c\)。  在现今多数程序语言中，常用上下文无关文法描述语法规则。语言的词法规则与语法规则规定了程序的结构，可以判断程序是否合式。合式程序仅表示词法与语法形式正确，语义不一定正确。 2.1.2 语义 语义是是各个单词符号与语法单位的意义，可以定义一个程序的意义。语义缺乏形式化的描述工具，主要采用自然语言阐释语义。运用属性文法进行语法制导翻译。 程序本质上是对某一问题以及处理问题的办法...</div></div></div></a><a class="pagination-related" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-21</div><div class="info-item-2">【程序设计语言 编译原理】 第三章 词法分析</div></div><div class="info-2"><div class="info-item-1">3.1 对于词法分析器的要求 3.1.1 词法分析器的功能和输出形式 词法分析器的功能时输入源程序，输出单词符号。单词符号一般分为：  关键字：有程序语言定义的具有固定意义的标识符。 标识符：用于表示各种名字。 常数 运算符 界符  在程序语言中，关键字、运算符、界符通常固定且数目不大。标识符和常数只有构成规则，使用数目不存在限制。 词法分析器输出的单词符号形式为   (单词种别, 单词符号属性值)   单词种别通常使用整数编码。它主要取决于处理上的方便。  标识符一般统归为一种。 常数则宜按类型（整、实、布尔等）分种。 关键字可将其全体视为一种，也可以一字一种。采用一字一种的分法实际处理起来较为方便。 运算符可采用一符一种的分法，但也可以把具有一定共性的运算符视为一种。 至于界符一般用一符一种的分法。  若一个种别含有多个单词符号，那么应给出种别编码和单词符号属性信息。 3.1.2 词法分析器作为独立子程序 3.2 词法分析器的设计 3.2.1 输入、预处理 词法分析器工作的第一步是输入源程序文本。输入串一般是放在一个缓...</div></div></div></a><a class="pagination-related" href="/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/" title="【程序设计语言 编译原理】 第四章 自顶向下的语法分析"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-13</div><div class="info-item-2">【程序设计语言 编译原理】 第四章 自顶向下的语法分析</div></div><div class="info-2"><div class="info-item-1">4.1 语法介绍 文法提供了一种形式化的方法来定义编程语言的语法规则。这使得编译器能够识别和解析程序代码中的结构。 编译原理中的文法是一组规则，用来描述词法单元（tokens）如何组合成短语（phrases）以及这些短语如何组合成更复杂的结构，最终形成有效的程序代码。 文法通常用来定义编程语言的语法结构。编译原理使用文法来检查语句、单词是否合法。 4.1.1 0 型文法 若文法 \(G = (V_T, V_N, S, \mathcal{P})\) 的每个产生式 \(\alpha \to \beta\) 满足左部 \(\alpha \in (V_T \cup V_N)\)，且 \(\alpha\) 至少含有一个非终结符，右部 \(\beta \in (V_T \cup V_N)^*\)，则称 \(G\) 为 0 型文法。 0 型文法又称短语文法，能力相当于 Turing 机。 4.1.2 1 型文法 若 \(G\) 是 0 型文法，且除 \(S \to \varepsilon\) 外，\(G\) 的任何产生式均满足 \(|\alpha| &gt; |\beta|\)...</div></div></div></a><a class="pagination-related" href="/2026/03/09/26-3-5-1-PrcpCmpl-1-intro/" title="【程序设计语言 编译原理】 第一章 引论"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-09</div><div class="info-item-2">【程序设计语言 编译原理】 第一章 引论</div></div><div class="info-2"><div class="info-item-1">       语言 特征     机器语言 早期编程直接使用含有 0、1 的机器语言。   汇编语言 将一些助记符与机器码直接对应。   高级程序语言 为提升效率设计，采用类自然语言语法，与机器语言无直接对应关系，需要编译。    1.1 什么是编译程序  编译程序 将源语言程序翻译成目标语言程序的程序。这个翻译过程称为编译。 好的编译  目标程序的大小 代码执行效率  解释程序 不产生目标程序，而是边解释边执行源程序本身的程序。 编译程序分类        名称 作用     诊断（Diagnostic）编译程序 帮助程序开发与调试   优化（Optimizing）编译程序 着重提高目标代码效率   交叉（Cross）编译程序 产生不同于其宿主机（运行编译）机器代码   可变目标（Retargetable）编译程序 不需重写编译程序中与机器无关的部分就能改变目标机（运行程序）     1.2 编译过程概述 一般有五个阶段：词法分析、语法分析...</div></div></div></a><a class="pagination-related" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-17</div><div class="info-item-2">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</div></div><div class="info-2"><div class="info-item-1">6.1 介绍 语法分析的主要目的时检测是否有语法错误，并生成语法树。 语法分析的输入输出如下所示  graph LR  A["单词符号"] B["语法分析器"] C["语法树"]  A --> B --> C 语法分析可以很容易构造出语法树，然后对语法树进行遍历完成属性计算。因此，语法树可以作为一种合适的中间语言形式。   1780617960226  在语法树中去掉那些对翻译不必要的信息，从而获得更有效的源程序中间表示。这种经变换后的语法树称之为抽象语法树（Abstract Syntax Tree）。一个抽象语法树的示例如下图所示。 graph TD  star(("star")) fift(("15")) plus(("+")) three(("3")) four(("4"))  star --> fift star --> plus  --> three plus --> four 6.2 回溯法 6.3 LL1 方法 6.3.1 数据结构 使用 Python 字典表示普通树结构。 12345678910111...</div></div></div></a><a class="pagination-related" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-17</div><div class="info-item-2">【程序设计语言 编译原理】 第七章 语义分析</div></div><div class="info-2"><div class="info-item-1">7.1 介绍 graph LR  A["语法树"] B["语义分析器"] C["语义树"]  A --> B --> C 语义树能为生成中间代码提供基础。 一个语句的语法及其语义的示例如下所示。大括号里边的内容为该语句的语义。 语法：\(E \rightarrow E_1 + E_2\)。 语义：&#123;E.val := E1.val + E2.val&#125;。 7.2 语义树    规则 语义动作     \(S&#39; := E\) &#123;print E.val&#125;   \(E := E(1) + E(2)\) &#123;E.val = E1.val + E2.val&#125;   \(E := E(1) * E(2)\) &#123;E.val = E1.val * E2.val&#125;   \(E := (E(1))\) &#123;E.val = E(1).val&#125;   \(E := \text{i}\) &#123;E.val = LEXVAL&#1...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">5.1 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">5.2 基本问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%92%E7%BA%A6"><span class="toc-number">2.1.</span> <span class="toc-text">5.2.1 归约</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%A6%E5%8F%B7%E6%A0%88%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">5.2.2 符号栈的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E6%96%87%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">5.3 算符优先文法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6%E6%96%87%E6%B3%95"><span class="toc-number">3.1.</span> <span class="toc-text">5.3.1 算符文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E6%96%87%E6%B3%95-1"><span class="toc-number">3.2.</span> <span class="toc-text">5.3.2 算符优先文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">3.3.</span> <span class="toc-text">5.3.3 算符优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E8%A1%A8"><span class="toc-number">3.4.</span> <span class="toc-text">5.3.4 算符优先表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firstvt-%E4%B8%8E-lastvt-%E9%9B%86%E5%90%88"><span class="toc-number">3.5.</span> <span class="toc-text">5.3.5 FirstVT 与 LastVT 集合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E4%BC%98%E5%85%88%E5%85%B3%E7%B3%BB%E8%A1%A8"><span class="toc-number">3.6.</span> <span class="toc-text">5.3.6 构造优先关系表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E4%BC%98%E5%85%88%E5%85%B3%E7%B3%BB%E8%A1%A8%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="toc-number">3.7.</span> <span class="toc-text">5.3.7 构造优先关系表的程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E7%A8%8B%E5%BA%8F"><span class="toc-number">3.8.</span> <span class="toc-text">5.3.8 语法分析程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lr-%E5%88%86%E6%9E%90%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">5.4 LR 分析法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">4.1.</span> <span class="toc-text">5.4.1 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="toc-number">4.2.</span> <span class="toc-text">5.4.2 基本思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA-lr0-%E5%88%86%E6%9E%90%E8%A1%A8"><span class="toc-number">4.3.</span> <span class="toc-text">5.4.3 构建 LR(0) 分析表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="toc-number">4.4.</span> <span class="toc-text">5.4.4 语法分析算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-1-%E7%A8%8B%E5%BA%8F%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.5.</span> <span class="toc-text">5.4.5 示例 1 程序实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B-2-%E7%A8%8B%E5%BA%8F%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.6.</span> <span class="toc-text">5.4.6 示例 2 程序实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0"><span class="toc-number">4.7.</span> <span class="toc-text">5.4.7 练习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%B2%E7%AA%81"><span class="toc-number">4.8.</span> <span class="toc-text">5.4.8 冲突</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#slr1-%E5%88%86%E6%9E%90%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">5.5 SLR1 分析法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">5.1.</span> <span class="toc-text">5.5.1 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#slr1-%E6%96%87%E6%B3%95"><span class="toc-number">5.2.</span> <span class="toc-text">5.5.2 SLR(1) 文法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#slr-%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95%E7%9A%84%E6%80%9D%E6%83%B3"><span class="toc-number">5.3.</span> <span class="toc-text">5.5.3 SLR 分析算法的思想</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#slr1-%E5%88%86%E6%9E%90%E8%A1%A8%E7%9A%84%E6%9E%84%E9%80%A0"><span class="toc-number">5.4.</span> <span class="toc-text">5.5.4 SLR(1) 分析表的构造</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lr1-%E5%88%86%E6%9E%90%E6%B3%95"><span class="toc-number">6.</span> <span class="toc-text">5.6 LR1 分析法</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第八章 中间代码生成"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成">【程序设计语言 编译原理】 第八章 中间代码生成</a><time datetime="2026-06-17T12:41:55.000Z" title="发表于 2026-06-17 20:41:55">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第七章 语义分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析">【程序设计语言 编译原理】 第七章 语义分析</a><time datetime="2026-06-17T12:41:37.000Z" title="发表于 2026-06-17 20:41:37">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</a><time datetime="2026-06-17T12:25:13.000Z" title="发表于 2026-06-17 20:25:13">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第五章 自底向上的语法分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析">【程序设计语言 编译原理】 第五章 自底向上的语法分析</a><time datetime="2026-06-17T12:12:03.000Z" title="发表于 2026-06-17 20:12:03">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"/></a><div class="content"><a class="title" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training">【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training</a><time datetime="2026-06-15T08:31:46.000Z" title="发表于 2026-06-15 16:31:46">2026-06-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.7.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.innerHTML, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.5.2/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
