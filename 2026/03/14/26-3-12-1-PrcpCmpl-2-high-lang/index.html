@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
 <meta property="article:published_time" content="2026-03-14T12:27:33.000Z">
-<meta property="article:modified_time" content="2026-03-24T09:54:03.963Z">
+<meta property="article:modified_time" content="2026-06-17T13:27:41.240Z">
 <meta property="article:author" content="Remy Campanella">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="编译原理">
@@ -24,7 +24,7 @@
   "url": "https://remy-campanella.github.io/2026/03/14/26-3-12-1-PrcpCmpl-2-high-lang/",
   "image": "https://remy-campanella.github.io/image/background/remy.jpg",
   "datePublished": "2026-03-14T12:27:33.000Z",
-  "dateModified": "2026-03-24T09:54:03.963Z",
+  "dateModified": "2026-06-17T13:27:41.240Z",
   "author": [
     {
       "@type": "Person",
@@ -167,21 +167,21 @@
   pageType: 'post'
 }</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
     <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-14T12:27:33.000Z" title="发表于 2026-03-14 20:27:33">2026-03-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-03-24T09:54:03.963Z" title="更新于 2026-03-24 17:54:03">2026-03-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">程序设计语言 编译原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="程序语言的定义">2.1 程序语言的定义</h2>
-<p>一个程序语言是一个记号系统。程序语法由语法、语义两方面定义。</p>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-14T12:27:33.000Z" title="发表于 2026-03-14 20:27:33">2026-03-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-17T13:27:41.240Z" title="更新于 2026-06-17 21:27:41">2026-06-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">程序设计语言 编译原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="程序语言的定义">2.1 程序语言的定义</h2>
+<p>一个程序语言是一个<strong>记号系统</strong>。程序语法由<strong>语法</strong>、<strong>语义</strong>两方面定义。</p>
 <ul>
-<li>语法：规定描述形式。</li>
-<li>语义：语法成分实际意义。</li>
+<li>语法：规定<strong>描述形式</strong>。</li>
+<li>语义：语法成分<strong>实际意义</strong>。</li>
 </ul>
 <h3 id="语法">2.1.1 语法</h3>
-<p>任何语言程序都可看作是一定字符集（字母表）上的一字符串（有限序列）。有一组用于生成合式程序的规则，这组规则就是语法。这些规则的一部分称为<strong>词法规则</strong>，另一部分称为<strong>语法规则</strong>。</p>
+<p>任何语言程序都可看作是<strong>一定字符集（字母表）</strong>上的<strong>一字符串（有限序列）</strong>。有一组用于<strong>生成合式程序</strong>的规则，这组规则就是语法。这些规则的一部分称为<strong>词法规则</strong>，另一部分称为<strong>语法规则</strong>。</p>
 <ul>
-<li><strong>单词符号</strong>：语言中具有独立意义的最基本结构。</li>
-<li><strong>词法规则</strong>：单词符号的形成规则。规定了字母表中什么样的字符串是单词符号。</li>
-<li><strong>语法规则</strong>：规定如何从单词符号形成更大的语法单位。</li>
+<li><strong>单词符号</strong>：语言中具有独立意义的<strong>最基本结构</strong>。</li>
+<li><strong>词法规则</strong>：单词符号的形成规则。规定了字母表中<strong>什么样的字符串是单词符号</strong>。</li>
+<li><strong>语法规则</strong>：规定如何<strong>从单词符号形成更大的语法单位</strong>。</li>
 <li><strong>语法范畴/语法单位</strong>：由单词符号组成的表达式，如 <span class="math inline">\(a * 114.514 + c\)</span>。</li>
 </ul>
-<p>在现今多数程序语言中，常用上下文无关文法描述语法规则。语言的词法规则与语法规则规定了程序的结构，可以判断程序是否<strong>合式</strong>。合式程序仅表示词法与语法形式正确，<strong>语义不一定正确</strong>。</p>
+<p>在现今多数程序语言中，常用<strong>上下文无关文法</strong>描述语法规则。语言的词法规则与语法规则规定了程序的结构，可以判断程序是否<strong>合式</strong>。合式程序仅表示词法与语法形式正确，<strong>语义不一定正确</strong>。</p>
 <h3 id="语义">2.1.2 语义</h3>
 <p>语义是是各个单词符号与语法单位的意义，可以定义一个程序的意义。语义缺乏形式化的描述工具，主要采用自然语言阐释语义。运用<strong>属性文法</strong>进行语法制导翻译。</p>
 <p>程序本质上是对某一问题以及处理问题的办法的描述。一个程序大概可以分为如下层次：<br />
@@ -190,14 +190,14 @@
 <h3 id="高级语言的分类">2.2.1 高级语言的分类</h3>
 <ol type="1">
 <li><p><strong>强制式语言（过程式语言）</strong><br />
-命令驱动，面向语句。过程式语言由一系列语句组成，每个语句的执行引起若干存储单元中值的改变。<br />
+命令驱动，面向语句。过程式语言由<strong>一系列语句</strong>组成，每个语句的执行引起若干存储单元中值的改变。<br />
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">语句 1</span><br><span class="line">语句 2</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p></li>
 <li><p><strong>函数式语言</strong><br />
-更注重程序所表示的功能，而不是一个语句接一个语句执行。程序的开发过程是从已有的函数构造新的函数，直至初始的数据可以计算出最终的结果。</p></li>
+更注重程序所表示的功能，而不是一个语句接一个语句执行。程序的开发过程是<strong>从已有的函数构造新的函数</strong>，直至初始的数据可以计算出最终的结果。</p></li>
 <li><p><strong>基于规则的语言</strong><br />
-检查一定的条件，当满足值时，执行适当动作。也称逻辑程序设计语言，基本运行条件是谓词逻辑表达式。</p></li>
+检查一定的条件，当满足值时，执行适当动作。也称<strong>逻辑程序设计语言</strong>，基本运行条件是<strong>谓词逻辑表达式</strong>。</p></li>
 <li><p><strong>面向对象语言</strong><br />
-支持<strong>封装性、继承性、多态性</strong>。把复杂的数据和用于这些数据的操作<strong>封装</strong>在一起，构成<strong>对象</strong>。</p></li>
+支持<strong>封装性、继承性、多态性</strong>。把<strong>复杂的数据</strong>和<strong>用于这些数据的操作封装</strong>在一起，构成<strong>对象</strong>。</p></li>
 </ol>
 <h3 id="程序结构">2.2.2 程序结构</h3>
 <p>一个高级语言程序通常由若干<strong>程序段</strong>（<strong>过程、函数</strong>）构造，许多语言还引入<strong>类、程序包</strong>等结构。</p>
@@ -216,7 +216,7 @@
 <li>字符数据</li>
 <li>指针类型</li>
 </ul>
-<p>在程序中各种名字使用<strong>标识符</strong>表示的，标识符是字母或数字组成的以字母开头的<strong>字符串</strong>。名字的属性包括<strong>类型</strong>与<strong>作用域</strong>。在程序语言中，名字的类型通常是显式说明的（<strong>静态</strong>），编译时可以直接登记在表中。如果一个名字的属性是在程序运行过程中确定的，则称其有<strong>动态性</strong>，会拖慢编译速度。</p></li>
+<p>在程序中各种名字使用<strong>标识符</strong>表示的，标识符是字母或数字组成的以字母开头的<strong>字符串</strong>。名字的属性包括<strong>类型</strong>与<strong>作用域</strong>。在程序语言中，名字的类型通常是<strong>显式说明</strong>的（<strong>静态</strong>），编译时可以直接登记在表中。如果一个名字的属性是<strong>在程序运行过程中</strong>确定的，则称其有<strong>动态性</strong>，会拖慢编译速度。</p></li>
 <li><p><strong>数据结构</strong></p>
 <ul>
 <li><p><strong>数组</strong>：从逻辑上说，一个数组是由同一类型数据所组成的某种 <span class="math inline">\(n\)</span> 维矩形结构。沿着每一维的距离称为一个下标。每维的下标只能在该维的上、下限之内变动。数组的每个元素是矩形结构中的一个点，它的位置可通过给出每维的下标来确定。</p>
@@ -265,7 +265,7 @@
 </ul>
 <p>对于同级算符，可采用<strong>左结合</strong>或<strong>右结合</strong>。</p></li>
 <li><p><strong>语句</strong><br />
-语句可分为执行性语句和说明性语句两类。</p>
+语句可分为<strong>执行性语句</strong>和<strong>说明性语句</strong>两类。</p>
 <ul>
 <li>赋值句：将右值赋给左值指向的单元。</li>
 <li>控制语句：控制程序的执行顺序。</li>
@@ -274,11 +274,11 @@
 </ul></li>
 </ol>
 <h2 id="程序语言的语法描述">2.3 程序语言的语法描述</h2>
-<p>设 <span class="math inline">\(\sum\)</span> 是一个有穷<strong>字母表</strong>，每一个元素为<strong>符</strong>号。<span class="math inline">\(\sum\)</span> 中的符号组成的有穷序列为 <span class="math inline">\(\sum\)</span> 上的<strong>符号串</strong>，空序列称为<strong>空字</strong> <span class="math inline">\(\epsilon\)</span>，<span class="math inline">\(\sum\)</span> 能组成的所有符号串为 <span class="math inline">\(\sum^*\)</span>（包括<span class="math inline">\(\epsilon\)</span>），<span class="math inline">\(\varnothing\)</span> 为<strong>空集</strong>。</p>
+<p>设 <span class="math inline">\(\Sigma\)</span> 是一个有穷<strong>字母表</strong>，每一个元素为<strong>符</strong>号。<span class="math inline">\(\Sigma\)</span> 中的符号组成的有穷序列为 <span class="math inline">\(\Sigma\)</span> 上的<strong>符号串</strong>，空序列称为<strong>空字</strong> <span class="math inline">\(\epsilon\)</span>，<span class="math inline">\(\Sigma\)</span> 能组成的所有符号串为 <span class="math inline">\(\Sigma^*\)</span>（包括<span class="math inline">\(\epsilon\)</span>），<span class="math inline">\(\varnothing\)</span> 为<strong>空集</strong>。</p>
 <blockquote>
 <p>注意 <span class="math inline">\(\epsilon\)</span>、<span class="math inline">\(\{\}\)</span>、<span class="math inline">\(\{ \epsilon \}\)</span>的区别。</p>
 </blockquote>
-<p><span class="math inline">\(\sum^*\)</span> 上 <span class="math inline">\(U\)</span>、<span class="math inline">\(V\)</span>的<strong>连接</strong>（<strong>积</strong>）定义为<br />
+<p><span class="math inline">\(\Sigma^*\)</span> 上 <span class="math inline">\(U\)</span>、<span class="math inline">\(V\)</span>的<strong>连接</strong>（<strong>积</strong>）定义为<br />
 <span class="math display">\[
 UV = \{\alpha \beta | \alpha \in U, \beta \in V\}
 \]</span></p>
@@ -370,15 +370,15 @@ E \Rightarrow (E) \Rightarrow (E + E) \Rightarrow (E + i) \Rightarrow (E * E + i
 E \Rightarrow (E) \Rightarrow (E * E) \Rightarrow (i * E) \Rightarrow (i * E + E) \Rightarrow (i * i + E) \Rightarrow (i * i + i)
 \]</span><br />
 <img src="/image/icon/loading.gif" data-lazy-src="/image/26-3-12-1-PrcpCmpl-2-high-lang/1773364569930.webp" alt="1773364569930" /></p>
-<p>如果一个文法存在某个句子对应两颗不同的语法树，则称这个文法是<strong>二义的</strong>。</p>
-<p>人们已经证明，<strong>二义性问题是不可判定的</strong>。即，不存在一个算法，它能在有限步骤内，确切地判定一个文法是否为二义的。我们所能做的事是为无二义性寻找一组充分条件（当然它们未必都是必要的）。例如，使 <span class="math inline">\(*\)</span> 的优先级高于 <span class="math inline">\(+\)</span>。</p>
+<p>如果一个文法存在<strong>某个句子对应两棵不同的语法树</strong>，则称这个文法是<strong>二义的</strong>。</p>
+<p>人们已经证明，<strong>二义性问题是不可判定的</strong>。即，不存在一个算法，它能在<strong>有限步骤</strong>内，<strong>确切地判定一个文法是否为二义的</strong>。我们所能做的事是为无二义性寻找一组<strong>充分条件</strong>（当然它们未必都是必要的）。例如，使 <span class="math inline">\(*\)</span> 的优先级高于 <span class="math inline">\(+\)</span>。</p>
 <p>因此，对上下文无关法提出限制：</p>
 <ul>
 <li>文法中不含形如 <span class="math inline">\(P \rightarrow P\)</span> 的产生式。</li>
-<li>每个非终结符必须有用，即每个非终结符必须存在一个句型中，即存在推导 <span class="math inline">\(S \Rightarrow^* \alpha P \beta\)</span>。另一方面，必须存在终结符串 <span class="math inline">\(\gamma\)</span>，使得 <span class="math inline">\(P \Rightarrow^+ \gamma\)</span>，对于 <span class="math inline">\(P\)</span> 不存在永不终结的回路。</li>
+<li>每个非终结符<strong>必须有用</strong>，即每个非终结符必须存在一个句型中，即存在推导 <span class="math inline">\(S \Rightarrow^* \alpha P \beta\)</span>。另一方面，必须存在终结符串 <span class="math inline">\(\gamma\)</span>，使得 <span class="math inline">\(P \Rightarrow^+ \gamma\)</span>，对于 <span class="math inline">\(P\)</span> 不存在永不终结的回路。</li>
 </ul>
 <h3 id="形式语言鸟瞰">2.3.3 形式语言鸟瞰</h3>
-<p>乔姆斯基体系把文法分为四种类型。0 型强于 1 型，1 型强于 2 型，2 型强于 3 型。这几类文法的差别在于对产生式施加不同的限制。</p>
+<p><strong>乔姆斯基体系</strong>把文法分为四种类型。0 型强于 1 型，1 型强于 2 型，2 型强于 3 型。这几类文法的差别在于对产生式施加不同的限制。</p>
 <p>若文法 <span class="math inline">\(G = (V_T, V_N, S, \mathcal{P})\)</span> 的每个产生式都满足<br />
 <span class="math display">\[
 \alpha \rightarrow \beta 
