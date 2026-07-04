@@ -1,0 +1,585 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【操作系统原理】 Lecture 5 物理内存管理：连续内存分配 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。  核心组件：    CPU：执行指令，生成逻辑地址。  MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。  总线：连接CPU、内存和外设。 ### 内存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【操作系统原理】 Lecture 5 物理内存管理：连续内存分配">
+<meta property="og:url" content="https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="计算机体系结构与内存层次 计算机体系结构  基础：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。  核心组件：    CPU：执行指令，生成逻辑地址。  MMU（内存管理单元）：将逻辑地址转换为物理地址，支持分段和分页。  总线：连接CPU、内存和外设。 ### 内存">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2025-11-05T01:32:56.000Z">
+<meta property="article:modified_time" content="2026-07-03T01:31:16.499Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【操作系统原理】 Lecture 5 物理内存管理：连续内存分配",
+  "url": "https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2025-11-05T01:32:56.000Z",
+  "dateModified": "2026-07-03T01:31:16.499Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【操作系统原理】 Lecture 5 物理内存管理：连续内存分配',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【操作系统原理】 Lecture 5 物理内存管理：连续内存分配</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【操作系统原理】 Lecture 5 物理内存管理：连续内存分配</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-11-05T01:32:56.000Z" title="发表于 2025-11-05 09:32:56">2025-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-03T01:31:16.499Z" title="更新于 2026-07-03 09:31:16">2026-07-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/">操作系统原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="计算机体系结构与内存层次">计算机体系结构与内存层次</h2>
+<h3 id="计算机体系结构">计算机体系结构</h3>
+<ol type="1">
+<li><strong>基础</strong>：基于Intel® 64和IA-32架构，参考官方手册（Intel® 64 and IA-32 Architectures Software Developer Manuals）。<br />
+</li>
+<li><strong>核心组件</strong>：<br />
+</li>
+</ol>
+<ul>
+<li><strong>CPU</strong>：执行指令，生成逻辑地址。<br />
+</li>
+<li><strong>MMU（内存管理单元）</strong>：将逻辑地址转换为物理地址，支持分段和分页。<br />
+</li>
+<li><strong>总线</strong>：连接CPU、内存和外设。<br />
+### 内存层次</li>
+</ul>
+<ol type="1">
+<li><strong>结构</strong>：<br />
+</li>
+</ol>
+<ul>
+<li><strong>高速缓存（Cache）</strong>：速度快，容量小，减少CPU访问内存延迟。<br />
+</li>
+<li><strong>主存（RAM）</strong>：存放运行中的程序和数据。<br />
+</li>
+<li><strong>外存（磁盘）</strong>：持久化存储，用于交换分区（Swapping）。<br />
+</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>性能问题</strong>：<br />
+</li>
+</ol>
+<ul>
+<li><strong>高速缓存未命中</strong>：需从主存加载数据，延迟增加。<br />
+</li>
+<li><strong>缺页（Page Fault）</strong>：虚拟内存机制中，访问未加载的页需从磁盘读取。</li>
+</ul>
+<h2 id="操作系统的内存管理方式">操作系统的内存管理方式</h2>
+<ol type="1">
+<li><strong>操作系统中的内存管理方式</strong>
+<ul>
+<li>重定位（relocation）</li>
+<li>分段（segmentation）</li>
+<li>分页（paging）</li>
+<li>虚拟存储（virtual memory）<br />
+&gt; 目前多数系统（如 Linux）采用<strong>按需页式虚拟存储</strong>。</li>
+</ul></li>
+<li><strong>实现高度依赖硬件</strong>
+<ul>
+<li>MMU（内存管理单元）：处理 CPU 存储访问请求的硬件</li>
+</ul></li>
+</ol>
+<h2 id="地址空间与地址生成">地址空间与地址生成</h2>
+<h3 id="地址空间定义">地址空间定义</h3>
+<table>
+<thead>
+<tr>
+<th>空间类型</th>
+<th>定义</th>
+<th>范围表示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理地址空间</td>
+<td>硬件支持的地址空间</td>
+<td>0 ~ <span class="math inline">\(MAX_{sys}\)</span></td>
+</tr>
+<tr>
+<td>逻辑地址空间</td>
+<td>在 CPU 运行的<strong>进程</strong>看到的地址</td>
+<td>0 ~ <span class="math inline">\(MAX_{prog}\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="逻辑地址生成">逻辑地址生成</h3>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/25-11-3-8-OpSys-5-phy-mem-con/1765805173546.webp" alt="1765805173546" />
+<figcaption aria-hidden="true">1765805173546</figcaption>
+</figure>
+<h3 id="地址生成过程">地址生成过程</h3>
+<ol type="1">
+<li><strong>CPU</strong>
+<ul>
+<li>ALU：需要逻辑地址的内存内容</li>
+<li>MMU：进行逻辑地址和物理地址的转换</li>
+<li>CPU 控制逻辑：给总线发送物理地址请求</li>
+</ul></li>
+<li><strong>内存</strong>
+<ul>
+<li>发送物理地址的内容给 CPU</li>
+<li>或接收 CPU 数据到物理地址</li>
+</ul></li>
+<li><strong>操作系统</strong>
+<ul>
+<li>建立逻辑地址 LA 和物理地址 PA 的映射</li>
+</ul></li>
+</ol>
+<h3 id="地址检查">地址检查</h3>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/25-11-3-8-OpSys-5-phy-mem-con/1765805550322.webp" alt="1765805550322" />
+<figcaption aria-hidden="true">1765805550322</figcaption>
+</figure>
+<h2 id="连续内存分配">连续内存分配</h2>
+<h3 id="连续内存分配与内存碎片">连续内存分配与内存碎片</h3>
+<dl>
+<dt><strong>连续内存分配</strong></dt>
+<dd>
+给进程分配一块<strong>不小于</strong>指定大小的连续的物理内存区域。
+</dd>
+<dt><strong>内存碎片</strong></dt>
+<dd>
+不能被利用的空闲内存。
+</dd>
+<dt><strong>外部碎片</strong></dt>
+<dd>
+分配单元之间未使用的内存。
+</dd>
+<dt><strong>内部碎片</strong></dt>
+<dd>
+分配单元之间未使用的内存，取决于分配单元大小是否要取整。
+</dd>
+</dl>
+<h3 id="动态分区分配策略">动态分区分配策略</h3>
+<ol type="1">
+<li><strong>动态分区分配</strong>
+<ul>
+<li>当程序被加载执行时，分配一个进程指定大小可变的分区（块、内存块）。</li>
+<li>分区的地址是<strong>连续的</strong>。</li>
+</ul></li>
+<li><strong>数据结构</strong>
+<ul>
+<li>所有进程已分配的分区。</li>
+<li>空闲分区（Empty Block）。</li>
+</ul></li>
+<li><strong>最先匹配策略（First Fit Allocation）</strong>
+<ul>
+<li><p><strong>思路</strong><br />
+分配 <span class="math inline">\(n\)</span> 字节分区时， 查找并使用不小于 <span class="math inline">\(n\)</span> 的最小空闲分区。</p></li>
+<li><p><strong>实现</strong></p>
+<ul>
+<li>空闲分区列表按<strong>地址顺序</strong>排序。</li>
+<li><strong>分配</strong>过程时，搜索一个合适的分区。</li>
+<li><strong>释放</strong>分区时，检查是否可<strong>与临近的空闲分区合并</strong>。</li>
+</ul></li>
+<li><p><strong>优点</strong></p>
+<ul>
+<li>简单</li>
+<li>高地址大块空闲分区</li>
+</ul></li>
+<li><p><strong>缺点</strong></p>
+<ul>
+<li>外部碎片</li>
+<li>分配大块时较慢</li>
+</ul></li>
+</ul></li>
+<li><strong>最佳匹配策略（Best Fit Allocation）</strong></li>
+</ol>
+<h4 id="碎片整理方法"><strong>2. 碎片整理方法</strong></h4>
+<ul>
+<li><strong>紧凑（Compaction）</strong>：
+<ul>
+<li>移动内存中的进程，使空闲空间连续。<br />
+</li>
+<li><strong>缺点</strong>：开销大，需暂停所有进程。<br />
+</li>
+</ul></li>
+<li><strong>分区对换（Swapping）</strong>：
+<ul>
+<li>将等待状态的进程换出到外存，释放内存空间。<br />
+</li>
+<li><strong>流程</strong>：
+<ul>
+<li>选择等待进程（如P2）。<br />
+</li>
+<li>将其内存数据写入磁盘。<br />
+</li>
+<li>回收分区供其他进程使用。</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="四伙伴系统buddy-system">四、伙伴系统（Buddy System）</h2>
+<h3 id="核心思想">核心思想</h3>
+<ul>
+<li><strong>分区规则</strong>：内存划分为大小为<code>2^U</code>的块，分配时按需拆分。<br />
+</li>
+<li><strong>伙伴关系</strong>：两个大小相同、地址连续的块互为“伙伴”，可合并为更大的块。<br />
+### 分配与释放流程</li>
+</ul>
+<ol type="1">
+<li><strong>分配示例</strong>：<br />
+</li>
+</ol>
+<ul>
+<li>请求100K → 分配128K（<code>2^7</code>）。<br />
+</li>
+<li>请求240K → 分配256K（<code>2^8</code>）。<br />
+</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>合并条件</strong>：<br />
+</li>
+</ol>
+<ul>
+<li>释放的块与其伙伴均为空闲时，合并为更大的块。<br />
+</li>
+<li><strong>公式</strong>：<code>buddy_addr = block_addr ^ block_size</code>（异或运算）。<br />
+### 优缺点</li>
+<li><strong>优点</strong>：分配/释放高效，合并算法简单。<br />
+</li>
+<li><strong>缺点</strong>：可能产生内部碎片（如请求100K却分配128K）。</li>
+</ul>
+<h2 id="五ucore中的物理内存管理">五、ucore中的物理内存管理</h2>
+<h3 id="数据结构设计">数据结构设计</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pmm_manager</span> &#123;</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *name;              <span class="comment">// 管理器名称</span></span><br><span class="line">    <span class="type">void</span> (*init)(<span class="type">void</span>);            <span class="comment">// 初始化</span></span><br><span class="line">    <span class="type">void</span> (*init_memmap)(<span class="keyword">struct</span> Page *base, <span class="type">size_t</span> n); <span class="comment">// 初始化内存映射</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Page</span> *(*<span class="title">alloc_pages</span>)(<span class="title">size_t</span> <span class="title">order</span>);</span>        <span class="comment">// 分配页（order=2^n）</span></span><br><span class="line">    <span class="type">void</span> (*free_pages)(<span class="keyword">struct</span> Page *base, <span class="type">size_t</span> n);  <span class="comment">// 释放页</span></span><br><span class="line">    <span class="type">size_t</span> (*nr_free_pages)(<span class="type">void</span>);   <span class="comment">// 获取空闲页数</span></span><br><span class="line">    <span class="type">void</span> (*check)(<span class="type">void</span>);            <span class="comment">// 检查一致性</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="伙伴系统实现">伙伴系统实现</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">pmm_manager</span> <span class="title">buddy_pmm_manager</span> =</span> &#123;</span><br><span class="line">    .name = <span class="string">&quot;buddy_pmm_manager&quot;</span>,</span><br><span class="line">    .init = buddy_init,             <span class="comment">// 初始化空闲块链表</span></span><br><span class="line">    .alloc_pages = buddy_alloc_pages, <span class="comment">// 分配页（按order拆分）</span></span><br><span class="line">    .free_pages = buddy_free_pages,   <span class="comment">// 释放页（尝试合并伙伴）</span></span><br><span class="line">    .check = buddy_check,           <span class="comment">// 检查链表一致性</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="关键函数逻辑">关键函数逻辑</h3>
+<ol type="1">
+<li><strong><code>buddy_alloc_pages</code></strong>：<br />
+</li>
+</ol>
+<ul>
+<li>查找满足<code>order</code>的最小空闲块。<br />
+</li>
+<li>若不存在，拆分更大的块并递归分配。<br />
+</li>
+</ul>
+<ol start="2" type="1">
+<li><strong><code>buddy_free_pages</code></strong>：<br />
+</li>
+</ol>
+<ul>
+<li>标记释放的块为空闲。<br />
+</li>
+<li>检查伙伴是否空闲，是则合并。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/">https://remy-campanella.github.io/2025/11/05/25-11-3-8-OpSys-5-phy-mem-con/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/11/05/25-11-3-7-OpSys-4-exp1-bootloader/" title="【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【操作系统原理】 Lecture 4 实验一 Bootloader 启动 ucore OS</div></div><div class="info-2"><div class="info-item-1">一、x86启动顺序 启动流程  BIOS阶段    初始状态：CS=0xF000, EIP=0xFFF0，物理地址为0xFFFFFFF0（BIOS EPROM位置）。  第一条指令：长跳转（JMP）到BIOS代码区，更新CS:EIP。    加载Bootloader    BIOS将存储设备（硬盘/USB）的主引导扇区（MBR，512字节）加载到内存0x7C00，并跳转执行。    Bootloader任务    使能保护模式：设置CR0寄存器的PE位（Bit 0）。  加载内核：从硬盘读取ELF格式的ucore内核到内存固定位置。  跳转执行：跳转到ucore入口点，移交控制权。 ### 实模式与保护模式   实模式（历史背景）    寻址方式：段基址:偏移量（如CS:IP），物理地址 = 段基址*16 + 偏移量。  限制：20位地址总线，最大1MB空间（0x00000~0xFFFFF），无保护机制。  中断处理：中断向量表（IVT）位于内存低地址，INT n通过N*4获取ISR地址。    保护模式    段机制：通过全局描述符表（GDT）管理段基址和权限，lgdt指令加载...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-1-OpSys-6-phy-mem-man-discon/" title="【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【操作系统原理】 Lecture 6 物理内存管理：非连续内存分配</div></div><div class="info-2"><div class="info-item-1">一、非连续内存分配的需求背景 设计目标  解决连续分配的缺陷：  外部碎片：内存中存在大量不连续的小空闲块，难以利用。  内部碎片：分配的块大于实际需求（如伙伴系统）。   支持灵活的内存布局：  允许程序代码、数据、堆栈等分散在物理内存的不同位置。  便于实现内存共享和保护（如共享库）。   实现方式  段式管理：按逻辑模块划分内存（如代码段、数据段）。  页式管理：将内存划分为固定大小的页，按需分配。  段页式管理：结合段式逻辑划分与页式物理分配。  二、段式存储管理 段地址空间  逻辑结构：  进程地址空间由多个段组成，如：  主代码段、子模块代码段、堆栈段、堆数据段。   二维地址：(段号, 段内偏移)。   非连续性：  各段可独立加载到物理内存的任意位置，无需连续。 ### 段访问机制  硬件实现：  逻辑地址：(段选择子, 偏移量)。  段表（GDT/LDT）：存储段基址和段限长。  地址转换：  物理地址 = 段基址 + 偏移量。  检查偏移量是否超过段限长，否则触发异常。    优点：  支持内存共享（如多个进程共享代码段）。  便于模块化编程和保护。   缺点...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/11/05/25-11-5-3-OpSys-8-virt-stor/" title="【操作系统原理】 Lecture 8 虚拟存储概念"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 8 虚拟存储概念</div></div><div class="info-2"><div class="info-item-1">一、虚拟存储的需求背景 1. 存储需求增长  程序规模 vs 存储容量：  应用程序（如大型游戏）规模增长速度远超物理内存容量。  核心矛盾：需要运行比物理内存更大的程序。   2. 存储层次结构  金字塔模型：  顶层：CPU寄存器（最快，容量最小）。  中层：高速缓存、主存（RAM）。  底层：磁盘（最慢，容量最大）。   操作系统抽象：  通过虚拟存储技术，将外存（磁盘）扩展为内存的延伸。   二、核心技术：覆盖与交换 1. 覆盖技术  原理：  按程序逻辑划分模块，将不会同时执行的模块共享同一内存区域。   示例：  模块A（20K）独立占用。  模块B/E/F（50K）共享区域，模块C/D（30K）共享区域。  总内存需求：100K（原需150K）。   不足：  需程序员手动划分模块，增加编程复杂度。  无法自动适应动态内存需求。   2. 交换技术  原理：  将内存中暂时不运行的进程整体换出到外存，释放内存空间。   流程：  换出：选择等待进程（如P2），写入磁盘。  换入：需要时再从磁盘加载回内存。   面临问题：  交换区大小：需预留足够磁盘空间。  交换时...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-9-OpSys-14-user-proc-man/" title="【操作系统原理】 Lecture 14 实验五 用户进程管理"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 14 实验五 用户进程管理</div></div><div class="info-2"><div class="info-item-1">一、总体介绍 1. 实验目标 本实验的目标是构建一个完整的用户进程环境，让学生掌握从内核态到用户态的跨越，以及用户进程的生命周期管理。 - 创建第一个用户进程：理解如何“硬构造”出第一个用户进程，为其建立用户态的代码/数据段。 - 实现系统调用框架：理解用户态如何通过int 0x80中断陷入内核，执行系统调用，并返回用户态。 - 掌握进程管理机制：包括进程的创建（fork）、加载（exec）、复制和销毁。 #### 2. 核心练习 - 加载并执行应用程序：将一个简单的hello程序（ELF格式）加载到内存并运行。 - 实现进程复制：完成fork系统调用，让父进程复制自己的内存空间给子进程。 - 分析系统调用与进程管理：深入理解do_execve和do_fork的实现细节。 — ### 二、进程的内存布局 理解用户进程的虚拟内存空间是本实验的基础。 #### 1. 内核与进程虚拟内存布局对比 ucore为内核和用户进程设计了不同的虚拟内存布局： - 内核空间（高地址）： - KERNBASE到KERNTOP：内核代码和数据，直接映射物理内存。 - VPT：存放当前页目录和页表的虚拟...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-8-OpSys-13-core-thr-man/" title="【操作系统原理】 Lecture 13 线程控制"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 13 线程控制</div></div><div class="info-2"><div class="info-item-1">一、实验目标与概述 1. 核心目标 本实验的核心目标是让学生深入理解内核线程的整个生命周期管理，具体包括： - 线程创建与执行：了解一个内核线程如何从无到有，并被调度执行。 - 线程状态管理：理解线程在Ready（就绪）、Running（运行）、Waiting（等待）等状态间的转换。 - 线程切换与调度：掌握CPU控制权如何从一个线程转移到另一个线程，这是多任务操作系统的基石。 #### 2. 练习任务 实验通过三个循序渐进的练习来达成目标： - 练习1：分配并初始化一个进程控制块（PCB），这是线程存在的基石。 - 练习2：为新创建的内核线程分配资源，主要是内核栈和执行上下文。 - 练习3：理解并完成进程切换，这是实现并发执行的关键。 — ### 二、关键数据结构 内核线程的管理依赖于两个核心数据结构：线程控制块和线程控制块链表。 #### 1. 线程控制块 在ucore中，线程和进程使用统一的数据结构proc_struct来表示，可以称之为TCB（Thread Control Block）。它包含了管理一个线程所需的所有信息： - 进程标识：pid（进程ID）、state（进...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-5-OpSys-2-exp0-env/" title="【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 2 实验零 操作实验系统实验环境准备</div></div><div class="info-2"><div class="info-item-1">一、了解操作系统（OS）  核心概念  特权机制：CPU 通过特权级（如 CPL = 0 为最高特权）保护系统安全，特权指令（如LIDT、MOV CRn）只能在特权态执行，否则触发异常。  中断与异常管理：包括外设中断、陷阱中断（如系统调用）和故障中断（如缺页异常）。  内存管理：  分段（Segmentation）和分页（Paging）机制，实现虚拟内存（Virtual Memory）。  硬件支持：TLB（快表）、MMU（内存管理单元）。    OS设计目标  高效管理硬件资源（CPU、内存、外设）。  提供系统调用接口，实现用户态与内核态切换。   二、了解硬件  计算机体系结构  图灵机模型：有限状态机，通过读写符号和状态转换实现计算。  冯·诺依曼架构：  组成：CPU（寄存器、执行单元）、内存、磁盘、键盘、显示器等。  特点：存储程序，指令与数据共享内存。    x86硬件特性  特权指令：仅当CPL=0时可执行，否则触发通用保护异常（如LGDT、STI）。  关键组件：  BIOS ROM（启动固件）、时钟（中断源）、地址/数据信号线。   实验环境：ucore O...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-5-2-OpSys-7-exp2-phy-mem-man/" title="【操作系统原理】 Lecture 7 实验二 物理内存管理"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 7 实验二 物理内存管理</div></div><div class="info-2"><div class="info-item-1">一、x86特权级机制 1. 特权级简介  保护环（Protection Rings）：  Ring 0：内核态，最高特权，可执行所有指令（如lgdt）。  Ring 3：用户态，最低特权，受限访问硬件资源。  Ring 1/2：设备驱动（Linux/ucore未使用）。   特权级检查时机：  访问数据段、页表、中断服务例程（ISR）时，CPU自动验证权限。  失败后果：触发通用保护异常（General Protection Fault）。 #### 2. 特权级相关寄存器与描述符  段选择子（Segment Selector）：  RPL（Requested Privilege Level）：请求者特权级（2位）。  TI（Table Indicator）：指示使用GDT（0）或LDT（1）。  索引：在描述符表中的位置。   段描述符（Segment Descriptor）：  DPL（Descriptor Privilege Level）：描述符特权级（2位）。  Base Address：段基址，隐藏部分缓存至段寄存器。   门描述符（Gate Descriptor）： ...</div></div></div></a><a class="pagination-related" href="/2025/11/05/25-11-3-4-OpSys-1-intro/" title="【操作系统原理】 Lecture 1 课程概述"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-05</div><div class="info-item-2">【操作系统原理】 Lecture 1 课程概述</div></div><div class="info-2"><div class="info-item-1">一、课程目标与意义  学习目的  掌握操作系统（OS）的基本原理与实现技术。  通过开发小型OS实践核心阶段（如中断处理、内存管理）。  深化对计算机系统的整体理解，提升知识应用能力。   OS的重要性  计算机科学的基石，连接硬件、软件与应用的核心支撑。  贯穿程序语言、编译、体系结构等领域，影响专业素质。   二、课程结构与内容  核心教学内容  OS结构、中断与系统调用、内存管理、进程/线程、调度、同步互斥、文件系统、I/O子系统。   实验与实践  实验序列：环境准备→系统启动→物理/虚拟内存管理→内核线程→用户进程→调度→同步→文件系统。  课程设计：基于RISC-V的ucore OS内核开发。   参考教材  《Operating System Concepts》（恐龙书）  《Operating Systems: Three Easy Pieces》（OSTEP）   三、操作系统核心概念  定义与地位  OS是管理硬件资源、提供用户接口的系统软件，位于硬件与应用之间（承上启下）。   内核特征  并发：多程序同时运行，需调度管理。  共享：资源互斥或同时访问。  ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%86%85%E5%AD%98%E5%B1%82%E6%AC%A1"><span class="toc-number">1.</span> <span class="toc-text">计算机体系结构与内存层次</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">计算机体系结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">操作系统的内存管理方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90"><span class="toc-number">3.</span> <span class="toc-text">地址空间与地址生成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%AE%9A%E4%B9%89"><span class="toc-number">3.1.</span> <span class="toc-text">地址空间定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90"><span class="toc-number">3.2.</span> <span class="toc-text">逻辑地址生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B"><span class="toc-number">3.3.</span> <span class="toc-text">地址生成过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%B0%E5%9D%80%E6%A3%80%E6%9F%A5"><span class="toc-number">3.4.</span> <span class="toc-text">地址检查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">连续内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E7%BB%AD%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87"><span class="toc-number">4.1.</span> <span class="toc-text">连续内存分配与内存碎片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">4.2.</span> <span class="toc-text">动态分区分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A2%8E%E7%89%87%E6%95%B4%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.1.</span> <span class="toc-text">2. 碎片整理方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9Fbuddy-system"><span class="toc-number">5.</span> <span class="toc-text">四、伙伴系统（Buddy System）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="toc-number">5.1.</span> <span class="toc-text">核心思想</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94ucore%E4%B8%AD%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">五、ucore中的物理内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">6.1.</span> <span class="toc-text">数据结构设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0"><span class="toc-number">6.2.</span> <span class="toc-text">伙伴系统实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%87%BD%E6%95%B0%E9%80%BB%E8%BE%91"><span class="toc-number">6.3.</span> <span class="toc-text">关键函数逻辑</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/03/25-12-2-2-CompOrg-9-io-sys/" title="【计算机组成原理】 第九章 输入输出系统"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【计算机组成原理】 第九章 输入输出系统"/></a><div class="content"><a class="title" href="/2026/07/03/25-12-2-2-CompOrg-9-io-sys/" title="【计算机组成原理】 第九章 输入输出系统">【计算机组成原理】 第九章 输入输出系统</a><time datetime="2026-07-03T01:31:16.501Z" title="发表于 2026-07-03 09:31:16">2026-07-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第八章 中间代码生成"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成">【程序设计语言 编译原理】 第八章 中间代码生成</a><time datetime="2026-06-17T12:41:55.000Z" title="发表于 2026-06-17 20:41:55">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第七章 语义分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析">【程序设计语言 编译原理】 第七章 语义分析</a><time datetime="2026-06-17T12:41:37.000Z" title="发表于 2026-06-17 20:41:37">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</a><time datetime="2026-06-17T12:25:13.000Z" title="发表于 2026-06-17 20:25:13">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第五章 自底向上的语法分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析">【程序设计语言 编译原理】 第五章 自底向上的语法分析</a><time datetime="2026-06-17T12:12:03.000Z" title="发表于 2026-06-17 20:12:03">2026-06-17</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.8.0+26.7.4.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.1.2/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js?v=undefined"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
