@@ -1594,11 +1594,11 @@
       
         <tags>
             
+            <tag> 实习实训 </tag>
+            
             <tag> Hadoop </tag>
             
             <tag> 大数据 </tag>
-            
-            <tag> 实习实训 </tag>
             
             <tag> MapReduce </tag>
             
@@ -1680,6 +1680,8 @@
       
         <tags>
             
+            <tag> 实习实训 </tag>
+            
             <tag> HDFS </tag>
             
             <tag> Hadoop </tag>
@@ -1693,8 +1695,6 @@
             <tag> NameNode </tag>
             
             <tag> HDFS Shell </tag>
-            
-            <tag> 实习实训 </tag>
             
         </tags>
       
@@ -1723,8 +1723,6 @@
       
         <tags>
             
-            <tag> 实习实训 </tag>
-            
             <tag> Python </tag>
             
             <tag> 网络爬虫 </tag>
@@ -1736,6 +1734,8 @@
             <tag> requests </tag>
             
             <tag> HTML解析 </tag>
+            
+            <tag> 实习实训 </tag>
             
         </tags>
       
