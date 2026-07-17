@@ -1,488 +1,0 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【程序设计语言 编译原理】 第七章 语义分析 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="7.1 介绍 graph LR  A[&quot;语法树&quot;] B[&quot;语义分析器&quot;] C[&quot;语义树&quot;]  A --&gt; B --&gt; C 语义树能为生成中间代码提供基础。 一个语句的语法及其语义的示例如下所示。大括号里边的内容为该语句的语义。 语法：\(E \rightarrow E_1 + E_2\)。 语义：&#123;E.val :&#x3D; E1.val + E2.val&#125;。 7">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【程序设计语言 编译原理】 第七章 语义分析">
-<meta property="og:url" content="https://remy-campanella.github.io/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/index.html">
-<meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="7.1 介绍 graph LR  A[&quot;语法树&quot;] B[&quot;语义分析器&quot;] C[&quot;语义树&quot;]  A --&gt; B --&gt; C 语义树能为生成中间代码提供基础。 一个语句的语法及其语义的示例如下所示。大括号里边的内容为该语句的语义。 语法：\(E \rightarrow E_1 + E_2\)。 语义：&#123;E.val :&#x3D; E1.val + E2.val&#125;。 7">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
-<meta property="article:published_time" content="2026-06-17T12:41:37.000Z">
-<meta property="article:modified_time" content="2026-06-17T12:41:37.566Z">
-<meta property="article:author" content="Remy Campanella">
-<meta property="article:tag" content="学习笔记">
-<meta property="article:tag" content="编译原理">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "【程序设计语言 编译原理】 第七章 语义分析",
-  "url": "https://remy-campanella.github.io/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/",
-  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
-  "datePublished": "2026-06-17T12:41:37.000Z",
-  "dateModified": "2026-06-17T12:41:37.566Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "Remy Campanella",
-      "url": "https://remy-campanella.github.io"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
-  translate: undefined,
-  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: '复制成功',
-    error: '复制失败',
-    noSupport: '浏览器不支持'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: '刚刚',
-    min: '分钟前',
-    hour: '小时前',
-    day: '天前',
-    month: '个月前'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
-    buttonText: '加载更多'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '【程序设计语言 编译原理】 第七章 语义分析',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
-    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【程序设计语言 编译原理】 第七章 语义分析</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【程序设计语言 编译原理】 第七章 语义分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-17T12:41:37.000Z" title="发表于 2026-06-17 20:41:37">2026-06-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-17T12:41:37.566Z" title="更新于 2026-06-17 20:41:37">2026-06-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AF%AD%E8%A8%80-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">程序设计语言 编译原理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="介绍">7.1 介绍</h2>
-<pre class="mermaid">graph LR
-
-A["语法树"]
-B["语义分析器"]
-C["语义树"]
-
-A --> B --> C</pre>
-<p>语义树能为生成中间代码提供基础。<br />
-一个语句的语法及其语义的示例如下所示。大括号里边的内容为该语句的语义。</p>
-<p>语法：<span class="math inline">\(E \rightarrow E_1 + E_2\)</span>。</p>
-<p>语义：<code>&#123;E.val := E1.val + E2.val&#125;</code>。</p>
-<h2 id="语义树">7.2 语义树</h2>
-<table>
-<thead>
-<tr class="header">
-<th>规则</th>
-<th>语义动作</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(S&#39; := E\)</span></td>
-<td><code>&#123;print E.val&#125;</code></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(E := E(1) + E(2)\)</span></td>
-<td><code>&#123;E.val = E1.val + E2.val&#125;</code></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(E := E(1) * E(2)\)</span></td>
-<td><code>&#123;E.val = E1.val * E2.val&#125;</code></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(E := (E(1))\)</span></td>
-<td><code>&#123;E.val = E(1).val&#125;</code></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(E := \text{i}\)</span></td>
-<td><code>&#123;E.val = LEXVAL&#125;</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>LEXVAL</code> 为词法分析得到的值。</p>
-<h2 id="属性文法">7.3 属性文法</h2>
-<h3 id="介绍-1">7.3.1 介绍</h3>
-<p>属性代表与<strong>文法符号</strong>相关信息，如类型、值、代码序列、符号表内容等。属性与变量一样，可以进行计算和传递。属性加工的过程即是语义处理的过程。</p>
-<p>属性文法把语法中各个符号的含义，以及含义之间的关系表示出来，并且和文法放在一起。</p>
-<p>属性文法在上下文无关文法的基础上，为每个文法符号（终结符或非终结符）配备若干相关的”值”（称为属性）。</p>
-<p>对于文法的每个产生式都配备了一组属性的计算规则，成为语义规则。语义规则是对于文法的每个产生式都配备了一组属性的计算规则。</p>
-<h3 id="综合属性">7.3.2 综合属性</h3>
-<h4 id="简要信息">7.3.2.1 简要信息</h4>
-<p><strong>定义</strong>：语法树中结点的综合属性由其子结点的属性值确定。</p>
-<p><strong>计算方法</strong></p>
-<p>采用自底向上的语义规则计算；</p>
-<ul>
-<li>产生式左部符号的综合属性由右部符号的属性计算得出；</li>
-<li>父节点的综合属性由子结点属性及父结点自身属性计算。</li>
-</ul>
-<p><strong>S 属性文法</strong>：仅使用综合属性的属性文法。</p>
-<p><strong>适用性</strong></p>
-<ul>
-<li>用于自下而上传递信息；</li>
-<li>非终结符的综合属性包括产生式左部和右部的非终结符属性；</li>
-<li>终结符的综合属性由词法分析器直接提供，无计算规则。</li>
-</ul>
-<h4 id="详细信息">7.3.2.2 详细信息</h4>
-<p><strong>综合属性自下而上传递</strong>，根据右部候选式中的符号的属性计算左部被定义符号的综合属性。</p>
-<p>从语法树的角度来看，根据子结点的属性和父结点自身的属性计算父节点的综合属性。</p>
-<p>一般说来，对出现在产生式右边的继承属性和出现在产生式左边的综合属性都必须提供一个计算规则。属性计算规则中只能使用相应产生式中的文法符号的属性，这有助于在产生式范围内”封装”属性的依赖性。</p>
-<p>然而，出现在产生式左边的继承属性和出现在产生式右边的综合属性不由所给的产生式的属性计算规则进行计算，它们由其他产生式的属性规则计算或者由属性计算器的参数提供。</p>
-<figure>
-<img src="/image/icon/loading.gif" data-lazy-src="/image/26-6-5-1-PrcpCmpl-7-sem-aly/1781699805262.jpg" alt="1781699805262" />
-<figcaption aria-hidden="true">1781699805262</figcaption>
-</figure>
-<p>综合属性在实际中被广泛应用。在语法树中，一个结点的综合属性的值由其子结点的属性值确定。因此，通常使用自底向上的方法在每一个结点处使用语义规则计算综合属性的值。仅仅使用综合属性的属性文法称 S 属性文法。</p>
-<p>综合属性自下而上传递信息。语法规则中产生式左部符号的综合属性由产生式右部符号的属性计算得出。语法树中，父节点的综合属性由子结点的属性和父结点自身的属性计算得出。</p>
-<p>非终结符的综合属性包括：产生式左部非终结符的综合属性，产生式右部非终结符的综合属性。</p>
-<p>终结符可以具有综合属性。终结符的综合属性值是由词法分析器提供的词法值，因此在属性文法中没有计算终结符属性值的语义规则。</p>
-<h3 id="继承属性">7.3.3 继承属性</h3>
-<h4 id="简要信息-1">7.3.3.1 简要信息</h4>
-<p><strong>定义</strong>：语法树中结点的继承属性由其父结点、兄弟结点或自身属性确定。</p>
-<p><strong>作用</strong>：表示程序设计语言中的上下文依赖关系。</p>
-<p><strong>适用性</strong>：需先构建语法树，再计算属性。</p>
-<p><strong>计算方法</strong>：依赖父结点、兄弟结点或当前结点的其他属性。</p>
-<h3 id="属性的计算">7.3.4 属性的计算</h3>
-<h4 id="依赖图">7.3.4.1 依赖图</h4>
-<h4 id="树遍历">7.3.4.2 树遍历</h4>
-<h2 id="生成带注释的语法树语义树">7.4 生成带注释的语法树（语义树）</h2>
-<h3 id="介绍-2">7.4.1 介绍</h3>
-<h3 id="ll1-分析法的语法树">7.4.2 LL1 分析法的语法树</h3>
-<h3 id="lr1-分析法的语义树">7.4.3 LR1 分析法的语义树</h3>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/">https://remy-campanella.github.io/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</div></div><div class="info-2"><div class="info-item-1">6.1 介绍 语法分析的主要目的时检测是否有语法错误，并生成语法树。 语法分析的输入输出如下所示  graph LR  A["单词符号"] B["语法分析器"] C["语法树"]  A --> B --> C 语法分析可以很容易构造出语法树，然后对语法树进行遍历完成属性计算。因此，语法树可以作为一种合适的中间语言形式。   1780617960226  在语法树中去掉那些对翻译不必要的信息，从而获得更有效的源程序中间表示。这种经变换后的语法树称之为抽象语法树（Abstract Syntax Tree）。一个抽象语法树的示例如下图所示。 graph TD  star(("star")) fift(("15")) plus(("+")) three(("3")) four(("4"))  star --> fift star --> plus  --> three plus --> four 6.2 回溯法 6.3 LL1 方法 6.3.1 数据结构 使用 Python 字典表示普通树结构。 12345678910111...</div></div></div></a><a class="pagination-related" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【程序设计语言 编译原理】 第八章 中间代码生成</div></div><div class="info-2"><div class="info-item-1">8.1 介绍 之前章节，生成了语法树和语义树，编译器的前端工作基本就完成了。 树本身也是一种中间代码。在它们基础上可以构造出后缀式、三元式、四元式等中间代码。 转换的做法是遍历这个抽象语法树，然后从符号表里面取出这两个叶节点对应的数据类型，然后来完成这种提升转换。 所以，只要完成了抽象语法树的生成，后面很多时候就是利用这个树做后续工作，无论是语义分析或生成中间代码等。 本章目标是把语句对应的代码写出来，按照翻译方案把源程序语句翻译为中间代码。 8.2 中间语言 中间语言可以使编译程序结构上逻辑简单明确，便于执行语义程序、便于目标代码优化工作、便于目标代码生成。 中间语言独立于机器，其复杂性界于源语言和目标语言之间。 8.2.1 树表示 在树形表示中，叶结点表示运算对象，其它结点表示运算符。 例如 \(a + b\) 表示为  graph TD  P(("+")) A(("a")) B(("b"))  P --- A P --- B 8.2.2 后缀式（逆波兰表示法）  如果 E 是一个变量或常量，则后缀式为 E。 如果 E 是 E1...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/14/26-3-12-1-PrcpCmpl-2-high-lang/" title="【程序设计语言 编译原理】 第二章 高级语言及其语法描述"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-14</div><div class="info-item-2">【程序设计语言 编译原理】 第二章 高级语言及其语法描述</div></div><div class="info-2"><div class="info-item-1">2.1 程序语言的定义 一个程序语言是一个记号系统。程序语法由语法、语义两方面定义。  语法：规定描述形式。 语义：语法成分实际意义。  2.1.1 语法 任何语言程序都可看作是一定字符集（字母表）上的一字符串（有限序列）。有一组用于生成合式程序的规则，这组规则就是语法。这些规则的一部分称为词法规则，另一部分称为语法规则。  单词符号：语言中具有独立意义的最基本结构。 词法规则：单词符号的形成规则。规定了字母表中什么样的字符串是单词符号。 语法规则：规定如何从单词符号形成更大的语法单位。 语法范畴/语法单位：由单词符号组成的表达式，如 \(a * 114.514 + c\)。  在现今多数程序语言中，常用上下文无关文法描述语法规则。语言的词法规则与语法规则规定了程序的结构，可以判断程序是否合式。合式程序仅表示词法与语法形式正确，语义不一定正确。 2.1.2 语义 语义是是各个单词符号与语法单位的意义，可以定义一个程序的意义。语义缺乏形式化的描述工具，主要采用自然语言阐释语义。运用属性文法进行语法制导翻译。 程序本质上是对某一问题以及处理问题的办法...</div></div></div></a><a class="pagination-related" href="/2026/05/21/26-3-19-1-PrcpCmpl-3-lexical/" title="【程序设计语言 编译原理】 第三章 词法分析"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-21</div><div class="info-item-2">【程序设计语言 编译原理】 第三章 词法分析</div></div><div class="info-2"><div class="info-item-1">3.1 对于词法分析器的要求 3.1.1 词法分析器的功能和输出形式 词法分析器的功能时输入源程序，输出单词符号。单词符号一般分为：  关键字：有程序语言定义的具有固定意义的标识符。 标识符：用于表示各种名字。 常数 运算符 界符  在程序语言中，关键字、运算符、界符通常固定且数目不大。标识符和常数只有构成规则，使用数目不存在限制。 词法分析器输出的单词符号形式为   (单词种别, 单词符号属性值)   单词种别通常使用整数编码。它主要取决于处理上的方便。  标识符一般统归为一种。 常数则宜按类型（整、实、布尔等）分种。 关键字可将其全体视为一种，也可以一字一种。采用一字一种的分法实际处理起来较为方便。 运算符可采用一符一种的分法，但也可以把具有一定共性的运算符视为一种。 至于界符一般用一符一种的分法。  若一个种别含有多个单词符号，那么应给出种别编码和单词符号属性信息。 3.1.2 词法分析器作为独立子程序 3.2 词法分析器的设计 3.2.1 输入、预处理 词法分析器工作的第一步是输入源程序文本。输入串一般是放在一个缓...</div></div></div></a><a class="pagination-related" href="/2026/06/13/26-3-26-1-PrcpCmpl-4-gram-td/" title="【程序设计语言 编译原理】 第四章 自顶向下的语法分析"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-13</div><div class="info-item-2">【程序设计语言 编译原理】 第四章 自顶向下的语法分析</div></div><div class="info-2"><div class="info-item-1">4.1 语法介绍 文法提供了一种形式化的方法来定义编程语言的语法规则。这使得编译器能够识别和解析程序代码中的结构。 编译原理中的文法是一组规则，用来描述词法单元（tokens）如何组合成短语（phrases）以及这些短语如何组合成更复杂的结构，最终形成有效的程序代码。 文法通常用来定义编程语言的语法结构。编译原理使用文法来检查语句、单词是否合法。 4.1.1 0 型文法 若文法 \(G = (V_T, V_N, S, \mathcal{P})\) 的每个产生式 \(\alpha \to \beta\) 满足左部 \(\alpha \in (V_T \cup V_N)\)，且 \(\alpha\) 至少含有一个非终结符，右部 \(\beta \in (V_T \cup V_N)^*\)，则称 \(G\) 为 0 型文法。 0 型文法又称短语文法，能力相当于 Turing 机。 4.1.2 1 型文法 若 \(G\) 是 0 型文法，且除 \(S \to \varepsilon\) 外，\(G\) 的任何产生式均满足 \(|\alpha| &gt; |\beta|\)...</div></div></div></a><a class="pagination-related" href="/2026/03/09/26-3-5-1-PrcpCmpl-1-intro/" title="【程序设计语言 编译原理】 第一章 引论"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-09</div><div class="info-item-2">【程序设计语言 编译原理】 第一章 引论</div></div><div class="info-2"><div class="info-item-1">       语言 特征     机器语言 早期编程直接使用含有 0、1 的机器语言。   汇编语言 将一些助记符与机器码直接对应。   高级程序语言 为提升效率设计，采用类自然语言语法，与机器语言无直接对应关系，需要编译。    1.1 什么是编译程序  编译程序 将源语言程序翻译成目标语言程序的程序。这个翻译过程称为编译。 好的编译  目标程序的大小 代码执行效率  解释程序 不产生目标程序，而是边解释边执行源程序本身的程序。 编译程序分类        名称 作用     诊断（Diagnostic）编译程序 帮助程序开发与调试   优化（Optimizing）编译程序 着重提高目标代码效率   交叉（Cross）编译程序 产生不同于其宿主机（运行编译）机器代码   可变目标（Retargetable）编译程序 不需重写编译程序中与机器无关的部分就能改变目标机（运行程序）     1.2 编译过程概述 一般有五个阶段：词法分析、语法分析...</div></div></div></a><a class="pagination-related" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-17</div><div class="info-item-2">【程序设计语言 编译原理】 第五章 自底向上的语法分析</div></div><div class="info-2"><div class="info-item-1">5.1 介绍 源程序经过词法分析后得到了单词符号。这些单词符号组成的语句是否符合语法规则需要进行分析。 5.2 基本问题 5.2.1 归约 基本思想  从输入串开始，逐步进行归约，直到文文法的开始符号。 归约：根据文法的产生式规则，把产生式的右部替换成左部符号。 从树末端开始，构造语法树。  例如 \[ S \to aAcBe \\ A \to b \\ A \to Ab \\ B \to d \] 试对 \(abbcde\) 进行移进归约分析。 用栈来实现，能归约就归约，不能归约就移进。  \(a\)，移进 \(ab\)，规约 \(aA\)，移进 \(aAb\)  第一种选择，规约（\(A \to b\)）  \(aAA\)：移进 \(aAAc\)：移进 \(aAAcd\)：规约 \(aAAcB\)：移进 \(aAAcBe\)：匹配失败  第二种选择，规约（\(A \to Ab\)）  \(aA\)，移进 \(aAc\)，移进 \(aAcd\)，规约 \(aAcB\)，移进 \(aAcBe\)，规约...</div></div></div></a><a class="pagination-related" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-17</div><div class="info-item-2">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</div></div><div class="info-2"><div class="info-item-1">6.1 介绍 语法分析的主要目的时检测是否有语法错误，并生成语法树。 语法分析的输入输出如下所示  graph LR  A["单词符号"] B["语法分析器"] C["语法树"]  A --> B --> C 语法分析可以很容易构造出语法树，然后对语法树进行遍历完成属性计算。因此，语法树可以作为一种合适的中间语言形式。   1780617960226  在语法树中去掉那些对翻译不必要的信息，从而获得更有效的源程序中间表示。这种经变换后的语法树称之为抽象语法树（Abstract Syntax Tree）。一个抽象语法树的示例如下图所示。 graph TD  star(("star")) fift(("15")) plus(("+")) three(("3")) four(("4"))  star --> fift star --> plus  --> three plus --> four 6.2 回溯法 6.3 LL1 方法 6.3.1 数据结构 使用 Python 字典表示普通树结构。 12345678910111...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">7.1 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E4%B9%89%E6%A0%91"><span class="toc-number">2.</span> <span class="toc-text">7.2 语义树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E6%96%87%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">7.3 属性文法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="toc-number">3.1.</span> <span class="toc-text">7.3.1 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%BC%E5%90%88%E5%B1%9E%E6%80%A7"><span class="toc-number">3.2.</span> <span class="toc-text">7.3.2 综合属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E8%A6%81%E4%BF%A1%E6%81%AF"><span class="toc-number">3.2.1.</span> <span class="toc-text">7.3.2.1 简要信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="toc-number">3.2.2.</span> <span class="toc-text">7.3.2.2 详细信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF%E5%B1%9E%E6%80%A7"><span class="toc-number">3.3.</span> <span class="toc-text">7.3.3 继承属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E8%A6%81%E4%BF%A1%E6%81%AF-1"><span class="toc-number">3.3.1.</span> <span class="toc-text">7.3.3.1 简要信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="toc-number">3.4.</span> <span class="toc-text">7.3.4 属性的计算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E5%9B%BE"><span class="toc-number">3.4.1.</span> <span class="toc-text">7.3.4.1 依赖图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%91%E9%81%8D%E5%8E%86"><span class="toc-number">3.4.2.</span> <span class="toc-text">7.3.4.2 树遍历</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%B8%A6%E6%B3%A8%E9%87%8A%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%91%E8%AF%AD%E4%B9%89%E6%A0%91"><span class="toc-number">4.</span> <span class="toc-text">7.4 生成带注释的语法树（语义树）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D-2"><span class="toc-number">4.1.</span> <span class="toc-text">7.4.1 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ll1-%E5%88%86%E6%9E%90%E6%B3%95%E7%9A%84%E8%AF%AD%E6%B3%95%E6%A0%91"><span class="toc-number">4.2.</span> <span class="toc-text">7.4.2 LL1 分析法的语法树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lr1-%E5%88%86%E6%9E%90%E6%B3%95%E7%9A%84%E8%AF%AD%E4%B9%89%E6%A0%91"><span class="toc-number">4.3.</span> <span class="toc-text">7.4.3 LR1 分析法的语义树</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第八章 中间代码生成"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成">【程序设计语言 编译原理】 第八章 中间代码生成</a><time datetime="2026-06-17T12:41:55.000Z" title="发表于 2026-06-17 20:41:55">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第七章 语义分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析">【程序设计语言 编译原理】 第七章 语义分析</a><time datetime="2026-06-17T12:41:37.000Z" title="发表于 2026-06-17 20:41:37">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</a><time datetime="2026-06-17T12:25:13.000Z" title="发表于 2026-06-17 20:25:13">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第五章 自底向上的语法分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析">【程序设计语言 编译原理】 第五章 自底向上的语法分析</a><time datetime="2026-06-17T12:12:03.000Z" title="发表于 2026-06-17 20:12:03">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"/></a><div class="content"><a class="title" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training">【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training</a><time datetime="2026-06-15T08:31:46.000Z" title="发表于 2026-06-15 16:31:46">2026-06-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.7.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
-  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
-  mermaid.initialize(options);
-}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const loadMathjax = () => {
-    if (!window.MathJax) {
-      window.MathJax = {
-        loader: {
-          load: [
-            // Four font extension packages (optional)
-            //- '[tex]/bbm',
-            //- '[tex]/bboldx',
-            //- '[tex]/dsfont',
-            '[tex]/mhchem'
-          ],
-          paths: {
-            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
-
-            //- // Four font extension packages (optional)
-            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
-            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
-            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
-            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
-          }
-        },
-        output: {
-          font: 'mathjax-newcm',
-        },
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          tags: 'none',
-          packages: {
-            '[+]': [
-              'mhchem'
-            ]
-          }
-        },
-        chtml: {
-          scale: 1.1
-        },
-        options: {
-          enableMenu: true,
-          menuOptions: {
-            settings: {
-              enrich: false  // Turn off Braille and voice narration text automatic generation
-            }
-          },
-          renderActions: {
-            findScript: [10, doc => {
-              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
-                const display = !!node.type.match(/; *mode=display/)
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
-                const text = document.createTextNode('')
-                node.parentNode.replaceChild(text, node)
-                math.start = {node: text, delim: '', n: 0}
-                math.end = {node: text, delim: '', n: 0}
-                doc.math.push(math)
-              }
-            }, '']
-          }
-        }
-      }
-
-      const script = document.createElement('script')
-      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
-      script.id = 'MathJax-script'
-      script.async = true
-      document.head.appendChild(script)
-    } else {
-      MathJax.startup.document.state(0)
-      MathJax.texReset()
-      MathJax.typesetPromise()
-    }
-  }
-
-  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
-  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
-})()</script><script>(() => {
-  const runMermaid = ele => {
-    window.loadMermaid = true
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
-
-    ele.forEach((item, index) => {
-      const mermaidSrc = item.firstElementChild
-      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
-      const mermaidID = `mermaid-${index}`
-      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
-
-      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
-      const renderMermaid = svg => {
-        mermaidSrc.insertAdjacentHTML('afterend', svg)
-      }
-
-      // mermaid v9 and v10 compatibility
-      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
-    })
-  }
-
-  const codeToMermaid = () => {
-    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
-    if (codeMermaidEle.length === 0) return
-
-    codeMermaidEle.forEach(ele => {
-      const preEle = document.createElement('pre')
-      preEle.className = 'mermaid-src'
-      preEle.hidden = true
-      preEle.textContent = ele.textContent
-      const newEle = document.createElement('div')
-      newEle.className = 'mermaid-wrap'
-      newEle.appendChild(preEle)
-      ele.parentNode.replaceWith(newEle)
-    })
-  }
-
-  const loadMermaid = () => {
-    if (true) codeToMermaid()
-    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
-    if ($mermaid.length === 0) return
-
-    const runMermaidFn = () => runMermaid($mermaid)
-    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
-    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
-  }
-
-  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
-  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
-})()</script><script>(() => {
-  const abcjsInit = () => {
-    const abcjsFn = () => {
-      setTimeout(() => {
-        const sheets = document.querySelectorAll(".abc-music-sheet")
-        for (let i = 0; i < sheets.length; i++) {
-          const ele = sheets[i]
-          if (ele.children.length > 0) continue
-
-          // Parse parameters from data-params attribute
-          let params = {}
-          const dp = ele.getAttribute("data-params")
-          if (dp) {
-            try {
-              params = JSON.parse(dp)
-            } catch (e) {
-              console.error("Failed to parse data-params:", e)
-            }
-          }
-
-          // Merge parsed parameters with the responsive option
-          // Ensures params content appears before responsive
-          const options = { ...params, responsive: "resize" }
-
-          // Render the music score using ABCJS.renderAbc
-          ABCJS.renderAbc(ele, ele.innerHTML, options)
-        }
-      }, 100)
-    }
-
-    if (typeof ABCJS === "object") {
-      abcjsFn()
-    } else {
-      btf.getScript("https://unpkg.com/abcjs@6.5.2/dist/abcjs-basic-min.js").then(abcjsFn)
-    }
-  }
-
-  if (window.pjax) {
-    abcjsInit()
-  } else {
-    window.addEventListener("load", abcjsInit)
-  }
-
-  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
-})()</script><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const getCount = () => {
-    const countELement = document.getElementById('twikoo-count')
-    if(!countELement) return
-    twikoo.getCommentsCount({
-      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
-      region: '',
-      urls: [window.location.pathname],
-      includeReply: false
-    }).then(res => {
-      countELement.textContent = res[0].count
-    }).catch(err => {
-      console.error(err)
-    })
-  }
-
-  const init = (el = document, path = location.pathname) => {
-    twikoo.init({
-      el: el.querySelector('#twikoo-wrap'),
-      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
-      region: '',
-      onCommentLoaded: () => {
-        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
-      },
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || path
-    })
-
-    
-
-    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
-      if (el.children.length) {
-        el.innerHTML = ''
-        el.classList.add('no-comment')
-      }
-    })
-  }
-
-  const loadTwikoo = (el, path) => {
-    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
-    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
-  }
-
-  if (isShuoshuo) {
-    'Twikoo' === 'Twikoo'
-      ? window.shuoshuoComment = { loadComment: loadTwikoo }
-      : window.loadOtherComment = loadTwikoo
-    return
-  }
-
-  if ('Twikoo' === 'Twikoo' || !false) {
-    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
-    else loadTwikoo()
-  } else {
-    window.loadOtherComment = loadTwikoo
-  }
-})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
-    <script src="/js/gallery.js" async></script>
-<!-- hexo injector body_end end --></body></html>

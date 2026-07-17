@@ -1,621 +1,0 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 367】 Lecture 16 Decision Theory and Expected Utility | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="From Probabilistic Belief to Action   1781439900637  Classical Planning and Planning with Uncertainty        Classical planning Planning with uncertainty     Actions are determinist">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【COMPSCI 367】 Lecture 16 Decision Theory and Expected Utility">
-<meta property="og:url" content="https://remy-campanella.github.io/2026/06/14/26-5-28-1-COMPSCI367-16-deci/index.html">
-<meta property="og:site_name" content="remy-campanella.github.io">
-<meta property="og:description" content="From Probabilistic Belief to Action   1781439900637  Classical Planning and Planning with Uncertainty        Classical planning Planning with uncertainty     Actions are determinist">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci367.webp">
-<meta property="article:published_time" content="2026-06-14T12:50:37.000Z">
-<meta property="article:modified_time" content="2026-06-14T12:51:24.399Z">
-<meta property="article:author" content="Remy Campanella">
-<meta property="article:tag" content="学习笔记">
-<meta property="article:tag" content="奥克兰大学—西南大学合作课程">
-<meta property="article:tag" content="外文">
-<meta property="article:tag" content="人工智能">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci367.webp"><script type="application/ld+json">{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "【COMPSCI 367】 Lecture 16 Decision Theory and Expected Utility",
-  "url": "https://remy-campanella.github.io/2026/06/14/26-5-28-1-COMPSCI367-16-deci/",
-  "image": "https://remy-campanella.github.io/image/background/categories/compsci367.webp",
-  "datePublished": "2026-06-14T12:50:37.000Z",
-  "dateModified": "2026-06-14T12:51:24.399Z",
-  "author": [
-    {
-      "@type": "Person",
-      "name": "Remy Campanella",
-      "url": "https://remy-campanella.github.io"
-    }
-  ]
-}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/06/14/26-5-28-1-COMPSCI367-16-deci/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
-    (() => {
-      
-    const saveToLocal = {
-      set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
-      },
-      get: key => {
-        const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return value
-      }
-    }
-
-    window.btf = {
-      saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
-        }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
-        }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
-      addGlobalFn: (key, fn, name = false, parent = window) => {
-        if (!false && key.startsWith('pjax')) return
-        const globalFn = parent.globalFn || {}
-        globalFn[key] = globalFn[key] || {}
-        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
-        parent.globalFn = globalFn
-      }
-    }
-  
-      
-      const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
-        }
-      }
-      const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
-        }
-      }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-
-      const theme = saveToLocal.get('theme')
-    
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
-        
-      
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
-      }
-    
-      
-    const detectApple = () => {
-      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-  
-    })()
-  </script><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
-  translate: undefined,
-  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
-  copy: {
-    success: '复制成功',
-    error: '复制失败',
-    noSupport: '浏览器不支持'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: '刚刚',
-    min: '分钟前',
-    hour: '小时前',
-    day: '天前',
-    month: '个月前'
-  },
-  copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  infinitegrid: {
-    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
-    buttonText: '加载更多'
-  },
-  isPhotoFigcaption: false,
-  islazyloadPlugin: true,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '【COMPSCI 367】 Lecture 16 Decision Theory and Expected Utility',
-  isHighlightShrink: false,
-  isToc: true,
-  pageType: 'post'
-}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
-    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci367.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 367】 Lecture 16 Decision Theory and Expected Utility</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 367】 Lecture 16 Decision Theory and Expected Utility</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-14T12:50:37.000Z" title="发表于 2026-06-14 20:50:37">2026-06-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-14T12:51:24.399Z" title="更新于 2026-06-14 20:51:24">2026-06-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-367-Artificial-Intelligence/">COMPSCI 367 Artificial Intelligence</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="from-probabilistic-belief-to-action">From Probabilistic Belief to Action</h2>
-<figure>
-<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-28-1-COMPSCI367-16-deci/1781439900637.jpg" alt="1781439900637" />
-<figcaption aria-hidden="true">1781439900637</figcaption>
-</figure>
-<h2 id="classical-planning-and-planning-with-uncertainty">Classical Planning and Planning with Uncertainty</h2>
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Classical planning</th>
-<th>Planning with uncertainty</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Actions are deterministic.</td>
-<td>Actions may have stochastic outcomes.</td>
-</tr>
-<tr class="even">
-<td>The current state is known.</td>
-<td>Information may be imperfect.</td>
-</tr>
-<tr class="odd">
-<td>A plan is expected to reach a goal.</td>
-<td>The goal may fail or be partially achieved.</td>
-</tr>
-<tr class="even">
-<td>Search checks reachability.</td>
-<td>The agent evaluates desirability of outcomes.</td>
-</tr>
-<tr class="odd">
-<td>A goal condition says what must become true.</td>
-<td>A utility model says how good each outcome is.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="prediction-vs-decision">Prediction vs Decision</h2>
-<table>
-<thead>
-<tr class="header">
-<th>Task</th>
-<th>Question</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Prediction</td>
-<td>What may happen?</td>
-</tr>
-<tr class="even">
-<td>Decision</td>
-<td>What should the agent do?</td>
-</tr>
-</tbody>
-</table>
-<h2 id="actions-outcomes-and-preferences">Actions, Outcomes, and Preferences</h2>
-<dl>
-<dt>State</dt>
-<dd>
-A state of the world describes what <strong>actually happens</strong>, possibly hidden or uncertain to the agent.
-</dd>
-<dt>Action</dt>
-<dd>
-An action is a choice available to the agent.
-</dd>
-<dt>Outcome</dt>
-<dd>
-An outcome is the result produced by an action under a particular state of the world.
-</dd>
-</dl>
-<figure>
-<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-28-1-COMPSCI367-16-deci/1781440186494.jpg" alt="1781440186494" />
-<figcaption aria-hidden="true">1781440186494</figcaption>
-</figure>
-<h2 id="utility">Utility</h2>
-<dl>
-<dt>Utility</dt>
-<dd>
-A utility is a numerical representation of how desirable an outcome is to an agent. Higher utility means the outcome is preferred.
-</dd>
-</dl>
-<h2 id="worked-example-umbrella-decision">Worked Example: Umbrella Decision</h2>
-<p><span class="math display">\[
-P(Rain) = 0.4, P(NoRain) = 0.6
-\]</span></p>
-<table>
-<thead>
-<tr class="header">
-<th>Action</th>
-<th><span class="math inline">\(Rain\)</span></th>
-<th><span class="math inline">\(NoRain\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(TakeUmbrella\)</span></td>
-<td><span class="math inline">\(70\)</span></td>
-<td><span class="math inline">\(90\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(LeaveUmbrella\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-<td><span class="math inline">\(100\)</span></td>
-</tr>
-</tbody>
-</table>
-<dl>
-<dt>Expected Utility:</dt>
-<dd>
-The expected utility of an action is the probability-weighted average utility of its possible outcomes:<br />
-<span class="math display">\[
-EU(a) = \sum_{s \in S}P(s)U(a, s)
-\]</span>
-</dd>
-</dl>
-<ul>
-<li><span class="math inline">\(a\)</span>: action</li>
-<li><span class="math inline">\(s\)</span>: possible state of the world</li>
-<li><span class="math inline">\(P(s)\)</span> probability of state <span class="math inline">\(s\)</span></li>
-<li><span class="math inline">\(U(a, s)\)</span>: utility if action <span class="math inline">\(a\)</span> is taken and state <span class="math inline">\(s\)</span> occurs</li>
-<li><span class="math inline">\(EU(a)\)</span>: expected utility of action <span class="math inline">\(a\)</span></li>
-</ul>
-<p>Expected utility asks: how good is this action on average, given uncertainty?</p>
-<p><strong>Expected utility of taking the umbrella</strong><br />
-<span class="math display">\[
-\begin{align}
-  EU(TakeUmbrella) &amp;= P(Rain)U(TakeUmbrella, Rain) + P(NoRain)U(TakeUmbrella, NoRain). \\
-  &amp;= 0.4 \times 70 + 0.6 \times 90 = 82
-\end{align}
-\]</span></p>
-<p><strong>Expected utility of leaving the umbrella</strong><br />
-<span class="math display">\[
-\begin{align}
-  EU(LeaveUmbrella) &amp;= P(Rain)P(LeaveUmbrella, Rain) + P(NoRain)P(LeaveUmbrella, NoRain) \\
-  &amp;= 0.4 \times 0 + 0.6 \times 100 = 60
-\end{align}
-\]</span></p>
-<p><span class="math inline">\(EU(TakeUmbrella) &gt; EU(LeaveUmbrella)\)</span>, so the rational choice under this model is <span class="math inline">\(TakeUmbrella\)</span>.</p>
-<h2 id="maximum-expected-utilitymeu">Maximum Expected Utility(MEU)</h2>
-<dl>
-<dt>Maximum Expected Utility</dt>
-<dd>
-The maximum expected utility principle chooses an action with the highest expected utility:<br />
-<span class="math display">\[
-a^* = \arg \max_{a \in A} EU(a)
-\]</span>
-</dd>
-</dl>
-<p><strong>MEU does not necessarily choose</strong></p>
-<ul>
-<li>the most likely state;</li>
-<li>the action with the best possible outcome;</li>
-<li>the action that avoids all risk.</li>
-</ul>
-<p><strong>MEU chooses</strong><br />
-The action with the best <strong>probability-weighted utility</strong>.</p>
-<p><strong>One-shot MEU procedure</strong><br />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List availble actions A</span><br><span class="line">List possible states S</span><br><span class="line"></span><br><span class="line">for all a in A do</span><br><span class="line">    EU(a) = sum_&#123;s in S&#125; P(s)U(a, s)</span><br><span class="line">end for</span><br><span class="line"></span><br><span class="line">Choose a* in arg max_a EU(a)</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>This is the core calculation for a one-shot decision under uncertainty. Larger models may require more efficient representation and inference, but the principle is the same.</p>
-</blockquote>
-<h2 id="one-off-decision-problem">One-Off Decision Problem</h2>
-<dl>
-<dt>One-Off Decision Problem</dt>
-<dd>
-A one-off decision problem consists of decision variables, random variables, probabilities over random variables, and utilities over resulting outcomes. The goal is to choose the decision values that maximise expected utility.
-</dd>
-</dl>
-<table>
-<thead>
-<tr class="header">
-<th>Component</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Decision variable</td>
-<td>A variable controlled by the agent</td>
-</tr>
-<tr class="even">
-<td>Random variable</td>
-<td>An uncertain environment factor</td>
-</tr>
-<tr class="odd">
-<td>Probability model</td>
-<td>Describes how likely the uncertain states are</td>
-</tr>
-<tr class="even">
-<td>Utility function</td>
-<td>Describes the desirability of final outcomes</td>
-</tr>
-<tr class="odd">
-<td>Solution</td>
-<td>A decision with maximum expected utility</td>
-</tr>
-</tbody>
-</table>
-<h2 id="worked-example-delivery-robot">Worked Example: Delivery Robot</h2>
-<figure>
-<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-28-1-COMPSCI367-16-deci/1779938839919.jpg" alt="1779938839919" />
-<figcaption aria-hidden="true">1779938839919</figcaption>
-</figure>
-<p>A delivery robot chooses whether to wear protective pads and whether to take a short or long route. The chance of an accident depends on the route, and the final utility depends on the route, the accident outcome, and whether the robot wears pads.</p>
-<h2 id="one-shot-vs-sequential-decisions">One-Shot vs Sequential Decisions</h2>
-<figure>
-<img src="/image/icon/loading.gif" data-lazy-src="/image/26-5-28-1-COMPSCI367-16-deci/1780272424125.jpg" alt="1780272424125" />
-<figcaption aria-hidden="true">1780272424125</figcaption>
-</figure>
-<dl>
-<dt>One-Shot Decision Problem</dt>
-<dd>
-A one-shot decision problem requires the agent to choose one action or one assignment of decision variables under uncertainty.
-</dd>
-<dt>Sequential Decision Problem</dt>
-<dd>
-A sequential decision problem requires the agent to choose actions over time, where current actions affect future states, observations, and rewards.
-</dd>
-</dl>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/06/14/26-5-28-1-COMPSCI367-16-deci/">https://remy-campanella.github.io/2026/06/14/26-5-28-1-COMPSCI367-16-deci/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E2%80%94%E8%A5%BF%E5%8D%97%E5%A4%A7%E5%AD%A6%E5%90%88%E4%BD%9C%E8%AF%BE%E7%A8%8B/">奥克兰大学—西南大学合作课程</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci367.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/06/14/26-5-26-1-COMPSCI367-15-prob-reas/" title="【COMPSCI 367】 Lecture 15 Probablistic Reasoning—Native Bayes and Bayesian Networks"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 15 Probablistic Reasoning—Native Bayes and Bayesian Networks</div></div><div class="info-2"><div class="info-item-1">From Facts to Degrees of Belief A degree of belief is a number in \([0, 1]\) representing how strongly an agent believes that a proposition is true. Probability does not replace logic. It extends reasoning to cases where the truth is hidden, noisy, or only partially observed. Probability Recap  Conditional Probability \[ P(A|B) = \frac{P(A, B)}{P(B)} \] Product Rule \[ P(A, B) = P(A|B)P(B) \] Marginalisation \[ P(A) = \sum_bP(A|b)P(b) \] Bayes’ Rule \[ P(H|E) = \frac{P(E|H)...</div></div></div></a><a class="pagination-related" href="/2026/06/14/26-6-1-1-COMPSCI367-17-markov/" title="【COMPSCI 367】 Lecture 17 Markov Decision Process(MDP) and Policy Evaluation"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 367】 Lecture 17 Markov Decision Process(MDP) and Policy Evaluation</div></div><div class="info-2"><div class="info-item-1">Sequential Decision Problem A sequential decision problem is one in which an agent repeatedly chooses actions, observes consequences, receives rewards, and continues from the resulting state. MDP = modelling languange for sequential decision problem. Grid-World Running Example A robot moves in a small grid-world. Some cells are terminal, one cell is blocked, and each ordinary move has a small cost.   1780273369743  Markov Decision Processes A Markov decision process is a tuple \[ ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/12/26-5-12-4-COMPSCI367-2-history/" title="【COMPSCI 367】 Lecture 2 The Historical Development of AI"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">【COMPSCI 367】 Lecture 2 The Historical Development of AI</div></div><div class="info-2"><div class="info-item-1">Symbolic Logic: The “Rule-based” Intelligence The Birth of Neural-Based Computation The Turing Test If the judge cannot reliably distinguish the machine from the human, the machine is said to pass the Turing Test. The Dartmouth Workshop: The Birth of AI In 1956, the Dartmouth Workshop helped establish Artificial Intelligence as a research field with a bold scientific goal: to study how machines might use language, form abstractions, solve problems, reason, learn, and improve themselves....</div></div></div></a><a class="pagination-related" href="/2026/05/12/26-5-12-3-COMPSCI367-1-intro/" title="【COMPSCI 367】 Lecture 1 What is Artificial Intelligence"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="info-item-2">【COMPSCI 367】 Lecture 1 What is Artificial Intelligence</div></div><div class="info-2"><div class="info-item-1">AI in the World Today In-class Quiz: Why Do We Call These Systems Intelligent? There Is No Single Definition of AI Working view for this course: AI is a scientific field that studies the mechanisms of intelligent behaviour and thinking-like problem solving, especially through the analysis and design of agents. What Makes AI Different from Ordinary Software? Agent as an Unifying Framework of AI An agent is a system that perceives its environment and acts upon that environment in pursuit ...</div></div></div></a><a class="pagination-related" href="/2026/05/25/26-5-19-3-COMPSCI367-3-state/" title="【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="info-item-2">【COMPSCI 367】 Lecture 3 Problem Solving as State-Space Search</div></div><div class="info-2"><div class="info-item-1">Example 1: Robot in Grid World A robot is navigating a room. The space in which the robot can move is depicted as a “grid” (turning a continuous space into a discrete set of coordinates). The robot starts at location \(S\) and must reach location \(G\). The robot can move forward, backward, turn left or right, but cannot pass through walls or obstacles. Suppose the robot knows the layout of the room. How can the robot perform its task? Question: How can we model the task abstractly? Pro...</div></div></div></a><a class="pagination-related" href="/2026/06/14/26-5-25-2-COMPSCI367-14-clas-plan/" title="【COMPSCI 367】 Lecture 14 Classical Planning"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-14</div><div class="info-item-2">【COMPSCI 367】 Lecture 14 Classical Planning</div></div><div class="info-2"><div class="info-item-1">Running scenario: RescueBot delivery RescueBot is in a small facility. A medical kit must be delivered to a patient room. Current situation  RescueBot starts in \(Room11\). The \(MedKit\) is in \(Room21\). The patient room is \(Room31\). The rooms are connected in a corridor.  Planning question Find a sequence of actions that makes \[ Delivered(MedKit, Room31) \] true. Available action types \[ Move, PickUp, Drop. \] Planning as Symbolic Search   1781435140782   Plann...</div></div></div></a><a class="pagination-related" href="/2026/06/14/26-5-21-1-COMPSCI367-11-prop-logic/" title="【COMPSCI 367】 Lecture 11 Propositional Logic"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-14</div><div class="info-item-2">【COMPSCI 367】 Lecture 11 Propositional Logic</div></div><div class="info-2"><div class="info-item-1">Purpose of Propositional Logic  Used in AI for symbolic reasoning (e.g., safety monitoring, access control, policy compliance). Helps derive conclusions from facts and rules.  A Smart Lab Safety Assistant Scenario A university AI lab has smoke and temperature sensors, a chemical cabinet, a mobile robot, and an evacuation alarm. The assistant receives facts and applies rules It must decide whether to trigger the alarm, lock the cabinet, and stop the robot. Observed facts in the incid...</div></div></div></a><a class="pagination-related" href="/2026/06/14/26-5-25-1-COMPSCI367-13-first-order-log/" title="【COMPSCI 367】 Lecture 13 First-Order Logic"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-14</div><div class="info-item-2">【COMPSCI 367】 Lecture 13 First-Order Logic</div></div><div class="info-2"><div class="info-item-1">Recall: A RescueBot World Propositional repetition Suppose the robot may enter any room that is safe and connected to its current room. With propositional atoms, we may need many separate rules: \[ SafeRoom21 \land ConnectedRoom11Room21 \to CanEnterRoom21,\\ SafeRoom12 \land ConnectedRoom11Room12 \to CanEnterRoom12,\\ SafeRoom22 \land ConnectedRoom11Room22 \to CanEnterRoom22. \] Problem The pattern is the same, but the room names keep changing. Desired representation One reusable ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">121</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">121</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">26</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#from-probabilistic-belief-to-action"><span class="toc-number">1.</span> <span class="toc-text">From Probabilistic Belief to Action</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#classical-planning-and-planning-with-uncertainty"><span class="toc-number">2.</span> <span class="toc-text">Classical Planning and Planning with Uncertainty</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prediction-vs-decision"><span class="toc-number">3.</span> <span class="toc-text">Prediction vs Decision</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#actions-outcomes-and-preferences"><span class="toc-number">4.</span> <span class="toc-text">Actions, Outcomes, and Preferences</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#utility"><span class="toc-number">5.</span> <span class="toc-text">Utility</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#worked-example-umbrella-decision"><span class="toc-number">6.</span> <span class="toc-text">Worked Example: Umbrella Decision</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maximum-expected-utilitymeu"><span class="toc-number">7.</span> <span class="toc-text">Maximum Expected Utility(MEU)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#one-off-decision-problem"><span class="toc-number">8.</span> <span class="toc-text">One-Off Decision Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#worked-example-delivery-robot"><span class="toc-number">9.</span> <span class="toc-text">Worked Example: Delivery Robot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#one-shot-vs-sequential-decisions"><span class="toc-number">10.</span> <span class="toc-text">One-Shot vs Sequential Decisions</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第八章 中间代码生成"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-2-PrcpCmpl-8-interm-code/" title="【程序设计语言 编译原理】 第八章 中间代码生成">【程序设计语言 编译原理】 第八章 中间代码生成</a><time datetime="2026-06-17T12:41:55.000Z" title="发表于 2026-06-17 20:41:55">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第七章 语义分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-6-5-1-PrcpCmpl-7-sem-aly/" title="【程序设计语言 编译原理】 第七章 语义分析">【程序设计语言 编译原理】 第七章 语义分析</a><time datetime="2026-06-17T12:41:37.000Z" title="发表于 2026-06-17 20:41:37">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第六章 语法分析——生成语法树"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-29-1-PrcpCmpl-6-gram-tree/" title="【程序设计语言 编译原理】 第六章 语法分析——生成语法树">【程序设计语言 编译原理】 第六章 语法分析——生成语法树</a><time datetime="2026-06-17T12:25:13.000Z" title="发表于 2026-06-17 20:25:13">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【程序设计语言 编译原理】 第五章 自底向上的语法分析"/></a><div class="content"><a class="title" href="/2026/06/17/26-5-22-1-PrcpCmpl-5-gram-dt/" title="【程序设计语言 编译原理】 第五章 自底向上的语法分析">【程序设计语言 编译原理】 第五章 自底向上的语法分析</a><time datetime="2026-06-17T12:12:03.000Z" title="发表于 2026-06-17 20:12:03">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci367.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training"/></a><div class="content"><a class="title" href="/2026/06/15/26-6-4-2-COMPSCI367-23-neu-net/" title="【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training">【COMPSCI 367】 Lecture 23 Neural Networks: Perceptrons, MLPs, and Training</a><time datetime="2026-06-15T08:31:46.000Z" title="发表于 2026-06-15 16:31:46">2026-06-15</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.7.0</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
-  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
-  mermaid.initialize(options);
-}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
-  const loadMathjax = () => {
-    if (!window.MathJax) {
-      window.MathJax = {
-        loader: {
-          load: [
-            // Four font extension packages (optional)
-            //- '[tex]/bbm',
-            //- '[tex]/bboldx',
-            //- '[tex]/dsfont',
-            '[tex]/mhchem'
-          ],
-          paths: {
-            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
-
-            //- // Four font extension packages (optional)
-            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
-            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
-            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
-            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
-          }
-        },
-        output: {
-          font: 'mathjax-newcm',
-        },
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          tags: 'none',
-          packages: {
-            '[+]': [
-              'mhchem'
-            ]
-          }
-        },
-        chtml: {
-          scale: 1.1
-        },
-        options: {
-          enableMenu: true,
-          menuOptions: {
-            settings: {
-              enrich: false  // Turn off Braille and voice narration text automatic generation
-            }
-          },
-          renderActions: {
-            findScript: [10, doc => {
-              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
-                const display = !!node.type.match(/; *mode=display/)
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
-                const text = document.createTextNode('')
-                node.parentNode.replaceChild(text, node)
-                math.start = {node: text, delim: '', n: 0}
-                math.end = {node: text, delim: '', n: 0}
-                doc.math.push(math)
-              }
-            }, '']
-          }
-        }
-      }
-
-      const script = document.createElement('script')
-      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
-      script.id = 'MathJax-script'
-      script.async = true
-      document.head.appendChild(script)
-    } else {
-      MathJax.startup.document.state(0)
-      MathJax.texReset()
-      MathJax.typesetPromise()
-    }
-  }
-
-  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
-  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
-})()</script><script>(() => {
-  const runMermaid = ele => {
-    window.loadMermaid = true
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
-
-    ele.forEach((item, index) => {
-      const mermaidSrc = item.firstElementChild
-      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
-      const mermaidID = `mermaid-${index}`
-      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
-
-      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
-      const renderMermaid = svg => {
-        mermaidSrc.insertAdjacentHTML('afterend', svg)
-      }
-
-      // mermaid v9 and v10 compatibility
-      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
-    })
-  }
-
-  const codeToMermaid = () => {
-    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
-    if (codeMermaidEle.length === 0) return
-
-    codeMermaidEle.forEach(ele => {
-      const preEle = document.createElement('pre')
-      preEle.className = 'mermaid-src'
-      preEle.hidden = true
-      preEle.textContent = ele.textContent
-      const newEle = document.createElement('div')
-      newEle.className = 'mermaid-wrap'
-      newEle.appendChild(preEle)
-      ele.parentNode.replaceWith(newEle)
-    })
-  }
-
-  const loadMermaid = () => {
-    if (true) codeToMermaid()
-    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
-    if ($mermaid.length === 0) return
-
-    const runMermaidFn = () => runMermaid($mermaid)
-    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
-    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
-  }
-
-  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
-  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
-})()</script><script>(() => {
-  const abcjsInit = () => {
-    const abcjsFn = () => {
-      setTimeout(() => {
-        const sheets = document.querySelectorAll(".abc-music-sheet")
-        for (let i = 0; i < sheets.length; i++) {
-          const ele = sheets[i]
-          if (ele.children.length > 0) continue
-
-          // Parse parameters from data-params attribute
-          let params = {}
-          const dp = ele.getAttribute("data-params")
-          if (dp) {
-            try {
-              params = JSON.parse(dp)
-            } catch (e) {
-              console.error("Failed to parse data-params:", e)
-            }
-          }
-
-          // Merge parsed parameters with the responsive option
-          // Ensures params content appears before responsive
-          const options = { ...params, responsive: "resize" }
-
-          // Render the music score using ABCJS.renderAbc
-          ABCJS.renderAbc(ele, ele.innerHTML, options)
-        }
-      }, 100)
-    }
-
-    if (typeof ABCJS === "object") {
-      abcjsFn()
-    } else {
-      btf.getScript("https://unpkg.com/abcjs@6.5.2/dist/abcjs-basic-min.js").then(abcjsFn)
-    }
-  }
-
-  if (window.pjax) {
-    abcjsInit()
-  } else {
-    window.addEventListener("load", abcjsInit)
-  }
-
-  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
-})()</script><script>(() => {
-  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
-  const option = null
-
-  const getCount = () => {
-    const countELement = document.getElementById('twikoo-count')
-    if(!countELement) return
-    twikoo.getCommentsCount({
-      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
-      region: '',
-      urls: [window.location.pathname],
-      includeReply: false
-    }).then(res => {
-      countELement.textContent = res[0].count
-    }).catch(err => {
-      console.error(err)
-    })
-  }
-
-  const init = (el = document, path = location.pathname) => {
-    twikoo.init({
-      el: el.querySelector('#twikoo-wrap'),
-      envId: 'https://twikoo-remy-campanella-github-io.vercel.app/',
-      region: '',
-      onCommentLoaded: () => {
-        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
-      },
-      ...option,
-      path: isShuoshuo ? path : (option && option.path) || path
-    })
-
-    
-
-    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
-      if (el.children.length) {
-        el.innerHTML = ''
-        el.classList.add('no-comment')
-      }
-    })
-  }
-
-  const loadTwikoo = (el, path) => {
-    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
-    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
-  }
-
-  if (isShuoshuo) {
-    'Twikoo' === 'Twikoo'
-      ? window.shuoshuoComment = { loadComment: loadTwikoo }
-      : window.loadOtherComment = loadTwikoo
-    return
-  }
-
-  if ('Twikoo' === 'Twikoo' || !false) {
-    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
-    else loadTwikoo()
-  } else {
-    window.loadOtherComment = loadTwikoo
-  }
-})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
-    <script src="/js/gallery.js" async></script>
-<!-- hexo injector body_end end --></body></html>
