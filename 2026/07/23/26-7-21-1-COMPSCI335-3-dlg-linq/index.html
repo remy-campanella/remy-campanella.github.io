@@ -1,0 +1,446 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 335】 L03 C# Delegate and LINQ | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Delegate Delegate is a data type that points to a function&#x2F;method. Declare a Delegate 12345678910111213141516public delegate int Foo1(int x, int y);static void Main(string[] args)&#123;    &#x2F;&#x2F; add2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 335】 L03 C# Delegate and LINQ">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Delegate Delegate is a data type that points to a function&#x2F;method. Declare a Delegate 12345678910111213141516public delegate int Foo1(int x, int y);static void Main(string[] args)&#123;    &#x2F;&#x2F; add2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/remy.jpg">
+<meta property="article:published_time" content="2026-07-23T03:00:02.000Z">
+<meta property="article:modified_time" content="2026-07-23T11:27:13.482Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="网络编程与分布式服务">
+<meta property="article:tag" content="C# 语言">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/remy.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 335】 L03 C# Delegate and LINQ",
+  "url": "https://remy-campanella.github.io/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/",
+  "image": "https://remy-campanella.github.io/image/background/remy.jpg",
+  "datePublished": "2026-07-23T03:00:02.000Z",
+  "dateModified": "2026-07-23T11:27:13.482Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.0.1/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 335】 L03 C# Delegate and LINQ',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">125</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/remy.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 335】 L03 C# Delegate and LINQ</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 335】 L03 C# Delegate and LINQ</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-07-23T03:00:02.000Z" title="发表于 2026-07-23 11:00:02">2026-07-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-23T11:27:13.482Z" title="更新于 2026-07-23 19:27:13">2026-07-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-335-Web-Programming-and-Distributed-Services/">COMPSCI 335 Web Programming and Distributed Services</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="delegate">Delegate</h2>
+<p>Delegate is a <strong>data type</strong> that <strong>points</strong> to a <strong>function/method</strong>.</p>
+<h3 id="declare-a-delegate">Declare a Delegate</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="built_in">int</span> <span class="title">Foo1</span>(<span class="params"><span class="built_in">int</span> x, <span class="built_in">int</span> y</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] <span class="keyword">args</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// add2 should match the pattern of Foo1.</span></span><br><span class="line">    Foo1 f1 = <span class="keyword">new</span> Foo1(add2);</span><br><span class="line">    Foo1 f01 = add2; <span class="comment">// or</span></span><br><span class="line">    <span class="comment">// If f1 appears in program, it is treated as add2.</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">int</span> result1 = f1(<span class="number">1</span>, <span class="number">2</span>); <span class="comment">// result = 3.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">add2</span>(<span class="params"><span class="built_in">int</span> i, <span class="built_in">int</span> j</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> i + j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This means the function pointed by a <code>Foo1</code> type variable must have the same signature as <code>Foo1</code>.</p>
+<ul>
+<li>The function returns an <code>int</code> type value.</li>
+<li>The function has two <code>int</code> type parameters.</li>
+</ul>
+<h3 id="what-if-the-signatures-do-not-match">What if the Signatures Do Not Match?</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="built_in">int</span> <span class="title">Foo1</span>(<span class="params"><span class="built_in">int</span> x, <span class="built_in">int</span> y</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] <span class="keyword">args</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// add3 didn&#x27;t match the pattern of Foo1.</span></span><br><span class="line">    Foo1 f1 = <span class="keyword">new</span> Foo1(add3);</span><br><span class="line">    Foo1 f01 = add3; <span class="comment">// or</span></span><br><span class="line">    <span class="comment">// If f1 appears in program, it is treated as add2.</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">int</span> result1 = f1(<span class="number">1</span>, <span class="number">2</span>); <span class="comment">// result = 3.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">add3</span>(<span class="params"><span class="built_in">int</span> i, <span class="built_in">int</span> j, <span class="built_in">int</span> k</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> i + j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The VS will report a generation error(生成错误). We must declare a new delegate.</p>
+<h3 id="matching-method">Matching Method</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">delegate</span> IEnumerable&lt;<span class="built_in">int</span>&gt; <span class="title">Foo</span>(<span class="params"><span class="built_in">int</span> a, <span class="built_in">int</span> b</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="function">List&lt;<span class="built_in">int</span>&gt; <span class="title">A</span>(<span class="params"><span class="built_in">int</span> a, <span class="built_in">int</span> b</span>)</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">Foo ff = A;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>List</code> is an implementation of <code>IEnumerable</code>.</li>
+<li><code>A</code> matches <code>Foo</code>.</li>
+</ul>
+<p>So the assignment is correct.</p>
+<h3 id="passing-functions-as-parameters">Passing Functions as Parameters</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">delegate</span> <span class="built_in">int</span> <span class="title">Foo</span>(<span class="params"><span class="built_in">int</span> a, <span class="built_in">int</span> b</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="built_in">int</span> <span class="title">Add</span>(<span class="params"><span class="built_in">int</span> a, <span class="built_in">int</span> b</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="built_in">int</span> <span class="title">Mul</span>(<span class="params"><span class="built_in">int</span> a, <span class="built_in">int</span> b</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> a * b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Work</span>(<span class="params">Foo w</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> r = w(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">    Console.WriteLine(r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] <span class="keyword">args</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Foo f1 = Add, f2 = Mul;</span><br><span class="line"></span><br><span class="line">    Work(f1); <span class="comment">// 7</span></span><br><span class="line">    Work(f2); <span class="comment">// 12</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The passing argument of <code>Work</code> is a function.</p>
+<h2 id="linqlanguage-intergrated-query">LINQ(Language Intergrated Query)</h2>
+<p>Data are stored in many formats, such as rational DB, XML, <em>etc.</em> Traditionally, we use <strong>SQL</strong> to access them. Microsoft has intergrated this access with programming through <strong>LINQ</strong>. In LINQ, record in data stores are represented as <strong>sequence of objects</strong>.</p>
+<p>The LINQ library actually provides some methods.</p>
+<h3 id="example">Example</h3>
+<p>There is a data store with a collection of <code>Customer</code> type objects.</p>
+<p>An interface is defined that allows us to</p>
+<ul>
+<li>retrieve <strong>all</strong> the <code>Customer</code> objects from the data store. <code>GetAllCustomer</code></li>
+<li>retrieve the <code>Customer</code> object with a given <code>ID</code>. <code>GetCustomerByID</code></li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Customer</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Id &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> FirstName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> LastName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Email &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">ICustomerRepo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">IEnumerable&lt;Customer&gt; <span class="title">GetAllCustomers</span>()</span>;</span><br><span class="line">    <span class="function">Customer <span class="title">GetCustomerByID</span>(<span class="params"><span class="built_in">int</span> id</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MockCustomerRepoV2</span> : <span class="title">ICustomerRepo</span></span><br><span class="line">&#123;</span><br><span class="line">    List&lt;Customer&gt; _customers;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MockCustomerRepoV2</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>._customers = <span class="keyword">new</span> List&lt;Customer&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">new</span> Customer &#123;Id=<span class="number">2</span>,FirstName=<span class="string">&quot;Carolyn&quot;</span>,LastName=<span class="string">&quot;Smith&quot;</span>,Email=<span class="string">&quot;CarolynSmith@mail.com&quot;</span>&#125;,</span><br><span class="line">            <span class="keyword">new</span> Customer &#123;Id=<span class="number">1</span>,FirstName=<span class="string">&quot;Benjamin&quot;</span>,LastName=<span class="string">&quot;Sanders&quot;</span>,Email=<span class="string">&quot;BenjaminSanders@mail.com&quot;</span>&#125;,</span><br><span class="line">            <span class="keyword">new</span> Customer &#123;Id=<span class="number">5</span>,FirstName=<span class="string">&quot;Olivia&quot;</span>,LastName=<span class="string">&quot;Jones&quot;</span>,Email=<span class="string">&quot;CharlotteJones@mail.com&quot;</span>&#125;,</span><br><span class="line">            <span class="keyword">new</span> Customer &#123;Id=<span class="number">4</span>,FirstName=<span class="string">&quot;William&quot;</span>,LastName=<span class="string">&quot;Brown&quot;</span>,Email=<span class="string">&quot;WilliamBrown@mail.com&quot;</span>&#125;,</span><br><span class="line">            <span class="keyword">new</span> Customer &#123;Id=<span class="number">3</span>,FirstName=<span class="string">&quot;Charlotte&quot;</span>,LastName=<span class="string">&quot;Jones&quot;</span>,Email=<span class="string">&quot;OliviaJones@mail.com&quot;</span>&#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IEnumerable&lt;Customer&gt; <span class="title">GetAllCustomers</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> _customers;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Customer <span class="title">GetCustomerByID</span>(<span class="params"><span class="built_in">int</span> id</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Customer c = _customers.FirstOrDefault(delegate (Customer e) &#123; return e.Id == id; &#125;);</span></span><br><span class="line">        <span class="comment">//Customer c = _customers.FirstOrDefault((Customer e) =&gt; &#123; return e.Id == id; &#125;);</span></span><br><span class="line">        <span class="comment">//Customer c = _customers.FirstOrDefault((e) =&gt; &#123; return e.Id == id; &#125;);</span></span><br><span class="line">        <span class="comment">//Customer c = _customers.FirstOrDefault(e =&gt; &#123; return e.Id == id; &#125;);</span></span><br><span class="line">        Customer c = _customers.FirstOrDefault(e =&gt; e.Id == id);</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="firstordefaultdelegate"><code>FirstOrDefault(&lt;delegate&gt;)</code></h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Enumerable.FirstOrDefault(&lt;<span class="built_in">delegate</span>&gt;)</span><br></pre></td></tr></table></figure>
+<p>Returns the first element that satisfy the condition in a sequence, or a default value (can be <code>null</code>) if no element is found.</p>
+<p>The parameter is a <strong>delegate</strong> that checks whetherthe condition is satisfied.</p>
+<h3 id="anonymous-function-lambda-expression">Anonymous Function, Lambda Expression</h3>
+<p>The delegate has a <strong>single argument</strong>, and returns a <code>Boolean</code> type value.</p>
+<p>The delegate is usually an <strong>lambda</strong> here. The lambda <code>e =&gt; e.Id == id</code> equals to<br />
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">bool</span> <span class="title">Check</span>(<span class="params">Customer e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> e.Id == id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>In this program, the lambda is supposed to be written as<br />
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Customer e) =&gt; &#123;e.Id == id&#125;</span><br></pre></td></tr></table></figure></p>
+<p>But this lambda is used under <code>_customers.FirstOrDefault()</code>, the class name can be omitted. The function only has a single statement, the <code>&#123;&#125;</code> can be omitted.<br />
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_customers.FirstOrDefault(e =&gt; e.Id == id) </span><br></pre></td></tr></table></figure></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/">https://remy-campanella.github.io/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1/">网络编程与分布式服务</a><a class="post-meta__tags" href="/tags/C-%E8%AF%AD%E8%A8%80/">C# 语言</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/remy.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/07/20/26-6-27-1-RSM-8-noth/" title="【RSM】 Chapter 8 Nothing Happened"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/album/rsm/rsm_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【RSM】 Chapter 8 Nothing Happened</div></div><div class="info-2"><div class="info-item-1">Snowflake awoke. Her eyelids flickered open, then shut, and parted again as the morning light pressed through the window. She slowly turned her body and faced up, what showed in sight was not the crystal dome, but blurrily the brown oblique ceiling instead. She laid still for a moment, let the fact settle: she was in her bed, not mud, not water. But the next thing she felt was wetness. Her bed sheet, herself, her blanket were all soaked in sweat. Peeling her body off the blanket let some c...</div></div></div></a><a class="pagination-related" href="/2026/07/23/26-7-22-1-COMPSCI320-1-intro/" title="【COMPSCI 320】 Lecture 01 Introduction 2026"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 01 Introduction 2026</div></div><div class="info-2"><div class="info-item-1">AI in This Course Algorithm Definitions An algorithm is a finite, definite, effective procedure, with some input and some output. COMPSCI 220 vs. 320  COMPSCI 220: Implementation and consumption of classic algorithms. COMPSCI 320: Design &amp; analysis of algorithms.  Representative Problems  Interval scheduling  Input. Set of jobs with start times and finish times. Goal. Find maximum cardinality subset of mutually compatible(jobs don’t overlap) jobs.  Weighted interval schedu...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/07/18/26-7-18-1-COMPSCI335-1-cs/" title="【COMPSCI 335】 L01 C# Project, Class, Field, &amp; Property"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-18</div><div class="info-item-2">【COMPSCI 335】 L01 C# Project, Class, Field, &amp; Property</div></div><div class="info-2"><div class="info-item-1">Introduction The course will be taught in two parts.  Server part.  C#, .NET 10 Core  Client part.  JavaScript.   We won’t use CodeRunner here.  Learn to write complex application rather than isolated functions. Develop testing and debugging skills.  We use AI but we still learn programming.  Programming teaches problem solving skills. AI might not handle a user’s need. We need to guide it. AI’s code might be ineffcient, insecure or incorrect. We learn programming to fix ...</div></div></div></a><a class="pagination-related" href="/2026/07/20/26-7-19-1-COMPSCI335-2-inh/" title="【COMPSCI 335】L02 C# Inheritance, Interface and Delegate"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-19</div><div class="info-item-2">【COMPSCI 335】L02 C# Inheritance, Interface and Delegate</div></div><div class="info-2"><div class="info-item-1">Inheritance 123456789class Parent&#123;    public string ParentProp &#123;get; set;&#125;&#125;class Child : Parent&#123;    public string ChildProp &#123;get; set;&#125;&#125; A child class can inherit the class properties/variables and methods from its parent class. Interface A interface define some methods, no implementation. Use a concrete class to define a interface. In C#, the name of an interface should starts with I. 12345678910111213141516using System.Collections.Generic; // P...</div></div></div></a><a class="pagination-related" href="/2026/07/30/26-7-28-1-COMPSCI335-4-linq/" title="【COMPSCI 335】 L04 LINQ"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">【COMPSCI 335】 L04 LINQ</div></div><div class="info-2"><div class="info-item-1">Where Where is used to find all the objects that satisfy certain conditions in a sequence. If there is no objects satisfies, it returns an empty sequence. In this customer example, to get the customers’ names by first/last name, 123IEnumerable&lt;Customer&gt; c = _customers.Where(e =&gt; e.FirstName == firstname);IEnumerable&lt;Customer&gt; c = _customers.Where(e =&gt; e.LastName == lastname); Select Select can be used to project (i.e., select) an element’s field. 123MockCustomerRepo r...</div></div></div></a><a class="pagination-related" href="/2026/07/30/26-7-29-2-COMPSCI335-5-entity/" title="【COMPSCI 335】 L05 Entity Framework"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">【COMPSCI 335】 L05 Entity Framework</div></div><div class="info-2"><div class="info-item-1">Object Relational Mapping Object rational mapping is to map data in SQL databases to objects in programming language and to write quries to against SQL database using statements of programming language. Object Relational Mapper An ORM is a library that automatically converts data stored in relational databases tables into objects used in application programs and vice versa.    Id FirstName LastName Email     1 Carolyn Smith carolynsmith@mail.com    1234567class Customer&...</div></div></div></a><a class="pagination-related" href="/2026/07/23/26-7-22-1-COMPSCI320-1-intro/" title="【COMPSCI 320】 Lecture 01 Introduction 2026"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-23</div><div class="info-item-2">【COMPSCI 320】 Lecture 01 Introduction 2026</div></div><div class="info-2"><div class="info-item-1">AI in This Course Algorithm Definitions An algorithm is a finite, definite, effective procedure, with some input and some output. COMPSCI 220 vs. 320  COMPSCI 220: Implementation and consumption of classic algorithms. COMPSCI 320: Design &amp; analysis of algorithms.  Representative Problems  Interval scheduling  Input. Set of jobs with start times and finish times. Goal. Find maximum cardinality subset of mutually compatible(jobs don’t overlap) jobs.  Weighted interval schedu...</div></div></div></a><a class="pagination-related" href="/2025/11/01/25-10-16-1-STATS330-1-synthesis-glm/" title="【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-31</div><div class="info-item-2">【STATS 330】 Handout 1 A Synthesis of Generalised Linear Models</div></div><div class="info-2"><div class="info-item-1">Linear Regression Simple linear regression model is: \[ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\\\ \epsilon_i \sim {\rm iid \ Normal(0, \sigma^2)} \] Poisson Linear Regression Macrorhabdus Ornithogaster Chicken Analysis Textbook Page 23:      Macrorhabdus Ornithogaster Chicken Data    Data Suitable for Using Poisson Distribution The Poisson distribution better reflects the nature of the response: - It is a discrete distribution - It is right skewed (but almost symmetri...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">128</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">125</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">28</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#delegate"><span class="toc-number">1.</span> <span class="toc-text">Delegate</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#declare-a-delegate"><span class="toc-number">1.1.</span> <span class="toc-text">Declare a Delegate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#what-if-the-signatures-do-not-match"><span class="toc-number">1.2.</span> <span class="toc-text">What if the Signatures Do Not Match?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#matching-method"><span class="toc-number">1.3.</span> <span class="toc-text">Matching Method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#passing-functions-as-parameters"><span class="toc-number">1.4.</span> <span class="toc-text">Passing Functions as Parameters</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linqlanguage-intergrated-query"><span class="toc-number">2.</span> <span class="toc-text">LINQ(Language Intergrated Query)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#example"><span class="toc-number">2.1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firstordefaultdelegate"><span class="toc-number">2.2.</span> <span class="toc-text">FirstOrDefault(&lt;delegate&gt;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#anonymous-function-lambda-expression"><span class="toc-number">2.3.</span> <span class="toc-text">Anonymous Function, Lambda Expression</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/30/26-7-28-1-COMPSCI335-4-linq/" title="【COMPSCI 335】 L04 LINQ"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 L04 LINQ"/></a><div class="content"><a class="title" href="/2026/07/30/26-7-28-1-COMPSCI335-4-linq/" title="【COMPSCI 335】 L04 LINQ">【COMPSCI 335】 L04 LINQ</a><time datetime="2026-07-30T02:41:52.000Z" title="发表于 2026-07-30 10:41:52">2026-07-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/30/26-7-29-2-COMPSCI335-5-entity/" title="【COMPSCI 335】 L05 Entity Framework"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 L05 Entity Framework"/></a><div class="content"><a class="title" href="/2026/07/30/26-7-29-2-COMPSCI335-5-entity/" title="【COMPSCI 335】 L05 Entity Framework">【COMPSCI 335】 L05 Entity Framework</a><time datetime="2026-07-30T02:41:29.000Z" title="发表于 2026-07-30 10:41:29">2026-07-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/23/26-7-22-1-COMPSCI320-1-intro/" title="【COMPSCI 320】 Lecture 01 Introduction 2026"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 01 Introduction 2026"/></a><div class="content"><a class="title" href="/2026/07/23/26-7-22-1-COMPSCI320-1-intro/" title="【COMPSCI 320】 Lecture 01 Introduction 2026">【COMPSCI 320】 Lecture 01 Introduction 2026</a><time datetime="2026-07-23T03:05:52.000Z" title="发表于 2026-07-23 11:05:52">2026-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/" title="【COMPSCI 335】 L03 C# Delegate and LINQ"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 L03 C# Delegate and LINQ"/></a><div class="content"><a class="title" href="/2026/07/23/26-7-21-1-COMPSCI335-3-dlg-linq/" title="【COMPSCI 335】 L03 C# Delegate and LINQ">【COMPSCI 335】 L03 C# Delegate and LINQ</a><time datetime="2026-07-23T03:00:02.000Z" title="发表于 2026-07-23 11:00:02">2026-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/07/20/26-6-27-1-RSM-8-noth/" title="【RSM】 Chapter 8 Nothing Happened"><img src="/image/icon/loading.gif" data-lazy-src="/album/rsm/rsm_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【RSM】 Chapter 8 Nothing Happened"/></a><div class="content"><a class="title" href="/2026/07/20/26-6-27-1-RSM-8-noth/" title="【RSM】 Chapter 8 Nothing Happened">【RSM】 Chapter 8 Nothing Happened</a><time datetime="2026-07-19T14:41:04.000Z" title="发表于 2026-07-19 22:41:04">2026-07-19</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.0</a></span></div><div class="footer_custom_text">源代码库版本 1.8.3+26.8.2.1</div></div><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@9.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.0.29/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.0.0/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://unpkg.com/mermaid@11.11.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.innerHTML, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.5.2/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.6.44/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
