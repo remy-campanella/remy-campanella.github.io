@@ -1826,11 +1826,11 @@
             
             <tag> 实习实训 </tag>
             
-            <tag> MapReduce </tag>
-            
             <tag> Hadoop </tag>
             
             <tag> 大数据 </tag>
+            
+            <tag> MapReduce </tag>
             
             <tag> 分布式计算 </tag>
             
@@ -1912,13 +1912,13 @@
             
             <tag> 实习实训 </tag>
             
-            <tag> Hadoop </tag>
-            
-            <tag> 大数据 </tag>
-            
             <tag> HDFS </tag>
             
+            <tag> Hadoop </tag>
+            
             <tag> 分布式存储 </tag>
+            
+            <tag> 大数据 </tag>
             
             <tag> HDFS 架构 </tag>
             
@@ -1994,13 +1994,13 @@
       
         <tags>
             
+            <tag> Python </tag>
+            
             <tag> 机器学习 </tag>
             
             <tag> 线性回归 </tag>
             
             <tag> 最小二乘法 </tag>
-            
-            <tag> Python </tag>
             
             <tag> Scikit-Learn </tag>
             
@@ -4324,9 +4324,9 @@
             
             <tag> 学习笔记 </tag>
             
-            <tag> 介绍 </tag>
-            
             <tag> 软件工程 </tag>
+            
+            <tag> 介绍 </tag>
             
         </tags>
       
