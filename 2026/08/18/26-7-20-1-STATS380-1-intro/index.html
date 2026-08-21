@@ -1,0 +1,615 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【STATS 380】 1 Introduction to R | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="The content of this course differs from that of other courses in the Department of Statistics in that it does not emphasise data analysis and interpretation, but instead concentrates on programming. W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【STATS 380】 1 Introduction to R">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/08/18/26-7-20-1-STATS380-1-intro/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="The content of this course differs from that of other courses in the Department of Statistics in that it does not emphasise data analysis and interpretation, but instead concentrates on programming. W">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/stats380_cover.webp">
+<meta property="article:published_time" content="2026-08-17T13:37:52.000Z">
+<meta property="article:modified_time" content="2026-08-17T09:37:52.638Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="统计学">
+<meta property="article:tag" content="R 语言">
+<meta property="article:tag" content="数据科学">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta property="article:tag" content="统计计算">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/stats380_cover.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【STATS 380】 1 Introduction to R",
+  "url": "https://remy-campanella.github.io/2026/08/18/26-7-20-1-STATS380-1-intro/",
+  "image": "https://remy-campanella.github.io/image/background/categories/stats380_cover.webp",
+  "datePublished": "2026-08-17T13:37:52.000Z",
+  "dateModified": "2026-08-17T09:37:52.638Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/08/18/26-7-20-1-STATS380-1-intro/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【STATS 380】 1 Introduction to R',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">139</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/stats380_cover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【STATS 380】 1 Introduction to R</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【STATS 380】 1 Introduction to R</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-08-17T13:37:52.000Z" title="发表于 2026-08-17 21:37:52">2026-08-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-08-17T09:37:52.638Z" title="更新于 2026-08-17 17:37:52">2026-08-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/STATS-380-Statistical-Computing/">STATS 380 Statistical Computing</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>The content of this course differs from that of other courses in the Department of Statistics in that it does not emphasise data analysis and interpretation, but instead concentrates on <strong>programming</strong>.</p>
+<h2 id="why-learn-to-write-r-code">Why Learn to Write R Code?</h2>
+<p><a target="_blank" rel="noopener" href="https://canvas.auckland.ac.nz/courses/142488/files/18282702?wrap=1&amp;fd_cookie_set=1">Notes</a></p>
+<h3 id="beaver-body-temperature">Beaver Body Temperature</h3>
+<p>Reynolds (1994) collected data on the body temperature of beavers. The dataset(dataframe) in provieded in the default package <code>&#123;dataset&#125;</code>.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">head<span class="punctuation">(</span>beaver1<span class="punctuation">)</span> <span class="comment"># Check first serveral rows(default 6).</span></span><br><span class="line"><span class="built_in">dim</span><span class="punctuation">(</span>beaver1<span class="punctuation">)</span> <span class="comment"># Check the dimention size of the dataframe.</span></span><br></pre></td></tr></table></figure><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  day time  temp activ</span><br><span class="line">1 346  840 36.33     0</span><br><span class="line">2 346  850 36.34     0</span><br><span class="line">3 346  900 36.35     0</span><br><span class="line">4 346  910 36.42     0</span><br><span class="line">5 346  920 36.55     0</span><br><span class="line">6 346  930 36.69     0</span><br><span class="line"></span><br><span class="line">[1] 114   4</span><br></pre></td></tr></table></figure></p>
+<p>The raw data in unclear to humans. We want to create a plot. But there isn’t a direct function, we need to construct it by ourselves. This course is about to solve this.</p>
+<h3 id="tidy-data">Tidy Data</h3>
+<p>The plot shows temperatures against “hours” and the temperatures are straightforward because that is just the <code>temp</code> variable. These are temperatures in degrees Celsius.</p>
+<p>However, It turns out that 346 is the number of days since the start of 1990 and 840 is not 840 seconds or 840 minutes, but actually 8:40 (<em>i.e.</em>, 40 minutes past 8 o’clock).</p>
+<p>We’ll transform days and times into hours.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hour <span class="operator">&lt;-</span> <span class="punctuation">(</span>beaver1<span class="operator">$</span>day <span class="operator">-</span> beaver1<span class="operator">$</span>day<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="operator">*</span><span class="number">24</span> <span class="operator">+</span> </span><br><span class="line">        <span class="punctuation">(</span>beaver1<span class="operator">$</span>time <span class="operator">%/%</span> <span class="number">100</span><span class="punctuation">)</span> <span class="operator">+</span></span><br><span class="line">        <span class="punctuation">(</span>beaver1<span class="operator">$</span>time <span class="operator">%%</span> <span class="number">100</span><span class="punctuation">)</span><span class="operator">/</span><span class="number">60</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="graphics">Graphics</h3>
+<p>Now we could create a plot between time and temperature.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot<span class="punctuation">(</span>hour<span class="punctuation">,</span> beaver1<span class="operator">$</span>temp<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&quot;l&quot;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/icon/loading.gif" data-lazy-src="/image/26-7-20-1-STATS380-1-intro/Rplot.webp" /></p>
+<p>We can add further points to the plot with the <code>points()</code> function. In this case, we only want to add points when the animal is active. This requires using logical operations and subsetting to isolate just the “active” data.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">active <span class="operator">&lt;-</span> beaver1<span class="operator">$</span>activ <span class="operator">==</span> <span class="number">1</span></span><br><span class="line">points<span class="punctuation">(</span>hour<span class="punctuation">[</span>active<span class="punctuation">]</span><span class="punctuation">,</span> beaver1<span class="operator">$</span>temp<span class="punctuation">[</span>active<span class="punctuation">]</span><span class="punctuation">,</span> pch<span class="operator">=</span><span class="number">16</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/icon/loading.gif" data-lazy-src="/image/26-7-20-1-STATS380-1-intro/Rplot01.webp" /></p>
+<h3 id="developing-code">Developing Code</h3>
+<p>We can pack those functions into two functions.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">beaverTidy <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>b<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    b<span class="operator">$</span>hour <span class="operator">&lt;-</span> <span class="punctuation">(</span>b<span class="operator">$</span>day <span class="operator">-</span> b<span class="operator">$</span>day<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="operator">*</span><span class="number">24</span> <span class="operator">+</span> </span><br><span class="line">              <span class="punctuation">(</span>b<span class="operator">$</span>time <span class="operator">%/%</span> <span class="number">100</span><span class="punctuation">)</span> <span class="operator">+</span></span><br><span class="line">              <span class="punctuation">(</span>b<span class="operator">$</span>time <span class="operator">%%</span> <span class="number">100</span><span class="punctuation">)</span><span class="operator">/</span><span class="number">60</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">beaverPlot <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>b<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    plot<span class="punctuation">(</span>b<span class="operator">$</span>hour<span class="punctuation">,</span> b<span class="operator">$</span>temp<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&quot;l&quot;</span><span class="punctuation">)</span></span><br><span class="line">    active <span class="operator">&lt;-</span> b<span class="operator">$</span>activ <span class="operator">==</span> <span class="number">1</span></span><br><span class="line">    points<span class="punctuation">(</span>b<span class="operator">$</span>hour<span class="punctuation">[</span>active<span class="punctuation">]</span><span class="punctuation">,</span> b<span class="operator">$</span>temp<span class="punctuation">[</span>active<span class="punctuation">]</span><span class="punctuation">,</span> pch<span class="operator">=</span><span class="number">16</span><span class="punctuation">)</span>    </span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>These two functions can be used on the second beaver <code>beaver2</code>.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">beaverPlot<span class="punctuation">(</span>beaverTidy<span class="punctuation">(</span>beaver2<span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/icon/loading.gif" data-lazy-src="/image/26-7-20-1-STATS380-1-intro/Rplot02.webp" /></p>
+<h2 id="deconstructing-r">Deconstructing R</h2>
+<h3 id="rstudio">RStudio</h3>
+<h3 id="a-note-on-tidyverse">A Note on Tidyverse</h3>
+<blockquote>
+<p>In this course, we will focus on writing code in the core R language.</p>
+</blockquote>
+<h2 id="r-basics">R Basics</h2>
+<h3 id="the-r-language">The R Language</h3>
+<p>R is a general-purpose computer language, like Python or Java or C. This means that we can use R to instruct a computer to perform any task.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="comment"># Numeric</span></span><br><span class="line"><span class="number">1</span> <span class="operator">+</span> <span class="number">2</span> <span class="comment"># Expressions</span></span><br><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">,</span> <span class="number">67</span><span class="punctuation">,</span> <span class="number">9</span><span class="punctuation">)</span> <span class="comment"># Vector</span></span><br><span class="line"><span class="number">1</span><span class="operator">:</span><span class="number">10</span> <span class="comment"># Vector using column operator, 1 to 10.</span></span><br><span class="line">b1time <span class="operator">&lt;-</span> beaver1<span class="operator">$</span>time <span class="comment"># Assignment</span></span><br></pre></td></tr></table></figure></p>
+<p>R has features that make it well-suited to working with data. For example, <strong>vectorisation</strong> means that it is very easy to create and work with a collection of values all at once.</p>
+<p>Vectorisation means that the calculation is performed <strong>for each numeric value</strong> in <code>b1time</code> and the result is another vector of numeric values.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b1time <span class="operator">%/%</span> <span class="number">100</span> <span class="comment"># Integer division</span></span><br><span class="line">b1time <span class="operator">%%</span> <span class="number">100</span> <span class="comment"># Module division</span></span><br></pre></td></tr></table></figure><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  [1]  8  8  9  9  9  9  9  9 10 10 10 10 10 10 11 11 11 11 11 11 12 12 12 12 12 12 13 13 13 13 13 13 14 14 14</span><br><span class="line"> [36] 14 14 14 15 15 15 15 15 15 16 16 16 16 16 16 17 17 17 17 17 17 18 18 18 18 18 18 19 19 19 19 19 19 20 20</span><br><span class="line"> [71] 20 20 20 20 21 21 21 21 21 21 22 22 22 22 22 23 23 23 23 23 23  0  0  0  0  0  0  1  1  1  1  1  1  2  2</span><br><span class="line">[106]  2  2  2  2  3  3  3  3  3</span><br><span class="line"></span><br><span class="line">  [1] 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20</span><br><span class="line"> [36] 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10</span><br><span class="line"> [71] 20 30 40 50  0 10 20 30 40 50  0 10 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10 20 30 40 50  0 10</span><br><span class="line">[106] 20 30 40 50  0 10 20 30 40</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span> <span class="comment"># 100 normal distributed numbers, n = 0, sigma^2 = 1.</span></span><br><span class="line">plot<span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">100</span><span class="punctuation">,</span> rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>Save something in a folder.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pdf<span class="punctuation">(</span><span class="string">&quot;Output/white-noise.pdf&quot;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>Read the data from the Internet.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1 <span class="operator">&lt;-</span> read.table<span class="punctuation">(</span><span class="string">&quot;http://www.stats.ox.ac.uk/pub/datasets/csb/ch11a.dat&quot;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="expression">Expression</h3>
+<p>R code consists of one or more expressions. Like any computer language, R has strict rules that must be followed. If our code breaks the rules, it will cause a syntax error.</p>
+<h4 id="numbers-and-text">Numbers and Text</h4>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">67</span></span><br><span class="line"><span class="number">67.67</span></span><br><span class="line"><span class="number">67.6e7</span></span><br></pre></td></tr></table></figure>
+<h4 id="text">Text</h4>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;No music!&quot;</span></span><br><span class="line"><span class="string">&#x27;No &quot;music&quot;!&#x27;</span></span><br><span class="line"><span class="string">&quot;No \&quot;music\&quot;!&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="arithmetic">Arithmetic</h4>
+<p>Numeric values can be combined using arithmetic operators. Operators are ordered from highest precedence to lowest in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>operator</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^</code></td>
+<td>exponentiation</td>
+</tr>
+<tr>
+<td><code>+</code>/<code>-</code></td>
+<td>unary plus/minus</td>
+</tr>
+<tr>
+<td><code>%/%</code>/<code>%%</code></td>
+<td>integer devision/remainder</td>
+</tr>
+<tr>
+<td><code>*</code>/<code>/</code></td>
+<td>multiplication/devision</td>
+</tr>
+<tr>
+<td><code>+</code>/<code>-</code></td>
+<td>addition/substraction</td>
+</tr>
+</tbody>
+</table>
+<h4 id="symbols-and-assigment">Symbols and Assigment</h4>
+<p>A symbol expression is any combination of letters, numbers, full stops, and underscore characters, but must start with a letter or full stop.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">8</span>x <span class="operator">+</span> <span class="number">2</span> <span class="comment"># Wrong</span></span><br></pre></td></tr></table></figure></p>
+<p>Values can be stored in memory using an assignment expression. This consists of a symbol expression, followed by the assignment operator(<code>&lt;-</code> or <code>=</code>), followed by the value to assign. The following code assigns numeric values to the symbols hour and minute.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mr67 <span class="operator">&lt;-</span> 67.6767</span><br><span class="line"><span class="number">67.6767</span> <span class="operator">-&gt;</span> mr67</span><br></pre></td></tr></table></figure></p>
+<h4 id="function-calls">Function Calls</h4>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot<span class="punctuation">(</span>b1hour<span class="punctuation">,</span> b1temp<span class="punctuation">,</span> type<span class="operator">=</span><span class="string">&quot;l&quot;</span><span class="punctuation">,</span> main<span class="operator">=</span><span class="string">&quot;Body Temperature&quot;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>This has the form of the function name, followed by parentheses, within which there can be one or more arguments which are separated by commas. Each argument value is an expression and arguments can be named, in which case the argument is of the form <code>name=value</code>.</p>
+<p>Not knowing how to use a function? Try<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">help<span class="punctuation">(</span>plot<span class="punctuation">)</span></span><br><span class="line"><span class="operator">?</span>plot</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## Default S3 method:</span></span><br><span class="line">plot<span class="punctuation">(</span>x<span class="punctuation">,</span> y <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> type <span class="operator">=</span> <span class="string">&quot;p&quot;</span><span class="punctuation">,</span>  xlim <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> ylim <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span></span><br><span class="line">     <span class="built_in">log</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span> lim2 <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">,</span> main <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> sub <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> xlab <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> ylab <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span></span><br><span class="line">     ann <span class="operator">=</span> par<span class="punctuation">(</span><span class="string">&quot;ann&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> axes <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">,</span> frame.plot <span class="operator">=</span> axes<span class="punctuation">,</span></span><br><span class="line">     panel.first <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> panel.last <span class="operator">=</span> <span class="literal">NULL</span><span class="punctuation">,</span> asp <span class="operator">=</span> <span class="literal">NA</span><span class="punctuation">,</span></span><br><span class="line">     xgap.axis <span class="operator">=</span> <span class="literal">NA</span><span class="punctuation">,</span> ygap.axis <span class="operator">=</span> <span class="literal">NA</span><span class="punctuation">,</span></span><br><span class="line">     ...<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>If there are parameters unnamed in function call, the parameters will match the argument list.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot<span class="punctuation">(</span>type<span class="operator">=</span><span class="string">&quot;l&quot;</span><span class="punctuation">,</span> main<span class="operator">=</span><span class="string">&quot;Body Temperature&quot;</span><span class="punctuation">,</span> b1hour<span class="punctuation">,</span> b1temp<span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="vectors">Vectors</h3>
+<p>All values in R are <strong>objects</strong> and the simplest sort of object in R is a vector. A vector can contain a single value or multiple values, but all of the values must have <strong>the same basic mode</strong>, typically either numeric or character.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">100</span></span><br><span class="line">mode<span class="punctuation">(</span>x<span class="punctuation">)</span> <span class="comment"># [1] &quot;numeric&quot;</span></span><br><span class="line">y <span class="operator">=</span> <span class="string">&quot;Arpx4kun&quot;</span></span><br><span class="line">mode<span class="punctuation">(</span>y<span class="punctuation">)</span> <span class="comment"># [1] &quot;character&quot;</span></span><br><span class="line"><span class="built_in">length</span><span class="punctuation">(</span>x<span class="punctuation">)</span> <span class="comment"># [1] 100</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="vectorisation-and-the-recycling-rule">Vectorisation and The Recycling Rule</h3>
+<p>Arithmetic operators in R are <strong>vectorised</strong> so if we perform a calculation with a vector of values we get a vector of values as the result.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1time <span class="operator">%/%</span> <span class="number">100</span></span><br></pre></td></tr></table></figure><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  [1]  8  8  9  9  9  9  9  9 10 10 10 10 10 10 11 11 11 11 11 11 12 12 12 12 12</span><br><span class="line"> [26] 12 13 13 13 13 13 13 14 14 14 14 14 14 15 15 15 15 15 15 16 16 16 16 16 16</span><br><span class="line"> [51] 17 17 17 17 17 17 18 18 18 18 18 18 19 19 19 19 19 19 20 20 20 20 20 20 21</span><br><span class="line"> [76] 21 21 21 21 21 22 22 22 22 22 23 23 23 23 23 23  0  0  0  0  0  0  1  1  1</span><br><span class="line">[101]  1  1  1  2  2  2  2  2  2  3  3  3  3  3</span><br></pre></td></tr></table></figure></p>
+<p>The example above also shows the <strong>recycling rule</strong> in R. The vector b1time has 114 values, but the vector 100 is just a single value. The recycling rule says that the shorter vector will <strong>be repeated</strong> to make it the length of the longer vector and then the calculation can take place for each pair of values.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">,</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">8</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">,</span> <span class="number">4</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">,</span> <span class="number">6</span><span class="punctuation">,</span> <span class="number">7</span><span class="punctuation">,</span> <span class="number">8</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>If the repetition wasn’t finished,<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># [1] 2 4 4</span></span><br><span class="line"><span class="comment"># Warning message:</span></span><br><span class="line"><span class="comment"># In c(1, 2, 3) + c(1, 2) :</span></span><br><span class="line"><span class="comment">#   longer object length is not a multiple of shorter object length</span></span><br></pre></td></tr></table></figure></p>
+<p>To perform an unfinished recycling and avoid the warning, do<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="operator">:</span><span class="number">100</span> <span class="operator">+</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="punctuation">,</span> len<span class="operator">=</span><span class="number">100</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="generating-vectors">Generating Vectors</h3>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="number">114</span><span class="punctuation">,</span> <span class="number">514</span><span class="punctuation">,</span> <span class="number">1919</span><span class="punctuation">,</span> <span class="number">810</span><span class="punctuation">)</span></span><br><span class="line"><span class="number">114</span><span class="operator">:</span><span class="number">514</span> <span class="comment"># Column operator</span></span><br><span class="line"><span class="operator">-</span><span class="number">5</span><span class="operator">:</span><span class="number">100</span> <span class="comment"># Same as (-5):100</span></span><br><span class="line"><span class="number">100</span><span class="operator">:</span><span class="operator">-</span><span class="number">5</span> <span class="comment"># Count from 100 to -5</span></span><br></pre></td></tr></table></figure>
+<p>We can generate a sequence with regular intervals with the <code>seq()</code> function.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seq<span class="punctuation">(</span><span class="number">800</span><span class="punctuation">,</span> by<span class="operator">=</span><span class="number">10</span><span class="punctuation">,</span> length.out<span class="operator">=</span><span class="number">6</span><span class="punctuation">)</span> <span class="comment"># [1] 800 810 820 830 840 850</span></span><br></pre></td></tr></table></figure></p>
+<p>We can repeat values with the <code>rep()</code> function.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rep</span><span class="punctuation">(</span><span class="number">800</span><span class="punctuation">,</span> times<span class="operator">=</span><span class="number">6</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>Both the value to repeat and the times argument can be vectors. The <code>each</code> argument can be used instead of times.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">rep</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">800</span><span class="punctuation">,</span> <span class="number">900</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">6</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">rep</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">800</span><span class="punctuation">,</span> <span class="number">900</span><span class="punctuation">)</span><span class="punctuation">,</span> each<span class="operator">=</span><span class="number">10</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>Many of the functions that generate vectors, also work for non-numeric values.</p>
+<h3 id="logical-vectors">Logical Vectors</h3>
+<p>In addition to numeric and character values, we can also work with logical values in R. A logical value is one of the special symbols <code>TRUE</code> or <code>FALSE</code>.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="literal">TRUE</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="built_in">T</span><span class="punctuation">,</span> <span class="built_in">F</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>Function <code>which</code> can give the TRUE indices of a logical object, allowing for array indices.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y <span class="operator">=</span> rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span></span><br><span class="line">which<span class="punctuation">(</span>y <span class="operator">&gt;</span> <span class="number">0</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>However, it is much more common for a logical vector to be the result of an expression involving a logical operator.</p>
+<table>
+<thead>
+<tr>
+<th>operator</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt;</code></td>
+<td>greater than</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>less than</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>equal to</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>not equal to</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>greater than or equal to</td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>less than or equal to</td>
+</tr>
+<tr>
+<td><code>\|</code></td>
+<td>logical or</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>logical and</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>logical not</td>
+</tr>
+</tbody>
+</table>
+<p>Using vectors in logical operation will get logical vectors.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="operator">:</span><span class="number">100</span> <span class="operator">&gt;</span> <span class="number">50</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="finite-precision">Finite Precision</h3>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y <span class="operator">=</span> rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span></span><br><span class="line">print<span class="punctuation">(</span>y<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="number">7</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>This can save 7 digit to print.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print<span class="punctuation">(</span><span class="number">12345678901234567890</span><span class="punctuation">,</span> <span class="number">20</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1] 12345678901234569216</span><br></pre></td></tr></table></figure></p>
+<p>The result is not accurate.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.3</span> <span class="operator">-</span> <span class="number">0.2</span> <span class="operator">==</span> <span class="number">0.1</span></span><br></pre></td></tr></table></figure><br />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1] FALSE</span><br></pre></td></tr></table></figure></p>
+<p>This also happens in floats.</p>
+<p>This problem occurs because numeric values are stored using a finite representation (a fixed number of bytes), so there is a limit to numeric accuracy. Even very simple decimal values are not stored with full accuracy. The “error” in these representations is very small, but it means that the values are not exactly the same.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">abs</span><span class="punctuation">(</span><span class="punctuation">(</span><span class="number">0.3</span> <span class="operator">-</span> <span class="number">0.2</span><span class="punctuation">)</span> <span class="operator">-</span> <span class="number">0.1</span><span class="punctuation">)</span> <span class="operator">&lt;</span> <span class="number">1e-10</span></span><br><span class="line">all.equal<span class="punctuation">(</span><span class="number">0.3</span> <span class="operator">-</span> <span class="number">0.2</span><span class="punctuation">,</span> <span class="number">0.1</span><span class="punctuation">)</span> <span class="comment"># Test if two numbers are (nearly) equal.</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="important-numeric-functions">Important Numeric Functions</h3>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">y <span class="operator">=</span> rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">max</span><span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line"><span class="built_in">min</span><span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line"><span class="built_in">range</span><span class="punctuation">(</span>y<span class="punctuation">)</span> <span class="comment"># Both max and min.</span></span><br><span class="line">mean<span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line">sd<span class="punctuation">(</span>y<span class="punctuation">)</span> <span class="comment"># Standard deviation.</span></span><br><span class="line">median<span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line"><span class="built_in">sum</span><span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line"><span class="built_in">round</span><span class="punctuation">(</span><span class="number">0.535</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span> <span class="comment"># Round the number to the nearest integer/float with x digits.</span></span><br><span class="line"><span class="built_in">pi</span> <span class="comment"># Constant</span></span><br><span class="line"><span class="built_in">pi</span> <span class="operator">=</span> <span class="number">1</span> <span class="comment"># pi will be overrided.</span></span><br><span class="line">rm<span class="punctuation">(</span><span class="built_in">pi</span><span class="punctuation">)</span> <span class="comment"># Restore.</span></span><br><span class="line"><span class="built_in">floor</span><span class="punctuation">(</span><span class="built_in">pi</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">ceiling</span><span class="punctuation">(</span><span class="built_in">pi</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">signif</span><span class="punctuation">(</span><span class="built_in">pi</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span> <span class="comment"># Save significant digits.</span></span><br><span class="line"><span class="built_in">cumsum</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">)</span> <span class="comment"># Cumulative sum. 1, 1 + 2, 1 + 2 + 3, ...</span></span><br><span class="line"><span class="built_in">prod</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">cumprod</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">)</span></span><br><span class="line">factorial<span class="punctuation">(</span><span class="number">10</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">all</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="literal">TRUE</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">,</span> <span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># Retuen TRUE when all elements are TRUE.</span></span><br><span class="line"><span class="built_in">any</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="literal">TRUE</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">,</span> <span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># Retuen TRUE when one element is TRUE.</span></span><br></pre></td></tr></table></figure>
+<h3 id="important-character-functions">Important Character Functions</h3>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">txt <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;67&quot;</span><span class="punctuation">,</span> <span class="string">&quot;6767&quot;</span><span class="punctuation">,</span> <span class="string">&quot;676767&quot;</span><span class="punctuation">)</span></span><br><span class="line">nchar<span class="punctuation">(</span>txt<span class="punctuation">)</span> <span class="comment"># Count length for each element.</span></span><br><span class="line">substring<span class="punctuation">(</span>txt<span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">)</span> <span class="comment"># Get substring from 1 to 1 for each element. The length of vectors might don&#x27;t match, but there isn&#x27;t a warning.</span></span><br><span class="line">substring<span class="punctuation">(</span>txt<span class="punctuation">,</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">rep</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">2</span><span class="punctuation">,</span> len<span class="operator">=</span><span class="number">3</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">paste<span class="punctuation">(</span><span class="string">&quot;x&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">,</span> sep<span class="operator">=</span><span class="string">&quot;|&quot;</span><span class="punctuation">)</span> <span class="comment"># Link the elements, link with whitespace by default.</span></span><br><span class="line">paste<span class="punctuation">(</span><span class="string">&quot;x&quot;</span><span class="punctuation">,</span> <span class="string">&quot;|&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">)</span></span><br><span class="line">paste0<span class="punctuation">(</span><span class="string">&quot;x&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">)</span> <span class="comment"># Equals to paste(sep=&quot;&quot;).</span></span><br><span class="line">paste0<span class="punctuation">(</span><span class="string">&quot;x&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">,</span> collapse<span class="operator">=</span><span class="string">&quot; -&gt; &quot;</span><span class="punctuation">)</span> <span class="comment"># Conjunk the results into one with &quot; -&gt; &quot;.</span></span><br><span class="line">grep<span class="punctuation">(</span><span class="string">&quot;676&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">)</span> <span class="comment"># Find substring. `fixed = TRUE` stops using regular expressions.</span></span><br><span class="line">grepl<span class="punctuation">(</span><span class="string">&quot;676&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">)</span> <span class="comment"># Return a logical vector.</span></span><br><span class="line">gsub<span class="punctuation">(</span><span class="string">&quot;67&quot;</span><span class="punctuation">,</span> <span class="string">&quot;xx&quot;</span><span class="punctuation">,</span> txt<span class="punctuation">)</span> <span class="comment"># Pattern matching and replacement.</span></span><br></pre></td></tr></table></figure>
+<h3 id="type-coercion">Type Coercion</h3>
+<p>Sometimes we need to coerce a vector of one type into another. For example, in the previous section, we began with character values representing times and extracted separate hours and minutes character vectors.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">as.numeric</span><span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;123&quot;</span><span class="punctuation">,</span> <span class="string">&quot;345&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="number">1</span></span><br><span class="line"><span class="number">1</span><span class="operator">:</span><span class="number">10</span> <span class="operator">+</span> <span class="literal">TRUE</span> <span class="comment"># The type with lower order will be converted into type with higher order.</span></span><br></pre></td></tr></table></figure></p>
+<p>This could be used to count how many cases is satisfied.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sum</span><span class="punctuation">(</span>x <span class="operator">&gt;</span> <span class="number">50</span> <span class="operator">&amp;</span> y <span class="operator">&gt;</span> <span class="number">0</span><span class="punctuation">)</span></span><br><span class="line">mean<span class="punctuation">(</span>x <span class="operator">&gt;</span> <span class="number">50</span> <span class="operator">&amp;</span> y <span class="operator">&gt;</span> <span class="number">0</span><span class="punctuation">)</span> <span class="comment"># Percentage.</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="subsetting">Subsetting</h3>
+<p>Because we often deal with vectors containing multiple values, being able to extract subsets of values is another important tool in R.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">100</span></span><br><span class="line">y <span class="operator">=</span> rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>Fetch value using index. We can also use vector to fetch several values. Note that index in R starts from 1. If the inde is negative vector, it means fetching subset except these.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">x<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">50</span><span class="punctuation">]</span></span><br><span class="line">x<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">50</span> <span class="operator">*</span> <span class="number">2</span><span class="punctuation">]</span> <span class="comment"># [2], [4], [6], ...</span></span><br><span class="line">x<span class="punctuation">[</span><span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">x<span class="punctuation">[</span><span class="operator">-</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">)</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure></p>
+<p>The access out of range will return <code>NA</code>.</p>
+<p>The brackets can also be filled with logical expressions. All cases make the logical expression true will be selected.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y<span class="punctuation">[</span>y <span class="operator">&gt;</span> <span class="number">0</span><span class="punctuation">]</span></span><br><span class="line">x<span class="punctuation">[</span>y <span class="operator">&gt;</span> <span class="number">0</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure></p>
+<p>Directly use assignment to replace a value or a subset of value. This also obeys the <strong>recycling rule</strong>.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">y<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="number">0</span></span><br><span class="line">y<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">10</span></span><br><span class="line">y<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">3</span> <span class="comment"># Warning</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="sorting-and-ordering">Sorting and ordering</h3>
+<p>The <code>sort()</code> function can be used to sort a vector (ascending by default, but the decreasing argument allows for descending order instead).<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">y <span class="operator">=</span> rnorm<span class="punctuation">(</span><span class="number">100</span><span class="punctuation">)</span></span><br><span class="line">sort<span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line">sort<span class="punctuation">(</span>y<span class="punctuation">,</span> decreasing<span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p><code>order()</code> will give a index sequence(in vector) whose value is sorted increasing/decreasing.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">order<span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line">order<span class="punctuation">(</span>y<span class="punctuation">,</span> decreasing <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="special-values">Special Values</h3>
+<p>The result of some mathematical operations are either infinite or undefined.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="operator">/</span> <span class="number">0</span></span><br><span class="line"><span class="comment"># [1] Inf</span></span><br><span class="line"><span class="operator">-</span><span class="number">1</span> <span class="operator">/</span> <span class="number">0</span></span><br><span class="line"><span class="comment"># [1] -Inf</span></span><br><span class="line"><span class="literal">Inf</span> <span class="operator">-</span> <span class="literal">Inf</span></span><br><span class="line"><span class="comment"># [1] NaN(Not a Number)</span></span><br><span class="line"><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="number">11</span><span class="punctuation">]</span></span><br><span class="line"><span class="comment"># [1] NA(Not Avalible)</span></span><br></pre></td></tr></table></figure></p>
+<p><code>NULL</code> represents the null object in R: it is a reserved word. <code>NULL</code> is often returned by expressions and functions whose value is undefined.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">length</span><span class="punctuation">(</span><span class="literal">NULL</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">c</span><span class="punctuation">(</span><span class="literal">NULL</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>Complex number is trated as <code>NaN</code> in base environment.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sqrt</span><span class="punctuation">(</span><span class="operator">-</span><span class="number">10</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># [1]      NaN      NaN      NaN      NaN      NaN      NaN      NaN      NaN      NaN      NaN 0.000000</span></span><br><span class="line"><span class="comment"># [12] 1.000000 1.414214 1.732051 2.000000 2.236068 2.449490 2.645751 2.828427 3.000000 3.162278</span></span><br><span class="line"><span class="comment"># Warning message:</span></span><br><span class="line"><span class="comment"># In sqrt(-10:10) : NaNs produced</span></span><br></pre></td></tr></table></figure></p>
+<p>If <code>NA</code> participated the calculation, the result is also <code>NA</code>. Use <code>na.rm</code> in some function to omit <code>NA</code>.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">y<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="literal">NA</span></span><br><span class="line">mean<span class="punctuation">(</span>y<span class="punctuation">)</span></span><br><span class="line">mean<span class="punctuation">(</span>y<span class="punctuation">,</span> na.rm<span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="list">List</h3>
+<p><code>list</code> type can save diffenent types of values into one variable.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">z <span class="operator">=</span> <span class="built_in">list</span><span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="literal">TRUE</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="built_in">letters</span><span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>The single bracket will return a <strong>sublist</strong>, the double brackets will return the object itself.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">z<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line"><span class="comment"># [[1]]</span></span><br><span class="line"><span class="comment">#  [1]  1  2  3  4  5  6  7  8  9 10</span></span><br><span class="line">z<span class="punctuation">[[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">]</span></span><br><span class="line"><span class="comment">#  [1]  1  2  3  4  5  6  7  8  9 10</span></span><br></pre></td></tr></table></figure></p>
+<p>Objects in list can also be named. Use <code>$</code> to access by name.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span><span class="punctuation">(</span></span><br><span class="line">    x<span class="operator">=</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="punctuation">,</span></span><br><span class="line">    y<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span><span class="literal">TRUE</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    z<span class="operator">=</span><span class="built_in">letters</span><span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">list</span><span class="operator">$</span>x</span><br></pre></td></tr></table></figure></p>
+<h3 id="formula">Formula</h3>
+<p>Formulas are another sort of expression in R. Formulas allow us to express a relationship between symbols, which is useful, for example, when specifying a statistical model and for some graphics functions.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y <span class="operator">~</span> x1 <span class="operator">+</span> x2 <span class="operator">+</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="example-summary-statistics">Example: Summary Statistics</h2>
+<p>We have a set of beaver body temperature measurements. A very simple model for those measurements is that they are randomly spread around a central value.</p>
+<p><span class="math display">\[
+X = \mu + \varepsilon \\
+\varepsilon \overset{\mathrm{iid}}{\sim} \rm{Normal}(0, \sigma)
+\]</span></p>
+<p>We can estimate <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> from the data:<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">temp <span class="operator">=</span> beaver1<span class="operator">$</span>temp</span><br><span class="line">mu <span class="operator">=</span> mean<span class="punctuation">(</span>temp<span class="punctuation">)</span></span><br><span class="line">eps <span class="operator">=</span> temp <span class="operator">-</span> mu</span><br><span class="line">n <span class="operator">=</span> <span class="built_in">length</span><span class="punctuation">(</span>temp<span class="punctuation">)</span></span><br><span class="line"><span class="built_in">sqrt</span><span class="punctuation">(</span><span class="built_in">sum</span><span class="punctuation">(</span>eps<span class="operator">^</span><span class="number">2</span><span class="punctuation">)</span> <span class="operator">/</span> <span class="punctuation">(</span>n <span class="operator">-</span> <span class="number">1</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># variation</span></span><br><span class="line">var<span class="punctuation">(</span>eps<span class="punctuation">)</span> <span class="comment"># or simply</span></span><br></pre></td></tr></table></figure></p>
+<p>Calculate normal distribution parameters.<br />
+<span class="math display">\[
+mu = mean(temp - mu)
+sigma = sd(temp)
+t2 = (temp - mu) / sigma
+\]</span></p>
+<p>Plot.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plot<span class="punctuation">(</span>temp<span class="punctuation">)</span></span><br><span class="line">plot<span class="punctuation">(</span>eps<span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>We could calculate the temperature deviations from <span class="math inline">\(\mu\)</span> and look at the correlation between successive deviations. If the deviations from <span class="math inline">\(\mu\)</span> are independent then they should not be correlated.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">eps1 <span class="operator">=</span> eps<span class="punctuation">[</span><span class="operator">-</span>n<span class="punctuation">]</span></span><br><span class="line">eps2 <span class="operator">=</span> eps<span class="punctuation">[</span><span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span></span><br><span class="line">plot<span class="punctuation">(</span>eps1<span class="punctuation">,</span> eps2<span class="punctuation">)</span></span><br><span class="line">cor<span class="punctuation">(</span>eps1<span class="punctuation">,</span> eps2<span class="punctuation">)</span></span><br></pre></td></tr></table></figure></p>
+<p>That seems like a quite high correlation; temperature (i) is similar to temperature ((i - 1)).</p>
+<h2 id="example-two-sample-t-test">Example: Two-Sample T-Test</h2>
+<p>A slightly more complex model for the beaver body temperature data allows for different average temperatures at night compared to during the day (see the Example above for why the “iid” assumption might not be a great idea).</p>
+$$<br />
+X = {
+<span class="math display">\[\begin{array}{ll} \mu_1 + \varepsilon, &amp; \text{night}\\ \mu_2 + \varepsilon, &amp; \text{day} \end{array}\]</span>
+<p>. \</p>
+<p> \rm{Normal}(0, )<br />
+$$</p>
+<p>The following code splits the temperatures up into groups of night temperatures and day temperatures.<br />
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">night <span class="operator">=</span> beaver1<span class="operator">$</span>time <span class="operator">&gt;</span> <span class="number">1800</span> <span class="operator">|</span> beaver1<span class="operator">$</span>time <span class="operator">&lt;</span> <span class="number">600</span></span><br><span class="line">day <span class="operator">=</span> <span class="operator">!</span>night</span><br><span class="line">x1 <span class="operator">=</span> temp<span class="punctuation">[</span>night<span class="punctuation">]</span></span><br><span class="line">x2 <span class="operator">=</span> temp<span class="punctuation">[</span>day<span class="punctuation">]</span></span><br></pre></td></tr></table></figure></p>
+<p>A <span class="math inline">\(t\)</span>-test can help us to test the hypothesis that the underlying <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> are actually the same (and all we are seeing in our data is random variation).<br />
+<span class="math display">\[
+t = \frac{\mu_1 - \mu_2}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}}
+\]</span></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mu1 <span class="operator">=</span> mean<span class="punctuation">(</span>x1<span class="punctuation">)</span></span><br><span class="line">mu2 <span class="operator">=</span> mean<span class="punctuation">(</span>x2<span class="punctuation">)</span></span><br><span class="line">var1 <span class="operator">=</span> var<span class="punctuation">(</span>x1<span class="punctuation">)</span></span><br><span class="line">var2 <span class="operator">=</span> var<span class="punctuation">(</span>x2<span class="punctuation">)</span></span><br><span class="line">n1 <span class="operator">=</span> <span class="built_in">length</span><span class="punctuation">(</span>x1<span class="punctuation">)</span></span><br><span class="line">n2 <span class="operator">=</span> <span class="built_in">length</span><span class="punctuation">(</span>x2<span class="punctuation">)</span></span><br><span class="line">tval <span class="operator">=</span> <span class="punctuation">(</span>mu1 <span class="operator">-</span> mu2<span class="punctuation">)</span> <span class="operator">/</span> <span class="built_in">sqrt</span><span class="punctuation">(</span>var1 <span class="operator">/</span> n1 <span class="operator">+</span> var2 <span class="operator">/</span> n2<span class="punctuation">)</span></span><br><span class="line">pt<span class="punctuation">(</span><span class="operator">-</span><span class="built_in">abs</span><span class="punctuation">(</span>tval<span class="punctuation">)</span><span class="punctuation">,</span> df<span class="operator">=</span>n1 <span class="operator">+</span> n2 <span class="operator">-</span> <span class="number">2</span><span class="punctuation">)</span> <span class="operator">*</span> <span class="number">2</span></span><br><span class="line">t.test<span class="punctuation">(</span>x1<span class="punctuation">,</span> x2<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h2 id="example-greyser-eruption">Example: Greyser Eruption</h2>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">head<span class="punctuation">(</span>faithful<span class="punctuation">)</span></span><br><span class="line">d <span class="operator">=</span> faithful<span class="operator">$</span>eruptions</span><br><span class="line">w <span class="operator">=</span> faithful<span class="operator">$</span>waiting</span><br><span class="line"><span class="built_in">sum</span><span class="punctuation">(</span>d <span class="operator">&gt;=</span> <span class="number">4</span><span class="punctuation">)</span> <span class="operator">/</span> <span class="built_in">length</span><span class="punctuation">(</span>d<span class="punctuation">)</span></span><br><span class="line">mean<span class="punctuation">(</span>d <span class="operator">&gt;=</span> <span class="number">4</span><span class="punctuation">)</span></span><br><span class="line">mean<span class="punctuation">(</span>w<span class="punctuation">[</span>d <span class="operator">&gt;=</span> <span class="number">4</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/08/18/26-7-20-1-STATS380-1-intro/">https://remy-campanella.github.io/2026/08/18/26-7-20-1-STATS380-1-intro/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6/">统计学</a><a class="post-meta__tags" href="/tags/R-%E8%AF%AD%E8%A8%80/">R 语言</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/">数据科学</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a><a class="post-meta__tags" href="/tags/%E7%BB%9F%E8%AE%A1%E8%AE%A1%E7%AE%97/">统计计算</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/stats380_cover.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/16/26-8-14-RSMCN-1-c1i1/" title="【RSM CN】 雪花枫叶的回忆（C1 ~ I1）"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/album/rsm/rsm_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【RSM CN】 雪花枫叶的回忆（C1 ~ I1）</div></div><div class="info-2"><div class="info-item-1"> 有关 RSM 计划和《雪花枫叶的回忆》相关介绍，请参阅 RSM Project。 基于 DeepSeek 翻译。   第一章 前奏曲 清晨。第一缕曙光爬过地平线，将液态的金色泼洒进茂密的林冠。清晨的交响乐以一声清亮的鸟鸣起始，那是一个孤独的音符，悬停在微凉的空气中。很快，松鼠的吱吱声回应了它，最后，公鸡响亮的对鸣加入了进来——这些声音，麒麟（kirin）1们数千年来都信赖它们将自己从沉睡中唤醒。 雪花（Snowflake）大概是第一批醒来的麒麟之一。高中毕业之后，她已经很久没有被迫这么早起床了。她还记得那些日子，匆匆忙忙地把自己拽起来，在教室里待上一整天，又倒头睡去，没有任何喘息的时间。雪花讨厌迟到，但她也绝不会喜欢在七点之前就睁开惺忪的睡眼。 “多么美好的一天啊！”她想，“才六点半！” 一个慵懒的哈欠从她大张的嘴里溜了出来。她揉了揉眼睛，镜中映出了她的身影：毫无疑问，是一只麒麟，火红鬃毛如同热情的烈焰，略显凌乱，而皮毛则是柔软光滑的白色。她常常感到一种割裂感——自己温暖可亲的外表，与内里安静、内敛的灵魂之间，似乎总是隔着一层。 雪花从桌上拿起一把梳子，开始梳理。好了，现在她看...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-10-1-STATS380-3-data-stru/" title="【STATS 380】 3 R Data Structures"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【STATS 380】 3 R Data Structures</div></div><div class="info-2"><div class="info-item-1">Matrices Most of the data that we have seen so far have been vectors: a one-dimensional structure containing zero-or-more values, all of the same type (all numeric, all character, or all logical). 11:12 A matrix is a two-dimensional structure containing zero-or-more values, all of the same type. Creating Matrices We can create a matrix with the matrix() function. This takes a vector of values as the first argument and then subsequent arguments describe the dimensions (rows and columns) of the...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/18/26-8-10-1-STATS380-3-data-stru/" title="【STATS 380】 3 R Data Structures"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-17</div><div class="info-item-2">【STATS 380】 3 R Data Structures</div></div><div class="info-2"><div class="info-item-1">Matrices Most of the data that we have seen so far have been vectors: a one-dimensional structure containing zero-or-more values, all of the same type (all numeric, all character, or all logical). 11:12 A matrix is a two-dimensional structure containing zero-or-more values, all of the same type. Creating Matrices We can create a matrix with the matrix() function. This takes a vector of values as the first argument and then subsequent arguments describe the dimensions (rows and columns) of the...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-13-1-STATS380-4-prog/" title="【STATS 380】 4 R Programming"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-17</div><div class="info-item-2">【STATS 380】 4 R Programming</div></div><div class="info-2"><div class="info-item-1">Control Flow In the most simple R “program” (or “script”), we have a series of R expressions that are evaluated in the order that they occur. For example in the code below, x = 1 is evaluated first, then y = 2, then x + y. 123x = 1y = 2x + y Use &#123;&#125; to form compound expressions. The value of the compound expression is the outcome of the last expression. 12345678910&#123;    x = 1    y = 2    x + y&#125;# [1] 3&#123;x = 1; y = 2; x + y&#125;# [1] 3&#123;1; 2; 3; 4; 5; &quot;*&quot;&#1...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-3-1-STATS380-2-graphics/" title="【STATS 380】 2 R Graphics"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-17</div><div class="info-item-2">【STATS 380】 2 R Graphics</div></div><div class="info-2"><div class="info-item-1">The plot() Function Creating a plot is often as simple as a single call to the plot() function. The first two arguments are x and y and the type of plot that is produced will depend on the type of values in x and y. 123456789101112b1day = beaver1$dayb1time = beaver1$timeb1temp = beaver1$tempb1active = beaver1$activeb1hour = (b1day - min(b1day))*24 + (b1time %/% 100) + (b1time %% 100)/60x = b1houry = b1tempz = b1activplot(x, y)  By executing ?plot, we can see there both exist a plot() function...</div></div></div></a><a class="pagination-related" href="/2025/10/20/25-10-16-1-STATS330-intro/" title="【STATS 330】 Introduction"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-20</div><div class="info-item-2">【STATS 330】 Introduction</div></div><div class="info-2"><div class="info-item-1">This course is about statistical modelling. We will expand on the generalised linear model (GLM) encountered in STATS 201/8. It comprises four parts:  Generalised linear models Simulation and bootstrapping Regression models for prediction Regression models for explanation  This course provides a versatile statistical toolbox that is useful in a range of fields, including almost all subjects in business and economics, along with experimental or social science. Course Link Prof. Jing Liu’s Emai...</div></div></div></a><a class="pagination-related" href="/2025/11/02/25-10-31-1-STATS330-2-explanatory/" title="【STATS 330】 Handout 2 Explanatory Terms and Interpretation"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="info-item-2">【STATS 330】 Handout 2 Explanatory Terms and Interpretation</div></div><div class="info-2"><div class="info-item-1">Intepretation: Numeric Explanatory Variables Linear Regression \[ y_i = \beta_0 + \beta_1 x_i + \epsilon_i \\\\ \epsilon \sim {\rm iid \ Normal}(0, \sigma_i^2) \]  When \(x\) is zero, the expected value of the response is \(\beta_0\). For every one-unit increase in \(x\), the expected value of the response increases by \(\beta_1\).  Poisson Regression \[ \log(\mu_i) = \beta_0 + \beta_1 x_i \\\\ Y_i \sim {\rm Poisson}(\mu_i) \]  When \(x\) is zero, the expected value of the response is \(\beta...</div></div></div></a><a class="pagination-related" href="/2025/11/03/25-11-2-1-STATS330-3-param-esti/" title="【STATS 330】 Handout 3 Parameter Estimation for Generalised Linear Models"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/remy.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-11-02</div><div class="info-item-2">【STATS 330】 Handout 3 Parameter Estimation for Generalised Linear Models</div></div><div class="info-2"><div class="info-item-1">Parameter Estimation Parameter estimation involves determining values for a model’s coefficients (or “parameters”) that “best” fit the data at hand.  For linear regression models, we can use the sum of the squared residuals(\(RSS\)). For generalised linear models, we can use the likelihood function(\(L(p;x)\)).  Least Squares Estimation The residual sum of squares is given by \[ RSS = \sum_{i = 1}^n (y_i - \hat{\mu_i})^2 \] The lower the \(RSS\) is, the “better” the candidate set of the param...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">139</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#why-learn-to-write-r-code"><span class="toc-number">1.</span> <span class="toc-text">Why Learn to Write R Code?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#beaver-body-temperature"><span class="toc-number">1.1.</span> <span class="toc-text">Beaver Body Temperature</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tidy-data"><span class="toc-number">1.2.</span> <span class="toc-text">Tidy Data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#graphics"><span class="toc-number">1.3.</span> <span class="toc-text">Graphics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#developing-code"><span class="toc-number">1.4.</span> <span class="toc-text">Developing Code</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deconstructing-r"><span class="toc-number">2.</span> <span class="toc-text">Deconstructing R</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rstudio"><span class="toc-number">2.1.</span> <span class="toc-text">RStudio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#a-note-on-tidyverse"><span class="toc-number">2.2.</span> <span class="toc-text">A Note on Tidyverse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#r-basics"><span class="toc-number">3.</span> <span class="toc-text">R Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-r-language"><span class="toc-number">3.1.</span> <span class="toc-text">The R Language</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#expression"><span class="toc-number">3.2.</span> <span class="toc-text">Expression</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#numbers-and-text"><span class="toc-number">3.2.1.</span> <span class="toc-text">Numbers and Text</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#text"><span class="toc-number">3.2.2.</span> <span class="toc-text">Text</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#arithmetic"><span class="toc-number">3.2.3.</span> <span class="toc-text">Arithmetic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#symbols-and-assigment"><span class="toc-number">3.2.4.</span> <span class="toc-text">Symbols and Assigment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#function-calls"><span class="toc-number">3.2.5.</span> <span class="toc-text">Function Calls</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vectors"><span class="toc-number">3.3.</span> <span class="toc-text">Vectors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vectorisation-and-the-recycling-rule"><span class="toc-number">3.4.</span> <span class="toc-text">Vectorisation and The Recycling Rule</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generating-vectors"><span class="toc-number">3.5.</span> <span class="toc-text">Generating Vectors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#logical-vectors"><span class="toc-number">3.6.</span> <span class="toc-text">Logical Vectors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#finite-precision"><span class="toc-number">3.7.</span> <span class="toc-text">Finite Precision</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#important-numeric-functions"><span class="toc-number">3.8.</span> <span class="toc-text">Important Numeric Functions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#important-character-functions"><span class="toc-number">3.9.</span> <span class="toc-text">Important Character Functions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#type-coercion"><span class="toc-number">3.10.</span> <span class="toc-text">Type Coercion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#subsetting"><span class="toc-number">3.11.</span> <span class="toc-text">Subsetting</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sorting-and-ordering"><span class="toc-number">3.12.</span> <span class="toc-text">Sorting and ordering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#special-values"><span class="toc-number">3.13.</span> <span class="toc-text">Special Values</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list"><span class="toc-number">3.14.</span> <span class="toc-text">List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#formula"><span class="toc-number">3.15.</span> <span class="toc-text">Formula</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-summary-statistics"><span class="toc-number">4.</span> <span class="toc-text">Example: Summary Statistics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-two-sample-t-test"><span class="toc-number">5.</span> <span class="toc-text">Example: Two-Sample T-Test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#example-greyser-eruption"><span class="toc-number">6.</span> <span class="toc-text">Example: Greyser Eruption</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/08/20/26-8-19-1-COMPSCI335-11-data-perf/" title="【COMPSCI 335】 L11 Customized Data Formats, Performance"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 L11 Customized Data Formats, Performance"/></a><div class="content"><a class="title" href="/2026/08/20/26-8-19-1-COMPSCI335-11-data-perf/" title="【COMPSCI 335】 L11 Customized Data Formats, Performance">【COMPSCI 335】 L11 Customized Data Formats, Performance</a><time datetime="2026-08-20T06:05:21.000Z" title="发表于 2026-08-20 14:05:21">2026-08-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/08/18/26-8-12-1-COMPSCI335-10-auth/" title="【COMPSCI 335】 L10 Authentication and Authorisation"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 L10 Authentication and Authorisation"/></a><div class="content"><a class="title" href="/2026/08/18/26-8-12-1-COMPSCI335-10-auth/" title="【COMPSCI 335】 L10 Authentication and Authorisation">【COMPSCI 335】 L10 Authentication and Authorisation</a><time datetime="2026-08-18T06:22:51.000Z" title="发表于 2026-08-18 14:22:51">2026-08-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/08/18/26-8-3-1-STATS380-2-graphics/" title="【STATS 380】 2 R Graphics"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【STATS 380】 2 R Graphics"/></a><div class="content"><a class="title" href="/2026/08/18/26-8-3-1-STATS380-2-graphics/" title="【STATS 380】 2 R Graphics">【STATS 380】 2 R Graphics</a><time datetime="2026-08-17T13:40:25.000Z" title="发表于 2026-08-17 21:40:25">2026-08-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/08/18/26-8-13-1-STATS380-4-prog/" title="【STATS 380】 4 R Programming"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【STATS 380】 4 R Programming"/></a><div class="content"><a class="title" href="/2026/08/18/26-8-13-1-STATS380-4-prog/" title="【STATS 380】 4 R Programming">【STATS 380】 4 R Programming</a><time datetime="2026-08-17T13:38:33.000Z" title="发表于 2026-08-17 21:38:33">2026-08-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/08/18/26-8-10-1-STATS380-3-data-stru/" title="【STATS 380】 3 R Data Structures"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/stats380_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【STATS 380】 3 R Data Structures"/></a><div class="content"><a class="title" href="/2026/08/18/26-8-10-1-STATS380-3-data-stru/" title="【STATS 380】 3 R Data Structures">【STATS 380】 3 R Data Structures</a><time datetime="2026-08-17T13:38:23.000Z" title="发表于 2026-08-17 21:38:23">2026-08-17</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.8.3+26.8.21.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.1.2/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@11.16.0/dist/mermaid.min.js?v=undefined"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
