@@ -1,0 +1,832 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 335】 Week 7 HTML &amp; CSS | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="HTML HTML HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s. An Example 12345678910&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Our First HTML d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 335】 Week 7 HTML &amp; CSS">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="HTML HTML HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s. An Example 12345678910&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Our First HTML d">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp">
+<meta property="article:published_time" content="2026-10-04T09:30:56.000Z">
+<meta property="article:modified_time" content="2026-10-04T04:30:56.947Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta property="article:tag" content="网络编程与分布式服务">
+<meta property="article:tag" content="C# 语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 335】 Week 7 HTML & CSS",
+  "url": "https://remy-campanella.github.io/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp",
+  "datePublished": "2026-10-04T09:30:56.000Z",
+  "dateModified": "2026-10-04T04:30:56.947Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 335】 Week 7 HTML & CSS',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci335_cover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 335】 Week 7 HTML &amp; CSS</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 335】 Week 7 HTML &amp; CSS</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-04T09:30:56.000Z" title="发表于 2026-10-04 17:30:56">2026-10-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-04T04:30:56.947Z" title="更新于 2026-10-04 12:30:56">2026-10-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-335-Web-Programming-and-Distributed-Services/">COMPSCI 335 Web Programming and Distributed Services</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="html">HTML</h1>
+<h2 id="html-1">HTML</h2>
+<p>HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s.</p>
+<h3 id="an-example">An Example</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Our First HTML document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Our sample heading<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Our sample paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>DOCTYPE</code> tells a browser the version of the HTML document. It is an artifact of the history of HTML. The content of the <code>DOCTYPE</code> changed through versions, and <strong>HTML5</strong> simplified it to just this: <code>&lt;!DOCTYPE html&gt;</code> meaning the current version of HTML.</p>
+<p>The root element of the HTML document is <code>&lt;html&gt;</code> which contains two child elements: <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>.</p>
+<ul>
+<li>The <code>&lt;body&gt;</code> element contains the data we see displayed on the browser.</li>
+<li>The <code>&lt;head&gt;</code> element contains <strong>metadata</strong> (that helps to render the data in the <code>&lt;body&gt;</code>). For example, <code>&lt;title&gt;</code> is not displayed in the HTML display of the browser, but browsers typically show this title in the <strong>browser window’s title bar</strong>.</li>
+</ul>
+<h2 id="elements">Elements</h2>
+<h3 id="head-and-body">Head and Body</h3>
+<h3 id="html-elements">HTML Elements</h3>
+<p>An element contains a <strong>start tag</strong>, an <strong>end tag</strong>, and <strong>content</strong> in between. The start and end tags describe the content within tags, which is also known the <strong>value</strong> if the element.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>Our forst element.<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="sematic-elements">Sematic Elements</h3>
+<p>Semantic elements <strong>define the meaning of the content</strong> they contain.</p>
+<h3 id="text-composition">Text Composition</h3>
+<p>We have elements to specify <em>italics</em> <code>&lt;i&gt;</code>, <strong>boldface</strong> <code>&lt;b&gt;</code>, <em>emphasize</em> <code>&lt;em&gt;</code>, <u>underline</u> <code>&lt;u&gt;</code>, and <s>strikethrough</s> <code>&lt;s&gt;</code>. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">i</span>&gt;</span>italics<span class="tag">&lt;/<span class="name">i</span>&gt;</span>, <span class="tag">&lt;<span class="name">b</span>&gt;</span>boldface<span class="tag">&lt;/<span class="name">b</span>&gt;</span>, <span class="tag">&lt;<span class="name">em</span>&gt;</span>emphasize<span class="tag">&lt;/<span class="name">em</span>&gt;</span>, <span class="tag">&lt;<span class="name">u</span>&gt;</span>underline<span class="tag">&lt;/<span class="name">u</span>&gt;</span>, <span class="tag">&lt;<span class="name">s</span>&gt;</span>strikethrough<span class="tag">&lt;/<span class="name">s</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<iframe
+width=100%
+    srcdoc="<i>italics</i>, <b>boldface</b>, <em>emphasize</em>, <u>underline</u>, <s>strikethrough</s>">
+<iframe>
+<hr />
+<p>We can put code fragments in <code>&lt;code&gt;</code>, keyboard input in <code>&lt;kbd&gt;</code>, sample output in <code>&lt;samp&gt;</code>, variables(in context of math) in <code>&lt;var&gt;</code>.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">code</span>&gt;</span>code fragments<span class="tag">&lt;/<span class="name">code</span>&gt;</span>, <span class="tag">&lt;<span class="name">kbd</span>&gt;</span>keyboard<span class="tag">&lt;/<span class="name">kbd</span>&gt;</span>, <span class="tag">&lt;<span class="name">samp</span>&gt;</span>sample<span class="tag">&lt;/<span class="name">samp</span>&gt;</span>, <span class="tag">&lt;<span class="name">var</span>&gt;</span>variables<span class="tag">&lt;/<span class="name">var</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr />
+<iframe width="100%" srcdoc="&lt;code&gt;code fragments&lt;/code&gt;, &lt;kbd&gt;keyboard&lt;/kbd&gt;, &lt;samp&gt;sample&lt;/samp&gt;, &lt;var&gt;variables&lt;/var&gt;">
+</iframe>
+<hr />
+<p><code>&lt;pre&gt;</code> contains <strong>preformatted text</strong>. That’ll be rendered exactly as they are written, using <strong>monospaced</strong> font. <code>&lt;pre&gt;</code> is used if we want to display a code fragment. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">code</span>&gt;</span></span><br><span class="line">const fac1 = (n) =&gt; n &lt;= 1 ? 1 : n * fac1(n - 1);</span><br><span class="line">    <span class="tag">&lt;/<span class="name">code</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">code</span>&gt;</span></span><br><span class="line">const fac2 = (n) =&gt; &#123;</span><br><span class="line">const facT = (n, a) =&gt; n &lt;= 1 ? a : facT(n - 1, n * a);</span><br><span class="line">return facT(n, 1);</span><br><span class="line">&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">code</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<iframe width="100%" srcdoc="&lt;pre&gt;
+    &lt;code&gt;
+const fac1 = (n) =&gt; n &lt;= 1 ? 1 : n * fac1(n - 1);
+    &lt;/code&gt;
+    &lt;code&gt;
+const fac2 = (n) =&gt; {
+    const facT = (n, a) =&gt; n &lt;= 1 ? a : facT(n - 1, n * a);
+    return facT(n, 1);
+}
+    &lt;/code&gt;
+&lt;/pre&gt;">
+</iframe>
+<hr />
+<h3 id="commonly-used-html-elements">Commonly Used HTML Elements</h3>
+<ul>
+<li><code>&lt;h1&gt;</code> ~ <code>&lt;h6&gt;</code>: Headings.</li>
+<li><code>&lt;p&gt;</code>: Paragraph.</li>
+</ul>
+<h3 id="div-and-span"><code>&lt;div&gt;</code> and <code>&lt;span&gt;</code></h3>
+<p>Both are containers. There are no semantic meaning to these containers. They simply are used for grouping and organization.</p>
+<ul>
+<li>The <code>&lt;div&gt;</code> containers identify block sections.</li>
+<li>Similarly the <code>&lt;span&gt;</code> containers identify inline sections.</li>
+</ul>
+<h2 id="attributes-and-more-elements">Attributes and More Elements</h2>
+<h3 id="attribute">Attribute</h3>
+<p>HTML elements can have attributes attached to them.</p>
+<ul>
+<li>E.g., <code>&lt;a href="https://dividni.com"&gt;Dividni&lt;/a&gt;</code></li>
+<li>The attribute values are quoted. Both <code>""</code> and <code>''</code> are fine.</li>
+</ul>
+<p>The attribute <code>lang</code> of <code>&lt;html lang="en"&gt;</code> specifies the language of the document (e.g., <code>en</code> for English).</p>
+<h3 id="hyperlink">Hyperlink</h3>
+<p>Hyperlinks are called <strong>anchors</strong>. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;https://remy-campanella.github.io&quot;</span>&gt;</span>Remy Campanella<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" srcdoc="&lt;a href=&quot;https://remy-campanella.github.io&quot;&gt;Remy Campanella&lt;/a&gt;">
+</iframe>
+<p>In-Page navigation is achieved by using element IDs and referring to these element IDs within the anchors. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#Hyperlink&quot;</span>&gt;</span>Hyperlink<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><a href="#Hyperlink">Hyperlink</a></p>
+<p>This will link to an element with <code>id="Hyperlink"</code>.</p>
+<h3 id="iframe"><code>iframe</code></h3>
+<p>The iframe element allows us to embed someone else’s web content in our own HTML. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">&quot;https://remy-campanella.github.io&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe src="https://remy-campanella.github.io">
+</iframe>
+<p>We can embed a video using <code>iframe</code>. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">src</span>=<span class="string">&quot;//player.bilibili.com/player.html?isOutside=true&amp;aid=1706416465&amp;bvid=BV1UT42167xb&amp;cid=1641702404&amp;p=1&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">scrolling</span>=<span class="string">&quot;no&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">border</span>=<span class="string">&quot;0&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">frameborder</span>=<span class="string">&quot;no&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">framespacing</span>=<span class="string">&quot;0&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">allowfullscreen</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=1706416465&amp;bvid=BV1UT42167xb&amp;cid=1641702404&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+</iframe>
+<h2 id="list-tables">List &amp; Tables</h2>
+<h3 id="html-lists">HTML Lists</h3>
+<ul>
+<li>Ordered list: <code>&lt;ol&gt;</code></li>
+<li>Unordered list: <code>&lt;ul&gt;</code></li>
+<li>List contain list items: <code>&lt;li&gt;</code></li>
+</ul>
+<p>Ordered lists have a type attribute. Value <code>1</code> is decimal number, <code>a</code> is lowercase alpha, <code>A</code> uppercase alpha, <code>i</code> is roman lowercase numerals, and <code>I</code> is roman uppercase numerals. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;1&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hobbiton<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Rototua<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Taupo<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>SH 43<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;a&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hobbiton<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Rototua<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Taupo<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>SH 43<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;A&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hobbiton<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Rototua<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Taupo<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>SH 43<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;i&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hobbiton<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Rototua<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Taupo<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>SH 43<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span> <span class="attr">type</span>=<span class="string">&quot;I&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hobbiton<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Rototua<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Taupo<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>SH 43<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<iframe width="100%" srcdoc="&lt;ol type=&quot;1&quot;&gt;
+    &lt;li&gt;Hobbiton&lt;/li&gt;
+    &lt;li&gt;Rototua&lt;/li&gt;
+    &lt;li&gt;Taupo&lt;/li&gt;
+    &lt;li&gt;SH 43&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol type=&quot;a&quot;&gt;
+    &lt;li&gt;Hobbiton&lt;/li&gt;
+    &lt;li&gt;Rototua&lt;/li&gt;
+    &lt;li&gt;Taupo&lt;/li&gt;
+    &lt;li&gt;SH 43&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol type=&quot;A&quot;&gt;
+    &lt;li&gt;Hobbiton&lt;/li&gt;
+    &lt;li&gt;Rototua&lt;/li&gt;
+    &lt;li&gt;Taupo&lt;/li&gt;
+    &lt;li&gt;SH 43&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol type=&quot;i&quot;&gt;
+    &lt;li&gt;Hobbiton&lt;/li&gt;
+    &lt;li&gt;Rototua&lt;/li&gt;
+    &lt;li&gt;Taupo&lt;/li&gt;
+    &lt;li&gt;SH 43&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol type=&quot;I&quot;&gt;
+    &lt;li&gt;Hobbiton&lt;/li&gt;
+    &lt;li&gt;Rototua&lt;/li&gt;
+    &lt;li&gt;Taupo&lt;/li&gt;
+    &lt;li&gt;SH 43&lt;/li&gt;
+&lt;/ol&gt;">
+</iframe>
+<hr />
+<h3 id="html-tables">HTML Tables</h3>
+<ul>
+<li>Tables are denoted by <code>&lt;table&gt;</code>.</li>
+<li>Each table has a number of rows: <code>&lt;tr&gt;</code></li>
+<li>Each row has a number of data cells (making up the columns): <code>&lt;td&gt;</code></li>
+<li>We can also have heading cells replacing some of the data cells: <code>&lt;th&gt;</code></li>
+</ul>
+<p>As tables get more complex, one can add further structure by using <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, and <code>&lt;tfoot&gt;</code> elements to the tables. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">th</span>&gt;</span>Name<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;<span class="name">th</span>&gt;</span>Number<span class="tag">&lt;/<span class="name">th</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>Bond<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>007<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>Lucifer<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>006<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>Remy<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>114514<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" srcdoc="&lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Number&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Bond&lt;/td&gt;&lt;td&gt;007&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Lucifer&lt;/td&gt;&lt;td&gt;006&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Remy&lt;/td&gt;&lt;td&gt;114514&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;">
+</iframe>
+<h2 id="void-elements">Void Elements</h2>
+<p>Most HTML elements contain some content. E.g., <code>&lt;p&gt;Hello!&lt;/p&gt;</code> or <code>&lt;p&gt;&lt;em&gt;Hello!&lt;/em&gt;&lt;p&gt;</code>. Some HTML elements have no content, <em>i.e.</em>, <strong>contain nothing</strong> – no text nor child elements These are called <strong>void elements</strong>.</p>
+<p>The following are some common examples of void elements: <code>&lt;br&gt;</code>(line break), <code>&lt;hr&gt;</code>(horizontal line), <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;link&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;embed&gt;</code>.</p>
+<p>Void elements has no closing tag, but use self-closing. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;114514&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="images">Images</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;https://remy-campanella.github.io/album/mianyang/my_sight/IMG_20260109_155355.webp&quot;</span> <span class="attr">alt</span>=<span class="string">&quot;好人好马上三线，备战备荒为人民&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" srcdoc="&lt;body style=&quot;margin: 0;&quot;&gt;
+    &lt;img src=&quot;https://remy-campanella.github.io/album/mianyang/my_sight/IMG_20260109_155355.webp&quot; alt=&quot;好人好马上三线，备战备荒为人民&quot; style=&quot;display: block; width: 100%; height: auto;&quot;&gt;
+&lt;/body&gt;">
+</iframe>
+<p>The mandatory <code>alt</code> attribute contains a textual replacement for the image and is useful for accessibility.</p>
+<h3 id="video-and-audio">Video and Audio</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span>=<span class="string">&quot;controls&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;/album/mianyang/cdmycq_transport/VID_20260626_084016.webm&quot;</span> <span class="attr">type</span>=<span class="string">&quot;video/mp4&quot;</span> /&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<video controls="controls" width="100%">
+<source src="/album/mianyang/cdmycq_transport/VID_20260626_084016.webm" type="video/mp4" />
+</video>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">controls</span>=<span class="string">&quot;controls&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;https://audiocdn.epidemicsound.com/lqmp3/01KK865ADF82ZYD6VDD230VFJ6.mp3&quot;</span> <span class="attr">type</span>=<span class="string">&quot;audio/mpeg&quot;</span> /&gt;</span><span class="tag">&lt;/<span class="name">audio</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<audio controls="controls">
+<source src="https://audiocdn.epidemicsound.com/lqmp3/01KK865ADF82ZYD6VDD230VFJ6.mp3" type="audio/mpeg" />
+</audio>
+<p>We can have <strong>multiple</strong> <code>&lt;source&gt;</code> tags within <code>&lt;video&gt;</code> and <code>&lt;audio&gt;</code>. This lets us define multiple files for the browser to choose from. The browser selects the first <code>&lt;source&gt;</code> it can support.</p>
+<h3 id="user-input">User Input</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>User: <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;username&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> /&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span>Password: <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;pass&quot;</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> /&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;agree&quot;</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> /&gt;</span> I agree to the terms <span class="symbol">&amp;amp;</span> conditions.<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" srcdoc="&lt;div&gt;
+    &lt;label&gt;User: &lt;input id=&quot;username&quot; type=&quot;text&quot; /&gt;&lt;/label&gt;
+    &lt;label&gt;Password: &lt;input id=&quot;pass&quot; type=&quot;password&quot; /&gt;&lt;/label&gt;
+    &lt;label&gt;&lt;input id=&quot;agree&quot; type=&quot;checkbox&quot; /&gt; I agree to the terms &amp; conditions.&lt;/label&gt;
+    &lt;button type=&quot;button&quot;&gt;Login&lt;/button&gt;
+&lt;/div&gt;">
+</iframe>
+<p>The <code>&lt;form&gt;</code> element provides a semantic container for related input items, making it a better choice than a non-semantic <code>&lt;div&gt;</code> for user input. However, the browser automatically handles form submission and validation, which often leads to unexpected behaviour if not properly controlled using JavaScript. Avoid using <code>&lt;form&gt;</code>s, and use <code>&lt;div&gt;</code> instead – at least when we are learning the ropes.</p>
+<h3 id="buttons">Buttons</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe srcdoc="&lt;button type=&quot;button&quot;&gt;Login&lt;/button&gt;">
+</iframe>
+<p>We must use the type attribute of the button tag to explicitly state the type of the button. <strong>We shall not rely on the default type.</strong> Generally, we will want to use the type button as the example above shows. For the curious, the default button type is submit which can throw curveballs.</p>
+<h2 id="unicode-and-entities">Unicode and Entities</h2>
+<h3 id="unicode-characters">Unicode Characters</h3>
+<p>HTML understands Unicode much like any other modern computer language does. To use Unicode, add <code>&lt;meta charset="utf-8"/&gt;</code> to the <code>&lt;head&gt;</code> element as the very first element of <code>&lt;head&gt;</code>.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Tāmaki Makaurau<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>Takānini<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>Ōrākei<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>Māngere<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;/&gt;
+    &lt;title&gt;Tāmaki Makaurau&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;ol&gt;
+        &lt;li&gt;Takānini&lt;/li&gt;
+        &lt;li&gt;Ōrākei&lt;/li&gt;
+        &lt;li&gt;Māngere&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/body&gt;
+&lt;/html&gt;">
+</iframe>
+<h3 id="html-entities">HTML Entities</h3>
+<p>In the past, HTML had the so-called HTML entities that allowed us to add certain symbols: <em>e.g.</em>, <code>&amp;copy;</code> is the entity that denotes the copyright symbol ©.</p>
+<p>These are no longer required since we can use Unicode symbols directly in HTML, improving readability considerably.</p>
+<p>However, there are four special entities that we commonly use.</p>
+<table>
+<thead>
+<tr>
+<th>Character</th>
+<th>Entities</th>
+<th>Render</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;</code></td>
+<td><code>&amp;lt;</code></td>
+<td>&lt;</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td><code>&amp;gt;</code></td>
+<td>&gt;</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td><code>&amp;amp;</code></td>
+<td>&amp;</td>
+</tr>
+<tr>
+<td>non-breaking space</td>
+<td><code>&amp;nbsp;</code></td>
+<td> </td>
+</tr>
+</tbody>
+</table>
+<h2 id="closing-remarks">Closing Remarks</h2>
+<h3 id="custom-attributes">Custom Attributes</h3>
+<p>Custom <code>data-*</code> attributes allow us to embed <strong>custom</strong>, <strong>private</strong> data into HTML elements. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">data-foo</span>=<span class="string">&quot;bar&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Custom <code>data-*</code> attributes are useful when we need to add metadata to table cells, flexboxes, <em>etc.</em></p>
+<h1 id="cascading-stylesheetcss">Cascading Stylesheet(CSS)</h1>
+<p>CSS is a language that describes the presentation aspects(look &amp; format) of an HTML document. It controls how HTML elements are displayed, including layout, colors, fonts, and responsiveness. This allows separation of concerns between the document’s content and the document’s presentation. “Cascading” refers to how styles are applied in a hierarchy, resolving conflicts between multiple style rules.</p>
+<h2 id="styling-basics">Styling Basics</h2>
+<h3 id="inline-styles">Inline Styles</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">style</span>=<span class="string">&quot;font-family: &#x27;Times New Roman&#x27;; color: red;&quot;</span>&gt;</span></span><br><span class="line">    This is a heading</span><br><span class="line">    <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>This is a paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Page Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 style=&quot;font-family: &#39;Times New Roman&#39;; color: red;&quot;&gt;
+    This is a heading
+    &lt;/h1&gt;
+    &lt;p&gt;This is a paragraph.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;">
+</iframe>
+<p>Inline styles are for one-off styling or for small adjustments. They are not scalable or reusable.</p>
+<h3 id="internal-styles">Internal Styles</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="selector-tag">h1</span> &#123; <span class="attribute">font-family</span>: <span class="string">&#x27;Times New Roman&#x27;</span>; <span class="attribute">color</span>: red; &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-tag">p</span> &#123; <span class="attribute">font-family</span>: <span class="string">&#x27;Times New Roman&#x27;</span>; <span class="attribute">color</span>: black; &#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is a heading<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>This is a paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" src="/assets/26-9-22-1-COMPSCI335-7-html-css/internal-styles.html">
+</iframe>
+<p>Internal styles are useful when used in a single HTML page However, they are not reusable if we want to use them across multiple HTML pages.</p>
+<h3 id="external-styles">External Styles</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/assets/26-9-22-1-COMPSCI335-7-html-css/external-styles.css&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>This is a heading<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>This is a paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h1</span> &#123; </span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&#x27;Times New Roman&#x27;</span>; </span><br><span class="line">    <span class="attribute">color</span>: red; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123; </span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&#x27;Times New Roman&#x27;</span>; </span><br><span class="line">    <span class="attribute">color</span>: black; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<iframe width="100%" src="/assets/26-9-22-1-COMPSCI335-7-html-css/external-styles.html">
+</iframe>
+<p>The styles are in a separate file and therefore are reusable across multiple HTML pages.</p>
+<ul>
+<li>Easier maintenance</li>
+<li>Suits large projects quite well</li>
+<li>Since the styles are external, we need an <strong>additional HTTP request</strong> to the server to fetch the style file</li>
+</ul>
+<h2 id="css-syntax">CSS Syntax</h2>
+<p>Format: <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;selector&gt; &#123;</span><br><span class="line">    &lt;property&gt;: &lt;value&gt;;</span><br><span class="line">    &lt;property&gt;: &lt;value&gt;;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="selector">Selector</h3>
+<p>The element selector (such as the <code>h1 &#123; ... &#125;</code> we saw earlier) is a basic selector that allows selecting <strong>all the named elements</strong> (such as <code>h1</code>, in our example).</p>
+<p>We also have a universal selector, written <code>*</code>, that selects all elements. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* &#123;</span><br><span class="line">    <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="id-selector">ID Selector</h3>
+<p><strong>Instances</strong> of an HTML element (e.g., <code>&lt;h1 id="header-1"&gt;</code>) can be separately styled. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/assets/26-9-22-1-COMPSCI335-7-html-css/id-selector.css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">id</span>=<span class="string">&quot;title&quot;</span>&gt;</span>This is a heading with id = &quot;title&quot;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>This is a paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Here&#x27;s another heading<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>And another paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#title</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;Times New Roman&quot;</span>;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;Times New Roman&quot;</span>;</span><br><span class="line">    <span class="attribute">color</span>: black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" src="/assets/26-9-22-1-COMPSCI335-7-html-css/id-selector.html">
+</iframe>
+<h3 id="class-selector">Class Selector</h3>
+<p>Classes allow us to style related instances of many HTML elements together. Such instances are uniquely identified by a class attribute of the HTML element. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/assets/26-9-22-1-COMPSCI335-7-html-css/id-selector.css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">&quot;town&quot;</span>&gt;</span>Ponyville<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;town&quot;</span>&gt;</span>The home of the Elements of Harmony.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.town</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;Times New Roman&quot;</span>;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#4099ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" src="/assets/26-9-22-1-COMPSCI335-7-html-css/class-selector.html">
+</iframe>
+<h3 id="grouping-selectors">Grouping Selectors</h3>
+<p>Grouping selectors help us to apply the same style to multiple elements. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h1</span>, <span class="selector-tag">h2</span>, <span class="selector-tag">h3</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="descendant-selector">Descendant Selector</h3>
+<p>Descendant selectors target elements nested inside others. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Page Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;/assets/26-9-22-1-COMPSCI335-7-html-css/descendant-selector.css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>A paragraph out of <span class="tag">&lt;<span class="name">code</span>&gt;</span>div<span class="tag">&lt;/<span class="name">code</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>A paragraph in <span class="tag">&lt;<span class="name">code</span>&gt;</span>div<span class="tag">&lt;/<span class="name">code</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" src="/assets/26-9-22-1-COMPSCI335-7-html-css/descendant-selector.html">
+</iframe>
+<h3 id="combinators">Combinators</h3>
+<p>Child <code>div &gt; p</code> will find the <strong>direct children</strong> <code>p</code> of <code>div</code>.</p>
+<p>Adjacent sibling <code>h2 + p</code> will select the element <code>&lt;p&gt;</code> immediately following another element <code>&lt;h2&gt;</code>.</p>
+<p>General sibiling <code>h2 ~ p</code> selects all matching siblings <code>&lt;p&gt;</code> that follow another element <code>&lt;p&gt;</code>.</p>
+<h3 id="common-css-properties">Common CSS Properties</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td>Text color.</td>
+</tr>
+<tr>
+<td><code>font-size</code></td>
+<td>Size of the font.</td>
+</tr>
+<tr>
+<td><code>font-family</code></td>
+<td>Type of font.</td>
+</tr>
+<tr>
+<td><code>font-weight</code></td>
+<td>Weight of the font.</td>
+</tr>
+<tr>
+<td><code>text-align</code></td>
+<td>Horizontal alignment (e.g., left, center, right).</td>
+</tr>
+<tr>
+<td><code>text-decoration</code></td>
+<td>Adds decoration like underline or none.</td>
+</tr>
+<tr>
+<td><code>background-color</code></td>
+<td>background color of an element.</td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>Adds an image as the background.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="css-box-model">CSS Box Model</h2>
+<p>The box model is the foundation of layout in CSS. It consists of:</p>
+<ul>
+<li>Content: The content inside the element.</li>
+<li>Border: The edge of the element.</li>
+<li>Padding: Space between the content and the border.</li>
+<li>Margin: Space between the element and others.</li>
+</ul>
+<h3 id="centering-a-block-element">Centering a Block Element</h3>
+<p>To center a block element horizontally, we set <code>margin</code> to <code>auto</code> and define a specific width for the element. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">margin</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>width: 50%</code> makes the element take up 50% of the container’s width, and the <code>margin</code> ensures it’s centered.</p>
+<h2 id="the-display-css-property">The Display CSS Property</h2>
+<h3 id="block-vs.-inline-display">Block vs. Inline Display</h3>
+<p>Block elements display one after the other like paragraphs in a document(<code>&lt;p&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;ul&gt;</code>, and <code>&lt;div&gt;</code>).</p>
+<p>Inline elements display one after the other like words in sentence(<code>&lt;a&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, and <code>&lt;span&gt;</code>).</p>
+<p>A block element can contain an inline element, but an inline element cannot contain a block element.</p>
+<p>The display property in CSS is a fundamental layout tool that controls how an element is visually formatted in the flow of the HTML document. It determines how an element behaves—whether it appears at all, takes up space, or how it interacts with other elements.</p>
+<h3 id="style-display-none">Style: <code>display: none</code></h3>
+<p>This completely removes the element from the rendering flow of the page.</p>
+<p>The element will not be visible, and it does not occupy any space in the layout. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;display: none&quot;</span>&gt;</span>you never see this one!!<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" srcdoc="&lt;p style=&quot;display: none&quot;&gt;you never see this one!!&lt;/p&gt;">
+</iframe>
+<p>This is an important mechanism we use for hiding elements based on conditions (<em>e.g.</em>, menus, modals). We also use it to toggle visibility without deleting the element from the HTML.</p>
+<p>If we hide an element using display: none and subsequently want to show the element, we would restore the original display status of the element.</p>
+<ul>
+<li><p>If the element is an <strong>inline element</strong>(such as <code>&lt;a&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, and <code>&lt;span&gt;</code>), then we restore the element using <code>display: inline</code> to show the element.</p></li>
+<li><p>If the element is a <strong>block element</strong>(such as <code>&lt;p&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;ul&gt;</code>, and <code>&lt;div&gt;</code>), then we restore the element using <code>display: block</code> to show the element.</p></li>
+</ul>
+<h3 id="style-visibility-hidden">Style: <code>visibility: hidden</code></h3>
+<p>With <code>visibility:hidden</code>, the element remains in the layout(like a ghost) and still occupies space in the page flow. We just can’t see it, and it is <strong>non-interactive</strong>. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is <span class="tag">&lt;<span class="name">span</span> <span class="attr">style</span>=<span class="string">&quot;visibility: hidden;&quot;</span>&gt;</span>invisible<span class="tag">&lt;/<span class="name">span</span>&gt;</span> text.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" srcdoc="&lt;p&gt;This is &lt;span style=&quot;visibility: hidden;&quot;&gt;invisible&lt;/span&gt; text.&lt;/p&gt;">
+</iframe>
+<p>When displaying a status message, we may want to show or hide it without affecting the layout of the page. In this case, using the visibility property is more appropriate than display, because it hides the element visually while still preserving its space in the layout.</p>
+<h3 id="the-css-opacity-property">The CSS Opacity Property</h3>
+<p>The opacity property in CSS controls the transparency level of an element, from 0(fully transparent) to 1(fully opaque).</p>
+<p>Opacity is inherited by child elements, meaning any nested elements will also have the same opacity.</p>
+<p>Example: an opacity of 0.5 makes the element 50% transparent, allowing elements behind it to be partially visible.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">    <span class="attribute">opacity</span>: <span class="number">50%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="flexbox">Flexbox</h2>
+<h3 id="flexible-displays">Flexible Displays</h3>
+<p>Flexbox provides an efficient and predictable way to arrange elements, especially when these elements have dynamic or unknown sizes. These elements are called the “flex items”. They will sit in a “flex container” and will be arranged nicely in this container automatically.</p>
+<p>The display value <code>flex</code> will set up a <strong>container</strong> for flexible display items. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: flex; flex-wrap: wrap;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" srcdoc="&lt;div style=&quot;display: flex; flex-wrap: wrap;&quot;&gt;&lt;/div&gt;">
+</iframe>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: flex; flex-wrap: wrap;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Tahi<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Rua<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Toru<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Whā<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Rima<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Ono<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Whitu<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" srcdoc="&lt;div style=&quot;display: flex; flex-wrap: wrap;&quot;&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Tahi&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rua&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Toru&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whā&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rima&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Ono&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whitu&lt;/div&gt;
+&lt;/div&gt;">
+</iframe>
+<iframe width="60%" srcdoc="&lt;div style=&quot;display: flex; flex-wrap: wrap;&quot;&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Tahi&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rua&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Toru&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whā&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rima&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Ono&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whitu&lt;/div&gt;
+&lt;/div&gt;">
+</iframe>
+<p>Change to <code>flex-wrap: nowrap;</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: flex; flex-wrap: nowrap;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Tahi<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Rua<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Toru<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Whā<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Rima<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Ono<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;</span>&gt;</span>Whitu<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<iframe width="100%" srcdoc="&lt;div style=&quot;display: flex; flex-wrap: nowrap;&quot;&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Tahi&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rua&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Toru&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whā&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rima&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Ono&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whitu&lt;/div&gt;
+&lt;/div&gt;">
+</iframe>
+<iframe width="60%" srcdoc="&lt;div style=&quot;display: flex; flex-wrap: nowrap;&quot;&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Tahi&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rua&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Toru&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whā&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Rima&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Ono&lt;/div&gt;
+&lt;div style=&quot;flex-basis: 20%; background-color: pink; margin: 1ex;&quot;&gt;Whitu&lt;/div&gt;
+&lt;/div&gt;">
+</iframe>
+<h2 id="the-nth-child">The <code>:nth-child</code></h2>
+<h3 id="pseudo-class-selectors">Pseudo-Class Selectors</h3>
+<p>A pseudo-class selector is a keyword added to a selector that targets elements based on their state or position. <code>:first-child</code> matches the first child of the parent, <code>:last-child</code> matches the last child of the parent. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">element <span class="selector-pseudo">:first-child</span> &#123; </span><br><span class="line">    property: value; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Here element is any HTML tag.</p>
+<h3 id="the-nth-child-1">The <code>:nth-child</code></h3>
+<p>The <code>:nth-child()</code> pseudo-class in CSS is a powerful selector used to target elements based on their position within their parent element. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">element <span class="selector-pseudo">:nth-child</span>( <span class="attribute">x</span> ) &#123; </span><br><span class="line">    property: value; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Here element is any HTML tag. The parameter <code>x</code> is a value (such as 2), a constant (such as odd or even) or a formula (<code>an + b</code>). In the formula <code>an + b</code>, <code>a</code> is a step value, and <code>b</code> is the starting point. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">li</span> <span class="selector-pseudo">:nth-child</span>(<span class="number">2</span>) &#123; </span><br><span class="line">    <span class="attribute">color</span>: blue; </span><br><span class="line">&#125; <span class="comment">/* select the 2nd &lt;li&gt; in any list */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">li</span> <span class="selector-pseudo">:nth-child</span>(<span class="number">1</span>) &#123; </span><br><span class="line">    <span class="attribute">color</span>: blue; </span><br><span class="line">&#125; <span class="comment">/* same as :first-child */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">li</span><span class="selector-pseudo">:nth-child</span>(odd) &#123; </span><br><span class="line">    <span class="attribute">color</span>: blue; </span><br><span class="line">&#125; <span class="comment">/* select every odd &lt;li&gt; in any list */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-id">#mylist</span> <span class="selector-tag">li</span><span class="selector-pseudo">:nth-child</span>(even) &#123; </span><br><span class="line">    <span class="attribute">color</span>: blue; </span><br><span class="line">&#125; <span class="comment">/* select even &lt;li&gt; in #mylist */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">li</span><span class="selector-pseudo">:nth-child</span>(<span class="number">3</span>n) &#123; </span><br><span class="line">    <span class="attribute">color</span>: blue; </span><br><span class="line">&#125; <span class="comment">/* select every 3rd &lt;li&gt; in any list */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">li</span><span class="selector-pseudo">:nth-child</span>(<span class="number">3</span>n+<span class="number">2</span>) &#123; </span><br><span class="line">    <span class="attribute">color</span>: blue; </span><br><span class="line">&#125; <span class="comment">/* select 2, 5, 8, 11, etc. */</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="media-queries">Media Queries</h2>
+<h3 id="media-queries-1">Media Queries</h3>
+<p>Media queries let us apply CSS styles based on the device’s media type (like screen or print) and specific features such as screen resolution, orientation, or aspect ratio. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="keyword">@media</span> print &#123;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.non-printable</span> &#123; <span class="attribute">display</span>: none; &#125;</span></span><br><span class="line"><span class="language-css">    &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;non-printable&quot;</span>&gt;</span></span><br><span class="line">    This sonnet is probably the most famous of all Shakespeare&#x27;s sonnets. To print it, press Ctrl+P (or select the Print option from your browser&#x27;s menu).</span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    Shall I compare thee to a summer&#x27;s day?<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    Thou art more lovely and more temperate:<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    Rough winds do shake the darling buds of May,<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    And summer&#x27;s lease hath all too short a date:<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    ...<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    So long as men can breathe or eyes can see,<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    So long lives this and this gives life to thee.<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<iframe width="100%" src="/assets/26-9-22-1-COMPSCI335-7-html-css/media-queries.html">
+</iframe>
+<p><a href="/assets/26-9-22-1-COMPSCI335-7-html-css/media-queries.html">media-queries.html</a></p>
+<p>We have indicated a specific style for print media: the display property of the elements that have been classed non-printable is set to none. In other words, in a print media elements that are marked non-printable will not show (<em>i.e.</em>, will not print).</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> screen <span class="keyword">and</span> (<span class="attribute">min-width</span>: <span class="number">40em</span>) <span class="keyword">and</span> (<span class="attribute">orientation</span>: portrait) &#123;</span><br><span class="line">    <span class="comment">/* applies to portrait-oriented screens with min width 40em */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> print <span class="keyword">and</span> (<span class="attribute">orientation</span>: landscape) &#123;</span><br><span class="line">    <span class="comment">/* applies to landscape print */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-height</span>: <span class="number">680px</span>), screen <span class="keyword">and</span> (<span class="attribute">orientation</span>: portrait) &#123;</span><br><span class="line">    <span class="comment">/* here we have two queries rolled into one */</span></span><br><span class="line">    <span class="comment">/* 1) applies to any device min height 680px */</span></span><br><span class="line">    <span class="comment">/* 2) applies to portrait-oriented screen */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@media</span> <span class="keyword">not</span> print &#123;</span><br><span class="line">    <span class="comment">/* applies to non-print media */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="all"><code>all</code></h3>
+<p>The <code>all</code> shorthand CSS property resets all of an element’s properties.</p>
+<p>In media queries, one very practical use case of the <code>all</code> property is to <strong>completely reset styles</strong>, allowing us to redefine specific styles from scratch, rather than trying to override each conflicting rule. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@media</span> print <span class="keyword">and</span> (<span class="attribute">orientation</span>: landscape) &#123;</span><br><span class="line">    * &#123;</span><br><span class="line">        <span class="attribute">all</span>: unset;</span><br><span class="line">        <span class="attribute">color</span>: blue; <span class="comment">/* override after reset */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Remove all styles, including margins, font settings, layout, <em>etc.</em>, even those from the browser’s default stylesheet for all (<code>*</code>) elements on the page when the page is being printed and the print layout is landscape. After resetting everything, explicitly set the text color to blue.</p>
+<h3 id="best-practice">Best Practice</h3>
+<p>Mobile-first design: start with styles for smaller screens (<em>i.e.</em>, default styles are for smaller screens) and add media queries for larger screens</p>
+<p>Breakpoints for media queries should based on screen widths of typical (<code>!</code>) devices.</p>
+<p>Avoid hardcoding pixel values. Prefer to use relative units such as <code>em</code>, <code>rem</code>, and <code>%</code>.</p>
+<p>The unit <code>em</code> is relative to the font size of the parent element, while the unit <code>rem</code> is relative to the font size of the root element (this is <code>&lt;html&gt;</code> usually).</p>
+<h2 id="cascading-and-specificity">Cascading and Specificity</h2>
+<p>CSS is built around a key idea called the <strong>cascade</strong>. This means that styles can come from different places — like the browser, the website’s code, or even the user — and all work together to style a webpage.</p>
+<p>Sometimes, different rules try to style the same thing in different ways.</p>
+<p>But in the end, only one rule can win.</p>
+<p>The cascade &amp; specificity help decide which rule is the one that gets applied.</p>
+<h3 id="css-cascading">CSS Cascading</h3>
+<p>Styles are specified in three contexts: browser (the default styles a browser uses), the content-creator or author, and user (via user preferences). These contexts are known as origins.</p>
+<p>In addition, each origin may optionally mark certain rules to be important(using the keyword <code>!important</code>). An important rules tells the browser: “This rule should win, no matter what other styles say — unless they are also marked <code>!important</code> and have higher precedence.”</p>
+<p>CSS rules from different origin types are applied based on a cascade order of importance. These are from low to high priority:</p>
+<ul>
+<li>User-agent styles</li>
+<li>User styles</li>
+<li>Author styles</li>
+<li>Author styles with <code>!important</code></li>
+<li>User styles with <code>!important</code></li>
+<li>User-agent styles with <code>!important</code> (these are very rare)</li>
+</ul>
+<h3 id="css-specificity">CSS Specificity</h3>
+<p>Specificity is the algorithm browsers use to determine which CSS declaration is most relevant to an element, ultimately deciding the applied property value. It calculates the weight of a CSS selector to resolve conflicts between competing declarations.</p>
+<p>When multiple rules specify different values for the same element, the declaration with the selector that has the highest specificity takes precedence.</p>
+<p>The last rule defined in the source takes precedence when specificity is equal.</p>
+<p>There are three selector weight categories</p>
+<ul>
+<li><code>ID</code> column which includes ID selectors such as <code>#course</code>. This column has the highest specificity</li>
+<li><code>CLASS</code> column which includes class selectors such as <code>.courses</code>. This column has the second highest specificity</li>
+<li><code>TYPE</code> column that includes element selectors such as <code>h1</code> and <code>span</code>. This has the lowest specificity</li>
+</ul>
+<p>The universal selector (<code>*</code>) is <strong>not counted</strong> and does not contribute to the specificity.</p>
+<p>The specificity values are expressed in this form: <code>x-y-z</code> where <code>x</code>, <code>y</code>, and <code>z</code> refer to the <strong>weights</strong> derived from <code>ID</code>, <code>CLASS</code> and <code>TYPE</code> respectively. <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: black; &#125; <span class="comment">/* Specificity: 0-0-1 */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-class">.content</span> <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: blue; &#125; <span class="comment">/* Specificity: 0-1-1 */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-class">.content</span> <span class="selector-class">.highlight</span> <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: green; &#125; <span class="comment">/* Specificity: 0-2-1 */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-id">#main</span> <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: red; &#125; <span class="comment">/* Specificity: 1-0-1 */</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="css-decision-flow">CSS Decision Flow</h3>
+<pre class="mermaid">graph LR
+
+a["Check <code>!important</code>"]
+b["Compare by origin (within the importance level)
+"]
+c["Within the winning origin, apply specificity"]
+d["If specificity is the same, use order of appearance"]
+
+a --> b --> c --> d</pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/">https://remy-campanella.github.io/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1/">网络编程与分布式服务</a><a class="post-meta__tags" href="/tags/C-%E8%AF%AD%E8%A8%80/">C# 语言</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci335_cover.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</div></div><div class="info-2"><div class="info-item-1">Naming Convention The name of a method with async modifier is giving an Async suffix. 1async Task&lt;T&gt; GoWorkAsync() Web API with async and await Use non-blocking method to utilise APIs we’ve written. Data Model 12345678public class Customer&#123;    [Key]    public int Id &#123;get; set;&#125;    public string FirstName &#123;get; set;&#125;    public string LastName &#123;get; set;&#125;    public string? Email &#123;get; set;&#125;&#125; The get and set methods are provided by EntityFr...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</div></div><div class="info-2"><div class="info-item-1">SVG SVG SVG is a vector-based graphic format for the Web and is defined using an XML-like syntax. SVG specifies a collection of graphical objects (such as lines and circles).  SVG defines the geometry of objects using mathematical descriptions rather than pixels, which means the shapes can scale infinitely without losing clarity or becoming pixelated.  Being a vector format, it does not lose quality during resizing or zooming. SVG Example 123&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/07/18/26-7-18-1-COMPSCI335-1-cs/" title="【COMPSCI 335】 Week 1 C# Project, Class, Field, &amp; Property"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-18</div><div class="info-item-2">【COMPSCI 335】 Week 1 C# Project, Class, Field, &amp; Property</div></div><div class="info-2"><div class="info-item-1">Introduction The course will be taught in two parts.  Server part.  C#, .NET 10 Core  Client part.  JavaScript.   We won’t use CodeRunner here.  Learn to write complex application rather than isolated functions. Develop testing and debugging skills.  We use AI but we still learn programming.  Programming teaches problem solving skills. AI might not handle a user’s need. We need to guide it. AI’s code might be ineffcient, insecure or incorrect. We learn programming to fix it.  Server-Side Deve...</div></div></div></a><a class="pagination-related" href="/2026/07/30/26-7-28-1-COMPSCI335-2-linq-ef-web/" title="【COMPSCI 335】 Week 2 LINQ, Entity Framework, Web API"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">【COMPSCI 335】 Week 2 LINQ, Entity Framework, Web API</div></div><div class="info-2"><div class="info-item-1">Where Where is used to find all the objects that satisfy certain conditions in a sequence. If there is no objects satisfies, it returns an empty sequence. In this customer example, to get the customers’ names by first/last name, 123IEnumerable&lt;Customer&gt; c = _customers.Where(e =&gt; e.FirstName == firstname);IEnumerable&lt;Customer&gt; c = _customers.Where(e =&gt; e.LastName == lastname); Select Select can be used to project (i.e., select) an element’s field. 123MockCustomerRepo repo = n...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</div></div><div class="info-2"><div class="info-item-1">SVG SVG SVG is a vector-based graphic format for the Web and is defined using an XML-like syntax. SVG specifies a collection of graphical objects (such as lines and circles).  SVG defines the geometry of objects using mathematical descriptions rather than pixels, which means the shapes can scale infinitely without losing clarity or becoming pixelated.  Being a vector format, it does not lose quality during resizing or zooming. SVG Example 123&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot...</div></div></div></a><a class="pagination-related" href="/2026/08/20/26-8-19-1-COMPSCI335-5-data-perf/" title="【COMPSCI 335】 Week 5 Customized Data Formats, Performance"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-20</div><div class="info-item-2">【COMPSCI 335】 Week 5 Customized Data Formats, Performance</div></div><div class="info-2"><div class="info-item-1">Returning Customized Data Formats from Web API flowchart LR  cli["Client"] ctrl["Controller"] datarep["Data Repository"] dbacc["DB AccessDB Context"] db["DB"] dto["DTO"] model["Model"]  cli --request--> ctrl  datarep  dbacc  db ctrl  dto  model ctrl --response--> cli When an object is sent to client, we convert it to JSON format. We also need to sent files. Output HTML Data If returning HTML ot plain text is needed, the return type of the controller should be ContentResult. ContentResult has ...</div></div></div></a><a class="pagination-related" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-23</div><div class="info-item-2">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</div></div><div class="info-2"><div class="info-item-1">Naming Convention The name of a method with async modifier is giving an Async suffix. 1async Task&lt;T&gt; GoWorkAsync() Web API with async and await Use non-blocking method to utilise APIs we’ve written. Data Model 12345678public class Customer&#123;    [Key]    public int Id &#123;get; set;&#125;    public string FirstName &#123;get; set;&#125;    public string LastName &#123;get; set;&#125;    public string? Email &#123;get; set;&#125;&#125; The get and set methods are provided by EntityFr...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-12-1-COMPSCI335-4-auth/" title="【COMPSCI 335】 Week 4 Authentication and Authorisation"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-18</div><div class="info-item-2">【COMPSCI 335】 Week 4 Authentication and Authorisation</div></div><div class="info-2"><div class="info-item-1">Authentication and Authorization  Authentication verifies users’ identities(password, biometric info). Authorization decides whether users have permissions to access resources according to identities.  HTTP Basic Authentication HTTP provides a challenge and response framework for carrying out authentication. The server challenges client’s request, then client provides the authentication info. graph LR  c["client"] s["server"] c2["client"] s2["server"]  c --"GET /home"--> s s --"401 Unauthoriz...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#html"><span class="toc-number">1.</span> <span class="toc-text">HTML</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#html-1"><span class="toc-number">1.1.</span> <span class="toc-text">HTML</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#an-example"><span class="toc-number">1.1.1.</span> <span class="toc-text">An Example</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#elements"><span class="toc-number">1.2.</span> <span class="toc-text">Elements</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#head-and-body"><span class="toc-number">1.2.1.</span> <span class="toc-text">Head and Body</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#html-elements"><span class="toc-number">1.2.2.</span> <span class="toc-text">HTML Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sematic-elements"><span class="toc-number">1.2.3.</span> <span class="toc-text">Sematic Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#text-composition"><span class="toc-number">1.2.4.</span> <span class="toc-text">Text Composition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#commonly-used-html-elements"><span class="toc-number">1.2.5.</span> <span class="toc-text">Commonly Used HTML Elements</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#div-and-span"><span class="toc-number">1.2.6.</span> <span class="toc-text">&lt;div&gt; and &lt;span&gt;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#attributes-and-more-elements"><span class="toc-number">1.3.</span> <span class="toc-text">Attributes and More Elements</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#attribute"><span class="toc-number">1.3.1.</span> <span class="toc-text">Attribute</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hyperlink"><span class="toc-number">1.3.2.</span> <span class="toc-text">Hyperlink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iframe"><span class="toc-number">1.3.3.</span> <span class="toc-text">iframe</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#list-tables"><span class="toc-number">1.4.</span> <span class="toc-text">List &amp; Tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#html-lists"><span class="toc-number">1.4.1.</span> <span class="toc-text">HTML Lists</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#html-tables"><span class="toc-number">1.4.2.</span> <span class="toc-text">HTML Tables</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#void-elements"><span class="toc-number">1.5.</span> <span class="toc-text">Void Elements</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#images"><span class="toc-number">1.5.1.</span> <span class="toc-text">Images</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#video-and-audio"><span class="toc-number">1.5.2.</span> <span class="toc-text">Video and Audio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user-input"><span class="toc-number">1.5.3.</span> <span class="toc-text">User Input</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#buttons"><span class="toc-number">1.5.4.</span> <span class="toc-text">Buttons</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unicode-and-entities"><span class="toc-number">1.6.</span> <span class="toc-text">Unicode and Entities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unicode-characters"><span class="toc-number">1.6.1.</span> <span class="toc-text">Unicode Characters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#html-entities"><span class="toc-number">1.6.2.</span> <span class="toc-text">HTML Entities</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#closing-remarks"><span class="toc-number">1.7.</span> <span class="toc-text">Closing Remarks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#custom-attributes"><span class="toc-number">1.7.1.</span> <span class="toc-text">Custom Attributes</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cascading-stylesheetcss"><span class="toc-number">2.</span> <span class="toc-text">Cascading Stylesheet(CSS)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#styling-basics"><span class="toc-number">2.1.</span> <span class="toc-text">Styling Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#inline-styles"><span class="toc-number">2.1.1.</span> <span class="toc-text">Inline Styles</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#internal-styles"><span class="toc-number">2.1.2.</span> <span class="toc-text">Internal Styles</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#external-styles"><span class="toc-number">2.1.3.</span> <span class="toc-text">External Styles</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-syntax"><span class="toc-number">2.2.</span> <span class="toc-text">CSS Syntax</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#selector"><span class="toc-number">2.2.1.</span> <span class="toc-text">Selector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#id-selector"><span class="toc-number">2.2.2.</span> <span class="toc-text">ID Selector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-selector"><span class="toc-number">2.2.3.</span> <span class="toc-text">Class Selector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#grouping-selectors"><span class="toc-number">2.2.4.</span> <span class="toc-text">Grouping Selectors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#descendant-selector"><span class="toc-number">2.2.5.</span> <span class="toc-text">Descendant Selector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#combinators"><span class="toc-number">2.2.6.</span> <span class="toc-text">Combinators</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#common-css-properties"><span class="toc-number">2.2.7.</span> <span class="toc-text">Common CSS Properties</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-box-model"><span class="toc-number">2.3.</span> <span class="toc-text">CSS Box Model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#centering-a-block-element"><span class="toc-number">2.3.1.</span> <span class="toc-text">Centering a Block Element</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-display-css-property"><span class="toc-number">2.4.</span> <span class="toc-text">The Display CSS Property</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#block-vs.-inline-display"><span class="toc-number">2.4.1.</span> <span class="toc-text">Block vs. Inline Display</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#style-display-none"><span class="toc-number">2.4.2.</span> <span class="toc-text">Style: display: none</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#style-visibility-hidden"><span class="toc-number">2.4.3.</span> <span class="toc-text">Style: visibility: hidden</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-css-opacity-property"><span class="toc-number">2.4.4.</span> <span class="toc-text">The CSS Opacity Property</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#flexbox"><span class="toc-number">2.5.</span> <span class="toc-text">Flexbox</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#flexible-displays"><span class="toc-number">2.5.1.</span> <span class="toc-text">Flexible Displays</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-nth-child"><span class="toc-number">2.6.</span> <span class="toc-text">The :nth-child</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pseudo-class-selectors"><span class="toc-number">2.6.1.</span> <span class="toc-text">Pseudo-Class Selectors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-nth-child-1"><span class="toc-number">2.6.2.</span> <span class="toc-text">The :nth-child</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#media-queries"><span class="toc-number">2.7.</span> <span class="toc-text">Media Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#media-queries-1"><span class="toc-number">2.7.1.</span> <span class="toc-text">Media Queries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#all"><span class="toc-number">2.7.2.</span> <span class="toc-text">all</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#best-practice"><span class="toc-number">2.7.3.</span> <span class="toc-text">Best Practice</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cascading-and-specificity"><span class="toc-number">2.8.</span> <span class="toc-text">Cascading and Specificity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#css-cascading"><span class="toc-number">2.8.1.</span> <span class="toc-text">CSS Cascading</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#css-specificity"><span class="toc-number">2.8.2.</span> <span class="toc-text">CSS Specificity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#css-decision-flow"><span class="toc-number">2.8.3.</span> <span class="toc-text">CSS Decision Flow</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/12/26-10-6-1-RSM-11-good/" title="【RSM】 Chapter 11 Good Times"><img src="/image/icon/loading.gif" data-lazy-src="/album/rsm/rsm_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【RSM】 Chapter 11 Good Times"/></a><div class="content"><a class="title" href="/2026/10/12/26-10-6-1-RSM-11-good/" title="【RSM】 Chapter 11 Good Times">【RSM】 Chapter 11 Good Times</a><time datetime="2026-10-11T15:39:17.000Z" title="发表于 2026-10-11 23:39:17">2026-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"/></a><div class="content"><a class="title" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</a><time datetime="2026-10-04T09:31:52.000Z" title="发表于 2026-10-04 17:31:52">2026-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 7 HTML &amp; CSS"/></a><div class="content"><a class="title" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS">【COMPSCI 335】 Week 7 HTML &amp; CSS</a><time datetime="2026-10-04T09:30:56.000Z" title="发表于 2026-10-04 17:30:56">2026-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"/></a><div class="content"><a class="title" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</a><time datetime="2026-09-23T03:04:17.000Z" title="发表于 2026-09-23 11:04:17">2026-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 03 Analysis Review"/></a><div class="content"><a class="title" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review">【COMPSCI 320】 Lecture 03 Analysis Review</a><time datetime="2026-09-14T07:01:14.000Z" title="发表于 2026-09-14 15:01:14">2026-09-14</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.8.3+26.9.20.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.1.2/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@11.16.0/dist/mermaid.min.js?v=undefined"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Naming Convention The name of a method with async modifier is giving an Async suffix. 1async Task&lt;T&gt; GoWorkAsync() Web API with async and await Use non-blocking method to utilise APIs we’ve writ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Naming Convention The name of a method with async modifier is giving an Async suffix. 1async Task&lt;T&gt; GoWorkAsync() Web API with async and await Use non-blocking method to utilise APIs we’ve writ">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp">
+<meta property="article:published_time" content="2026-09-23T03:04:17.000Z">
+<meta property="article:modified_time" content="2026-09-22T23:04:17.860Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta property="article:tag" content="网络编程与分布式服务">
+<meta property="article:tag" content="C# 语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API",
+  "url": "https://remy-campanella.github.io/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp",
+  "datePublished": "2026-09-23T03:04:17.000Z",
+  "dateModified": "2026-09-22T23:04:17.860Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci335_cover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-09-23T03:04:17.000Z" title="发表于 2026-09-23 11:04:17">2026-09-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-09-22T23:04:17.860Z" title="更新于 2026-09-23 07:04:17">2026-09-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-335-Web-Programming-and-Distributed-Services/">COMPSCI 335 Web Programming and Distributed Services</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="naming-convention">Naming Convention</h2>
+<p>The name of a method with <code>async</code> modifier is giving an <code>Async</code> suffix. <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">async</span> Task&lt;T&gt; <span class="title">GoWorkAsync</span>()</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="web-api-with-async-and-await">Web API with <code>async</code> and <code>await</code></h2>
+<p>Use non-blocking method to utilise APIs we’ve written.</p>
+<h3 id="data-model">Data Model</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Customer</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Key</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Id &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> FirstName &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> LastName &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span>? Email &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The <code>get</code> and <code>set</code> methods are provided by <code>EntityFrameworkCore</code>, there is no <code>async</code> version.</p>
+<p>No change to this class.</p>
+<h3 id="data-access-layer-db-context">Data Access Layer, DB Context</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WebAPIDbContext</span> : <span class="title">DbContext</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WebAPIDbContext</span>(<span class="params">DbContextOptions&lt;WebAPIDbContext&gt; options</span>): <span class="title">base</span>(<span class="params">options</span>)</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> DbSet&lt;Customer&gt; Customers &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The <code>get</code> and <code>set</code> methods are provided by <code>EntityFrameworkCore</code>, there is no <code>async</code> version.</p>
+<p>No change to this class.</p>
+<h3 id="data-repository">Data Repository</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IWebRepo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">async</span> Task&lt;IEnumerable&lt;Customer&gt;&gt; GetAllCustomersAsync();</span><br><span class="line">    <span class="function"><span class="keyword">async</span> Task&lt;Customer&gt; <span class="title">GetCustomerByIDAsync</span>(<span class="params"><span class="built_in">int</span> id</span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">async</span> Task&lt;Customer&gt; <span class="title">AddCustomer</span>(<span class="params">Customer customer</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DbWebRepoAPIRepo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> WebAPIDbContext _dbContext;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DbWebRepoAPIRepo</span>(<span class="params">WebAPIDbContext dbContext</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _dbContext = dbContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;Customer&gt; <span class="title">AddCustomerAsync</span>(<span class="params">Customer customer</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        ValueTask&lt;EntityEntry&lt;Customer&gt;&gt; t = _dbContext.Customers.AddAsync(customer)</span><br><span class="line">        <span class="keyword">await</span> t;</span><br><span class="line">        Customer c = t.Result.Entity;</span><br><span class="line">        <span class="keyword">await</span> _dbContext.SaveChangesAsync();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In <code>AddCustomer</code>, the <code>Add</code> and <code>SaveChanges</code> methods can be changed into <code>async</code> form.</p>
+<blockquote>
+<p>How do we know there is an <code>async</code> from?</p>
+<p>By IDE coding hint.</p>
+</blockquote>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DbWebRepoAPIRepo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IEnumerable&lt;Customer&gt;&gt; GetAllCustomersAsync()</span><br><span class="line">    &#123;</span><br><span class="line">        IEnumerable&lt;Customer&gt; customers = <span class="keyword">await</span> _dbContext.Customers.ToListAsync&lt;Customers&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> customers;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>await</code> appears on the right side of the <code>=</code>, which means the variable will be assigned after the expression on the right is finished.</p>
+<h3 id="controller">Controller</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Route(<span class="string">&quot;webapi&quot;</span>)</span>]</span><br><span class="line">[<span class="meta">ApiController</span>]</span><br><span class="line"><span class="keyword">public</span> MyController : Controller</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> IWebRepo _repository;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyController</span>(<span class="params">IWebRepo repository</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _repository = repository;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">HttpGet(<span class="string">&quot;GetCustomers&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">async</span> Task&lt;ActionResult&lt;IEnumerable&lt;CustomerOutputDto&gt;&gt;&gt; GetCustomersAsync()</span><br><span class="line">    &#123;</span><br><span class="line">        IEnumerable&lt;Customer&gt; customers = <span class="keyword">await</span> _repository.GetAllCusomersAsync();</span><br><span class="line">        IEnumerable&lt;CustomerOutputDto&gt; cOut = customers.Select(</span><br><span class="line">            c =&gt; <span class="keyword">new</span> CustomerOutputDto &#123;</span><br><span class="line">                Id = c.Id,</span><br><span class="line">                FirstName = c.FirstName,</span><br><span class="line">                LastName = c.LastName,</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Ok(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">async</span> Task&lt;ActionResult&lt;Customer&gt;&gt; AddCustomerAsync(CustomerInputDto customer)</span><br><span class="line">    &#123;</span><br><span class="line">        Customer c = <span class="keyword">new</span> Customer &#123;</span><br><span class="line">            Email = customer.Email,</span><br><span class="line">            FirstName = customer.FirstName,</span><br><span class="line">            LastName = customer.LastName</span><br><span class="line">        &#125;;</span><br><span class="line">        Customer addCustomer = <span class="keyword">await</span> _repository.AddCustomerAsync(c);</span><br><span class="line">        CustomerOutputDto cOut = <span class="keyword">new</span> CustomerOutputDto &#123;</span><br><span class="line">            Email = addCustomer.Email,</span><br><span class="line">            FirstName = addCustomer.FirstName,</span><br><span class="line">            LastName = addCustomer.LastName</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> CreatedAtAction(<span class="keyword">nameof</span>(GetCustomer), <span class="keyword">new</span> &#123;id = cOut.Id&#125;, cOut);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="linq-join">LINQ <code>Join</code></h2>
+<p>Customers.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>FirstName</th>
+<th>LastName</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Carolyn</td>
+<td>Smith</td>
+</tr>
+</tbody>
+</table>
+<p>Orders.</p>
+<table>
+<thead>
+<tr>
+<th>OrderId</th>
+<th>CustomerId</th>
+<th>ProductID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1001</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>We want to merge the information in the two tables to list all the products that the customer has orded.</p>
+<p>The <code>Join</code> method correlates the elements of to sequence based on <strong>matching keys</strong>.</p>
+<h3 id="data-models">Data Models</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Customer</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Key</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Id &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> FirstName &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> LastName &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Order</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Key</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> OrderId &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> CustomerId &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> ProductId &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="data-repository-1">Data Repository</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IDataRepo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IEnumerable&lt;Customers&gt; <span class="title">GetCustomers</span>()</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IEnumerable&lt;Orders&gt; <span class="title">GetOrders</span>()</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IEnumerable&lt;Products&gt; <span class="title">GetProducts</span>()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The general format of <code>Join</code> is <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">outerSequence.Join(innerSequence, delegate1, delegate2, delegate3);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>delegate1</code> specifies the matching key of outer sequence.</li>
+<li><code>delegate2</code> specifies the matching key of inner sequence.</li>
+<li><code>delegate3</code> shows how to construct the new record in the output sequence using the records from the outer and inner sequence.</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">IEnumerable&lt;Customer&gt; customers = _repository.GetCustomers();</span><br><span class="line">IEnumerable&lt;Order&gt; orders = _repository.GetOrders();</span><br><span class="line"><span class="keyword">var</span> custOrders = customer.Join(</span><br><span class="line">    orders,</span><br><span class="line">    c =&gt; c.ID,</span><br><span class="line">    o =&gt; o.CustomerID,</span><br><span class="line">    (c, o) =&gt; <span class="keyword">new</span> &#123;</span><br><span class="line">        CustomerName = c.FirstName + <span class="string">&quot; &quot;</span> + c.LastName,</span><br><span class="line">        ProductId = o.ProductId</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"><span class="keyword">var</span> custProd = custOrder.Join(</span><br><span class="line">    products,</span><br><span class="line">    co =&gt; co.ProductId,</span><br><span class="line">    p =&gt; p.ProductId,</span><br><span class="line">    (co, p) =&gt; <span class="keyword">new</span> &#123;</span><br><span class="line">        CustomerName = co.CustomerName,</span><br><span class="line">        ProductName = p.ProductName</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="agentic-api">Agentic API</h2>
+<h3 id="traditional-apis">Traditional APIs</h3>
+<ul>
+<li>Execute predefined business logic.</li>
+<li>Developer explicitly specifies the workflow.</li>
+</ul>
+<h3 id="agentic-web-apis">Agentic Web APIs</h3>
+<ul>
+<li>LLM decides what sctions are needed.</li>
+<li>Can dynamically invoke tools.</li>
+<li>Workflow determined at <strong>runtime</strong>.</li>
+</ul>
+<pre class="mermaid">flowchart LR
+
+user["User"]
+endp["Agent Endpoint"]
+llm["LLM"]
+db["Tool 1: Database"]
+wth["Tool 2: Weather"]
+ext["Tool 3: External Tools"]
+resp["Final response"]
+
+user --> endp --LLM Request--> llm <--Response Data--> db
+llm <--Response Data--> wth
+llm <--Response Data--> ext
+llm --Compile Final Response--> resp --> user</pre>
+<ul>
+<li>Users: Sends request.</li>
+<li>Agent Endpoint: Orchestrates execution.</li>
+<li>LLM: Reasoning, planning and execute by calling tools.</li>
+<li>Tools: Perform actions, <em>e.g.</em> access DB, web APIs.</li>
+</ul>
+<h2 id="llm">LLM</h2>
+<h3 id="what-is-llm">What is LLM?</h3>
+<ul>
+<li>Large language model: a neural network trained to predict the next <strong>token</strong>.</li>
+<li>LLM acts as
+<ul>
+<li>Planner</li>
+<li>Decisioner</li>
+<li>Tool selector</li>
+<li>Response generator</li>
+</ul></li>
+<li>LLM is NOT responsible for
+<ul>
+<li>Database access</li>
+<li>Business rules</li>
+<li>Responsibilities remains in tools.</li>
+</ul></li>
+</ul>
+<h3 id="hosting">Hosting</h3>
+<h2 id="tool">Tool</h2>
+<p>Tool is a <strong>function</strong> that LLM can invoke.</p>
+<p>Principle: LLM thinks, tools carry out the task.</p>
+<h3 id="tool-calling-process">Tool Calling Process</h3>
+<pre class="mermaid">flowchart LR
+
+user["User"]
+llm["LLM<br>Intepret request and plan execution"]
+tools["Tools"]
+resp["Response"]
+
+user --request--> llm --execution request--> tools --results--> llm --If the results are satisfactory, generate the response.--> resp
+llm --If the results are not satis factory, revise the plan.--> tools</pre>
+<h2 id="model-context-protocolmcp">Model Context Protocol(MCP)</h2>
+<h3 id="overview">Overview</h3>
+<p>A <strong>standard</strong> way for LLMs to <strong>discover and invoke tools</strong>.</p>
+<ul>
+<li>Tool discovery</li>
+<li>Tool descriptions</li>
+<li>Tool invocation</li>
+</ul>
+<p>Goal: allow LLM applications to use tools consistently.</p>
+<h3 id="mcp-architecture">MCP Architecture</h3>
+<pre class="mermaid">flowchart LR
+
+llm["llm"]
+mcpc["MCP Client"]
+mcp["MCP Server"]
+wt["Weather Tool"]
+et["Email Tool"]
+pt["Product Tool"]
+
+llm --> mcpc --> mcp --> wt
+mcp --> et
+mcp --> pt</pre>
+<p>The LLM does not call endpoints directly.</p>
+<h3 id="metadata">Metadata</h3>
+<p>LLM chooses tools using</p>
+<ul>
+<li>Name</li>
+<li>Description</li>
+<li>Parameter schema</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GetWeather&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Retuen weather information.&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;city&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="good-tool">Good Tool</h3>
+<ul>
+<li>Performs one task.</li>
+<li>Clear name.</li>
+<li>Clear description.</li>
+</ul>
+<h3 id="mcp-compliant-tools">MCP Compliant Tools</h3>
+<p>In the project folder, install <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dotnet add package Microsoft.SemanticKernel</span><br><span class="line">dotnet add package ModelContextProtocol.AspNetCore</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Create a folder called <code>Agentic</code>.</li>
+<li>Under <code>Agentic</code>, create a folder <code>McpTools</code>.</li>
+<li>Under <code>McpTools</code>, create <code>CustomerMcpTool.cs</code>.</li>
+</ul>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> ModelContextProtocol.Server;</span><br><span class="line"><span class="keyword">using</span> System.ComponentModel;</span><br><span class="line"><span class="keyword">using</span> WebAPIEx12.Data;</span><br><span class="line"><span class="keyword">using</span> WebAPIEx12.Dtos;</span><br><span class="line"><span class="keyword">using</span> WebAPIEx12.Models;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">WebAPIEx12.Agentic.McpTools</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">McpServerToolType</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomerMcpTools</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> IWebAPIRepo _repository;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">CustomerMcpTools</span>(<span class="params">IWebAPIRepo repository</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            _repository = repository;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">McpServerTool</span>]</span><br><span class="line">        [<span class="meta">Description(<span class="string">&quot;Retreives all customers currently stored in the customer database. Use this when the user asks to see or list customer.&quot;</span>)</span>]</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IEnumerable&lt;CustomerOutputDto&gt;&gt; GetCustomerAsync()</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;AGENT ACTION -&gt; GetCustomerAsync&quot;</span>)</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">McpServerTool</span>]</span><br><span class="line">        [<span class="meta">Description(<span class="string">&quot;Registers and creates a brand new customer profile in the system database.&quot;</span>)</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;CustomerOutputDto&gt; <span class="title">AddCustomerAsync</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">            [Description(<span class="string">&quot;The given/first name of the customer.&quot;</span></span>)]</span></span><br><span class="line"><span class="function">            <span class="built_in">string</span> firstName,</span></span><br><span class="line"><span class="function">            [<span class="title">Description</span>(<span class="params"><span class="string">&quot;The family/last name of the customer.&quot;</span></span>)]</span></span><br><span class="line"><span class="function">            <span class="built_in">string</span> lastName,</span></span><br><span class="line"><span class="function">            [<span class="title">Description</span>(<span class="params"><span class="string">&quot;The optional email address of the customer. Can be null or omitted if unknown.&quot;</span></span>)]</span></span><br><span class="line"><span class="function">            <span class="built_in">string</span>? email</span></span><br><span class="line"><span class="function">        )</span>&#123;</span><br><span class="line">            Console.Writeline(<span class="string">&quot;AGENT ACTION -&gt; AddCustomerAsync&quot;</span>);</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Register the tools. <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">builder.Services.AddMcpServer()</span><br><span class="line">    .WithHttpTransport()</span><br><span class="line">    .WithToolsFromAssembly();</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>AddMcpServer</code>: tell the container for hosting the tools.</li>
+<li><code>WithHttpTransport</code>: indicate the access to the tools is carried out by HTTP protocol.</li>
+<li><code>WithToolsAssembly</code>: find methods with <code>McpServerTool</code> attribute and register them.</li>
+</ul>
+<p>Make the tools avaliable on <code>localhost:8080/mcp</code>. <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.MapMcp(<span class="string">&quot;/mcp&quot;</span>);</span><br></pre></td></tr></table></figure></p>
+<h2 id="implement-agentic-endpoint">Implement Agentic Endpoint</h2>
+<p>The formal <code>AddCustomer</code> controller is defined as <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;ActionResult&lt;Customer&gt;&gt; AddCustomerAsync(CustomerInputDto customer)</span><br></pre></td></tr></table></figure></p>
+<p>We want to change the input to <strong>natural language sentence</strong>. We want to create an agent and let the agent to figure out the actions.</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">HttpPost(<span class="string">&quot;AddCustomer&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;ActionResult&lt;Customer&gt;&gt; AddCustomerAsync(<span class="built_in">string</span> naturalLanguageInput)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Check the input.</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">string</span>.IsNullOrWhiteSpace(naturalLanguageInput))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> BadRequest(<span class="string">&quot;Input string cannot be empty.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register the LLM service.</span></span><br><span class="line">    <span class="keyword">var</span> envBuilder = Kernel.CreateBuilder();</span><br><span class="line">    envBuilder.AddOpenAIChatCompletion(</span><br><span class="line">        modelId: <span class="string">&quot;gemma-4-e2b&quot;</span>,</span><br><span class="line">        apiKey: <span class="string">&quot;local&quot;</span>,</span><br><span class="line">        httpClient: <span class="keyword">new</span> HttpClient &#123;</span><br><span class="line">            BaseAddress = <span class="keyword">new</span> Uri(<span class="string">&quot;http://localhost:8080/v1/&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create communication channel to MCP server.</span></span><br><span class="line">    <span class="keyword">var</span> transportOptions = <span class="keyword">new</span> TransportOptions &#123;</span><br><span class="line">        Endpoint = <span class="keyword">new</span> Uri(<span class="string">&quot;http://localhost:8080/mcp&quot;</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> transport = <span class="keyword">new</span> HttpClientTransport(trasnportOptions);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Query the MCP server to find out the list of tools available.</span></span><br><span class="line">    <span class="keyword">await</span> <span class="keyword">using</span> <span class="keyword">var</span> mcpClient = <span class="keyword">await</span> McpClient.CreateAsync(transport);</span><br><span class="line">    <span class="keyword">var</span> discoveredTools = <span class="keyword">await</span> mcpClient.ListToolsAsync();</span><br><span class="line">    <span class="keyword">foreach</span>(<span class="keyword">var</span> tools <span class="keyword">in</span> discoveredTools)</span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Discovered Tool: <span class="subst">&#123;tools.Name&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Generate the code for calling tools.</span></span><br><span class="line">    <span class="keyword">var</span> kernelFunctions = discoveredTools.Select(tool =&gt; tool.AsKernelFunction());</span><br><span class="line">    envBuilder.Plugins.AddFromFunctions(<span class="string">&quot;LiveCustomerSystems&quot;</span>, kernelFunctions);</span><br><span class="line">    envBuilder.Services.AddSingleton&lt;IFunctionInvocationFilter, ToolLoggingFilter&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Generate agent execution environment.</span></span><br><span class="line">    <span class="keyword">var</span> agentEnv = envBuilder.Build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Specify agent behavior.</span></span><br><span class="line">    <span class="keyword">var</span> settings = <span class="keyword">new</span> PromptExecutionSettings &#123;</span><br><span class="line">        FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Provide execution context.</span></span><br><span class="line">    <span class="keyword">var</span> chatHistory = <span class="keyword">new</span> ChatHistory();</span><br><span class="line">    chatHistory.AddSystemMessage(<span class="string">&quot;...&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// System prompt.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// User prompt.</span></span><br><span class="line">    chatHistory.AddUserMessage(naturalLanguageInput);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Obtain and execute agent.</span></span><br><span class="line">    <span class="keyword">var</span> agent = agentEnv.GetRequiredService&lt;IChatCompletionService&gt;();</span><br><span class="line">    <span class="keyword">var</span> result = <span class="keyword">await</span> agent.GetChatMessageContentAsync(chatHistory, settings, agentEnv);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Send result back</span></span><br><span class="line">    <span class="keyword">return</span> Ok(<span class="keyword">new</span> &#123;Response = result.Content&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="logging">Logging</h2>
+<p>We will log on how the agent calls the tools to find how the agent works. <code>/Agentic/Filters/ToolLoggingFilter.cs</code> <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ToolLoggingFilter</span> : <span class="title">IFunctionInvocationFilter</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">OnFinctionInvocationAsync</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        FunctionInvocationContext context,</span></span></span><br><span class="line"><span class="params"><span class="function">        Func&lt;FunctionInvocationContext, Task&gt; next</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>)</span>&#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Calling: <span class="subst">&#123;context.Function.PluginName&#125;</span>.<span class="subst">&#123;context.Function.Name&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span>(<span class="keyword">var</span> arg <span class="keyword">in</span> context.Arguments)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;arg.Key&#125;</span> = <span class="subst">&#123;arg.Value&#125;</span>&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> next(context)</span><br><span class="line"></span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;Completed: <span class="subst">&#123;context.Function.PluginName&#125;</span>.<span class="subst">&#123;context.Function.Name&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>We need to modify the default logging setting to reduce the amount of logging info being shown.</p>
+<p>Change the log level from <code>Information</code> to <code>Warning</code> in both <code>appsettings.json</code> and <code>appsettings.Development.json</code>. <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;Logging&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;LogLevel&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Default&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Warning&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="a-naive-agentic-api">A Naive Agentic API</h2>
+<h3 id="the-limit-of-your-agent">The Limit of Your Agent</h3>
+<ul>
+<li>The frontier model can satisfy most of the programming tasks.</li>
+<li>The cost of calling a model will play a role in choosing a model.</li>
+<li>Be aware of the capacity of the model when designing a system.</li>
+</ul>
+<p>We’ve retrieved email in endpoint <code>ViewCustomer</code>. <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> email = claim.Value.ToString();</span><br><span class="line">Customer customer = _repository.GetCustomerByEmail(email);</span><br></pre></td></tr></table></figure></p>
+<p>Change this to an agentic endpoint.</p>
+<h3 id="the-tool">The Tool</h3>
+<p>Create <code>./McpTools/CustoomerMcpTools.cs</code> <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomerMcpTools</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> IAuthRepo _repository;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomerMcpTools</span>(<span class="params">IAuthRepo repository</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _repository = repository;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">McpServerTool</span>]</span><br><span class="line">    [<span class="meta">Description(<span class="string">&quot;Retrieves a customer currently stored in the customer database according to the email of the customer.&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;CustomerOutputDto&gt; <span class="title">GetCustomerByEmailAsync</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        [Description(<span class="string">&quot;The email of the customer.&quot;</span></span>)] <span class="built_in">string</span> email</span></span><br><span class="line"><span class="function">    )</span>&#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;AGENTACTION -&gt; GetCustomerByEmailAsync&quot;</span>);</span><br><span class="line">        Customer customer  = <span class="keyword">await</span> _repository.GetCustomerByEmailAsync(email);</span><br><span class="line">        CustomerOutputDto c = <span class="keyword">new</span> CustomerOutputDto &#123;</span><br><span class="line">            FirstName = customer.FirstName,</span><br><span class="line">            LastName = customer.LastName,</span><br><span class="line">            Email = customer.Email,</span><br><span class="line">            Password = customer.Password</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>In controller, <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Authorize(AuthenticationSchemes = <span class="string">&quot;Authentication&quot;</span>)</span>]</span><br><span class="line">[<span class="meta">Authorize(Policy = <span class="string">&quot;AuthOnly&quot;</span>)</span>]</span><br><span class="line">[<span class="meta">HttpGet(<span class="string">&quot;ViewCustomer&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;ActionResult&lt;CustomerOutputDto&gt;&gt; ViewCustomer(<span class="built_in">string</span> naturalLanguageInput)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">string</span>.IsNullOrWhitespace(naturalLanguageInput))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> BadRequest(<span class="string">&quot;Input string cannot be empty.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="register-the-llm-service">Register the LLM Service</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> envBuilder = Kernel.CreateBuilder();</span><br><span class="line">envBuilder.AddOpenChatCompletion(</span><br><span class="line">    modelId: <span class="string">&quot;gemma-4-e2b&quot;</span>,</span><br><span class="line">    apiKey: <span class="string">&quot;local&quot;</span>,</span><br><span class="line">    httpClient: <span class="keyword">new</span> HttpClient &#123;</span><br><span class="line">        BaseAddress = <span class="keyword">new</span> Uri(<span class="string">&quot;http://localhost:8090/v1/&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="find-our-available-tools">Find Our Available Tools</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> transportOptions = <span class="keyword">new</span> HttpClientTransportOptions &#123;</span><br><span class="line">    Endpoint = <span class="keyword">new</span> Uri(<span class="string">&quot;http://localhost:8080/mcp&quot;</span>)</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> transport = <span class="keyword">new</span> HttpClientTransport(transportOptions)</span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> <span class="keyword">using</span> <span class="keyword">var</span> mcpClient = <span class="keyword">await</span> McpClient.CreateAsync(transport);</span><br><span class="line"><span class="keyword">var</span> discoveredTools = <span class="keyword">await</span> mcpClient.ListToolAsync();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> kernelFunctions = discoveredTools.Select(tool =&gt; tool.AskKernelFunction());</span><br><span class="line">envBuilder.Plugins.AddFromFunctions(<span class="string">&quot;LiveCustomerSystems&quot;</span>, kernelFunctions);</span><br></pre></td></tr></table></figure>
+<h3 id="create-agent-execution-environment">Create Agent Execution Environment</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">envBuilder.Services.AddSingleton&lt;IFunctionInvocationFilter, ToolLoggingFilter&gt;();</span><br><span class="line"><span class="keyword">var</span> agentEnv = envBuilder.Build();</span><br></pre></td></tr></table></figure>
+<h3 id="set-up-parameters-for-agent-execution">Set up Parameters for Agent Execution</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> settings = <span class="keyword">new</span> PromptExecutionSettings &#123;</span><br><span class="line">    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> chatHistory = <span class="keyword">new</span> ChatHistory();</span><br><span class="line">chatHistory.AddSystemMessage(<span class="string">&quot;...&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="create-an-object-for-interacting-with-the-agent">Create an Object for Interacting with the Agent</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chatHistory.AddUserMessage(naturalLanguageInput);</span><br><span class="line"><span class="keyword">var</span> agent = agentEnv.GetRequiredService&lt;IChatCompletionService&gt;();</span><br></pre></td></tr></table></figure>
+<h3 id="ask-the-agent-start-working">Ask the Agent Start Working</h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = <span class="keyword">await</span> agent.GetChatMessageContentAsync(chatHistory, settings, agentEnv);</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> Ok(<span class="keyword">new</span> &#123;Response = Result.Content&#125;);</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/">https://remy-campanella.github.io/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1/">网络编程与分布式服务</a><a class="post-meta__tags" href="/tags/C-%E8%AF%AD%E8%A8%80/">C# 语言</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci335_cover.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://unpkg.com/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 03 Analysis Review</div></div><div class="info-2"><div class="info-item-1">Computational Tractability Models of Computation: Turing Machines Finite state machine with infinite tape.  Running time: Number fo steps. Memory. Number of tape cells utilized.  Caveat. No random access of memory.  Single-Tape TM requires \(\leq n^2\) steps to detect \(n\)-bit palindromes(回文). Easy to detect palindromes in \(\leq cn\) steps on a real computer.  Models of Computation: Word RAM(Random Access Machine) Word RAM.  Each memory location and input/output cell stores a \(w\)-bit inte...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 335】 Week 7 HTML & CSS</div></div><div class="info-2"><div class="info-item-1">HTML HTML HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s. An Example 12345678910&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Our First HTML document&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h1&gt;Our sample heading&lt;/h1&gt;    &lt;p&gt;Our sample paragraph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; DOCTYPE tells a browser the version of the HTML document. It is an artifact of the history of HTML. The content of the DOCTYPE changed th...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/20/26-8-19-1-COMPSCI335-5-data-perf/" title="【COMPSCI 335】 Week 5 Customized Data Formats, Performance"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-20</div><div class="info-item-2">【COMPSCI 335】 Week 5 Customized Data Formats, Performance</div></div><div class="info-2"><div class="info-item-1">Returning Customized Data Formats from Web API flowchart LR  cli["Client"] ctrl["Controller"] datarep["Data Repository"] dbacc["DB AccessDB Context"] db["DB"] dto["DTO"] model["Model"]  cli --request--> ctrl  datarep  dbacc  db ctrl  dto  model ctrl --response--> cli When an object is sent to client, we convert it to JSON format. We also need to sent files. Output HTML Data If returning HTML ot plain text is needed, the return type of the controller should be ContentResult. ContentResult has ...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</div></div><div class="info-2"><div class="info-item-1">SVG SVG SVG is a vector-based graphic format for the Web and is defined using an XML-like syntax. SVG specifies a collection of graphical objects (such as lines and circles).  SVG defines the geometry of objects using mathematical descriptions rather than pixels, which means the shapes can scale infinitely without losing clarity or becoming pixelated.  Being a vector format, it does not lose quality during resizing or zooming. SVG Example 123&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot...</div></div></div></a><a class="pagination-related" href="/2026/07/18/26-7-18-1-COMPSCI335-1-cs/" title="【COMPSCI 335】 Week 1 C# Project, Class, Field, &amp; Property"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-18</div><div class="info-item-2">【COMPSCI 335】 Week 1 C# Project, Class, Field, &amp; Property</div></div><div class="info-2"><div class="info-item-1">Introduction The course will be taught in two parts.  Server part.  C#, .NET 10 Core  Client part.  JavaScript.   We won’t use CodeRunner here.  Learn to write complex application rather than isolated functions. Develop testing and debugging skills.  We use AI but we still learn programming.  Programming teaches problem solving skills. AI might not handle a user’s need. We need to guide it. AI’s code might be ineffcient, insecure or incorrect. We learn programming to fix it.  Server-Side Deve...</div></div></div></a><a class="pagination-related" href="/2026/07/30/26-7-28-1-COMPSCI335-2-linq-ef-web/" title="【COMPSCI 335】 Week 2 LINQ, Entity Framework, Web API"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">【COMPSCI 335】 Week 2 LINQ, Entity Framework, Web API</div></div><div class="info-2"><div class="info-item-1">Where Where is used to find all the objects that satisfy certain conditions in a sequence. If there is no objects satisfies, it returns an empty sequence. In this customer example, to get the customers’ names by first/last name, 123IEnumerable&lt;Customer&gt; c = _customers.Where(e =&gt; e.FirstName == firstname);IEnumerable&lt;Customer&gt; c = _customers.Where(e =&gt; e.LastName == lastname); Select Select can be used to project (i.e., select) an element’s field. 123MockCustomerRepo repo = n...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-12-1-COMPSCI335-4-auth/" title="【COMPSCI 335】 Week 4 Authentication and Authorisation"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-18</div><div class="info-item-2">【COMPSCI 335】 Week 4 Authentication and Authorisation</div></div><div class="info-2"><div class="info-item-1">Authentication and Authorization  Authentication verifies users’ identities(password, biometric info). Authorization decides whether users have permissions to access resources according to identities.  HTTP Basic Authentication HTTP provides a challenge and response framework for carrying out authentication. The server challenges client’s request, then client provides the authentication info. graph LR  c["client"] s["server"] c2["client"] s2["server"]  c --"GET /home"--> s s --"401 Unauthoriz...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 7 HTML &amp; CSS</div></div><div class="info-2"><div class="info-item-1">HTML HTML HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s. An Example 12345678910&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Our First HTML document&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h1&gt;Our sample heading&lt;/h1&gt;    &lt;p&gt;Our sample paragraph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; DOCTYPE tells a browser the version of the HTML document. It is an artifact of the history of HTML. The content of the DOCTYPE changed th...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">141</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#naming-convention"><span class="toc-number">1.</span> <span class="toc-text">Naming Convention</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web-api-with-async-and-await"><span class="toc-number">2.</span> <span class="toc-text">Web API with async and await</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-model"><span class="toc-number">2.1.</span> <span class="toc-text">Data Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-access-layer-db-context"><span class="toc-number">2.2.</span> <span class="toc-text">Data Access Layer, DB Context</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-repository"><span class="toc-number">2.3.</span> <span class="toc-text">Data Repository</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#controller"><span class="toc-number">2.4.</span> <span class="toc-text">Controller</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linq-join"><span class="toc-number">3.</span> <span class="toc-text">LINQ Join</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-models"><span class="toc-number">3.1.</span> <span class="toc-text">Data Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-repository-1"><span class="toc-number">3.2.</span> <span class="toc-text">Data Repository</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#agentic-api"><span class="toc-number">4.</span> <span class="toc-text">Agentic API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#traditional-apis"><span class="toc-number">4.1.</span> <span class="toc-text">Traditional APIs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#agentic-web-apis"><span class="toc-number">4.2.</span> <span class="toc-text">Agentic Web APIs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#llm"><span class="toc-number">5.</span> <span class="toc-text">LLM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-llm"><span class="toc-number">5.1.</span> <span class="toc-text">What is LLM?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hosting"><span class="toc-number">5.2.</span> <span class="toc-text">Hosting</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tool"><span class="toc-number">6.</span> <span class="toc-text">Tool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tool-calling-process"><span class="toc-number">6.1.</span> <span class="toc-text">Tool Calling Process</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model-context-protocolmcp"><span class="toc-number">7.</span> <span class="toc-text">Model Context Protocol(MCP)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#overview"><span class="toc-number">7.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mcp-architecture"><span class="toc-number">7.2.</span> <span class="toc-text">MCP Architecture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#metadata"><span class="toc-number">7.3.</span> <span class="toc-text">Metadata</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#good-tool"><span class="toc-number">7.4.</span> <span class="toc-text">Good Tool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mcp-compliant-tools"><span class="toc-number">7.5.</span> <span class="toc-text">MCP Compliant Tools</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#implement-agentic-endpoint"><span class="toc-number">8.</span> <span class="toc-text">Implement Agentic Endpoint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logging"><span class="toc-number">9.</span> <span class="toc-text">Logging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-naive-agentic-api"><span class="toc-number">10.</span> <span class="toc-text">A Naive Agentic API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#the-limit-of-your-agent"><span class="toc-number">10.1.</span> <span class="toc-text">The Limit of Your Agent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-tool"><span class="toc-number">10.2.</span> <span class="toc-text">The Tool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#register-the-llm-service"><span class="toc-number">10.3.</span> <span class="toc-text">Register the LLM Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#find-our-available-tools"><span class="toc-number">10.4.</span> <span class="toc-text">Find Our Available Tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create-agent-execution-environment"><span class="toc-number">10.5.</span> <span class="toc-text">Create Agent Execution Environment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-up-parameters-for-agent-execution"><span class="toc-number">10.6.</span> <span class="toc-text">Set up Parameters for Agent Execution</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create-an-object-for-interacting-with-the-agent"><span class="toc-number">10.7.</span> <span class="toc-text">Create an Object for Interacting with the Agent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ask-the-agent-start-working"><span class="toc-number">10.8.</span> <span class="toc-text">Ask the Agent Start Working</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/12/26-10-6-1-RSM-11-good/" title="【RSM】 Chapter 11 Good Times"><img src="/image/icon/loading.gif" data-lazy-src="/album/rsm/rsm_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【RSM】 Chapter 11 Good Times"/></a><div class="content"><a class="title" href="/2026/10/12/26-10-6-1-RSM-11-good/" title="【RSM】 Chapter 11 Good Times">【RSM】 Chapter 11 Good Times</a><time datetime="2026-10-11T15:39:17.000Z" title="发表于 2026-10-11 23:39:17">2026-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"/></a><div class="content"><a class="title" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</a><time datetime="2026-10-04T09:31:52.000Z" title="发表于 2026-10-04 17:31:52">2026-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 7 HTML &amp; CSS"/></a><div class="content"><a class="title" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS">【COMPSCI 335】 Week 7 HTML &amp; CSS</a><time datetime="2026-10-04T09:30:56.000Z" title="发表于 2026-10-04 17:30:56">2026-10-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"/></a><div class="content"><a class="title" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</a><time datetime="2026-09-23T03:04:17.000Z" title="发表于 2026-09-23 11:04:17">2026-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 03 Analysis Review"/></a><div class="content"><a class="title" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review">【COMPSCI 320】 Lecture 03 Analysis Review</a><time datetime="2026-09-14T07:01:14.000Z" title="发表于 2026-09-14 15:01:14">2026-09-14</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.8.3+26.9.20.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://unpkg.com/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.js"></script><script src="https://unpkg.com/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/mathjax@4.1.2/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script type="text/javascript" id="maid-script" src="https://unpkg.com/mermaid@11.16.0/dist/mermaid.min.js?v=undefined"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
