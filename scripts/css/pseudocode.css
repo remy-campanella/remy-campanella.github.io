@@ -1,0 +1,29 @@
+.pseudocode-container {
+  margin: 1.5em 0;
+  overflow-x: auto;
+}
+
+.pseudocode-container .ps-root {
+  font-family: inherit;
+  color: inherit;
+}
+
+.pseudocode-container .ps-root .ps-algorithm,
+.pseudocode-container .ps-root .ps-algorithm.with-caption > .ps-line:first-child {
+  border-color: currentColor;
+}
+
+/* Keep theme heading/paragraph rules from overriding the algorithm typography. */
+.pseudocode-container .ps-root .ps-line {
+  line-height: 1.65;
+}
+
+.pseudocode-container .ps-root .ps-keyword,
+.pseudocode-container .ps-root .ps-funcname,
+.pseudocode-container .ps-root .ps-comment {
+  font-family: inherit;
+}
+
+.pseudocode-source {
+  white-space: pre;
+}
