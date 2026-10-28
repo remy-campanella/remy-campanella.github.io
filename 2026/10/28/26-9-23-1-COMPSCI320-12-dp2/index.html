@@ -1,0 +1,578 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 320】 Lecture 12 Dynamic Programming 2 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Revision Focus Sequence alignment occurs in the 2022-2024 MCQs; 2024 SAQ5 requires both a grid DP value and its path. Practise table filling and reconstruction first. Understand Hirschberg’s time&#x2F;spac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 320】 Lecture 12 Dynamic Programming 2">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Revision Focus Sequence alignment occurs in the 2022-2024 MCQs; 2024 SAQ5 requires both a grid DP value and its path. Practise table filling and reconstruction first. Understand Hirschberg’s time&#x2F;spac">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif">
+<meta property="article:published_time" content="2026-10-28T09:51:06.000Z">
+<meta property="article:modified_time" content="2026-10-28T04:51:06.385Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="应用算法">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 320】 Lecture 12 Dynamic Programming 2",
+  "url": "https://remy-campanella.github.io/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif",
+  "datePublished": "2026-10-28T09:51:06.000Z",
+  "dateModified": "2026-10-28T04:51:06.385Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/scripts/vendor/fontawesome/css/all.min.css"><link rel="stylesheet" href="/scripts/vendor/fancybox/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 320】 Lecture 12 Dynamic Programming 2',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/scripts/css/font.css"></noscript><link rel="stylesheet" href="/scripts/vendor/pseudocode/pseudocode.min.css"><link rel="stylesheet" href="/scripts/css/pseudocode.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci320_cover.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-28T09:51:06.000Z" title="发表于 2026-10-28 17:51:06">2026-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-28T04:51:06.385Z" title="更新于 2026-10-28 12:51:06">2026-10-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-320-Applied-Algorithms/">COMPSCI 320 Applied Algorithms</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="revision-focus">Revision Focus</h1>
+<p>Sequence alignment occurs in the 2022-2024 MCQs; 2024 SAQ5 requires both a grid DP value and its path. Practise table filling and reconstruction first. Understand Hirschberg’s time/space tradeoff without prioritizing its full implementation. Bellman-Ford is a second example of defining a state by a resource bound, here the allowed number of edges.</p>
+<h1 id="sequence-alignment">Sequence Alignment</h1>
+<h2 id="edit-distance-and-alignment">Edit Distance and Alignment</h2>
+<p>For strings <span class="math inline">\(X=x_1\cdots x_m\)</span> and <span class="math inline">\(Y=y_1\cdots y_n\)</span>, align characters without reusing them and without crossing pairings. Unpaired characters incur gap penalty <span class="math inline">\(\delta\geq0\)</span>. Pairing <span class="math inline">\(x_i\)</span> with <span class="math inline">\(y_j\)</span> incurs <span class="math inline">\(\alpha_{x_i y_j}\)</span>, usually zero for a match and a positive mismatch penalty otherwise.</p>
+<p>The objective is minimum total penalty. Ordinary unit-cost edit distance is the special case of unit insertion/deletion and substitution costs; the course alignment model allows different penalties.</p>
+<h2 id="problem-structure-and-recurrence">Problem Structure and Recurrence</h2>
+<p>Let <span class="math inline">\(D[i,j]\)</span> be the minimum cost of aligning prefixes <span class="math inline">\(x_1\cdots x_i\)</span> and <span class="math inline">\(y_1\cdots y_j\)</span>. <span class="math display">\[
+\begin{aligned}
+D[0,0]&amp;=0,&amp;D[i,0]&amp;=i\delta,&amp;D[0,j]&amp;=j\delta,\\
+D[i,j]&amp;=\min\{D[i-1,j-1]+\alpha_{x_i y_j},\ D[i-1,j]+\delta,\ D[i,j-1]+\delta\}.
+\end{aligned}
+\]</span></p>
+<p><strong>Correctness.</strong> The final alignment column pairs both final characters, pairs <span class="math inline">\(x_i\)</span> with a gap, or pairs <span class="math inline">\(y_j\)</span> with a gap. Removing that column leaves an optimal alignment of the corresponding prefixes; otherwise replacing the prefix would improve the whole solution.</p>
+<p>Fill rows or columns in increasing order. Answer: <span class="math inline">\(D[m,n]\)</span>. Time and full-table space: <span class="math inline">\(O(mn)\)</span>.</p>
+<h2 id="implementation-and-reconstruction">Implementation and Reconstruction</h2>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Align}
+\begin{algorithmic}
+\PROCEDURE{Align}{$X,Y,\delta,\alpha$}
+    \STATE Initialize $D[i,0]=i\delta$ and $D[0,j]=j\delta$
+    \FOR{$i \gets 1$ \TO $m$}
+        \FOR{$j \gets 1$ \TO $n$}
+            \STATE $D[i,j] \gets \min\{D[i-1,j-1]+\alpha_{x_i y_j},D[i-1,j]+\delta,D[i,j-1]+\delta\}$
+            \STATE Save a predecessor attaining this minimum
+        \ENDFOR
+    \ENDFOR
+    \RETURN $D[m,n]$ and the alignment recovered by tracing predecessors backward
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>Trace from <span class="math inline">\((m,n)\)</span> to <span class="math inline">\((0,0)\)</span>, outputting paired characters or gaps, then reverse the output. Ties may yield multiple optimal alignments. If a mismatch costs more than two gaps, leaving both characters unpaired may be cheaper; do not force a diagonal step.</p>
+<p>For the value alone, retain two rows, using <span class="math inline">\(O(\min\{m,n\})\)</span> extra space after choosing the shorter dimension. This rolling table does not directly retain the path.</p>
+<h1 id="hirschbergs-algorithm">Hirschberg’s Algorithm</h1>
+<h2 id="sequence-alignment-in-linear-space">Sequence Alignment in Linear Space</h2>
+<p>The DP table is a shortest-path grid: horizontal/vertical edges cost <span class="math inline">\(\delta\)</span>, and diagonal edges cost the corresponding match/mismatch penalty.</p>
+<p>To match the lecture’s indexing, split <strong><span class="math inline">\(Y\)</span> at column <span class="math inline">\(j=\lfloor n/2\rfloor\)</span></strong>. Define</p>
+<ul>
+<li><span class="math inline">\(f(i,j)\)</span>: shortest grid-path cost from <span class="math inline">\((0,0)\)</span> to <span class="math inline">\((i,j)\)</span>, equal to the prefix alignment cost.</li>
+<li><span class="math inline">\(g(i,j)\)</span>: shortest grid-path cost from <span class="math inline">\((i,j)\)</span> to <span class="math inline">\((m,n)\)</span>, computed backward on suffixes.</li>
+</ul>
+<p>Any path through <span class="math inline">\((i,j)\)</span> has minimum possible cost <span class="math inline">\(f(i,j)+g(i,j)\)</span>. Choose <span class="math display">\[
+q\in\mathop{\mathrm{argmin}}_{0\leq i\leq m}\{f(i,j)+g(i,j)\}.
+\]</span> Some optimal alignment path crosses the middle column at <span class="math inline">\((q,j)\)</span>. Recursively solve the prefix and suffix rectangles and concatenate their alignments. Splitting <span class="math inline">\(X\)</span> at a middle row instead is an equivalent transposed implementation; the two conventions must not be mixed in the indices.</p>
+<h2 id="recursive-implementation">Recursive Implementation</h2>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Hirschberg}
+\begin{algorithmic}
+\PROCEDURE{Hirschberg}{$X,Y$}
+    \STATE $m\gets|X|$; $n\gets|Y|$
+    \IF{$m\leq2$ or $n\leq2$}
+        \RETURN an optimal alignment from the ordinary DP, including empty-string cases
+    \ENDIF
+    \STATE $j\gets\lfloor n/2\rfloor$
+    \STATE Compute $F[i]=f(i,j)$ for all $0\leq i\leq m$ using rolling columns
+    \STATE Compute $B[i]=g(i,j)$ for all $0\leq i\leq m$ using rolling columns backward
+    \STATE Choose $q$ minimizing $F[i]+B[i]$
+    \STATE Release the temporary DP arrays
+    \STATE $A_1\gets$ \CALL{Hirschberg}{$X[1..q],Y[1..j]$}
+    \STATE $A_2\gets$ \CALL{Hirschberg}{$X[q+1..m],Y[j+1..n]$}
+    \RETURN the concatenation of $A_1$ and $A_2$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>Pass substrings by index ranges and append alignment output without repeatedly copying large strings.</p>
+<h2 id="time-and-space-analysis">Time and Space Analysis</h2>
+<p>A forward/backward pass costs <span class="math inline">\(O(mn)\)</span> time and <span class="math inline">\(O(m)\)</span> working space. Releasing the arrays before recursion leaves only constant-size split information per call. Including the output and recursive bookkeeping, the space is <span class="math inline">\(O(m+n)\)</span>.</p>
+<p>For the lecture’s idealized even split, <span class="math display">\[
+T(m,n)\leq T(q,n/2)+T(m-q,n/2)+cmn.
+\]</span> The bound <span class="math inline">\(2T(m,n/2)+O(mn)\)</span> is valid but loose: it ignores that the two subproblems split the <span class="math inline">\(m\)</span> dimension as well.</p>
+<blockquote>
+<p><strong>Proof of the tight bound.</strong> Choose <span class="math inline">\(c\)</span> large enough to cover the direct base cases. Induct on <span class="math inline">\(m+n\)</span>, assuming <span class="math inline">\(T(m&#39;,n&#39;)\leq2cm&#39;n&#39;\)</span> for smaller non-base rectangles. Then <span class="math display">\[
+\begin{aligned}
+T(m,n)&amp;\leq2cq(n/2)+2c(m-q)(n/2)+cmn\\
+&amp;=2cmn.
+\end{aligned}
+\]</span> Floors/ceilings only change the constant-factor accounting. Empty-string cases cost the length of the emitted gaps. For nonempty inputs, the total time remains <span class="math inline">\(O(mn)\)</span>.</p>
+</blockquote>
+<h1 id="longest-common-subsequence">Longest Common Subsequence</h1>
+<h2 id="prefix-dp">Prefix DP</h2>
+<p>A common subsequence preserves order in both strings but need not be contiguous. Let <span class="math inline">\(L[i,j]\)</span> be the length of an LCS of <span class="math inline">\(X[1..i]\)</span> and <span class="math inline">\(Y[1..j]\)</span>. <span class="math display">\[
+L[i,j]=\begin{cases}
+0,&amp;i=0\text{ or }j=0,\\
+1+L[i-1,j-1],&amp;x_i=y_j,\\
+\max\{L[i-1,j],L[i,j-1]\},&amp;x_i\ne y_j.
+\end{cases}
+\]</span></p>
+<p>If the final characters match, an optimal subsequence can end in that match. Otherwise a common subsequence cannot use both final characters as a pair, so omit at least one. Fill increasing <span class="math inline">\(i,j\)</span>; the answer is <span class="math inline">\(L[m,n]\)</span>. Time and full-table space are <span class="math inline">\(O(mn)\)</span>.</p>
+<p>For recovery, move diagonally and emit a character at a match; at a mismatch, move to a neighboring state attaining the same optimum. Reverse the recovered characters. A rolling table gives the value in linear space; Hirschberg gives an actual LCS with linear space as well.</p>
+<h2 id="reduction-to-alignment">Reduction to Alignment</h2>
+<p>Set gap cost to one, match cost to zero, and mismatch cost to <span class="math inline">\(+\infty\)</span> (forbid mismatching pairs). If the alignment pairs <span class="math inline">\(\ell\)</span> matching characters, it leaves <span class="math inline">\((m-\ell)+(n-\ell)\)</span> gaps. Therefore <span class="math display">\[
+\operatorname{LCS}(X,Y)=\frac{m+n-\operatorname{alignmentCost}(X,Y)}{2}.
+\]</span></p>
+<p>The forbidden-mismatch condition is essential: ordinary unit substitution cost is not this reduction. This is another way to reuse the linear-space alignment algorithm.</p>
+<h1 id="bellman-ford-moore-algorithm">Bellman-Ford-Moore Algorithm</h1>
+<h2 id="shortest-paths-with-negative-weights">Shortest Paths with Negative Weights</h2>
+<p>Negative edges invalidate Dijkstra’s settled-vertex argument. A negative cycle matters to an <span class="math inline">\(s\to t\)</span> query only if it is reachable from <span class="math inline">\(s\)</span> and can reach <span class="math inline">\(t\)</span>; then walks can have arbitrarily negative cost. A negative cycle elsewhere does not automatically destroy every shortest-path answer.</p>
+<h2 id="dynamic-programming-toward-a-fixed-destination">Dynamic Programming Toward a Fixed Destination</h2>
+<p>Let <span class="math inline">\(D_i(v)\)</span> be the minimum cost of a <span class="math inline">\(v\to t\)</span> walk using at most <span class="math inline">\(i\)</span> edges: <span class="math display">\[
+D_0(t)=0,\qquad D_0(v)=+\infty\ (v\ne t),
+\]</span> <span class="math display">\[
+D_i(v)=\min\left\{D_{i-1}(v),\min_{(v,w)\in E}\{l_{vw}+D_{i-1}(w)\}\right\}.
+\]</span></p>
+<p>The two cases omit a new edge or choose the first edge <span class="math inline">\((v,w)\)</span>. If there is no relevant negative cycle, a shortest walk can be made simple, using at most <span class="math inline">\(|V|-1\)</span> edges. Evaluate all vertices for each increasing edge budget. This destination-oriented convention must not be mixed with the source-oriented one below.</p>
+<h2 id="course-implementation-destination-oriented-bellman-ford-moore">Course Implementation: Destination-Oriented Bellman-Ford-Moore</h2>
+<p>The lecture keeps <span class="math inline">\(d[v]\)</span> as an estimate <strong>from <span class="math inline">\(v\)</span> to <span class="math inline">\(t\)</span></strong> and stores <span class="math inline">\(successor[v]\)</span>, not a predecessor from <span class="math inline">\(s\)</span>. Initialize all distances to <span class="math inline">\(+\infty\)</span> except <span class="math inline">\(d[t]=0\)</span>.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Bellman-Ford-Moore}
+\begin{algorithmic}
+\PROCEDURE{Bellman-Ford-Moore}{$V,E,l,t$}
+    \STATE Set $d[v]\gets\infty$ and $successor[v]\gets\mathrm{null}$ for every $v\in V$
+    \STATE $d[t]\gets0$; $active\gets\{t\}$
+    \FOR{$i\gets1$ \TO $|V|-1$}
+        \STATE $next\gets\emptyset$
+        \FORALL{$w\in active$}
+            \FORALL{incoming edges $(v,w)\in E$}
+                \IF{$d[v]&gt;l_{vw}+d[w]$}
+                    \STATE $d[v]\gets l_{vw}+d[w]$
+                    \STATE $successor[v]\gets w$
+                    \STATE $next\gets next\cup\{v\}$
+                \ENDIF
+            \ENDFOR
+        \ENDFOR
+        \IF{$next=\emptyset$}
+            \RETURN $d$ and $successor$
+        \ENDIF
+        \STATE $active\gets next$
+    \ENDFOR
+    \RETURN $d$ and $successor$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>The set <span class="math inline">\(active\)</span> snapshots the vertices changed in the preceding pass. Incoming adjacency lists avoid scanning all edges separately for each active vertex. Updates are strict; arbitrary successor changes on equal values are unnecessary.</p>
+<p><strong>Correctness invariants, assuming no negative cycles.</strong></p>
+<ul>
+<li>Every finite <span class="math inline">\(d[v]\)</span> is the cost of some <span class="math inline">\(v\to t\)</span> walk; hence it never underestimates the optimum.</li>
+<li>Distances only decrease.</li>
+<li>After pass <span class="math inline">\(i\)</span>, <span class="math inline">\(d[v]\)</span> is at most the cost of a shortest <span class="math inline">\(v\to t\)</span> walk using at most <span class="math inline">\(i\)</span> edges.</li>
+</ul>
+<p>For the third property, take the first edge <span class="math inline">\((v,w)\)</span> of such a walk. If <span class="math inline">\(d[w]\)</span> improved in the previous pass, its incoming edges are reconsidered. If not, the required relaxation was already available earlier. Combined with a shortest simple path’s at-most-<span class="math inline">\(|V|-1\)</span> edges, this proves correctness and <span class="math inline">\(O(|V||E|)\)</span> time with <span class="math inline">\(O(|V|)\)</span> extra space after adjacency-list preparation.</p>
+<p><strong>In-place versus synchronous DP.</strong> After pass <span class="math inline">\(i\)</span>, the in-place estimate need not equal <span class="math inline">\(D_i(v)\)</span>: an update can propagate through several edges within a pass. The invariant is the one-sided bound above.</p>
+<p><strong>Successor recovery.</strong> During execution, current successor pointers need not describe a walk of cost exactly the current <span class="math inline">\(d[v]\)</span>, because downstream labels can improve later. At termination with no relevant negative cycle, following successors from a reachable vertex gives a shortest route to <span class="math inline">\(t\)</span>. The lecture proves that a directed cycle in the strict-update successor graph would be negative; no-negative-cycle assumptions therefore exclude such a loop.</p>
+<h2 id="standard-source-oriented-implementation">Standard Source-Oriented Implementation</h2>
+<p>Set <span class="math inline">\(d[s]=0\)</span> and <span class="math inline">\(d[v]=+\infty\)</span> otherwise. Perform <span class="math inline">\(|V|-1\)</span> passes over the edges, relaxing <span class="math display">\[
+d[v]\gets\min\{d[v],d[u]+l_{uv}\}
+\]</span> when <span class="math inline">\(d[u]\)</span> is finite. Save predecessor <span class="math inline">\(u\)</span> on a strict improvement. Stop early if a pass changes nothing.</p>
+<p>After these passes, an additional successful relaxation reachable from <span class="math inline">\(s\)</span> indicates a source-reachable negative cycle. To identify destinations with unbounded-below distance, propagate reachability from vertices still improved. For a single target, check whether these vertices can reach it.</p>
+<p>Time is <span class="math inline">\(O(|V||E|)\)</span> and space <span class="math inline">\(O(|V|)\)</span> beyond the graph. Synchronous DP uses the previous layer exactly; an in-place pass may propagate through more than one edge, but retains the standard Bellman-Ford correctness guarantee.</p>
+<h2 id="detecting-a-negative-cycle-anywhere">Detecting a Negative Cycle Anywhere</h2>
+<p>A single source misses disconnected negative cycles; a single destination misses cycles unable to reach that destination. The lecture adds a new sink reachable by an added edge from every vertex. An equivalent source-oriented method adds a super-source with zero-cost edges to all vertices, or simply initializes every original distance to zero.</p>
+<p>With <span class="math inline">\(n=|V|\)</span> original vertices, relax every edge for <span class="math inline">\(n\)</span> full passes. If a strict improvement occurs in pass <span class="math inline">\(n\)</span>, a negative cycle exists. If none occurs, the labels have converged and every edge satisfies <span class="math inline">\(d[v]\leq d[u]+l_{uv}\)</span>; summing around a cycle rules out a negative total.</p>
+<p><strong>Recovering a cycle.</strong> Store a predecessor on each strict improvement. From a vertex updated on pass <span class="math inline">\(n\)</span>, follow predecessors <span class="math inline">\(n\)</span> times to enter a cycle, then continue until a vertex repeats. Reverse the predecessor traversal to list its directed edges. This uses <span class="math inline">\(O(n)\)</span> additional space and <span class="math inline">\(O(n|E|)\)</span> time. This paragraph uses the source-oriented predecessor convention; the lecture’s destination-oriented construction uses successors instead.</p>
+<h2 id="currency-conversion-application">Currency-Conversion Application</h2>
+<p>If an edge exchanges one unit of currency <span class="math inline">\(u\)</span> for <span class="math inline">\(r_{uv}&gt;0\)</span> units of currency <span class="math inline">\(v\)</span>, a cycle is profitable exactly when the product of its rates exceeds one. Assign <span class="math display">\[
+l_{uv}=-\ln r_{uv}.
+\]</span> Then a product greater than one is equivalent to a negative sum, so negative-cycle detection finds the corresponding opportunity in the mathematical model. This is the course’s modelling example; practical fees and numerical tolerances would change the data and comparisons.</p>
+<h2 id="distance-vector-routing">Distance-Vector Routing</h2>
+<p>A router can update an estimate to destination <span class="math inline">\(t\)</span> using only neighbors’ advertised distances: <span class="math display">\[
+d(v,t)\gets\min_{(v,w)\in E}\{l_{vw}+d(w,t)\}.
+\]</span> This is the local Bellman-Ford recurrence. Under a fixed network and suitable fair updates, routers need not run in perfect lockstep. A router stores distance estimates and next hops for the possible destinations.</p>
+<p><strong>Count to infinity.</strong> If a link fails, two routers may each believe the other still has a route, repeatedly increasing their estimates while routing in a loop. Thus convergence under a fixed graph does not mean arbitrary changes are instantly handled. Protocols retaining additional path or topology information can detect more routing structure, at a storage/communication cost. Path-vector information and full link-state topology are different forms of extra information, not interchangeable descriptions of a single algorithm.</p>
+<h1 id="longest-increasing-and-decreasing-subsequences">Longest Increasing and Decreasing Subsequences</h1>
+<p>A subsequence need not be contiguous. Let <span class="math inline">\(L[j]\)</span> be the length of the longest <strong>strictly increasing</strong> subsequence ending <strong>exactly at</strong> <span class="math inline">\(A_j\)</span>: <span class="math display">\[
+L[j]=1+\max\left(\{0\}\cup\{L[i]:i&lt;j,\ A_i&lt;A_j\}\right).
+\]</span></p>
+<p>Fill increasing <span class="math inline">\(j\)</span>, return <span class="math inline">\(\max_j L[j]\)</span>, and save the maximizing predecessor for reconstruction. Time is <span class="math inline">\(O(n^2)\)</span>; space is <span class="math inline">\(O(n)\)</span>. For a strictly decreasing subsequence, replace <span class="math inline">\(A_i&lt;A_j\)</span> by <span class="math inline">\(A_i&gt;A_j\)</span>. Repeated values do not extend a strict subsequence.</p>
+<p>Example: <span class="math inline">\((3,4,8,2,3,4,7,9)\)</span> has increasing subsequence <span class="math inline">\((2,3,4,7,9)\)</span> of length 5. The original heading said decreasing, but this example and recurrence are increasing.</p>
+<h1 id="counting-boolean-parenthesizations">Counting Boolean Parenthesizations</h1>
+<h2 id="states-and-base-cases">States and Base Cases</h2>
+<p>For operands <span class="math inline">\(a_1,\ldots,a_n\)</span> and intervening operators <span class="math inline">\(op_k\)</span>, let <span class="math inline">\(T[i,j]\)</span> and <span class="math inline">\(F[i,j]\)</span> count full parenthesizations of operands <span class="math inline">\(i,\ldots,j\)</span> evaluating to true and false.</p>
+<p>If <span class="math inline">\(a_i\)</span> is true, <span class="math inline">\((T[i,i],F[i,i])=(1,0)\)</span>; if false, it is <span class="math inline">\((0,1)\)</span>.</p>
+<h2 id="split-at-the-final-operator">Split at the Final Operator</h2>
+<p>For each <span class="math inline">\(i\leq k&lt;j\)</span>, write <span class="math inline">\(t_L=T[i,k]\)</span>, <span class="math inline">\(f_L=F[i,k]\)</span>, <span class="math inline">\(t_R=T[k+1,j]\)</span>, and <span class="math inline">\(f_R=F[k+1,j]\)</span>. Add the following contributions:</p>
+<table>
+<thead>
+<tr>
+<th><span class="math inline">\(op_k\)</span></th>
+<th>True contribution</th>
+<th>False contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND</td>
+<td><span class="math inline">\(t_Lt_R\)</span></td>
+<td><span class="math inline">\(t_Lf_R+f_Lt_R+f_Lf_R\)</span></td>
+</tr>
+<tr>
+<td>OR</td>
+<td><span class="math inline">\(t_Lt_R+t_Lf_R+f_Lt_R\)</span></td>
+<td><span class="math inline">\(f_Lf_R\)</span></td>
+</tr>
+<tr>
+<td>XOR</td>
+<td><span class="math inline">\(t_Lf_R+f_Lt_R\)</span></td>
+<td><span class="math inline">\(t_Lt_R+f_Lf_R\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Initialize each non-base state to zero and <strong>sum over every split</strong>. The left and right counts multiply because their choices are independent. Fill increasing interval length. Answer: <span class="math inline">\(T[1,n]\)</span>. There are <span class="math inline">\(O(n^2)\)</span> states and <span class="math inline">\(O(n)\)</span> splits per state: <span class="math inline">\(O(n^3)\)</span> arithmetic operations and <span class="math inline">\(O(n^2)\)</span> stored counts. Exact counts can be large, so this is an arithmetic-operation bound.</p>
+<h1 id="exam-transfer-minimum-cost-grid-path-2024-saq5">Exam Transfer: Minimum-Cost Grid Path (2024 SAQ5)</h1>
+<p>Moves are right, down, or diagonally down-right. Both endpoint cell costs are included. Let <span class="math inline">\(D[i,j]\)</span> be the cheapest cost from <span class="math inline">\((1,1)\)</span> to <span class="math inline">\((i,j)\)</span>. <span class="math display">\[
+D[1,1]=C[1,1],\qquad
+D[i,j]=C[i,j]+\min\{D[i-1,j],D[i,j-1],D[i-1,j-1]\},
+\]</span> with out-of-grid entries treated as <span class="math inline">\(+\infty\)</span> and <span class="math inline">\((1,1)\)</span> handled separately.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Minimum-Cost-Grid-Path}
+\begin{algorithmic}
+\PROCEDURE{Minimum-Cost-Grid-Path}{$C,m,n$}
+    \STATE Initialize all $D[i,j]$ to $\infty$
+    \STATE $D[1,1] \gets C[1,1]$
+    \FOR{$i \gets 1$ \TO $m$}
+        \FOR{$j \gets 1$ \TO $n$}
+            \IF{$(i,j)\neq(1,1)$}
+                \STATE Choose a valid predecessor $(u,v)$ among $(i-1,j),(i,j-1),(i-1,j-1)$ minimizing $D[u,v]$
+                \STATE $D[i,j] \gets C[i,j]+D[u,v]$
+                \STATE $pred[i,j] \gets (u,v)$
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+    \STATE Trace $pred$ from $(m,n)$ to $(1,1)$ and reverse the resulting path
+    \RETURN $D[m,n]$ and the path
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p><strong>Correctness.</strong> Every path ends through one of the valid predecessor cells. Its prefix must have minimum cost for that predecessor; otherwise replace it with a cheaper prefix.</p>
+<p>Time is <span class="math inline">\(O(mn)\)</span>; table and predecessor space are <span class="math inline">\(O(mn)\)</span>; tracing the path takes <span class="math inline">\(O(m+n)\)</span>. A rolling-row value-only solution uses <span class="math inline">\(O(n)\)</span> space, but does not alone answer the paper’s requirement to output the path.</p>
+<p><strong>Sources and scope.</strong> Cross-checked against <code>Lectures_22-24_DP2.pdf</code>: alignment and traceback (PDF pp. 3-12), Hirschberg (14-27), LCS (28-30), shortest-path DP and destination-oriented Bellman-Ford-Moore (32-54), routing (57-59), and global negative-cycle detection (61-66). The increasing/decreasing-subsequence and Boolean-parenthesization sections are retained supplements from the original note outline, not topics found in this PDF. The grid-path section is a derived solution to 2024 SAQ5; alignment revision also uses the 2022-2024 MCQs.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/">https://remy-campanella.github.io/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%BA%94%E7%94%A8%E7%AE%97%E6%B3%95/">应用算法</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci320_cover.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/scripts/vendor/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/scripts/vendor/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/10/28/26-9-17-1-COMPSCI320-11-dp1/" title="【COMPSCI 320】 Lecture 11 Dynamic Programming 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 11 Dynamic Programming 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2022-2024 finals all include DP design questions and test knapsack/alignment in MCQs. The 2025 paper’s omission of DP is not evidence that it is outside the syllabus. Prioritize state meaning, recurrence, boundaries, evaluation order, reconstruction, and complexity. The matrix and stock examples below are derived solutions to past-paper tasks, not official marking schemes. Dynamic Programming A Design Template DP solves overlapping subproblems and stores each answer once. T...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 13 Network Flow 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus Network flow appears in all four finals examined. The 2022 SAQ5 asks for a residual network, a maximum-bottleneck augmenting path, and a flow with an equal-capacity cut. The 2024 SAQ2 asks for a capacity-change proof and counterexample; 2025 Q6(a) again asks for a justified maximum flow. First master residual edges, augmentation, and the optimality certificate. Then learn matching and vertex splitting in Lecture 14. Advanced running-time proofs are a second-pass topic, not a re...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 14 Network Flow 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2023 maze question and 2025 matching/vertex-disjoint-path questions make modelling and recovering an actual solution central. For every reduction, specify vertices, arcs, capacities, the meaning of one unit of flow, both correctness directions, integrality, and output recovery. Bipartite Matching Definitions A matching is a set of edges with no shared endpoint. A maximum matching has maximum cardinality; a maximal matching merely cannot be enlarged by adding one edge and ne...</div></div></div></a><a class="pagination-related" href="/2026/10/23/26-7-30-1-COMPSCI320-5-union/" title="【COMPSCI 320】 Lecture 05 Union-Find Algorithms"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-23</div><div class="info-item-2">【COMPSCI 320】 Lecture 05 Union-Find Algorithms</div></div><div class="info-2"><div class="info-item-1">Network Connectivity Network Connectivity Basic Abstractions.  set of objects union command: connect two objects. find query: is there a path connecting one object to another?  Objects Union-find applications involve manipulating objects of all types. When programming, convenient to name them \(0\) to \(N-1\). Union-Find Abstractions SImple model captures the essential nature of connectivity.  Objects. (Grid points.) 10 1 2 3 4 5 6 7 8 9 Disjoint sets of objects. (Subsets of connected grid po...</div></div></div></a><a class="pagination-related" href="/2026/10/19/26-7-29-1-COMPSCI320-4-graph/" title="【COMPSCI 320】 Lecture 04 Graphs"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-19</div><div class="info-item-2">【COMPSCI 320】 Lecture 04 Graphs</div></div><div class="info-2"><div class="info-item-1">Definitions and Applications Undirected Graphs Notation. \(G = (V, E)\). Captures pairwise relationship between objects. Let \(n = |V|\), \(m = |E|\). Graph Representation: Adjacency Matrix  Adjacency Matrix  \(n\)-by-\(n\) matrix with \(A_{uv} = 1\) if \((u, v)\) is an edge.    Space proportional to \(n^2\). Check if \((u, v)\) is an edge takes time \(\Theta(1)\). Identify all edges takes time \(\Theta(n^2)\).  Graph Representation: Adjacency Lists Node-indexed array of lists.  Space is \(\T...</div></div></div></a><a class="pagination-related" href="/2026/09/14/26-7-23-1-COMPSCI320-2-match/" title="【COMPSCI 320】 Lecture 02 Stable Matching"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-14</div><div class="info-item-2">【COMPSCI 320】 Lecture 02 Stable Matching</div></div><div class="info-2"><div class="info-item-1">Stable Matching Goal. Given a set of preferences among hospitals and med-school students, design a self-reinforcing admissions process.  Unstable Pair  Assume that an assignment is established. Hospital \(h\) and student \(s\) form an unstable pair if both:    \(h\) prefers \(s\) to one of its admitted students. \(s\) prefers \(h\) to assigned hospital.   Stable assignment  Assignment with no unstable pairs.    Natural and desirable condition. Individual self-interest prevents any hospital–st...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 15 Intractability 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2022 SAQ4 requires a complete NP-completeness proof for CLIQUE, and SAQ6 asks for a reduction between matching and edge cover. The 2025 Q5 tests what may be concluded from \(A\leq B\) under different resource bounds. Prioritize reduction direction, polynomial construction size, and both directions of the correctness equivalence. Large Hamilton-cycle, colouring, and numerical gadgets are second-pass details; understanding the proof template remains essential. Polynomial-Time...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-9-17-1-COMPSCI320-11-dp1/" title="【COMPSCI 320】 Lecture 11 Dynamic Programming 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 11 Dynamic Programming 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2022-2024 finals all include DP design questions and test knapsack/alignment in MCQs. The 2025 paper’s omission of DP is not evidence that it is outside the syllabus. Prioritize state meaning, recurrence, boundaries, evaluation order, reconstruction, and complexity. The matrix and stock examples below are derived solutions to past-paper tasks, not official marking schemes. Dynamic Programming A Design Template DP solves overlapping subproblems and stores each answer once. T...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#revision-focus"><span class="toc-number">1.</span> <span class="toc-text">Revision Focus</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sequence-alignment"><span class="toc-number">2.</span> <span class="toc-text">Sequence Alignment</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#edit-distance-and-alignment"><span class="toc-number">2.1.</span> <span class="toc-text">Edit Distance and Alignment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#problem-structure-and-recurrence"><span class="toc-number">2.2.</span> <span class="toc-text">Problem Structure and Recurrence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#implementation-and-reconstruction"><span class="toc-number">2.3.</span> <span class="toc-text">Implementation and Reconstruction</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hirschbergs-algorithm"><span class="toc-number">3.</span> <span class="toc-text">Hirschberg’s Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sequence-alignment-in-linear-space"><span class="toc-number">3.1.</span> <span class="toc-text">Sequence Alignment in Linear Space</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#recursive-implementation"><span class="toc-number">3.2.</span> <span class="toc-text">Recursive Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#time-and-space-analysis"><span class="toc-number">3.3.</span> <span class="toc-text">Time and Space Analysis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#longest-common-subsequence"><span class="toc-number">4.</span> <span class="toc-text">Longest Common Subsequence</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#prefix-dp"><span class="toc-number">4.1.</span> <span class="toc-text">Prefix DP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reduction-to-alignment"><span class="toc-number">4.2.</span> <span class="toc-text">Reduction to Alignment</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bellman-ford-moore-algorithm"><span class="toc-number">5.</span> <span class="toc-text">Bellman-Ford-Moore Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#shortest-paths-with-negative-weights"><span class="toc-number">5.1.</span> <span class="toc-text">Shortest Paths with Negative Weights</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dynamic-programming-toward-a-fixed-destination"><span class="toc-number">5.2.</span> <span class="toc-text">Dynamic Programming Toward a Fixed Destination</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#course-implementation-destination-oriented-bellman-ford-moore"><span class="toc-number">5.3.</span> <span class="toc-text">Course Implementation: Destination-Oriented Bellman-Ford-Moore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#standard-source-oriented-implementation"><span class="toc-number">5.4.</span> <span class="toc-text">Standard Source-Oriented Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#detecting-a-negative-cycle-anywhere"><span class="toc-number">5.5.</span> <span class="toc-text">Detecting a Negative Cycle Anywhere</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#currency-conversion-application"><span class="toc-number">5.6.</span> <span class="toc-text">Currency-Conversion Application</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#distance-vector-routing"><span class="toc-number">5.7.</span> <span class="toc-text">Distance-Vector Routing</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#longest-increasing-and-decreasing-subsequences"><span class="toc-number">6.</span> <span class="toc-text">Longest Increasing and Decreasing Subsequences</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#counting-boolean-parenthesizations"><span class="toc-number">7.</span> <span class="toc-text">Counting Boolean Parenthesizations</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#states-and-base-cases"><span class="toc-number">7.1.</span> <span class="toc-text">States and Base Cases</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#split-at-the-final-operator"><span class="toc-number">7.2.</span> <span class="toc-text">Split at the Final Operator</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exam-transfer-minimum-cost-grid-path-2024-saq5"><span class="toc-number">8.</span> <span class="toc-text">Exam Transfer: Minimum-Cost Grid Path (2024 SAQ5)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 16 Intractability 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2">【COMPSCI 320】 Lecture 16 Intractability 2</a><time datetime="2026-10-28T09:51:57.000Z" title="发表于 2026-10-28 17:51:57">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 15 Intractability 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1">【COMPSCI 320】 Lecture 15 Intractability 1</a><time datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 14 Network Flow 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2">【COMPSCI 320】 Lecture 14 Network Flow 2</a><time datetime="2026-10-28T09:51:37.000Z" title="发表于 2026-10-28 17:51:37">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 13 Network Flow 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1">【COMPSCI 320】 Lecture 13 Network Flow 1</a><time datetime="2026-10-28T09:51:26.000Z" title="发表于 2026-10-28 17:51:26">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</a><time datetime="2026-10-28T09:51:06.000Z" title="发表于 2026-10-28 17:51:06">2026-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.9.0+26.10.28.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/scripts/vendor/fancybox/dist/fancybox/fancybox.umd.js"></script><script src="/scripts/vendor/lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = '/scripts/vendor/mathjax/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax || document.readyState !== 'loading' ? loadMathjax() : document.addEventListener('DOMContentLoaded', loadMathjax, { once: true })
+})()</script><script type="text/javascript" id="maid-script" src="/scripts/vendor/mermaid/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins') || '{}');
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/scripts/vendor/pseudocode/pseudocode.js"></script><script src="/scripts/js/pseudocode-init.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>

@@ -1,0 +1,859 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 320】 Lecture 09 Divide and Conquer 1 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Divide-and-conquer Paradigm Divide-and-conquer.  Divide up problem into several subproblems (of the same kind). Solve (conquer) each subproblem recursively. Combine solutions to subproblems into overa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 320】 Lecture 09 Divide and Conquer 1">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/10/28/26-8-19-2-COMPSCI320-9-divide/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Divide-and-conquer Paradigm Divide-and-conquer.  Divide up problem into several subproblems (of the same kind). Solve (conquer) each subproblem recursively. Combine solutions to subproblems into overa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif">
+<meta property="article:published_time" content="2026-10-28T09:23:01.000Z">
+<meta property="article:modified_time" content="2026-10-28T04:23:01.822Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="应用算法">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 320】 Lecture 09 Divide and Conquer 1",
+  "url": "https://remy-campanella.github.io/2026/10/28/26-8-19-2-COMPSCI320-9-divide/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif",
+  "datePublished": "2026-10-28T09:23:01.000Z",
+  "dateModified": "2026-10-28T04:23:01.822Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/10/28/26-8-19-2-COMPSCI320-9-divide/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/scripts/vendor/fontawesome/css/all.min.css"><link rel="stylesheet" href="/scripts/vendor/fancybox/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 320】 Lecture 09 Divide and Conquer 1',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/scripts/css/font.css"></noscript><link rel="stylesheet" href="/scripts/vendor/pseudocode/pseudocode.min.css"><link rel="stylesheet" href="/scripts/css/pseudocode.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci320_cover.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 320】 Lecture 09 Divide and Conquer 1</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 320】 Lecture 09 Divide and Conquer 1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-28T09:23:01.000Z" title="发表于 2026-10-28 17:23:01">2026-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-28T04:23:01.822Z" title="更新于 2026-10-28 12:23:01">2026-10-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-320-Applied-Algorithms/">COMPSCI 320 Applied Algorithms</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="divide-and-conquer-paradigm">Divide-and-conquer Paradigm</h2>
+<p><strong>Divide-and-conquer.</strong></p>
+<ul>
+<li>Divide up problem into several subproblems (of the same kind).</li>
+<li>Solve (conquer) each subproblem recursively.</li>
+<li>Combine solutions to subproblems into overall solution.</li>
+</ul>
+<p><strong>Usage.</strong></p>
+<ul>
+<li>Divide problem of <span class="math inline">\(n\)</span> into two subproblems of <span class="math inline">\(n / 2\)</span>. <span class="math inline">\(O(n)\)</span></li>
+<li>Solve recursively.</li>
+<li>Combine to overall solution. <span class="math inline">\(O(n)\)</span></li>
+</ul>
+<p><strong>Consequence.</strong></p>
+<ul>
+<li>Brute: <span class="math inline">\(\Theta(n^2)\)</span></li>
+<li>DC: <span class="math inline">\(O(n \log n)\)</span></li>
+</ul>
+<h1 id="mergesort">Mergesort</h1>
+<h2 id="sorting-problem">Sorting Problem</h2>
+<dl>
+<dt>Sorting Problem</dt>
+<dd>
+Given a list <span class="math inline">\(L\)</span> of <span class="math inline">\(n\)</span> elements, rearrange them in ascending order.
+</dd>
+</dl>
+<h2 id="mergesort-1">Mergesort</h2>
+<ul>
+<li>Sort left half.</li>
+<li>Sort right half.</li>
+<li>Merge two haves to make sorted whole.</li>
+</ul>
+<h2 id="merging">Merging</h2>
+<ul>
+<li>Scan <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> from left to right.</li>
+<li>Compare <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_j\)</span>.</li>
+<li>If <span class="math inline">\(a_i \leq b_j\)</span> then append <span class="math inline">\(a_i\)</span> to <span class="math inline">\(C\)</span>(no larger than any element in <span class="math inline">\(B\)</span>).</li>
+<li>If <span class="math inline">\(a_i &gt; b_j\)</span> then append <span class="math inline">\(b_i\)</span> to <span class="math inline">\(C\)</span>(smaller than any element in <span class="math inline">\(A\)</span>).</li>
+</ul>
+<h2 id="mergesort-implementation">Mergesort Implementation</h2>
+<p><strong>Input.</strong> List <span class="math inline">\(L\)</span> of <span class="math inline">\(n\)</span> elements from a totally ordered universe.</p>
+<p><strong>Output.</strong> The <span class="math inline">\(n\)</span> elements in ascending order.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Merge-Sort}
+\begin{algorithmic}
+\PROCEDURE{Merge-Sort}{$L$}
+    \IF{list $L$ has one element}
+        \RETURN $L$
+    \ENDIF
+    \STATE Divide the list into two halves $A$ and $B$
+    \STATE $A \gets$ \CALL{Merge-Sort}{$A$} \COMMENT{$T(n / 2)$}
+    \STATE $B \gets$ \CALL{Merge-Sort}{$B$} \COMMENT{$T(n / 2)$}
+    \STATE $L \gets$ \CALL{Merge}{$A, B$} \COMMENT{$\Theta(n)$}
+    \RETURN $L$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<h2 id="a-useful-recurrence-relation">A Useful Recurrence Relation</h2>
+<dl>
+<dt><span class="math inline">\(T(n)\)</span></dt>
+<dd>
+Max number of compares to mergesort a list of length <span class="math inline">\(n\)</span>.
+</dd>
+</dl>
+<p><strong>Recurrence.</strong> <span class="math display">\[
+T(n) = \begin{cases}
+    0 &amp;, n = 1 \\
+    T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2} \rceil) + n &amp;, n &gt; 1
+\end{cases}
+\]</span></p>
+<p><strong>Solution.</strong> <span class="math inline">\(T(n) = O(n \log n)\)</span>.</p>
+<p><strong>Assorted Proofs.</strong> We describe serveral ways to solve this recurrence. Initially we assume <span class="math inline">\(n\)</span> is a power of 2 and replace <span class="math inline">\(\leq\)</span> with <span class="math inline">\(=\)</span> in recurrence.</p>
+<h2 id="recursion-tree">Recursion Tree</h2>
+<p><strong>Proposition.</strong> If <span class="math inline">\(T(n)\)</span> satisfies the following recurrence, then <span class="math inline">\(T(n) = n \log n\)</span>. <span class="math display">\[
+T(n) = \begin{cases}
+    0&amp;, n = 1 \\
+    2T(\frac{n}{2}) + n&amp;, n &gt; 1
+\end{cases}
+\]</span></p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/mergesort-recursion-tree.webp" alt="Mergesort recursion tree: linear work at each of logarithmically many levels" />
+<figcaption aria-hidden="true">Mergesort recursion tree: linear work at each of logarithmically many levels</figcaption>
+</figure>
+<blockquote>
+<p><strong>Pf.</strong> [by induction]</p>
+<ul>
+<li>Base: <span class="math inline">\(n = 1\)</span>, <span class="math inline">\(T(1) = 0 = n \log_2 n\)</span>.</li>
+<li>Inductive hypothesis: assume <span class="math inline">\(T(n) = n \log_2 n\)</span>.</li>
+<li>Goal: Show that <span class="math inline">\(T(2n) = 2n \log_2(2n)\)</span>. <span class="math display">\[
+\begin{align}
+  T(2n) &amp;= 2T(n) + 2n \\ 
+        &amp;= 2n \log_2 n + 2n \\ 
+        &amp;= 2n(\log_2(2n) - 1) + 2n \\
+        &amp;= 2n \log_2 2n
+\end{align}
+\]</span></li>
+</ul>
+</blockquote>
+<h2 id="analysis-of-mergesort-recurrence">Analysis of Mergesort Recurrence</h2>
+<p>If <span class="math inline">\(T(n)\)</span> satisfies the following recurrence, then <span class="math inline">\(T(n) \leq n \lceil \log_2n \rceil\)</span>. <span class="math display">\[
+T(n) \leq \begin{cases}
+    0&amp;, n = 1 \\
+    T(\lfloor \frac{n}{2} \rfloor) + T(\lceil \frac{n}{2}\rceil) + n&amp;, n &gt; 1
+\end{cases}
+\]</span></p>
+<blockquote>
+<p><strong>Pf.</strong> [by strong induction on <span class="math inline">\(n\)</span>]</p>
+<ul>
+<li><p>Base: <span class="math inline">\(n = 1\)</span>.</p></li>
+<li><p>Define <span class="math inline">\(n_1 = \lfloor n / 2 \rfloor\)</span>, <span class="math inline">\(n_2 = \lceil n / 2 \rceil\)</span>, <span class="math inline">\(n_1 + n_2 = n\)</span>.</p></li>
+<li><p>Induction: assume true for <span class="math inline">\(1, \ldots, n - 1\)</span>. <span class="math display">\[
+\begin{align}
+    T(n) &amp;\leq T(n_1) + T(n_2) + n \\
+         &amp;\leq n_1 \lceil \log n_1 \rceil + n_2 \lceil \log n_2 \rceil + n \\
+         &amp;\leq n_1 \lceil \log n_2 \rceil + n_2 \lceil \log n_2 \rceil + n \\
+         &amp;= n \lceil \log n_2 \rceil + n
+\end{align}
+\]</span></p>
+<p>Claim <span class="math display">\[
+\log n \leq k = \lceil \log n \rceil \\
+n \leq 2^k \\
+\frac{n}{2} \leq 2^{k - 1} \\
+\lceil \frac{n}{2} \rceil \leq \lceil 2^{k - 1} \rceil = 2^{k - 1} \\
+n_2 \leq 2^{\lceil \log n \rceil - 1} \\
+\lceil \log n_2 \rceil \leq \lceil \log n \rceil - 1
+\]</span></p>
+<p>So <span class="math display">\[
+T(n) \leq n \lceil \log n_2 \rceil + n \\
+\leq n(\lceil \log n \rceil - 1) + n \\
+= n\lceil \log n \rceil
+\]</span></p></li>
+</ul>
+</blockquote>
+<h2 id="sorting-lower-bound">Sorting Lower Bound</h2>
+<p><strong>Theorem.</strong> Any deterministic comparison-based sorting algorithm must make <span class="math inline">\(\Omega(n \log n)\)</span> comparisons in the worst case.</p>
+<blockquote>
+<p><strong>Pf.</strong> [information theoretic]</p>
+<ul>
+<li>Assume the array consists of <span class="math inline">\(n\)</span> distinct values <span class="math inline">\(a_1, \ldots, a_n\)</span>.</li>
+<li>Represent the algorithm by a comparison tree. Each internal node is a pairwise comparison, and its two branches represent the possible outcomes for distinct elements.</li>
+<li>The worst-case number of comparisons is the height <span class="math inline">\(h\)</span> of the pruned comparison tree.</li>
+<li>A binary tree of height <span class="math inline">\(h\)</span> has at most <span class="math inline">\(2^h\)</span> leaves.</li>
+<li>There are <span class="math inline">\(n!\)</span> different orderings. A correct sorting algorithm must distinguish all of them, so the tree has at least <span class="math inline">\(n!\)</span> reachable leaves.</li>
+</ul>
+<p>Therefore, <span class="math display">\[
+2^h \geq \text{number of leaves} \geq n!
+\]</span></p>
+<p>Taking logarithms and applying Stirling’s formula gives <span class="math display">\[
+h \geq \log_2(n!) \geq n\log_2 n - \frac{n}{\ln 2} = \Omega(n\log n).
+\]</span></p>
+<p>Thus, every deterministic comparison-based sorting algorithm requires <span class="math inline">\(\Omega(n \log n)\)</span> comparisons in the worst case.</p>
+</blockquote>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/sorting-comparison-tree.webp" alt="Comparison tree: n! orderings require at least n! reachable leaves" />
+<figcaption aria-hidden="true">Comparison tree: n! orderings require at least n! reachable leaves</figcaption>
+</figure>
+<p><strong>Note.</strong> Lower bound can be extended to include randomized algorithms.</p>
+<h1 id="counting-inversions">Counting Inversions</h1>
+<h2 id="counting-inversions-1">Counting Inversions</h2>
+<p>Music site tries to match your song preferences with others.</p>
+<dl>
+<dt>Similarity Metric</dt>
+<dd>
+Number of inversions between two rankings.
+</dd>
+</dl>
+<ul>
+<li>My rank: <span class="math inline">\(1, 2, \ldots, n\)</span>.</li>
+<li>Your rank: <span class="math inline">\(a_1, a_2, \dots, a_n\)</span>.</li>
+<li>Songs <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are inverted if <span class="math inline">\(i &lt; j\)</span>, but <span class="math inline">\(a_i &gt; a_j\)</span>.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/ranking-inversions.webp" alt="Two inversions between two rankings of the same items" />
+<figcaption aria-hidden="true">Two inversions between two rankings of the same items</figcaption>
+</figure>
+<p><strong>Brute force.</strong> Check all <span class="math inline">\(\Theta(n^2)\)</span> pairs.</p>
+<h2 id="divide-and-conquer">Divide-and-Conquer</h2>
+<ul>
+<li><strong>Divide</strong>: separate list into two halves <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>.</li>
+<li><strong>Conquer</strong>: recursively count inversions in each list.</li>
+<li><strong>Combine</strong>: count inversions <span class="math inline">\((a, b)\)</span> with <span class="math inline">\(a \in A\)</span> and <span class="math inline">\(b \in B\)</span>.</li>
+<li>Return sum of three counts.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/inversions-divide-and-conquer.webp" alt="Count inversions within each half and across the two halves" />
+<figcaption aria-hidden="true">Count inversions within each half and across the two halves</figcaption>
+</figure>
+<h2 id="how-to-combine-two-subproblems">How to Combine Two Subproblems?</h2>
+<p><strong>Warmup.</strong></p>
+<ul>
+<li>Sort <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>.</li>
+<li>For each <span class="math inline">\(b \in B\)</span>, binary search in <span class="math inline">\(A\)</span> to find how many elements in <span class="math inline">\(A\)</span> are greater than <span class="math inline">\(b\)</span>.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/cross-inversions-binary-search.webp" alt="Count cross inversions by binary search in the sorted left half" />
+<figcaption aria-hidden="true">Count cross inversions by binary search in the sorted left half</figcaption>
+</figure>
+<p><strong>Merge-and-count.</strong> Count inversions <span class="math inline">\((a, b)\)</span> with <span class="math inline">\(a \in A\)</span> and <span class="math inline">\(b \in B\)</span>, assuming <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are sorted.</p>
+<ul>
+<li>Scan <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> from left to right, comparing the current elements <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_j\)</span>.</li>
+<li>If <span class="math inline">\(a_i &lt; b_j\)</span>, then <span class="math inline">\(a_i\)</span> is <strong>not inverted</strong> with any element left in <span class="math inline">\(B\)</span>. Append <span class="math inline">\(a_i\)</span> to the sorted list <span class="math inline">\(C\)</span> and advance <span class="math inline">\(i\)</span>.</li>
+<li>If <span class="math inline">\(a_i &gt; b_j\)</span>, then <span class="math inline">\(b_j\)</span> is inverted with <strong>every element left in <span class="math inline">\(A\)</span></strong>. Add <span class="math inline">\(|A| - i + 1\)</span> to the inversion count (using 1-based indexing), append <span class="math inline">\(b_j\)</span> to <span class="math inline">\(C\)</span>, and advance <span class="math inline">\(j\)</span>.</li>
+<li>When either list is exhausted, append the remaining elements of the other list to <span class="math inline">\(C\)</span> without adding any further cross inversions.</li>
+<li>Return the cross-inversion count and the merged sorted list <span class="math inline">\(C\)</span>.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/merge-and-count.webp" alt="Count cross inversions while merging the two sorted halves" />
+<figcaption aria-hidden="true">Count cross inversions while merging the two sorted halves</figcaption>
+</figure>
+<h2 id="divide-and-conquer-algorithm-implementation">Divide-and-Conquer Algorithm Implementation</h2>
+<p><strong>Input.</strong> List <span class="math inline">\(L\)</span>.</p>
+<p><strong>Output.</strong> Number of inversions in <span class="math inline">\(L\)</span> and <span class="math inline">\(L\)</span> in sorted order.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Sort-And-Count}
+\begin{algorithmic}
+\PROCEDURE{Sort-And-Count}{$L$}
+    \IF{list $L$ has one element}
+        \RETURN $(0, L)$
+    \ENDIF
+    \STATE Divide the list into two halves $A$ and $B$
+    \STATE $(r_A, A) \gets$ \CALL{Sort-And-Count}{$A$} \COMMENT{$T(n / 2)$}
+    \STATE $(r_B, B) \gets$ \CALL{Sort-And-Count}{$B$} \COMMENT{$T(n / 2)$}
+    \STATE $(r_{AB}, L) \gets$ \CALL{Merge-And-Count}{$A, B$} \COMMENT{$\Theta(n)$}
+    \RETURN $(r_A + r_B + r_{AB}, L)$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<h2 id="divide-and-conquer-algorithm-analysis">Divide-and-Conquer Algorithm Analysis</h2>
+<p><strong>Proposition.</strong> The sort-and-count algorithm coounts the number of inversions in a permutation of size <span class="math inline">\(n\)</span> in <span class="math inline">\(O(n \log n)\)</span> time.</p>
+<h1 id="ramdomized-quicksort">Ramdomized Quicksort</h1>
+<h2 id="randomized-quicksort">Randomized Quicksort</h2>
+<ul>
+<li>Pick a random pivot <span class="math inline">\(p \in A\)</span>.</li>
+<li>3-way partition to <span class="math inline">\(L\)</span>, <span class="math inline">\(M\)</span>, <span class="math inline">\(R\)</span>. <span class="math inline">\(\forall l \in L, l &lt; p\)</span>, <span class="math inline">\(\forall r \in R, r &gt; p\)</span>.</li>
+<li>Recursively sort <span class="math inline">\(L\)</span> and <span class="math inline">\(R\)</span>.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/quicksort-three-way-partition.webp" alt="Three-way partition around a pivot and recursive sorting of the outer partitions" />
+<figcaption aria-hidden="true">Three-way partition around a pivot and recursive sorting of the outer partitions</figcaption>
+</figure>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Randomized-Quicksort}
+\begin{algorithmic}
+\PROCEDURE{Randomized-Quicksort}{$A$}
+    \IF{array $A$ has zero or one element}
+        \RETURN
+    \ENDIF
+    \STATE Pick pivot $p \in A$ uniformly at random
+    \STATE $(L, M, R) \gets$ \CALL{Partition-3-Way}{$A, p$} \COMMENT{$\Theta(n)$}
+    \STATE \CALL{Randomized-Quicksort}{$L$} \COMMENT{$T(i)$}
+    \STATE \CALL{Randomized-Quicksort}{$R$} \COMMENT{$T(n - i - 1)$}
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>Here, <span class="math inline">\(i = |L|\)</span> is a random variable depending on the pivot <span class="math inline">\(p\)</span>. The annotation <span class="math inline">\(T(n - i - 1)\)</span> assumes distinct elements, so <span class="math inline">\(|M| = 1\)</span>; in general, <span class="math inline">\(|R| = n - |L| - |M|\)</span>.</p>
+<h2 id="analysis-of-randomized-quicksort">Analysis of Randomized Quicksort</h2>
+<p><strong>Proposition.</strong> The expected number of compares to quicksort an array of <span class="math inline">\(n\)</span> distinct elements <span class="math inline">\(a_1 &lt; \ldots &lt; a_n\)</span> is <span class="math inline">\(O(n \log n)\)</span>.</p>
+<p>Consider BST representation of pivot elements.</p>
+<ul>
+<li><span class="math inline">\(a_i\)</span> and <span class="math inline">\(a_j\)</span> are compared once iff one is an ancestor of the other.</li>
+<li><span class="math inline">\(P(a_i, a_j \text{ are compared}) = \frac{2}{j - i + 1}, i &lt; j\)</span>.</li>
+<li>Expected number of compares: <span class="math display">\[
+\sum_{i = 1}^n\sum_{j = i + 1}^n\frac{2}{j - i + 1} = 2\sum_{i = 1}^n\sum_{j = 2}^{n - i + 1}\frac{1}{j} \\
+\leq 2n\sum_{j = 1}^n\frac{1}{j} \\
+\leq 2n(\ln n + 1) \text{(harmonic sum)}
+\]</span></li>
+</ul>
+<h1 id="median-and-selection">Median and Selection</h1>
+<p><strong>Selection.</strong> Given <span class="math inline">\(n\)</span> elements from a totally ordered universe, find <span class="math inline">\(k\)</span>th smallest.</p>
+<ul>
+<li><span class="math inline">\(O(n)\)</span> compares for <span class="math inline">\(k = 1\)</span> or <span class="math inline">\(n\)</span>.</li>
+<li><span class="math inline">\(O(n \log n)\)</span> compares by <strong>sorting</strong>.</li>
+<li><span class="math inline">\(O(n \log k)\)</span> compares with a <strong>binary heap</strong>.</li>
+</ul>
+<h2 id="randomized-quickselect">Randomized Quickselect</h2>
+<ul>
+<li>Pick a random pivot <span class="math inline">\(p \in A\)</span>.</li>
+<li>3-way partition to <span class="math inline">\(L\)</span>, <span class="math inline">\(M\)</span>, <span class="math inline">\(R\)</span>.</li>
+<li>Recur in one subarray, the one containing the <span class="math inline">\(k\)</span>th smallest element.</li>
+</ul>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Quick-Select}
+\begin{algorithmic}
+\PROCEDURE{Quick-Select}{$A, k$}
+    \STATE Pick pivot $p \in A$ uniformly at random
+    \STATE $(L, M, R) \gets$ \CALL{Partition-3-Way}{$A, p$} \COMMENT{$\Theta(n)$}
+    \IF{$k \leq |L|$}
+        \RETURN \CALL{Quick-Select}{$L, k$} \COMMENT{$T(i)$}
+    \ELIF{$k &gt; |L| + |M|$}
+        \RETURN \CALL{Quick-Select}{$R, k - |L| - |M|$} \COMMENT{$T(n - i - 1)$}
+    \ELSE
+        \RETURN $p$
+    \ENDIF
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p><strong>Notes.</strong> Here, <span class="math inline">\(1 \leq k \leq |A|\)</span>, and <span class="math inline">\(M\)</span> contains all elements equal to <span class="math inline">\(p\)</span>. The final branch applies when <span class="math inline">\(|L| &lt; k \leq |L| + |M|\)</span>; the lecture’s final condition <span class="math inline">\(k = |L|\)</span> is a typo. As in quicksort, <span class="math inline">\(i = |L|\)</span>, and the annotation <span class="math inline">\(T(n - i - 1)\)</span> assumes distinct elements; in general, the right subproblem has size <span class="math inline">\(n - |L| - |M|\)</span>.</p>
+<h2 id="randomized-quickselect-analysis">Randomized Quickselect Analysis</h2>
+<p><strong>Intuition.</strong> Splitting a candy bar uniformly at random leaves a larger piece whose expected size is <span class="math inline">\(3/4\)</span> of the whole. This suggests <span class="math display">\[
+T(n) \leq T(3n / 4) + n \quad \Rightarrow \quad T(n) \leq 4n.
+\]</span> However, this is <strong>not a rigorous recurrence</strong>: in general, we cannot assume <span class="math inline">\(\mathbb{E}[T(i)] \leq T(\mathbb{E}[i])\)</span>.</p>
+<p><strong>Definitions.</strong> Assume distinct elements, as in the lecture analysis.</p>
+<ul>
+<li><span class="math inline">\(T(n, k)\)</span> is the maximum expected number of comparisons needed to select the <span class="math inline">\(k\)</span>th smallest element in an array of length at most <span class="math inline">\(n\)</span>.</li>
+<li><span class="math inline">\(T(n) = \max_{1 \leq k \leq n} T(n, k)\)</span>, with <span class="math inline">\(T(0) = 0\)</span>.</li>
+<li>The expectation is over the random pivot choices. Since the definition covers arrays of length <strong>at most</strong> <span class="math inline">\(n\)</span>, <span class="math inline">\(T(n)\)</span> is monotone non-decreasing.</li>
+</ul>
+<p><strong>Proposition.</strong> <span class="math inline">\(T(n) \leq 4n\)</span>, under the lecture’s cost model of at most <span class="math inline">\(n\)</span> comparisons per partition.</p>
+<blockquote>
+<p><strong>Pf.</strong> [by strong induction on <span class="math inline">\(n\)</span>]</p>
+<p><strong>Base case.</strong> An array of length at most 1 takes at most one comparison, so <span class="math inline">\(T(1) \leq 1 \leq 4\)</span>.</p>
+<p><strong>Inductive hypothesis.</strong> Assume <span class="math inline">\(T(j) \leq 4j\)</span> for every <span class="math inline">\(0 \leq j &lt; n\)</span>.</p>
+<p>For an array of length <span class="math inline">\(n\)</span>, let <span class="math inline">\(i\)</span> be the number of elements smaller than the pivot. A uniformly random pivot makes <span class="math inline">\(i\)</span> uniform over <span class="math inline">\(0, 1, \ldots, n - 1\)</span>. The two outer subarrays have sizes <span class="math inline">\(i\)</span> and <span class="math inline">\(n - i - 1\)</span>.</p>
+<p>Quickselect recurses into at most one subarray. By monotonicity, its recursive cost is at most <span class="math inline">\(T(\max\{i, n - i - 1\})\)</span>. Each possible larger-subarray size occurs at most twice, giving <span class="math display">\[
+\begin{aligned}
+\text{expected cost}
+&amp;\leq n + \frac{1}{n}\sum_{i=0}^{n-1} T(\max\{i, n-i-1\}) \\
+&amp;\leq n + \frac{2}{n}\sum_{j=\lfloor n/2 \rfloor}^{n-1} T(j) \\
+&amp;\leq n + \frac{8}{n}\sum_{j=\lfloor n/2 \rfloor}^{n-1} j \\
+&amp;\leq n + \frac{8}{n}\cdot\frac{3n^2}{8} \\
+&amp;= 4n.
+\end{aligned}
+\]</span></p>
+<p>The last bound holds for both even and odd <span class="math inline">\(n\)</span>. Arrays shorter than <span class="math inline">\(n\)</span> are already covered by the inductive hypothesis, so <span class="math inline">\(T(n) \leq 4n\)</span>.</p>
+</blockquote>
+<p>Thus, randomized quickselect uses <span class="math inline">\(O(n)\)</span> expected comparisons for every valid <span class="math inline">\(k\)</span>.</p>
+<h2 id="selection-in-worst-case-linear-time">Selection in Worst-Case Linear Time</h2>
+<p><strong>Goal.</strong> Choose a pivot that guarantees a constant fraction of the elements can be discarded, rather than relying on a random pivot.</p>
+<p><strong>Idea.</strong> Recursively select the median of a sample of about <span class="math inline">\(n/5\)</span> elements. A suitable sample guarantees that each outer partition has size at most <span class="math inline">\(7n/10 + O(1)\)</span>.</p>
+<p>Ignoring rounding and base cases, the recurrence has the form <span class="math display">\[
+T(n) \leq T(n/5) + T(7n/10) + O(n).
+\]</span></p>
+<p>The two recursive subproblems have different sizes, but their sizes sum to only <span class="math inline">\(9n/10\)</span>. The total work is therefore linear; the proof below handles the floor terms explicitly.</p>
+<h2 id="choosing-the-pivot-element">Choosing the Pivot Element</h2>
+<ol type="1">
+<li>Divide the elements into <span class="math inline">\(\lfloor n/5 \rfloor\)</span> groups of five, plus any leftover elements.</li>
+<li>Find the median of each full group. Let <span class="math inline">\(B\)</span> be the list of these medians.</li>
+<li>Recursively select a middle element of <span class="math inline">\(B\)</span> as the pivot <span class="math inline">\(p\)</span>.</li>
+<li>Partition the <strong>entire</strong> original array around <span class="math inline">\(p\)</span>, including the leftover elements.</li>
+</ol>
+<p>The leftovers are ignored only when choosing the pivot, not when selecting the answer.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/median-of-medians-pivot.webp" alt="Choose a pivot from the medians of five-element groups" />
+<figcaption aria-hidden="true">Choose a pivot from the medians of five-element groups</figcaption>
+</figure>
+<h2 id="median-of-medians-selection-algorithm">Median-of-Medians Selection Algorithm</h2>
+<p><strong>Input.</strong> A nonempty array <span class="math inline">\(A\)</span> and a rank <span class="math inline">\(1 \leq k \leq |A|\)</span>.</p>
+<p><strong>Output.</strong> The <span class="math inline">\(k\)</span>th smallest element of <span class="math inline">\(A\)</span>.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Mom-Select}
+\begin{algorithmic}
+\PROCEDURE{Mom-Select}{$A, k$}
+    \STATE $n \gets |A|$
+    \IF{$n &lt; 50$}
+        \RETURN the $k$th smallest element of $A$ via mergesort
+    \ENDIF
+    \STATE Group $A$ into $\lfloor n/5 \rfloor$ groups of five, ignoring leftovers for this step
+    \STATE $B \gets$ the median of each group of five
+    \STATE $p \gets$ \CALL{Mom-Select}{$B, \lfloor n/10 \rfloor$} \COMMENT{A middle element of $B$}
+    \STATE $(L, M, R) \gets$ \CALL{Partition-3-Way}{$A, p$}
+    \IF{$k \leq |L|$}
+        \RETURN \CALL{Mom-Select}{$L, k$}
+    \ELIF{$k &gt; |L| + |M|$}
+        \RETURN \CALL{Mom-Select}{$R, k - |L| - |M|$}
+    \ELSE
+        \RETURN $p$
+    \ENDIF
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>The pivot rank follows the lecture: <span class="math inline">\(\lfloor n/10 \rfloor = \lfloor |B|/2 \rfloor\)</span>. For odd <span class="math inline">\(|B|\)</span>, this is one position below the usual median, but the bounds below still hold.</p>
+<h3 id="why-the-pivot-is-good">Why the Pivot Is Good</h3>
+<p>Let <span class="math inline">\(q = \lfloor n/10 \rfloor\)</span>.</p>
+<ul>
+<li>At least <span class="math inline">\(q\)</span> group medians are <span class="math inline">\(\leq p\)</span>. Each such group contributes at least three elements <span class="math inline">\(\leq p\)</span>.</li>
+<li>At least <span class="math inline">\(q\)</span> group medians are <span class="math inline">\(\geq p\)</span>. Each such group contributes at least three elements <span class="math inline">\(\geq p\)</span>.</li>
+<li>Thus, at least <span class="math inline">\(3q\)</span> elements are <span class="math inline">\(\leq p\)</span>, and at least <span class="math inline">\(3q\)</span> elements are <span class="math inline">\(\geq p\)</span>.</li>
+<li>Either recursive outer partition therefore contains at most <span class="math inline">\(n - 3\lfloor n/10 \rfloor\)</span> elements.</li>
+</ul>
+<p>These non-strict inequalities also handle duplicate values: elements equal to <span class="math inline">\(p\)</span> belong to <span class="math inline">\(M\)</span> and are excluded from either recursive outer partition.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/median-of-medians-lower-medians.webp" alt="Group medians at or below the chosen pivot" />
+<figcaption aria-hidden="true">Group medians at or below the chosen pivot</figcaption>
+</figure>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/median-of-medians-lower-elements.webp" alt="Each qualifying group contributes three elements at or below the pivot" />
+<figcaption aria-hidden="true">Each qualifying group contributes three elements at or below the pivot</figcaption>
+</figure>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/median-of-medians-upper-median-candidates.webp" alt="Identify group medians at or above the pivot" />
+<figcaption aria-hidden="true">Identify group medians at or above the pivot</figcaption>
+</figure>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/median-of-medians-upper-medians.webp" alt="Group medians at or above the chosen pivot" />
+<figcaption aria-hidden="true">Group medians at or above the chosen pivot</figcaption>
+</figure>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-19-2-COMPSCI320-9-divide/median-of-medians-upper-elements.webp" alt="Each qualifying group contributes three elements at or above the pivot" />
+<figcaption aria-hidden="true">Each qualifying group contributes three elements at or above the pivot</figcaption>
+</figure>
+<h3 id="analysis-of-selection-algorithm-recurrence">Analysis of Selection Algorithm Recurrence</h3>
+<p>Let <span class="math inline">\(T(n)\)</span> be the maximum number of comparisons on any valid selection input of length <strong>at most</strong> <span class="math inline">\(n\)</span>. This definition makes <span class="math inline">\(T(n)\)</span> monotone non-decreasing.</p>
+<p>Under the lecture’s comparison model, finding a median of five uses at most six comparisons, and partitioning uses at most <span class="math inline">\(n\)</span> comparisons. The non-recursive work is at most <span class="math display">\[
+6\lfloor n/5 \rfloor + n \leq \frac{11}{5}n.
+\]</span></p>
+<p>Hence, <span class="math display">\[
+T(n) \leq
+\begin{cases}
+6n, &amp; n &lt; 50, \\
+\max\left\{T(n-1),\ T(\lfloor n/5 \rfloor) + T(n-3\lfloor n/10 \rfloor) + \frac{11}{5}n\right\}, &amp; n \geq 50.
+\end{cases}
+\]</span></p>
+<p>The <span class="math inline">\(T(n-1)\)</span> term covers inputs shorter than <span class="math inline">\(n\)</span>; the other term covers inputs of length exactly <span class="math inline">\(n\)</span>.</p>
+<p><strong>Claim.</strong> <span class="math inline">\(T(n) \leq 44n\)</span>.</p>
+<blockquote>
+<p><strong>Pf.</strong> [by strong induction]</p>
+<p><strong>Base case.</strong> For <span class="math inline">\(n &lt; 50\)</span>, mergesort gives <span class="math inline">\(T(n) \leq 6n \leq 44n\)</span>.</p>
+<p><strong>Inductive hypothesis.</strong> Assume <span class="math inline">\(T(j) \leq 44j\)</span> for all <span class="math inline">\(j &lt; n\)</span>.</p>
+<p><strong>Inductive step.</strong> For <span class="math inline">\(n \geq 50\)</span>, the first term satisfies <span class="math inline">\(T(n-1) \leq 44(n-1) \leq 44n\)</span>. For the second term, use <span class="math inline">\(3\lfloor n/10 \rfloor \geq n/4\)</span>: <span class="math display">\[
+\begin{aligned}
+T(\lfloor n/5 \rfloor) + T(n-3\lfloor n/10 \rfloor) + \frac{11}{5}n
+&amp;\leq 44\lfloor n/5 \rfloor + 44(n-3\lfloor n/10 \rfloor) + \frac{11}{5}n \\
+&amp;\leq \frac{44}{5}n + 44n - 11n + \frac{11}{5}n \\
+&amp;= 44n.
+\end{aligned}
+\]</span></p>
+<p>Both terms are at most <span class="math inline">\(44n\)</span>, completing the induction.</p>
+</blockquote>
+<p><strong>Conclusion.</strong> Median-of-medians selection takes <span class="math inline">\(O(n)\)</span> time in the <strong>worst case</strong>, whereas randomized quickselect has an <span class="math inline">\(O(n)\)</span> <strong>expected</strong> bound.</p>
+<h1 id="closest-pair-of-points">Closest Pair of Points</h1>
+<h2 id="problem">Problem</h2>
+<p>Given <span class="math inline">\(n\)</span> points in the plane, find a pair with the <strong>smallest Euclidean distance</strong>.</p>
+<ul>
+<li><strong>Brute force.</strong> Check all pairs using <span class="math inline">\(\Theta(n^2)\)</span> distance calculations.</li>
+<li><strong>1D version.</strong> Sort the points and check adjacent pairs, taking <span class="math inline">\(O(n \log n)\)</span> time.</li>
+<li><strong>Non-degeneracy assumption.</strong> No two points have the same <span class="math inline">\(x\)</span>-coordinate, as assumed in the lecture.</li>
+</ul>
+<h2 id="first-attempt">First Attempt</h2>
+<p>Sorting by <span class="math inline">\(x\)</span>-coordinate and checking nearby positions does not guarantee finding the closest pair in the plane. Sorting by <span class="math inline">\(y\)</span>-coordinate has the same limitation: the closest points can be separated in either ordering by other points that are far away in the other coordinate.</p>
+<!-- Suggested figure: why coordinate sorting alone fails; lecture slide 67, PDF page 57. -->
+<p><strong>Second attempt.</strong> Divide the plane into four quadrants. This does not guarantee balanced subproblems: a quadrant may contain far more than <span class="math inline">\(n/4\)</span> points.</p>
+<h2 id="divide-and-conquer-1">Divide and Conquer</h2>
+<ul>
+<li><strong>Divide.</strong> Choose a vertical line <span class="math inline">\(L\)</span> between the middle points in <span class="math inline">\(x\)</span>-order, producing two subsets whose sizes differ by at most one.</li>
+<li><strong>Conquer.</strong> Recursively find the closest-pair distances <span class="math inline">\(\delta_1\)</span> and <span class="math inline">\(\delta_2\)</span> in the left and right subsets.</li>
+<li><strong>Combine.</strong> Let <span class="math inline">\(\delta = \min\{\delta_1, \delta_2\}\)</span>. Search for a cross-boundary pair with distance less than <span class="math inline">\(\delta\)</span>.</li>
+<li>Return the best of the left, right, and cross-boundary results.</li>
+</ul>
+<p>The challenge is to perform the combine step without checking all cross-boundary pairs.</p>
+<h2 id="find-closest-pair">Find Closest Pair</h2>
+<p><strong>Observation.</strong> Any cross-boundary pair closer than <span class="math inline">\(\delta\)</span> must have both points within distance <span class="math inline">\(\delta\)</span> of <span class="math inline">\(L\)</span>.</p>
+<p>Only points in this <strong><span class="math inline">\(2\delta\)</span>-wide strip</strong> need to be considered. Sort them by <span class="math inline">\(y\)</span>-coordinate as <span class="math inline">\(s_1, s_2, \ldots, s_t\)</span>.</p>
+<p><strong>Claim.</strong> It suffices to compare each point with the next <strong>seven</strong> points in this order. If <span class="math inline">\(j-i &gt; 7\)</span>, the distance between <span class="math inline">\(s_i\)</span> and <span class="math inline">\(s_j\)</span> is at least <span class="math inline">\(\delta\)</span>.</p>
+<!-- Suggested figure: the dividing line and the 2-delta strip; lecture slide 72, PDF page 62. -->
+<blockquote>
+<p><strong>Pf.</strong></p>
+<ul>
+<li>Consider the <span class="math inline">\(2\delta\)</span>-by-<span class="math inline">\(\delta\)</span> rectangle in the strip whose bottom edge passes through <span class="math inline">\(s_i\)</span>.</li>
+<li>Any point above this rectangle differs from <span class="math inline">\(s_i\)</span> in <span class="math inline">\(y\)</span>-coordinate by at least <span class="math inline">\(\delta\)</span>, so it cannot be closer than <span class="math inline">\(\delta\)</span>.</li>
+<li>Split the rectangle along <span class="math inline">\(L\)</span> and subdivide it into eight squares of side length <span class="math inline">\(\delta/2\)</span>. Each square lies entirely in one recursive half.</li>
+<li>Each square has diameter <span class="math inline">\(\delta/\sqrt{2} &lt; \delta\)</span>. It contains at most one point, because points in the same half are at least <span class="math inline">\(\delta\)</span> apart.</li>
+<li>Thus, the rectangle contains at most eight points, including <span class="math inline">\(s_i\)</span>. At most seven subsequent points can be closer than <span class="math inline">\(\delta\)</span>.</li>
+</ul>
+</blockquote>
+<!-- Suggested figure: the eight-square packing proof; lecture slide 73, PDF page 63. -->
+<h2 id="closest-pair-algorithm">Closest-Pair Algorithm</h2>
+<p>The following version returns the minimum distance. To return the actual pair, retain the pair attaining each minimum as well. The base case is made explicit here; it is omitted from the lecture pseudocode.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Closest-Pair}
+\begin{algorithmic}
+\PROCEDURE{Closest-Pair}{$P$}
+    \STATE $n \gets |P|$
+    \IF{$n \leq 3$}
+        \RETURN the minimum pairwise distance by brute force, or $\infty$ if $n &lt; 2$
+    \ENDIF
+    \STATE Choose a vertical line $L$ splitting $P$ into balanced halves $P_L$ and $P_R$
+    \STATE $\delta_1 \gets$ \CALL{Closest-Pair}{$P_L$}
+    \STATE $\delta_2 \gets$ \CALL{Closest-Pair}{$P_R$}
+    \STATE $\delta \gets \min\{\delta_1, \delta_2\}$
+    \STATE $S \gets$ points of $P$ within distance $\delta$ of $L$
+    \STATE Sort $S$ by $y$-coordinate as $s_1, \ldots, s_t$
+    \FOR{$i \gets 1$ \TO $t$}
+        \FOR{$j \gets i+1$ \TO $\min\{i+7, t\}$}
+            \STATE $d \gets$ \CALL{Distance}{$s_i, s_j$}
+            \STATE $\delta \gets \min\{\delta, d\}$
+        \ENDFOR
+    \ENDFOR
+    \RETURN $\delta$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>The strip and its seven-neighbor bound are formed using the value of <span class="math inline">\(\delta\)</span> from the two recursive calls. Updating the best distance during the scan does not require rebuilding the strip.</p>
+<h2 id="closest-pair-analysis">Closest-Pair Analysis</h2>
+<p><strong>Initial version.</strong> Splitting the points by the median <span class="math inline">\(x\)</span>-coordinate takes <span class="math inline">\(O(n)\)</span> time using linear-time selection. Sorting the strip by <span class="math inline">\(y\)</span> at each recursive call costs <span class="math inline">\(O(n \log n)\)</span>, while the seven-neighbor scan costs <span class="math inline">\(O(n)\)</span>.</p>
+<p>The resulting recurrence is <span class="math display">\[
+T(n) \leq T(\lfloor n/2 \rfloor) + T(\lceil n/2 \rceil) + O(n\log n),
+\]</span> which gives <span class="math inline">\(T(n) = O(n\log^2 n)\)</span>.</p>
+<p><strong>Improvement.</strong> Avoid sorting the strip from scratch at every call.</p>
+<ul>
+<li>Sort the full point set by <span class="math inline">\(x\)</span>-coordinate once, in <span class="math inline">\(O(n\log n)\)</span> time, so balanced splits are available by position.</li>
+<li>Each recursive call also returns its points sorted by <span class="math inline">\(y\)</span>-coordinate.</li>
+<li>Merge the two sorted <span class="math inline">\(y\)</span>-lists in <span class="math inline">\(O(n)\)</span> time, then filter the merged list to obtain the strip in <span class="math inline">\(y\)</span>-order.</li>
+<li>Scan at most seven successors per strip point in <span class="math inline">\(O(n)\)</span> time.</li>
+</ul>
+<p>Each combine step is now linear: <span class="math display">\[
+T(n) \leq T(\lfloor n/2 \rfloor) + T(\lceil n/2 \rceil) + O(n)
+= O(n\log n).
+\]</span></p>
+<p>The initial sort also takes <span class="math inline">\(O(n\log n)\)</span>, so the complete algorithm runs in <strong><span class="math inline">\(O(n\log n)\)</span> time</strong>.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/10/28/26-8-19-2-COMPSCI320-9-divide/">https://remy-campanella.github.io/2026/10/28/26-8-19-2-COMPSCI320-9-divide/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%BA%94%E7%94%A8%E7%AE%97%E6%B3%95/">应用算法</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci320_cover.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/scripts/vendor/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/scripts/vendor/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/" title="【COMPSCI 320】 Lecture 08 Greedy Algorithm 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 08 Greedy Algorithm 2</div></div><div class="info-2"><div class="info-item-1">  The trolley problem (not exactly)  Dijkstra’s Algorithm Single-Pair Shortest Path Problem  Single-Pair Shortest Problem  Given a digraph \(G = (V, E)\), edge lengths \(l_e \geq 0\), source \(s \in V\), and destination \(t \in V\), find a shortest directed path from \(s\) to \(t\).     A shortest directed path from source s to destination t  Single-Source Shortest Paths Problem  Single-Source Shortest Path Problem  Given a digraph \(G = (V, E)\), edge lengths \(l_e \geq 0\), source \(s \in V...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-8-26-1-COMPSCI320-10-divide2/" title="【COMPSCI 320】 Lecture 10 Divide and Conquer 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 10 Divide and Conquer 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus Past-paper evidence. The 2025 final Q3 asks five Master Theorem calculations, and Q4 asks for a logarithmic-time local-minimum algorithm with a proof. Earlier papers also test recurrences and FFT concepts. Prioritize deriving a recurrence and explaining the combine step; retain FFT’s representations, padding, and complexity before studying its implementation details. These priorities summarize the 2022-2025 papers discussed in the COMPSCI 320 chat. They are not an official fore...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 15 Intractability 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2022 SAQ4 requires a complete NP-completeness proof for CLIQUE, and SAQ6 asks for a reduction between matching and edge cover. The 2025 Q5 tests what may be concluded from \(A\leq B\) under different resource bounds. Prioritize reduction direction, polynomial construction size, and both directions of the correctness equivalence. Large Hamilton-cycle, colouring, and numerical gadgets are second-pass details; understanding the proof template remains essential. Polynomial-Time...</div></div></div></a><a class="pagination-related" href="/2026/07/23/26-7-22-1-COMPSCI320-1-intro/" title="【COMPSCI 320】 Lecture 01 Introduction 2026"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-23</div><div class="info-item-2">【COMPSCI 320】 Lecture 01 Introduction 2026</div></div><div class="info-2"><div class="info-item-1">AI in This Course Algorithm Definitions An algorithm is a finite, definite, effective procedure, with some input and some output. COMPSCI 220 vs. 320  COMPSCI 220: Implementation and consumption of classic algorithms. COMPSCI 320: Design &amp; analysis of algorithms.  Representative Problems  Interval scheduling  Input. Set of jobs with start times and finish times. Goal. Find maximum cardinality subset of mutually compatible(jobs don’t overlap) jobs.  Weighted interval scheduling  Input. Set...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 13 Network Flow 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus Network flow appears in all four finals examined. The 2022 SAQ5 asks for a residual network, a maximum-bottleneck augmenting path, and a flow with an equal-capacity cut. The 2024 SAQ2 asks for a capacity-change proof and counterexample; 2025 Q6(a) again asks for a justified maximum flow. First master residual edges, augmentation, and the optimality certificate. Then learn matching and vertex splitting in Lecture 14. Advanced running-time proofs are a second-pass topic, not a re...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-8-26-1-COMPSCI320-10-divide2/" title="【COMPSCI 320】 Lecture 10 Divide and Conquer 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 10 Divide and Conquer 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus Past-paper evidence. The 2025 final Q3 asks five Master Theorem calculations, and Q4 asks for a logarithmic-time local-minimum algorithm with a proof. Earlier papers also test recurrences and FFT concepts. Prioritize deriving a recurrence and explaining the combine step; retain FFT’s representations, padding, and complexity before studying its implementation details. These priorities summarize the 2022-2025 papers discussed in the COMPSCI 320 chat. They are not an official fore...</div></div></div></a><a class="pagination-related" href="/2026/10/23/26-7-30-1-COMPSCI320-5-union/" title="【COMPSCI 320】 Lecture 05 Union-Find Algorithms"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-23</div><div class="info-item-2">【COMPSCI 320】 Lecture 05 Union-Find Algorithms</div></div><div class="info-2"><div class="info-item-1">Network Connectivity Network Connectivity Basic Abstractions.  set of objects union command: connect two objects. find query: is there a path connecting one object to another?  Objects Union-find applications involve manipulating objects of all types. When programming, convenient to name them \(0\) to \(N-1\). Union-Find Abstractions SImple model captures the essential nature of connectivity.  Objects. (Grid points.) 10 1 2 3 4 5 6 7 8 9 Disjoint sets of objects. (Subsets of connected grid po...</div></div></div></a><a class="pagination-related" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-14</div><div class="info-item-2">【COMPSCI 320】 Lecture 03 Analysis Review</div></div><div class="info-2"><div class="info-item-1">Computational Tractability Models of Computation: Turing Machines Finite state machine with infinite tape.  Running time: Number fo steps. Memory. Number of tape cells utilized.  Caveat. No random access of memory.  Single-Tape TM requires \(\leq n^2\) steps to detect \(n\)-bit palindromes(回文). Easy to detect palindromes in \(\leq cn\) steps on a real computer.  Models of Computation: Word RAM(Random Access Machine) Word RAM.  Each memory location and input/output cell stores a \(w\)-bit inte...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#divide-and-conquer-paradigm"><span class="toc-number">1.</span> <span class="toc-text">Divide-and-conquer Paradigm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mergesort"><span class="toc-number"></span> <span class="toc-text">Mergesort</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sorting-problem"><span class="toc-number">1.</span> <span class="toc-text">Sorting Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mergesort-1"><span class="toc-number">2.</span> <span class="toc-text">Mergesort</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#merging"><span class="toc-number">3.</span> <span class="toc-text">Merging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mergesort-implementation"><span class="toc-number">4.</span> <span class="toc-text">Mergesort Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-useful-recurrence-relation"><span class="toc-number">5.</span> <span class="toc-text">A Useful Recurrence Relation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#recursion-tree"><span class="toc-number">6.</span> <span class="toc-text">Recursion Tree</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#analysis-of-mergesort-recurrence"><span class="toc-number">7.</span> <span class="toc-text">Analysis of Mergesort Recurrence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sorting-lower-bound"><span class="toc-number">8.</span> <span class="toc-text">Sorting Lower Bound</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#counting-inversions"><span class="toc-number"></span> <span class="toc-text">Counting Inversions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#counting-inversions-1"><span class="toc-number">1.</span> <span class="toc-text">Counting Inversions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#divide-and-conquer"><span class="toc-number">2.</span> <span class="toc-text">Divide-and-Conquer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how-to-combine-two-subproblems"><span class="toc-number">3.</span> <span class="toc-text">How to Combine Two Subproblems?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#divide-and-conquer-algorithm-implementation"><span class="toc-number">4.</span> <span class="toc-text">Divide-and-Conquer Algorithm Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#divide-and-conquer-algorithm-analysis"><span class="toc-number">5.</span> <span class="toc-text">Divide-and-Conquer Algorithm Analysis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ramdomized-quicksort"><span class="toc-number"></span> <span class="toc-text">Ramdomized Quicksort</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#randomized-quicksort"><span class="toc-number">1.</span> <span class="toc-text">Randomized Quicksort</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#analysis-of-randomized-quicksort"><span class="toc-number">2.</span> <span class="toc-text">Analysis of Randomized Quicksort</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#median-and-selection"><span class="toc-number"></span> <span class="toc-text">Median and Selection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#randomized-quickselect"><span class="toc-number">1.</span> <span class="toc-text">Randomized Quickselect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#randomized-quickselect-analysis"><span class="toc-number">2.</span> <span class="toc-text">Randomized Quickselect Analysis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#selection-in-worst-case-linear-time"><span class="toc-number">3.</span> <span class="toc-text">Selection in Worst-Case Linear Time</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#choosing-the-pivot-element"><span class="toc-number">4.</span> <span class="toc-text">Choosing the Pivot Element</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#median-of-medians-selection-algorithm"><span class="toc-number">5.</span> <span class="toc-text">Median-of-Medians Selection Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#why-the-pivot-is-good"><span class="toc-number">5.1.</span> <span class="toc-text">Why the Pivot Is Good</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#analysis-of-selection-algorithm-recurrence"><span class="toc-number">5.2.</span> <span class="toc-text">Analysis of Selection Algorithm Recurrence</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#closest-pair-of-points"><span class="toc-number"></span> <span class="toc-text">Closest Pair of Points</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#problem"><span class="toc-number">1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#first-attempt"><span class="toc-number">2.</span> <span class="toc-text">First Attempt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#divide-and-conquer-1"><span class="toc-number">3.</span> <span class="toc-text">Divide and Conquer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#find-closest-pair"><span class="toc-number">4.</span> <span class="toc-text">Find Closest Pair</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#closest-pair-algorithm"><span class="toc-number">5.</span> <span class="toc-text">Closest-Pair Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#closest-pair-analysis"><span class="toc-number">6.</span> <span class="toc-text">Closest-Pair Analysis</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 16 Intractability 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2">【COMPSCI 320】 Lecture 16 Intractability 2</a><time datetime="2026-10-28T09:51:57.000Z" title="发表于 2026-10-28 17:51:57">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 15 Intractability 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1">【COMPSCI 320】 Lecture 15 Intractability 1</a><time datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 14 Network Flow 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2">【COMPSCI 320】 Lecture 14 Network Flow 2</a><time datetime="2026-10-28T09:51:37.000Z" title="发表于 2026-10-28 17:51:37">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 13 Network Flow 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1">【COMPSCI 320】 Lecture 13 Network Flow 1</a><time datetime="2026-10-28T09:51:26.000Z" title="发表于 2026-10-28 17:51:26">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</a><time datetime="2026-10-28T09:51:06.000Z" title="发表于 2026-10-28 17:51:06">2026-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.9.0+26.10.28.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/scripts/vendor/fancybox/dist/fancybox/fancybox.umd.js"></script><script src="/scripts/vendor/lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = '/scripts/vendor/mathjax/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax || document.readyState !== 'loading' ? loadMathjax() : document.addEventListener('DOMContentLoaded', loadMathjax, { once: true })
+})()</script><script type="text/javascript" id="maid-script" src="/scripts/vendor/mermaid/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins') || '{}');
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/scripts/vendor/pseudocode/pseudocode.js"></script><script src="/scripts/js/pseudocode-init.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 320】 Lecture 15 Intractability 1 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Revision Focus The 2022 SAQ4 requires a complete NP-completeness proof for CLIQUE, and SAQ6 asks for a reduction between matching and edge cover. The 2025 Q5 tests what may be concluded from \(A\leq B">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 320】 Lecture 15 Intractability 1">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Revision Focus The 2022 SAQ4 requires a complete NP-completeness proof for CLIQUE, and SAQ6 asks for a reduction between matching and edge cover. The 2025 Q5 tests what may be concluded from \(A\leq B">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif">
+<meta property="article:published_time" content="2026-10-28T09:51:46.000Z">
+<meta property="article:modified_time" content="2026-10-28T04:51:46.993Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="应用算法">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 320】 Lecture 15 Intractability 1",
+  "url": "https://remy-campanella.github.io/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif",
+  "datePublished": "2026-10-28T09:51:46.000Z",
+  "dateModified": "2026-10-28T04:51:46.993Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/scripts/vendor/fontawesome/css/all.min.css"><link rel="stylesheet" href="/scripts/vendor/fancybox/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 320】 Lecture 15 Intractability 1',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/scripts/css/font.css"></noscript><link rel="stylesheet" href="/scripts/vendor/pseudocode/pseudocode.min.css"><link rel="stylesheet" href="/scripts/css/pseudocode.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci320_cover.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 320】 Lecture 15 Intractability 1</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 320】 Lecture 15 Intractability 1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-28T04:51:46.993Z" title="更新于 2026-10-28 12:51:46">2026-10-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-320-Applied-Algorithms/">COMPSCI 320 Applied Algorithms</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="revision-focus">Revision Focus</h1>
+<p>The 2022 SAQ4 requires a complete NP-completeness proof for CLIQUE, and SAQ6 asks for a reduction between matching and edge cover. The 2025 Q5 tests what may be concluded from <span class="math inline">\(A\leq B\)</span> under different resource bounds.</p>
+<p>Prioritize reduction direction, polynomial construction size, and both directions of the correctness equivalence. Large Hamilton-cycle, colouring, and numerical gadgets are second-pass details; understanding the proof template remains essential.</p>
+<h1 id="polynomial-time-reductions">Polynomial-Time Reductions</h1>
+<h2 id="computational-requirements">Computational Requirements</h2>
+<p>An algorithm is polynomial-time if its running time is polynomial in the <strong>encoded input length</strong>. Numerical magnitudes are not their binary lengths. NP does not mean non-polynomial, and membership in NP alone is not evidence of intractability.</p>
+<p>Distinguish solving a decision problem from verifying a proposed yes-certificate. PSPACE and undecidability describe different issues; a problem can be decidable yet have no known polynomial algorithm.</p>
+<h2 id="cook-and-karp-reductions">Cook and Karp Reductions</h2>
+<p>A <strong>Cook reduction</strong> solves <span class="math inline">\(X\)</span> using polynomial ordinary work and polynomially many oracle calls to <span class="math inline">\(Y\)</span>, on polynomial-size queries.</p>
+<p>A <strong>Karp many-one reduction</strong> computes a polynomial-time function <span class="math inline">\(f\)</span> such that <span class="math display">\[
+x\in X\iff f(x)\in Y.
+\]</span> It uses one transformed decision instance and preserves yes/no answers. Use this convention for the NP-hardness constructions below and for 2025 Q5. Do not silently replace a many-one requirement by a multi-query oracle algorithm.</p>
+<h2 id="what-the-arrow-means">What the Arrow Means</h2>
+<p><span class="math inline">\(X\leq_PY\)</span> means <strong>an algorithm for <span class="math inline">\(Y\)</span> can solve <span class="math inline">\(X\)</span></strong>, after the permitted transformation.</p>
+<ul>
+<li>If <span class="math inline">\(Y\in P\)</span>, then <span class="math inline">\(X\in P\)</span>.</li>
+<li>If <span class="math inline">\(X\)</span> is NP-hard, then <span class="math inline">\(Y\)</span> is NP-hard.</li>
+<li>If <span class="math inline">\(X\notin P\)</span>, then <span class="math inline">\(Y\notin P\)</span>.</li>
+<li>If <span class="math inline">\(X\in P\)</span>, no upper bound on <span class="math inline">\(Y\)</span> follows.</li>
+<li>For many-one reductions, <span class="math inline">\(Y\in NP\)</span> implies <span class="math inline">\(X\in NP\)</span>; <span class="math inline">\(X\in NP\)</span> does not imply <span class="math inline">\(Y\in NP\)</span>.</li>
+</ul>
+<p>Reductions compose. To prove a new problem <span class="math inline">\(Y\)</span> hard, reduce a <strong>known hard problem to <span class="math inline">\(Y\)</span></strong>, not the other way around.</p>
+<h2 id="a-complete-reduction-answer">A Complete Reduction Answer</h2>
+<ol type="1">
+<li>Name the source problem and define its input.</li>
+<li>Construct the target instance, including its parameter.</li>
+<li>Bound construction time and output size polynomially.</li>
+<li>Prove source yes <span class="math inline">\(\Rightarrow\)</span> target yes.</li>
+<li>Prove target yes <span class="math inline">\(\Rightarrow\)</span> source yes.</li>
+<li>For NP-completeness, separately prove that the target has polynomial-size yes-certificates and a polynomial-time verifier.</li>
+</ol>
+<h1 id="packing-and-covering-problems">Packing and Covering Problems</h1>
+<h2 id="independent-set-and-vertex-cover">Independent Set and Vertex Cover</h2>
+<p>An independent set <span class="math inline">\(I\)</span> contains no adjacent vertices. A vertex cover <span class="math inline">\(C\)</span> touches every edge.</p>
+<p><strong>Lemma.</strong> <span class="math inline">\(I\)</span> is independent iff <span class="math inline">\(V\setminus I\)</span> is a vertex cover.</p>
+<blockquote>
+<p><strong>Proof.</strong> If an edge were uncovered by <span class="math inline">\(V\setminus I\)</span>, both its endpoints would lie in <span class="math inline">\(I\)</span>, contradicting independence. Conversely, an edge inside <span class="math inline">\(I\)</span> would be uncovered by its complement.</p>
+</blockquote>
+<p>Thus <span class="math display">\[
+(G,k)\in\mathrm{IS}\iff(G,|V|-k)\in\mathrm{VC},
+\]</span> using “at least <span class="math inline">\(k\)</span>” for IS and “at most <span class="math inline">\(|V|-k\)</span>” for VC. The same complement operation gives the reverse reduction.</p>
+<h2 id="clique-via-the-complement-graph-2022-saq4">CLIQUE via the Complement Graph (2022 SAQ4)</h2>
+<p>A clique of size at least <span class="math inline">\(k\)</span> is a vertex set with all pairs adjacent. For the complement graph <span class="math inline">\(\overline G\)</span>, distinct vertices are adjacent exactly when they are not adjacent in <span class="math inline">\(G\)</span>. <span class="math display">\[
+G\text{ has an independent set of size at least }k
+\iff\overline G\text{ has a clique of size at least }k.
+\]</span></p>
+<p><strong>Construction.</strong> Build the complement in <span class="math inline">\(O(n^2)\)</span> time and keep <span class="math inline">\(k\)</span> unchanged.</p>
+<p><strong>Both directions.</strong> Every non-edge between selected vertices in <span class="math inline">\(G\)</span> is an edge in <span class="math inline">\(\overline G\)</span>, and conversely. Thus IS reduces to CLIQUE and proves NP-hardness.</p>
+<p><strong>Membership in NP.</strong> A certificate lists <span class="math inline">\(k\)</span> distinct vertices; verify their validity and all <span class="math inline">\(\binom{k}{2}\)</span> edges. With an adjacency matrix this costs <span class="math inline">\(O(k^2)\)</span> after graph preparation. Therefore CLIQUE is NP-complete. A verifier is not a polynomial-time search algorithm for the clique.</p>
+<h2 id="set-cover">Set Cover</h2>
+<p>Given universe <span class="math inline">\(U\)</span>, subsets <span class="math inline">\(S_1,\ldots,S_m\)</span>, and budget <span class="math inline">\(k\)</span>, ask whether at most <span class="math inline">\(k\)</span> subsets cover every element.</p>
+<p><strong>Vertex Cover <span class="math inline">\(\leq_P\)</span> Set Cover.</strong> Let <span class="math inline">\(U=E\)</span> and create <span class="math inline">\(S_v=\{e:e\text{ is incident to }v\}\)</span> for every vertex. Keep budget <span class="math inline">\(k\)</span>. Selected vertices cover all edges iff their corresponding subsets cover <span class="math inline">\(U\)</span>. Total incidence size is <span class="math inline">\(2|E|\)</span>, so the construction is polynomial.</p>
+<h1 id="constraint-satisfaction">Constraint Satisfaction</h1>
+<h2 id="sat-and-3-sat">SAT and 3-SAT</h2>
+<p>A literal is a variable or its negation. A clause is a disjunction of literals. CNF is a conjunction of clauses. SAT asks for a satisfying assignment; 3-SAT restricts clauses to three literals in the course formulation.</p>
+<p>The number of clauses and the total encoded formula size are different parameters; state which one is used.</p>
+<h2 id="sat-reduces-to-independent-set">3-SAT Reduces to Independent Set</h2>
+<p>Given <span class="math inline">\(m\)</span> clauses, make a vertex for each literal <strong>occurrence</strong>.</p>
+<ul>
+<li>Join the three occurrence vertices of each clause into a triangle.</li>
+<li>Join occurrences in different clauses whenever their literals are complementary.</li>
+<li>Ask for an independent set of size <span class="math inline">\(m\)</span>.</li>
+</ul>
+<blockquote>
+<p><strong>Forward.</strong> From a satisfying assignment, choose one true occurrence per clause. No two chosen occurrences are in the same triangle or are complementary, so they form an independent set of size <span class="math inline">\(m\)</span>.</p>
+<p><strong>Reverse.</strong> Each triangle contributes at most one vertex, so a size-<span class="math inline">\(m\)</span> independent set contains one occurrence per clause. No selected literals contradict each other. Assign their variables accordingly and fill other variables arbitrarily; every clause has a selected true literal.</p>
+</blockquote>
+<p>There are <span class="math inline">\(3m\)</span> vertices and at most <span class="math inline">\(O(m^2)\)</span> edges. Repeated variables require occurrence vertices, not one vertex per variable.</p>
+<h1 id="sequencing-problems">Sequencing Problems</h1>
+<h2 id="hamilton-cycle">Hamilton Cycle</h2>
+<p>A Hamilton cycle visits every vertex exactly once before returning to its start. Hamilton path has no closing requirement. Directed versions must follow arc directions. These ask for vertex visits; Euler problems ask for edge visits.</p>
+<h2 id="directed-hamilton-cycle-to-undirected-hamilton-cycle">Directed Hamilton Cycle to Undirected Hamilton Cycle</h2>
+<p>Replace each directed vertex <span class="math inline">\(v\)</span> by a path <span class="math inline">\(v_{in}-v_{mid}-v_{out}\)</span>. For each original arc <span class="math inline">\(u\to v\)</span>, add the undirected edge <span class="math inline">\(u_{out}v_{in}\)</span>.</p>
+<p>The middle vertex has degree two, forcing every Hamilton cycle to traverse its entire three-vertex gadget. After orienting the whole cycle, traversals consistently run from in to out, and inter-gadget edges correspond to directed arcs. Contracting gadgets recovers a directed Hamilton cycle; expanding a directed cycle gives an undirected one. The construction has <span class="math inline">\(3|V|\)</span> vertices and <span class="math inline">\(2|V|+|E|\)</span> edges. Small degenerate input cases can be handled separately.</p>
+<h2 id="sat-to-directed-hamilton-cycle">3-SAT to Directed Hamilton Cycle</h2>
+<p>The lecture uses variable paths that can be traversed in two directions for truth values, and clause vertices that can be visited through a detour only through an appropriate literal choice. A satisfying assignment permits all clause detours; a Hamilton cycle’s traversals encode consistent truth choices satisfying all clauses.</p>
+<p><strong>Revision depth.</strong> Recognize the role of variable choice, clause satisfaction, and the reverse implication. This paragraph is an overview, not a complete gadget construction suitable to submit as a proof. Reproduce the full lecture construction if specifically asked; prioritize the complete IS/CLIQUE reduction above first.</p>
+<h1 id="partitioning-and-colouring">Partitioning and Colouring</h1>
+<h2 id="three-dimensional-matching">Three-Dimensional Matching</h2>
+<p>Given disjoint <span class="math inline">\(X,Y,Z\)</span>, each of size <span class="math inline">\(n\)</span>, and allowed triples <span class="math inline">\(T\subseteq X\times Y\times Z\)</span>, ask whether <span class="math inline">\(n\)</span> triples cover every element exactly once. This is not ordinary bipartite matching; moving from two sets to triples changes the problem’s complexity.</p>
+<h2 id="colourability">3-Colourability</h2>
+<p>Assign one of three colours to each vertex so adjacent vertices differ. In the SAT reduction, a fixed reference triangle establishes three colour roles, variable gadgets enforce opposite truth colours for a variable and its negation, and clause gadgets enforce satisfaction.</p>
+<p>As with Hamilton-cycle gadgets, knowing the gadget’s intended function does not replace proving that it has exactly the required valid extensions. The full construction is a second-pass task; the ability to verify a colouring certificate and explain the reduction direction is first-pass material.</p>
+<h1 id="numerical-problems">Numerical Problems</h1>
+<h2 id="subset-sum">Subset Sum</h2>
+<p>Given nonnegative integers <span class="math inline">\(w_1,\ldots,w_n\)</span> and target <span class="math inline">\(W\)</span>, ask whether a subset sums <strong>exactly</strong> to <span class="math inline">\(W\)</span>. A DP over targets takes <span class="math inline">\(O(nW)\)</span> time, which is pseudo-polynomial in the binary encoding.</p>
+<h2 id="sat-to-subset-sum-construction-principle">3-SAT to Subset Sum: Construction Principle</h2>
+<p>Use positional digits with one column per variable and per clause. For each variable, create a true-choice and false-choice number, both carrying one in that variable column and contributions to satisfied clauses. Target one in each variable column forces exactly one truth choice. Clause slack numbers allow a clause target to be met iff at least one chosen literal satisfies it.</p>
+<p>The base must prevent carry between columns, and the numbers’ <strong>bit lengths</strong> must be polynomial. Large numerical values alone do not make a reduction exponential. For revision, understand the choice/slack/no-carry roles; a full numerical gadget proof needs its exact digits and both implications.</p>
+<h2 id="subset-sum-reduces-to-0-1-knapsack">Subset Sum Reduces to 0-1 Knapsack</h2>
+<p>The knapsack decision version asks for a subset <span class="math inline">\(S\)</span> satisfying <span class="math display">\[
+\sum_{i\in S}u_i\leq U,\qquad\sum_{i\in S}v_i\geq V,
+\]</span> with positive weights and nonnegative values. Set <span class="math inline">\(u_i=v_i=w_i\)</span> and <span class="math inline">\(U=V=W\)</span>. The two inequalities force the same sum to equal <span class="math inline">\(W\)</span>, proving equivalence. The value condition is <strong>at least</strong>, not at most.</p>
+<h1 id="exam-transfer-matching-and-minimum-edge-cover-2022-saq6">Exam Transfer: Matching and Minimum Edge Cover (2022 SAQ6)</h1>
+<p>For an undirected graph with no isolated vertices, let <span class="math inline">\(\nu\)</span> be its maximum matching size and <span class="math inline">\(\rho\)</span> its minimum edge-cover size. An edge cover touches every <strong>vertex</strong>, unlike a vertex cover, which touches every <strong>edge</strong>. <span class="math display">\[
+\rho=|V|-\nu.
+\]</span></p>
+<p>From a maximum matching, add one incident edge for each unmatched vertex. No two unmatched vertices are adjacent, or the matching could be enlarged, so this gives an edge cover with <span class="math inline">\(\nu+(|V|-2\nu)=|V|-\nu\)</span> edges.</p>
+<p>Conversely, take a minimum edge cover and delete any redundant edges. Each component is a star: an edge whose endpoints both have degree at least two would be redundant. If the cover has <span class="math inline">\(c\)</span> components, it has <span class="math inline">\(|V|-c\)</span> edges, and choosing one edge per component gives a matching of size <span class="math inline">\(c\leq\nu\)</span>. Therefore <span class="math inline">\(\rho\geq|V|-\nu\)</span>.</p>
+<p>Compute a maximum matching and extend it as above to solve the edge-cover problem in polynomial time. This is an optimization/oracle reduction, consistent with the course’s Cook-reduction setting; distinguish it from a decision many-one construction.</p>
+<p><strong>Sources.</strong> <code>Lectures_31-33_NP1.pdf</code>; 2022 SAQ4/SAQ6; 2025 Q5. Preserve the distinction between complete proofs above and the explicitly labelled second-pass gadget overviews.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/">https://remy-campanella.github.io/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%BA%94%E7%94%A8%E7%AE%97%E6%B3%95/">应用算法</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci320_cover.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/scripts/vendor/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/scripts/vendor/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 14 Network Flow 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2023 maze question and 2025 matching/vertex-disjoint-path questions make modelling and recovering an actual solution central. For every reduction, specify vertices, arcs, capacities, the meaning of one unit of flow, both correctness directions, integrality, and output recovery. Bipartite Matching Definitions A matching is a set of edges with no shared endpoint. A maximum matching has maximum cardinality; a maximal matching merely cannot be enlarged by adding one edge and ne...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 16 Intractability 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2022 final requires a full NP-completeness proof; 2023 tests class recognition; 2025 Q5 tests the strongest conclusion justified by reduction direction and resource bounds. Prioritize definitions, certificate size, and logical implications. Cook-Levin’s full proof and large gadget details are second-pass material. P, NP, and EXP Decision Problems and Input Length A decision problem is a language \(X\) of encoded instances. A deterministic algorithm decides \(X\) if it halts...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/10/28/26-8-19-2-COMPSCI320-9-divide/" title="【COMPSCI 320】 Lecture 09 Divide and Conquer 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 09 Divide and Conquer 1</div></div><div class="info-2"><div class="info-item-1">Divide-and-conquer Paradigm Divide-and-conquer.  Divide up problem into several subproblems (of the same kind). Solve (conquer) each subproblem recursively. Combine solutions to subproblems into overall solution.  Usage.  Divide problem of \(n\) into two subproblems of \(n / 2\). \(O(n)\) Solve recursively. Combine to overall solution. \(O(n)\)  Consequence.  Brute: \(\Theta(n^2)\) DC: \(O(n \log n)\)  Mergesort Sorting Problem  Sorting Problem  Given a list \(L\) of \(n\) elements, rearrange...</div></div></div></a><a class="pagination-related" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-14</div><div class="info-item-2">【COMPSCI 320】 Lecture 03 Analysis Review</div></div><div class="info-2"><div class="info-item-1">Computational Tractability Models of Computation: Turing Machines Finite state machine with infinite tape.  Running time: Number fo steps. Memory. Number of tape cells utilized.  Caveat. No random access of memory.  Single-Tape TM requires \(\leq n^2\) steps to detect \(n\)-bit palindromes(回文). Easy to detect palindromes in \(\leq cn\) steps on a real computer.  Models of Computation: Word RAM(Random Access Machine) Word RAM.  Each memory location and input/output cell stores a \(w\)-bit inte...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 14 Network Flow 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2023 maze question and 2025 matching/vertex-disjoint-path questions make modelling and recovering an actual solution central. For every reduction, specify vertices, arcs, capacities, the meaning of one unit of flow, both correctness directions, integrality, and output recovery. Bipartite Matching Definitions A matching is a set of edges with no shared endpoint. A maximum matching has maximum cardinality; a maximal matching merely cannot be enlarged by adding one edge and ne...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/" title="【COMPSCI 320】 Lecture 08 Greedy Algorithm 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-27</div><div class="info-item-2">【COMPSCI 320】 Lecture 08 Greedy Algorithm 2</div></div><div class="info-2"><div class="info-item-1">  The trolley problem (not exactly)  Dijkstra’s Algorithm Single-Pair Shortest Path Problem  Single-Pair Shortest Problem  Given a digraph \(G = (V, E)\), edge lengths \(l_e \geq 0\), source \(s \in V\), and destination \(t \in V\), find a shortest directed path from \(s\) to \(t\).     A shortest directed path from source s to destination t  Single-Source Shortest Paths Problem  Single-Source Shortest Path Problem  Given a digraph \(G = (V, E)\), edge lengths \(l_e \geq 0\), source \(s \in V...</div></div></div></a><a class="pagination-related" href="/2026/10/23/26-7-30-1-COMPSCI320-5-union/" title="【COMPSCI 320】 Lecture 05 Union-Find Algorithms"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-23</div><div class="info-item-2">【COMPSCI 320】 Lecture 05 Union-Find Algorithms</div></div><div class="info-2"><div class="info-item-1">Network Connectivity Network Connectivity Basic Abstractions.  set of objects union command: connect two objects. find query: is there a path connecting one object to another?  Objects Union-find applications involve manipulating objects of all types. When programming, convenient to name them \(0\) to \(N-1\). Union-Find Abstractions SImple model captures the essential nature of connectivity.  Objects. (Grid points.) 10 1 2 3 4 5 6 7 8 9 Disjoint sets of objects. (Subsets of connected grid po...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 13 Network Flow 1</div></div><div class="info-2"><div class="info-item-1">Revision Focus Network flow appears in all four finals examined. The 2022 SAQ5 asks for a residual network, a maximum-bottleneck augmenting path, and a flow with an equal-capacity cut. The 2024 SAQ2 asks for a capacity-change proof and counterexample; 2025 Q6(a) again asks for a justified maximum flow. First master residual edges, augmentation, and the optimality certificate. Then learn matching and vertex splitting in Lecture 14. Advanced running-time proofs are a second-pass topic, not a re...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#revision-focus"><span class="toc-number">1.</span> <span class="toc-text">Revision Focus</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#polynomial-time-reductions"><span class="toc-number">2.</span> <span class="toc-text">Polynomial-Time Reductions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#computational-requirements"><span class="toc-number">2.1.</span> <span class="toc-text">Computational Requirements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cook-and-karp-reductions"><span class="toc-number">2.2.</span> <span class="toc-text">Cook and Karp Reductions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#what-the-arrow-means"><span class="toc-number">2.3.</span> <span class="toc-text">What the Arrow Means</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-complete-reduction-answer"><span class="toc-number">2.4.</span> <span class="toc-text">A Complete Reduction Answer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#packing-and-covering-problems"><span class="toc-number">3.</span> <span class="toc-text">Packing and Covering Problems</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#independent-set-and-vertex-cover"><span class="toc-number">3.1.</span> <span class="toc-text">Independent Set and Vertex Cover</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clique-via-the-complement-graph-2022-saq4"><span class="toc-number">3.2.</span> <span class="toc-text">CLIQUE via the Complement Graph (2022 SAQ4)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-cover"><span class="toc-number">3.3.</span> <span class="toc-text">Set Cover</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#constraint-satisfaction"><span class="toc-number">4.</span> <span class="toc-text">Constraint Satisfaction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sat-and-3-sat"><span class="toc-number">4.1.</span> <span class="toc-text">SAT and 3-SAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sat-reduces-to-independent-set"><span class="toc-number">4.2.</span> <span class="toc-text">3-SAT Reduces to Independent Set</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sequencing-problems"><span class="toc-number">5.</span> <span class="toc-text">Sequencing Problems</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hamilton-cycle"><span class="toc-number">5.1.</span> <span class="toc-text">Hamilton Cycle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#directed-hamilton-cycle-to-undirected-hamilton-cycle"><span class="toc-number">5.2.</span> <span class="toc-text">Directed Hamilton Cycle to Undirected Hamilton Cycle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sat-to-directed-hamilton-cycle"><span class="toc-number">5.3.</span> <span class="toc-text">3-SAT to Directed Hamilton Cycle</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#partitioning-and-colouring"><span class="toc-number">6.</span> <span class="toc-text">Partitioning and Colouring</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#three-dimensional-matching"><span class="toc-number">6.1.</span> <span class="toc-text">Three-Dimensional Matching</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#colourability"><span class="toc-number">6.2.</span> <span class="toc-text">3-Colourability</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#numerical-problems"><span class="toc-number">7.</span> <span class="toc-text">Numerical Problems</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#subset-sum"><span class="toc-number">7.1.</span> <span class="toc-text">Subset Sum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sat-to-subset-sum-construction-principle"><span class="toc-number">7.2.</span> <span class="toc-text">3-SAT to Subset Sum: Construction Principle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#subset-sum-reduces-to-0-1-knapsack"><span class="toc-number">7.3.</span> <span class="toc-text">Subset Sum Reduces to 0-1 Knapsack</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#exam-transfer-matching-and-minimum-edge-cover-2022-saq6"><span class="toc-number">8.</span> <span class="toc-text">Exam Transfer: Matching and Minimum Edge Cover (2022 SAQ6)</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 16 Intractability 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2">【COMPSCI 320】 Lecture 16 Intractability 2</a><time datetime="2026-10-28T09:51:57.000Z" title="发表于 2026-10-28 17:51:57">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 15 Intractability 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1">【COMPSCI 320】 Lecture 15 Intractability 1</a><time datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 14 Network Flow 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2">【COMPSCI 320】 Lecture 14 Network Flow 2</a><time datetime="2026-10-28T09:51:37.000Z" title="发表于 2026-10-28 17:51:37">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 13 Network Flow 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1">【COMPSCI 320】 Lecture 13 Network Flow 1</a><time datetime="2026-10-28T09:51:26.000Z" title="发表于 2026-10-28 17:51:26">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</a><time datetime="2026-10-28T09:51:06.000Z" title="发表于 2026-10-28 17:51:06">2026-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.9.0+26.10.28.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/scripts/vendor/fancybox/dist/fancybox/fancybox.umd.js"></script><script src="/scripts/vendor/lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = '/scripts/vendor/mathjax/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax || document.readyState !== 'loading' ? loadMathjax() : document.addEventListener('DOMContentLoaded', loadMathjax, { once: true })
+})()</script><script type="text/javascript" id="maid-script" src="/scripts/vendor/mermaid/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins') || '{}');
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/scripts/vendor/pseudocode/pseudocode.js"></script><script src="/scripts/js/pseudocode-init.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>

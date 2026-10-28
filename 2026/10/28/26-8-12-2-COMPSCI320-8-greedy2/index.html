@@ -1,0 +1,904 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 320】 Lecture 08 Greedy Algorithm 2 | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="The trolley problem (not exactly)  Dijkstra’s Algorithm Single-Pair Shortest Path Problem  Single-Pair Shortest Problem  Given a digraph \(G &#x3D; (V, E)\), edge lengths \(l_e \geq 0\), source \(s \in V">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 320】 Lecture 08 Greedy Algorithm 2">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="The trolley problem (not exactly)  Dijkstra’s Algorithm Single-Pair Shortest Path Problem  Single-Pair Shortest Problem  Given a digraph \(G &#x3D; (V, E)\), edge lengths \(l_e \geq 0\), source \(s \in V">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif">
+<meta property="article:published_time" content="2026-10-27T14:09:38.000Z">
+<meta property="article:modified_time" content="2026-10-27T09:09:38.679Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="应用算法">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 320】 Lecture 08 Greedy Algorithm 2",
+  "url": "https://remy-campanella.github.io/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci320_cover.gif",
+  "datePublished": "2026-10-27T14:09:38.000Z",
+  "dateModified": "2026-10-27T09:09:38.679Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/scripts/vendor/fontawesome/css/all.min.css"><link rel="stylesheet" href="/scripts/vendor/fancybox/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 320】 Lecture 08 Greedy Algorithm 2',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/scripts/css/font.css"></noscript><link rel="stylesheet" href="/scripts/vendor/pseudocode/pseudocode.min.css"><link rel="stylesheet" href="/scripts/css/pseudocode.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci320_cover.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 320】 Lecture 08 Greedy Algorithm 2</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 320】 Lecture 08 Greedy Algorithm 2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-27T14:09:38.000Z" title="发表于 2026-10-27 22:09:38">2026-10-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-27T09:09:38.679Z" title="更新于 2026-10-27 17:09:38">2026-10-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-320-Applied-Algorithms/">COMPSCI 320 Applied Algorithms</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/1786520400495.webp" alt="The trolley problem (not exactly)" />
+<figcaption aria-hidden="true">The trolley problem (not exactly)</figcaption>
+</figure>
+<h1 id="dijkstras-algorithm">Dijkstra’s Algorithm</h1>
+<h2 id="single-pair-shortest-path-problem">Single-Pair Shortest Path Problem</h2>
+<dl>
+<dt>Single-Pair Shortest Problem</dt>
+<dd>
+Given a digraph <span class="math inline">\(G = (V, E)\)</span>, edge lengths <span class="math inline">\(l_e \geq 0\)</span>, source <span class="math inline">\(s \in V\)</span>, and destination <span class="math inline">\(t \in V\)</span>, find a <strong>shortest directed path</strong> from <span class="math inline">\(s\)</span> to <span class="math inline">\(t\)</span>.
+</dd>
+</dl>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/single-pair-shortest-path.webp" alt="A shortest directed path from source s to destination t" />
+<figcaption aria-hidden="true">A shortest directed path from source s to destination t</figcaption>
+</figure>
+<h2 id="single-source-shortest-paths-problem">Single-Source Shortest Paths Problem</h2>
+<dl>
+<dt>Single-Source Shortest Path Problem</dt>
+<dd>
+Given a digraph <span class="math inline">\(G = (V, E)\)</span>, edge lengths <span class="math inline">\(l_e \geq 0\)</span>, source <span class="math inline">\(s \in V\)</span>, find a shortest directed path from <span class="math inline">\(s\)</span> <strong>to every node</strong>.
+</dd>
+</dl>
+<p><strong>Assumption.</strong> There exists a path from <span class="math inline">\(s\)</span> to every node.</p>
+<h2 id="dijkstras-algorithm-1">Dijkstra’s Algorithm</h2>
+<p><strong>Greedy Approach.</strong> Maintain a set of explored nodes <span class="math inline">\(S\)</span> for which algorithm has determined <span class="math inline">\(d[u]\)</span> = length of a shortest <span class="math inline">\(s \to u\)</span> path.</p>
+<ul>
+<li><p>Initialize <span class="math inline">\(S \leftarrow \{ s \}\)</span>, <span class="math inline">\(d[s] \leftarrow 0\)</span>.</p></li>
+<li><p>Repeatedly choose unexplored node <span class="math inline">\(v \notin S\)</span> which minimizes <span class="math display">\[
+\pi(v) = \min_{e = (u, v): u \in S}d[u] + l_e
+\]</span></p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/dijkstra-greedy-choice.webp" alt="Dijkstra’s greedy choice: extend the explored set S to an unexplored node v" />
+<figcaption aria-hidden="true">Dijkstra’s greedy choice: extend the explored set S to an unexplored node v</figcaption>
+</figure>
+<p>add <span class="math inline">\(v\)</span> to <span class="math inline">\(S\)</span>, and set <span class="math inline">\(d[v] \leftarrow \pi(v)\)</span>.</p></li>
+<li><p>To recover path, set <span class="math inline">\(pred[v] \leftarrow e\)</span> that achieves min.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/1786520302718.webp" alt="Recovering a shortest path using the predecessor edge of v" />
+<figcaption aria-hidden="true">Recovering a shortest path using the predecessor edge of v</figcaption>
+</figure></li>
+</ul>
+<h2 id="proof-of-correctness">Proof of Correctness</h2>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/1786520353655.webp" alt="Dijkstra’s correctness proof: compare the chosen path with a path P leaving S" />
+<figcaption aria-hidden="true">Dijkstra’s correctness proof: compare the chosen path with a path P leaving S</figcaption>
+</figure>
+<p><strong>Invariant.</strong> For each node <span class="math inline">\(u \in S\)</span>, <span class="math inline">\(d[u] =\)</span> length of a shortest <span class="math inline">\(s \to u\)</span> path.</p>
+<blockquote>
+<p><strong>Pf.</strong> [by induction]</p>
+<p><strong>Base Case.</strong> <span class="math inline">\(|S| = 1\)</span> is easy since <span class="math inline">\(S = \{s\}\)</span> and <span class="math inline">\(d[s] = 0\)</span>.</p>
+<p><strong>Inductive Hypothesis.</strong> Assume <span class="math inline">\(|S| \geq 1\)</span>.</p>
+<ul>
+<li>Let <span class="math inline">\(v\)</span> be next node added to <span class="math inline">\(S\)</span>, and let <span class="math inline">\((u, v)\)</span> be the final edge.</li>
+<li>A shortest <span class="math inline">\(s \to u\)</span> path plus <span class="math inline">\((u, v)\)</span> is an <span class="math inline">\(s \to v\)</span> path of length <span class="math inline">\(\pi(v)\)</span>.</li>
+<li>Consider any other <span class="math inline">\(s \to v\)</span> path <span class="math inline">\(P\)</span>. We need to show that it is <strong>no shorter</strong> than <span class="math inline">\(\pi(v)\)</span>. <span class="math display">\[l(P) \geq \pi(v)\]</span></li>
+<li>Let <span class="math inline">\(e = (x, y)\)</span> be the first edge in <span class="math inline">\(P\)</span> that <strong>leaves</strong> <span class="math inline">\(S\)</span>, and let <span class="math inline">\(P&#39;\)</span> be the <strong>subpath</strong> from <span class="math inline">\(s\)</span> to <span class="math inline">\(x\)</span>.</li>
+<li>Then we can infer:<br />
+<span class="math display">\[
+\begin{align}
+  l(P) &amp;\geq l(P&#39;) + l_e (\text{non-negative lengths}) \\
+  &amp;\geq d[x] + l_e (\text{inductive hypothesis}) \\
+  &amp;\geq \pi(y) (\text{definition of }\pi(y)) \\
+  &amp;\geq \pi(v) (\text{algo chose } v \text{ instead of } y)
+\end{align}
+\]</span></li>
+</ul>
+</blockquote>
+<h2 id="efficient-implementation">Efficient Implementation</h2>
+<p><strong>Implementation.</strong></p>
+<ul>
+<li>Algorithm maintains <span class="math inline">\(\pi[v]\)</span> for each node <span class="math inline">\(v\)</span>.</li>
+<li>Priority queue stores unexplored nodes, using <span class="math inline">\(\pi[\cdot]\)</span> as priorities.</li>
+<li>Once <span class="math inline">\(u\)</span> is deleted from the PQ, <span class="math inline">\(\pi[u] =\)</span> length of a shortest <span class="math inline">\(s \to u\)</span> path.</li>
+</ul>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Dijkstra}
+\begin{algorithmic}
+\PROCEDURE{Dijkstra}{$V, E, l, s$}
+    \FORALL{$v \in V \setminus \{s\}$}
+        \STATE $\pi[v] \gets \infty$; $pred[v] \gets \mathrm{null}$
+    \ENDFOR
+    \STATE $\pi[s] \gets 0$
+    \STATE Create an empty priority queue $pq$
+    \FORALL{$v \in V$}
+        \STATE \CALL{Insert}{$pq, v, \pi[v]$}
+    \ENDFOR
+    \WHILE{\CALL{Is-Not-Empty}{$pq$}}
+        \STATE $u \gets$ \CALL{Del-Min}{$pq$}
+        \FORALL{edge $e = (u, v) \in E$ leaving $u$}
+            \IF{$\pi[v] &gt; \pi[u] + l_e$}
+                \STATE \CALL{Decrease-Key}{$pq, v, \pi[u] + l_e$}
+                \STATE $\pi[v] \gets \pi[u] + l_e$; $pred[v] \gets e$
+            \ENDIF
+        \ENDFOR
+    \ENDWHILE
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<h2 id="which-priority-queue">Which Priority Queue?</h2>
+<p><strong>Performance.</strong> depends on PQ: <span class="math inline">\(n\)</span> <code>Insert</code>, <span class="math inline">\(n\)</span> <code>DeleteMin</code>, <span class="math inline">\(\leq m\)</span> <code>DecreaseKey</code>.</p>
+<ul>
+<li><strong>Array</strong> implementation optimal for <strong>dense graphs</strong>. <span class="math inline">\(\Theta(n^2)\)</span> edges.</li>
+<li><strong>Binary heap</strong> much faster for <strong>sparse graphs</strong>. <span class="math inline">\(\Theta(n)\)</span> edges.</li>
+<li><strong>4-way heap</strong> worth the trouble in <strong>performance-critical</strong> situations.</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>priority queue</th>
+<th><code>Insert</code></th>
+<th><code>Del-Min</code></th>
+<th><code>Decrease-Key</code></th>
+<th>total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unordered array</td>
+<td><span class="math inline">\(O(1)\)</span></td>
+<td><span class="math inline">\(O(n)\)</span></td>
+<td><span class="math inline">\(O(1)\)</span></td>
+<td><span class="math inline">\(O(n^2)\)</span></td>
+</tr>
+<tr>
+<td>binary heap</td>
+<td><span class="math inline">\(O(\log n)\)</span></td>
+<td><span class="math inline">\(O(\log n)\)</span></td>
+<td><span class="math inline">\(O(\log n)\)</span></td>
+<td><span class="math inline">\(O(m \log n)\)</span></td>
+</tr>
+<tr>
+<td>d-way heap</td>
+<td><span class="math inline">\(O(d \log_d n)\)</span></td>
+<td><span class="math inline">\(O(d\log_d n)\)</span></td>
+<td><span class="math inline">\(O(\log_d n)\)</span></td>
+<td><span class="math inline">\(O(m \log_{m / n} n)\)</span></td>
+</tr>
+<tr>
+<td>Fobinacci heap</td>
+<td><span class="math inline">\(O(1)\)</span></td>
+<td><span class="math inline">\(O(\log n)\)</span></td>
+<td><span class="math inline">\(O(1)\)</span></td>
+<td><span class="math inline">\(O(m + n \log n)\)</span></td>
+</tr>
+<tr>
+<td>integer priority queue</td>
+<td><span class="math inline">\(O(1)\)</span></td>
+<td><span class="math inline">\(O(\log \log n)\)</span></td>
+<td><span class="math inline">\(O(1)\)</span></td>
+<td><span class="math inline">\(O(m + n \log \log n)\)</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="extensions-of-dijkstras-algorithm">Extensions of Dijkstra’s Algorithm</h2>
+<p>Dijkstra’s algorithm and proof can be extended to serveral related problems:</p>
+<ul>
+<li>Shortest paths in undirected graphs: <span class="math inline">\(\pi[v] \leq \pi[u] + l(u, v)\)</span>.</li>
+<li>Maximum capacity paths: <span class="math inline">\(\pi[v] \geq \min \{ \pi[u], c(u, v) \}\)</span>.</li>
+<li>Maximum reliability paths: <span class="math inline">\(\pi[v] \geq \pi[u] \times \gamma(u, v)\)</span> .</li>
+<li>…</li>
+</ul>
+<p><strong>Key algebraic structure.</strong> Closed semiring (min-plus, bottleneck, Viterbi, …).</p>
+<h1 id="minimum-spanning-trees">Minimum Spanning Trees</h1>
+<h2 id="cycles">Cycles</h2>
+<dl>
+<dt>Path</dt>
+<dd>
+A path is <strong>a sequence of edges</strong> which connects a sequence of nodes.
+</dd>
+<dt>Cycle</dt>
+<dd>
+A cycle is a path with no repeated nodes or edges other than the starting and ending nodes.
+</dd>
+</dl>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/1786520433794.webp" alt="A path and a cycle in an undirected graph" />
+<figcaption aria-hidden="true">A path and a cycle in an undirected graph</figcaption>
+</figure>
+<h2 id="cuts">Cuts</h2>
+<dl>
+<dt>Cut</dt>
+<dd>
+A cut is <strong>a partition of the nodes</strong> into two <strong>nonempty</strong> subsets <span class="math inline">\(S\)</span> and <span class="math inline">\(V – S\)</span>.
+</dd>
+<dt>Cutset</dt>
+<dd>
+The cutset of a cut <span class="math inline">\(S\)</span> is the set of <strong>edges</strong> with exactly <strong>one endpoint</strong> in <span class="math inline">\(S\)</span>.
+</dd>
+</dl>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/1786520458770.webp" alt="A cut S and its cutset D" />
+<figcaption aria-hidden="true">A cut S and its cutset D</figcaption>
+</figure>
+<h2 id="cyclecut-intersection">Cycle–Cut Intersection</h2>
+<p><strong>Proposition.</strong> A cycle and a cutset intersect in an <strong>even</strong> number of edges.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/1786520486796.webp" alt="A cycle and a cutset intersect in an even number of edges" />
+<figcaption aria-hidden="true">A cycle and a cutset intersect in an even number of edges</figcaption>
+</figure>
+<h2 id="spanning-tree">Spanning Tree</h2>
+<dl>
+<dt>Spanning Tree</dt>
+<dd>
+Let <span class="math inline">\(H = (V, T)\)</span> be a subgraph of an undirected graph <span class="math inline">\(G = (V, E)\)</span>. <span class="math inline">\(H\)</span> is a spanning tree of <span class="math inline">\(G\)</span> if <span class="math inline">\(H\)</span> is both <strong>acyclic</strong> and <strong>connected</strong>.
+</dd>
+</dl>
+<p><strong>Proposition.</strong> Let <span class="math inline">\(H = (V, T)\)</span> be a subgraph of an undirected graph <span class="math inline">\(G = (V, E)\)</span>. Then the following are <strong>equivalent</strong>.</p>
+<ul>
+<li><span class="math inline">\(H\)</span> is a spanning tree of <span class="math inline">\(G\)</span>.</li>
+<li><span class="math inline">\(H\)</span> is acyclic and connected.</li>
+<li><span class="math inline">\(H\)</span> is connected and has <span class="math inline">\(|V| - 1\)</span> edges.</li>
+<li><span class="math inline">\(H\)</span> is acylic and has <span class="math inline">\(|V| - 1\)</span> edges.</li>
+<li><span class="math inline">\(H\)</span> is minimally connected: removing any edge disconnects it.</li>
+<li><span class="math inline">\(H\)</span> is maximally acylic: adding any edge creates a cycle.</li>
+</ul>
+<h2 id="minimum-spanning-trees-1">Minimum Spanning Trees</h2>
+<dl>
+<dt>Minimum spanning tree (MST)</dt>
+<dd>
+Given a connected, undirected graph <span class="math inline">\(G = (V, E)\)</span> with edge costs <span class="math inline">\(c_e\)</span>, a minimum spanning tree <span class="math inline">\((V, T)\)</span> is a spanning tree of <span class="math inline">\(G\)</span> such that the sum of the <strong>edge costs</strong> in <span class="math inline">\(T\)</span> is minimized.
+</dd>
+<dt>Cayley’s Theorem</dt>
+<dd>
+The complete graph on <span class="math inline">\(n\)</span> nodes has <span class="math inline">\(n^{n–2}\)</span> spanning trees.
+</dd>
+</dl>
+<blockquote>
+<p>Cannot solve by brute force.</p>
+</blockquote>
+<h2 id="fundamental-cycle">Fundamental Cycle</h2>
+<p>Let <span class="math inline">\(H = (V, T)\)</span> be a spanning tree of <span class="math inline">\(G = (V, E)\)</span>.</p>
+<ul>
+<li>For any non-tree edge <span class="math inline">\(e \in E : T \cup \{ e \}\)</span> contains a unique cycle, say <span class="math inline">\(C\)</span>.</li>
+<li>For any edge <span class="math inline">\(f \in C : T \cup \{ e \} – \{ f \}\)</span> is a spanning tree.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/spanning-tree-edge-exchange.webp" alt="Edge exchange: add a non-tree edge e and remove an edge f from the resulting cycle" />
+<figcaption aria-hidden="true">Edge exchange: add a non-tree edge e and remove an edge f from the resulting cycle</figcaption>
+</figure>
+<p><strong>Observation.</strong> If <span class="math inline">\(c_e &lt; c_f\)</span>, then <span class="math inline">\((V, T)\)</span> is <strong>not</strong> an MST.</p>
+<h2 id="the-greedy-algorithm">The Greedy Algorithm</h2>
+<p><strong>Red Rule.</strong></p>
+<ul>
+<li>Let <span class="math inline">\(C\)</span> be a cycle with no red edges.</li>
+<li>Select an uncolored edge of <span class="math inline">\(C\)</span> of max cost and color it red.</li>
+</ul>
+<p><strong>Blue Rule.</strong></p>
+<ul>
+<li>Let <span class="math inline">\(D\)</span> be a cutset with no blue edges.</li>
+<li>Select an uncolored edge in <span class="math inline">\(D\)</span> of min cost and color it blue.</li>
+</ul>
+<p><strong>Greedy Algorithm.</strong></p>
+<ul>
+<li>Apply the red and blue rules (nondeterministically!) until all edges are colored. The blue edges form an MST.</li>
+<li>Note: can stop once <span class="math inline">\(n – 1\)</span> edges colored blue.</li>
+</ul>
+<h2 id="proof-of-correctness-1">Proof of Correctness</h2>
+<p><strong>Color Invariant.</strong> There exists an MST <span class="math inline">\((V, T^*)\)</span> containing every blue edge and no red edge.</p>
+<blockquote>
+<p><strong>Pf.</strong> [by induction on number of iterations]</p>
+<p><strong>Blue.</strong></p>
+<p>Suppose color invariant true before blue rule.</p>
+<p>Let <span class="math inline">\(D\)</span> be chosen cutset, and let <span class="math inline">\(f\)</span> be edge colored blue.</p>
+<p>If <span class="math inline">\(f \in T^*\)</span>, then <span class="math inline">\(T^*\)</span> still satisfies invariant.</p>
+<p>Otherwise, consider fundamental cycle <span class="math inline">\(C\)</span> by adding <span class="math inline">\(f\)</span> to <span class="math inline">\(T^*\)</span>.</p>
+<p>Let <span class="math inline">\(e \in C\)</span> be another edge in <span class="math inline">\(D\)</span>.</p>
+<p><span class="math inline">\(e\)</span> is uncolored and <span class="math inline">\(c_e \geq c_f\)</span> since</p>
+<ul>
+<li><span class="math inline">\(e \in T^* \Rightarrow e\)</span> not red.</li>
+<li>blue rule <span class="math inline">\(\Rightarrow e\)</span> not blue and <span class="math inline">\(c_e \geq c_f\)</span>.</li>
+</ul>
+<p>Thus, <span class="math inline">\(T^* \cup \{f\} - \{e\}\)</span> satisfies invariant.</p>
+<p><strong>Red.</strong></p>
+<p>Suppose color invariant true before red rule.</p>
+<p>Let <span class="math inline">\(C\)</span> be chosen cycle, and let <span class="math inline">\(e\)</span> be edge colored red.</p>
+<p>If <span class="math inline">\(e \notin T^*\)</span>, then <span class="math inline">\(T^*\)</span> satisfies invariant.</p>
+<p>Otherwise, consider fundamental cutset <span class="math inline">\(D\)</span> by deleting <span class="math inline">\(e\)</span> from <span class="math inline">\(T^*\)</span>.</p>
+<p>Let <span class="math inline">\(f \in D\)</span> be another edge in <span class="math inline">\(C\)</span>.</p>
+<p><span class="math inline">\(f\)</span> is uncolored and <span class="math inline">\(c_e \geq c_f\)</span> since</p>
+<ul>
+<li><span class="math inline">\(f \notin T^* \Rightarrow f\)</span> not blue.</li>
+<li>red rule <span class="math inline">\(\Rightarrow f\)</span> not red and <span class="math inline">\(c_e \geq c_f\)</span>.</li>
+</ul>
+<p>Thus, <span class="math inline">\(T^* \cup \{f\} - \{e\}\)</span> satisfies invariant.</p>
+</blockquote>
+<p><strong>Theorem.</strong> The greedy algorithm terminates. Blue edges form an MST.</p>
+<blockquote>
+<p><strong>Pf.</strong> We need to show that either the red or blue or both applies.</p>
+<p>Suppose edge <span class="math inline">\(e\)</span> is left uncolored. Blue edges forms a forest.</p>
+<p><strong>Case 1.</strong> Both endpoints of <span class="math inline">\(e\)</span> are in same blue tree. <span class="math inline">\(\Rightarrow\)</span> Apply red rule to cycle formed by adding <span class="math inline">\(e\)</span> to blue forest.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/mst-greedy-red-rule.webp" alt="Case 1: apply the red rule when both endpoints of e lie in the same blue tree" />
+<figcaption aria-hidden="true">Case 1: apply the red rule when both endpoints of e lie in the same blue tree</figcaption>
+</figure>
+<p><strong>Case 2.</strong> Both endpoints of <span class="math inline">\(e\)</span> are in different blue trees. <span class="math inline">\(\Rightarrow\)</span> Apply blue rule to cutset induced by adding either of blue forest.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/mst-greedy-blue-rule.webp" alt="Case 2: apply the blue rule when the endpoints of e lie in different blue trees" />
+<figcaption aria-hidden="true">Case 2: apply the blue rule when the endpoints of e lie in different blue trees</figcaption>
+</figure>
+</blockquote>
+<h1 id="prim-kruskal-boruvka">Prim, Kruskal, Boruvka</h1>
+<h2 id="prims-algorithm">Prim’s Algorithm</h2>
+<p>Initiallise <span class="math inline">\(S =\)</span> any node, <span class="math inline">\(T = \varnothing\)</span>.</p>
+<p>Repeat <span class="math inline">\(n - 1\)</span> times:</p>
+<ul>
+<li>Add to <span class="math inline">\(T\)</span> a min-cost edge with one endpoint in $.</li>
+<li>Add new node to <span class="math inline">\(S\)</span>.</li>
+</ul>
+<p><strong>Theorem.</strong> Prim’s algorithm computes an MST.</p>
+<blockquote>
+<p><strong>Pf.</strong></p>
+<p>Special case of greedy algorithm. (Blue rule is repeatedly applied to <span class="math inline">\(S\)</span>.)</p>
+</blockquote>
+<h2 id="prims-algorithm-implementation">Prim’s Algorithm: Implementation</h2>
+<p><strong>Theorem.</strong> Prim’s algorithm can be implemented to run in <span class="math inline">\(O(m \log n)\)</span> time.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Prim}
+\begin{algorithmic}
+\PROCEDURE{Prim}{$V, E, c$}
+    \STATE $S \gets \emptyset$; $T \gets \emptyset$
+    \STATE $s \gets$ any node in $V$
+    \FORALL{$v \in V \setminus \{s\}$}
+        \STATE $\pi[v] \gets \infty$; $pred[v] \gets \mathrm{null}$
+    \ENDFOR
+    \STATE $\pi[s] \gets 0$
+    \STATE Create an empty priority queue $pq$
+    \FORALL{$v \in V$}
+        \STATE \CALL{Insert}{$pq, v, \pi[v]$}
+    \ENDFOR
+    \WHILE{\CALL{Is-Not-Empty}{$pq$}}
+        \STATE $u \gets$ \CALL{Del-Min}{$pq$}
+        \STATE $S \gets S \cup \{u\}$
+        \IF{$u \neq s$}
+            \STATE $T \gets T \cup \{pred[u]\}$
+        \ENDIF
+        \FORALL{edge $e = (u, v) \in E$ with $v \notin S$}
+            \IF{$c_e &lt; \pi[v]$}
+                \STATE \CALL{Decrease-Key}{$pq, v, c_e$}
+                \STATE $\pi[v] \gets c_e$; $pred[v] \gets e$
+            \ENDIF
+        \ENDFOR
+    \ENDWHILE
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p>Here, <span class="math inline">\(\pi[v]\)</span> is the cost of the cheapest known edge between <span class="math inline">\(v\)</span> and <span class="math inline">\(S\)</span>. The initial node <span class="math inline">\(s\)</span> has no predecessor edge, so it is skipped when adding edges to <span class="math inline">\(T\)</span>; this makes explicit the root case omitted in the lecture pseudocode.</p>
+<h2 id="kruskals-algorithm">Kruskal’s Algorithm</h2>
+<p>Consider edges in ascending order of cost:</p>
+<p>Add to tree unless it would create a cycle.</p>
+<p><strong>Theorem.</strong> Kruskal’s algorithm computes an MST.</p>
+<blockquote>
+<p><strong>Pf.</strong></p>
+<p>Special case of greedy algorithm.</p>
+<p><strong>Case 1.</strong> Both endpoints of <span class="math inline">\(e\)</span> in same blue tree. All other edges in cycle are blue. <span class="math inline">\(\Rightarrow\)</span> Color <span class="math inline">\(e\)</span> red by applying red rule to unique cycle.</p>
+<p><strong>Case 2.</strong> Both endpoints of <span class="math inline">\(e\)</span> in different blue trees. No edge in cutset has smaller cost(since Kruskal chose it first). <span class="math inline">\(\Rightarrow\)</span> Color <span class="math inline">\(e\)</span> blue by applying blue rule to cutset defined by either tree.</p>
+</blockquote>
+<h2 id="kruskals-algorithm-implementation">Kruskal’s Algorithm: Implementation</h2>
+<p><strong>Theorem.</strong> Kruskal’s algorithm can be implemented to run in <span class="math inline">\(O(m \log m)\)</span> time.</p>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Kruskal}
+\begin{algorithmic}
+\PROCEDURE{Kruskal}{$V, E, c$}
+    \STATE Sort $m$ edges by cost and renumber so that $c(e_1) \leq c(e_2) \leq \cdots \leq c(e_m)$
+    \STATE $T \gets \emptyset$
+    \FORALL{$v \in V$}
+        \STATE \CALL{Make-Set}{$v$}
+    \ENDFOR
+    \FOR{$i \gets 1$ \TO $m$}
+        \STATE $(u, v) \gets e_i$
+        \IF{\CALL{Find-Set}{$u$} $\neq$ \CALL{Find-Set}{$v$}}
+            \STATE $T \gets T \cup \{e_i\}$
+            \STATE \CALL{Union}{$u, v$} \COMMENT{Merge the components containing $u$ and $v$}
+        \ENDIF
+    \ENDFOR
+    \RETURN $T$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<h2 id="reverse-delete-algorithm">Reverse-Delete Algorithm</h2>
+<p>Start with all edges in <span class="math inline">\(T\)</span> and consider them in descending order of cost, delete edge from <span class="math inline">\(T\)</span> unless it would disconnect <span class="math inline">\(T\)</span>.</p>
+<p><strong>Theorem.</strong> The reverse-delete algorithm computes an MST.</p>
+<blockquote>
+<p><strong>Pf.</strong> Special case of greedy algorithm.</p>
+<p><strong>Case 1.</strong> Deleting edge does not disconnect <span class="math inline">\(T \Rightarrow\)</span> Apply red rule to cycle <span class="math inline">\(C\)</span> by adding <span class="math inline">\(e\)</span> to another path in <span class="math inline">\(T\)</span> between its two end points.</p>
+<p><strong>Case 2.</strong> Deleting edge disconnects <span class="math inline">\(T \Rightarrow\)</span> Apply blue rule to curset <span class="math inline">\(D\)</span> induced by either component.</p>
+</blockquote>
+<h2 id="borůvkas-algorithm">Borůvka’s Algorithm</h2>
+<p>Repeat until only <strong>one tree</strong>:</p>
+<ul>
+<li>Apply blue rule to cutset corresponding to each blue tree.</li>
+<li>Color <strong>all</strong> selected edges blue.</li>
+</ul>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/boruvka-phase.webp" alt="A Boruvka phase: select a cheapest outgoing edge for each blue tree" />
+<figcaption aria-hidden="true">A Boruvka phase: select a cheapest outgoing edge for each blue tree</figcaption>
+</figure>
+<h2 id="borůvkas-algorithm-implementation">Borůvka’s Algorithm: Implementation</h2>
+<p>Borůvka’s algorithm can be implemented to run in <span class="math inline">\(O(m \log n)\)</span> time.</p>
+<p><strong>Contract version</strong></p>
+<ul>
+<li>After each phase, contract each blue tree to a single supernode.</li>
+<li>Delete self-loops and parallel edges, keeping only the cheapest one.</li>
+<li>Borůvka phase becomes: take cheapest edge incident to each node.</li>
+</ul>
+<p><strong>Problem.</strong> Given a graph <span class="math inline">\(G = (V, E)\)</span> and a set of edges <span class="math inline">\(F\)</span>, contract all edges in <span class="math inline">\(F\)</span>, removing any self-loops or parallel edges.</p>
+<h2 id="borůvkas-algorithm-on-planar-graphs">Borůvka’s Algorithm on Planar Graphs</h2>
+<p><strong>Theorem.</strong> Borůvka’s algorithm (contraction version) can be implemented to run in <span class="math inline">\(O(n)\)</span> time on planar graphs.</p>
+<h2 id="a-hybrid-algorithm">A Hybrid Algorithm</h2>
+<p><strong>Borůvka–Prim algorithm.</strong></p>
+<ul>
+<li>Run Borůvka (contraction version) for <span class="math inline">\(\log_2 \log_2 n\)</span> phases.</li>
+<li>Run Prim on resulting, contracted graph.</li>
+</ul>
+<h1 id="single-link-clustering">Single-Link Clustering</h1>
+<h2 id="clustering">Clustering</h2>
+<dl>
+<dt><span class="math inline">\(k\)</span>-Clustering</dt>
+<dd>
+Given a set <span class="math inline">\(U\)</span> of <span class="math inline">\(n\)</span> objects labeled <span class="math inline">\(p_1, \ldots, p_n\)</span>, partition into <span class="math inline">\(k\)</span> clusters so that objects in different clusters are far apart.
+</dd>
+</dl>
+<h2 id="clustering-of-maximum-spacing">Clustering of Maximum Spacing</h2>
+<dl>
+<dt>Distace Function</dt>
+<dd>
+Numeric value specifying “closeness” of two objects.
+</dd>
+</dl>
+<ul>
+<li><span class="math inline">\(d(p_i, p_j) = 0\)</span> iff <span class="math inline">\(p_i = p_j\)</span>.</li>
+<li><span class="math inline">\(d(p_i, p_j) \geq 0\)</span>.</li>
+<li><span class="math inline">\(d(p_i, p_j) = d(p_j, p_i)\)</span>.</li>
+</ul>
+<dl>
+<dt>Spacing</dt>
+<dd>
+Min distance between any pair of points in different clusters.
+</dd>
+<dt>Goal</dt>
+<dd>
+Given an integer <span class="math inline">\(k\)</span>, find a <span class="math inline">\(k\)</span>-clustering of maximum spacing.
+</dd>
+</dl>
+<h2 id="greedy-clustering-algorithm-analysis">Greedy Clustering Algorithm: Analysis</h2>
+<p><strong>Theorem.</strong> Let <span class="math inline">\(C^*\)</span> denote the clustering <span class="math inline">\(C^*_1, \dots, C^*_k\)</span> formed by deleting the <span class="math inline">\(k – 1\)</span> longest edges of an MST. Then, <span class="math inline">\(C^*\)</span> is a <span class="math inline">\(k\)</span>-clustering of max spacing.</p>
+<p><strong>Pf.</strong></p>
+<ul>
+<li>Let <span class="math inline">\(C\)</span> denote any other clustering <span class="math inline">\(C_1, \ldots, C_n\)</span>.</li>
+<li>Let <span class="math inline">\(p_i\)</span>, <span class="math inline">\(p_j\)</span> be in the same cluster in <span class="math inline">\(C^*\)</span>, say <span class="math inline">\(C^*_r\)</span>, but different cluster in <span class="math inline">\(C\)</span>, say <span class="math inline">\(C_s\)</span> and <span class="math inline">\(C_r\)</span>.</li>
+<li>Some edge <span class="math inline">\((p, q)\)</span> in <span class="math inline">\(p_i - p_j\)</span> path in <span class="math inline">\(C^*_r\)</span> spans two different clusters in <span class="math inline">\(C\)</span>.</li>
+<li>Spacing of <span class="math inline">\(C^* =\)</span> length <span class="math inline">\(d^*\)</span> of the <span class="math inline">\((k - 1)\)</span>st longest edge in MST.</li>
+<li>Edge <span class="math inline">\((p, q)\)</span> has length <span class="math inline">\(\leq d^*\)</span> since it wasn’t deleted.</li>
+<li>Spacing of <span class="math inline">\(C\)</span> is <span class="math inline">\(\leq d^*\)</span> since <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are in different clusters.</li>
+</ul>
+<h1 id="min-cost-arborescences">Min-Cost Arborescences</h1>
+<h2 id="arborescences">Arborescences</h2>
+<dl>
+<dt>Arborescences</dt>
+<dd>
+Given a digraph <span class="math inline">\(G = (V, E)\)</span> and a root <span class="math inline">\(r \in V\)</span>, an arborescence rooted at <span class="math inline">\(r\)</span> is a subgraph <span class="math inline">\(T = (V, F)\)</span> such that
+</dd>
+</dl>
+<ul>
+<li><span class="math inline">\(T\)</span> is a spanning tree of <span class="math inline">\(G\)</span> if we ignore the edge direction.</li>
+<li>There is a unique directed path in <span class="math inline">\(T\)</span> from <span class="math inline">\(r\)</span> to each other node <span class="math inline">\(v \in V\)</span>.</li>
+</ul>
+<p><strong>Proposition.</strong> A subgraph <span class="math inline">\(T = (V, F)\)</span> of <span class="math inline">\(G\)</span> is an arborescence rooted at <span class="math inline">\(r\)</span> iff <span class="math inline">\(T\)</span> has no directed cycles and each node <span class="math inline">\(v \neq r\)</span> has exactly one entering edge.</p>
+<blockquote>
+<p><strong>Pf.</strong></p>
+<p><span class="math inline">\(\Rightarrow\)</span> If <span class="math inline">\(T\)</span> is an arborescence, then it has no directed cycles, and every node <span class="math inline">\(v \neq r\)</span> has exactly one entering edge: the last edge on the unique <span class="math inline">\(r \to v\)</span> path.</p>
+<p><span class="math inline">\(\Leftarrow\)</span> Suppose <span class="math inline">\(T\)</span> has no directed cycles and each node <span class="math inline">\(v \neq r\)</span> has exactly one entering edge.</p>
+<ul>
+<li>To construct an <span class="math inline">\(r \to v\)</span> path, start at <span class="math inline">\(v\)</span> and repeatedly follow entering edges in the <strong>backward direction</strong>.</li>
+<li>Since <span class="math inline">\(T\)</span> is finite and has no directed cycles, this process must terminate at a node with no entering edge.</li>
+<li>It must terminate at <span class="math inline">\(r\)</span>, since every other node has an entering edge. Thus, <span class="math inline">\(r\)</span> has no entering edge, and reversing the traced sequence gives an <span class="math inline">\(r \to v\)</span> path.</li>
+<li>The path is unique because each node other than <span class="math inline">\(r\)</span> has exactly one entering edge. Also, <span class="math inline">\(T\)</span> has <span class="math inline">\(|V| - 1\)</span> edges and is connected when edge directions are ignored, so it is a spanning tree.</li>
+</ul>
+<p>Therefore, <span class="math inline">\(T\)</span> is an arborescence rooted at <span class="math inline">\(r\)</span>.</p>
+</blockquote>
+<h2 id="min-cost-arborescences-problem">Min-Cost Arborescences Problem</h2>
+<p><strong>Assumption 1.</strong> All nodes are reachable from <span class="math inline">\(r\)</span>.</p>
+<p><strong>Assumption 2.</strong> No edges enters <span class="math inline">\(r\)</span>.</p>
+<dl>
+<dt>Min-Cost Arborescence Problem</dt>
+<dd>
+Given a digraph <span class="math inline">\(G\)</span> with a root node <span class="math inline">\(r\)</span> and edge costs <span class="math inline">\(c_e \geq 0\)</span>, find an arborescence rooted at <span class="math inline">\(r\)</span> of minimum cost.
+</dd>
+</dl>
+<h2 id="a-sufficient-optimality-condition">A Sufficient Optimality Condition</h2>
+<p><strong>Property.</strong> For each node <span class="math inline">\(v \neq r\)</span>, choose a cheapest edge entering <span class="math inline">\(v\)</span> and let <span class="math inline">\(F^*\)</span> denote this set of <span class="math inline">\(n – 1\)</span> edges. If <span class="math inline">\((V, F*)\)</span> is an arborescence, then it is a min-cost arborescence.</p>
+<p><strong>Note.</strong> <span class="math inline">\(F^*\)</span> may not be an arborescence (since it may have directed cycles).</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/arborescence-cheapest-entering-edges.webp" alt="Cheapest entering edges can form a directed cycle instead of an arborescence" />
+<figcaption aria-hidden="true">Cheapest entering edges can form a directed cycle instead of an arborescence</figcaption>
+</figure>
+<h2 id="reduced-costs">Reduced Costs</h2>
+<dl>
+<dt>Reduced Cost</dt>
+<dd>
+For each <span class="math inline">\(v \neq r\)</span>, let <span class="math inline">\(y(v)\)</span> denote the min cost of any edge entering <span class="math inline">\(v\)</span>. Define the reduced cost of an edge <span class="math inline">\((u, v)\)</span> as <span class="math inline">\(c&#39;(u, v) = c(u, v) - y(v) \geq 0\)</span>.
+</dd>
+</dl>
+<p><strong>Observation.</strong> <span class="math inline">\(T\)</span> is a min-cost arborescence in <span class="math inline">\(G\)</span> using costs <span class="math inline">\(c\)</span> iff <span class="math inline">\(T\)</span> is a min-cost arborescence in <span class="math inline">\(G\)</span> using reduced costs <span class="math inline">\(c&#39;\)</span>.</p>
+<figure>
+<img src="/image/icon/loading.gif" data-lazy-src="/image/26-8-12-2-COMPSCI320-8-greedy2/arborescence-reduced-costs.webp" alt="Original edge costs and reduced costs for the arborescence problem" />
+<figcaption aria-hidden="true">Original edge costs and reduced costs for the arborescence problem</figcaption>
+</figure>
+<h2 id="edmonds-branching-algorithm">Edmonds Branching Algorithm</h2>
+<p><strong>Intuition.</strong> Recall <span class="math inline">\(F^* =\)</span> set of cheapest edges entering <span class="math inline">\(v\)</span> for each <span class="math inline">\(v \neq r\)</span>.</p>
+<ul>
+<li>All edges in <span class="math inline">\(F^*\)</span> have <strong>0 cost</strong> with respect to reduced costs <span class="math inline">\(c&#39;(u, v)\)</span>.</li>
+<li>If <span class="math inline">\(F^*\)</span> does not contain a cycle, then <span class="math inline">\((V, F^*)\)</span> is a min-cost arborescence.</li>
+<li>If <span class="math inline">\(F^*\)</span> contains a cycle <span class="math inline">\(C\)</span>, we can use edges in <span class="math inline">\(C\)</span> without increasing the reduced cost.</li>
+<li><strong>Contract</strong> the edges in <span class="math inline">\(C\)</span> to a single supernode, removing any self-loops.</li>
+<li>Recursively solve the problem in the contracted network <span class="math inline">\(G&#39;\)</span> with reduced costs <span class="math inline">\(c&#39;\)</span>.</li>
+</ul>
+<div class="pseudocode-container"><pre class="pseudocode-source mathjax_ignore">\begin{algorithm}
+\caption{Edmonds-Branching}
+\begin{algorithmic}
+\PROCEDURE{Edmonds-Branching}{$G, r, c$}
+    \FORALL{$v \in V \setminus \{r\}$}
+        \STATE $y(v) \gets$ minimum cost of any edge entering $v$
+        \FORALL{edge $(u, v)$ entering $v$}
+            \STATE $c&#39;(u, v) \gets c(u, v) - y(v)$
+        \ENDFOR
+    \ENDFOR
+    \STATE $F^* \gets \emptyset$
+    \FORALL{$v \in V \setminus \{r\}$}
+        \STATE Choose one 0-cost edge $e$ entering $v$ under costs $c&#39;$
+        \STATE $F^* \gets F^* \cup \{e\}$
+    \ENDFOR
+    \IF{$(V, F^*)$ is an arborescence rooted at $r$}
+        \RETURN $T = (V, F^*)$
+    \ELSE
+        \STATE $C \gets$ a directed cycle in $F^*$
+        \STATE Contract $C$ to a single supernode, yielding $G&#39; = (V&#39;, E&#39;)$
+        \STATE $T&#39; \gets$ \CALL{Edmonds-Branching}{$G&#39;, r, c&#39;$}
+        \STATE Extend $T&#39;$ to an arborescence $T$ in $G$ by adding all but one edge of $C$
+    \ENDIF
+    \RETURN $T$
+\ENDPROCEDURE
+\end{algorithmic}
+\end{algorithm}</pre></div>
+<p><strong>Notes.</strong> The reduced-cost assignment uses <span class="math inline">\(c&#39;(u, v) = c(u, v) - y(v)\)</span>, as defined above; the lecture pseudocode writes <span class="math inline">\(c&#39;\)</span> on both sides without initializing it. When expanding the contracted cycle, restore the original edges represented by <span class="math inline">\(T&#39;\)</span>. If its edge entering the supernode enters <span class="math inline">\(C\)</span> at vertex <span class="math inline">\(b\)</span>, omit the cycle edge entering <span class="math inline">\(b\)</span> and add all other edges of <span class="math inline">\(C\)</span>.</p>
+<h2 id="min-cost-aborescence">Min-Cost Aborescence</h2>
+<p><strong>Theorem.</strong> There exists an <span class="math inline">\(O(m + n \log n)\)</span> time algorithm to compute a min-cost arborescence.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/">https://remy-campanella.github.io/2026/10/28/26-8-12-2-COMPSCI320-8-greedy2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E5%BA%94%E7%94%A8%E7%AE%97%E6%B3%95/">应用算法</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci320_cover.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/scripts/vendor/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/scripts/vendor/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/10/27/26-8-5-1-COMPSCI320-7-greedy1/" title="【COMPSCI 320】 Lecture 07 Greedy Algorithm 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 07 Greedy Algorithm 1</div></div><div class="info-2"><div class="info-item-1">Coin Changing Coin Changing  Coin Changing  Given U. S. currency denominations \(\{ 1, 5, 10, 25, 100 \}\), devise a method to pay amount to customer using fewest coins.   Cashier’s Algorithm. At each iteration, add coin of the largest value that does not take us past the amount to be paid. Cashier’s Algorithm \begin{algorithm} \caption{Cashiers-Algorithm} \begin{algorithmic} \PROCEDURE{Cashiers-Algorithm}{$x, c_1, c_2, \ldots, c_n$}     \STATE Sort $n$ coin denominations so that $0 &lt; c_1 ...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-8-19-2-COMPSCI320-9-divide/" title="【COMPSCI 320】 Lecture 09 Divide and Conquer 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 320】 Lecture 09 Divide and Conquer 1</div></div><div class="info-2"><div class="info-item-1">Divide-and-conquer Paradigm Divide-and-conquer.  Divide up problem into several subproblems (of the same kind). Solve (conquer) each subproblem recursively. Combine solutions to subproblems into overall solution.  Usage.  Divide problem of \(n\) into two subproblems of \(n / 2\). \(O(n)\) Solve recursively. Combine to overall solution. \(O(n)\)  Consequence.  Brute: \(\Theta(n^2)\) DC: \(O(n \log n)\)  Mergesort Sorting Problem  Sorting Problem  Given a list \(L\) of \(n\) elements, rearrange...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 16 Intractability 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus The 2022 final requires a full NP-completeness proof; 2023 tests class recognition; 2025 Q5 tests the strongest conclusion justified by reduction direction and resource bounds. Prioritize definitions, certificate size, and logical implications. Cook-Levin’s full proof and large gadget details are second-pass material. P, NP, and EXP Decision Problems and Input Length A decision problem is a language \(X\) of encoded instances. A deterministic algorithm decides \(X\) if it halts...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-8-19-2-COMPSCI320-9-divide/" title="【COMPSCI 320】 Lecture 09 Divide and Conquer 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 09 Divide and Conquer 1</div></div><div class="info-2"><div class="info-item-1">Divide-and-conquer Paradigm Divide-and-conquer.  Divide up problem into several subproblems (of the same kind). Solve (conquer) each subproblem recursively. Combine solutions to subproblems into overall solution.  Usage.  Divide problem of \(n\) into two subproblems of \(n / 2\). \(O(n)\) Solve recursively. Combine to overall solution. \(O(n)\)  Consequence.  Brute: \(\Theta(n^2)\) DC: \(O(n \log n)\)  Mergesort Sorting Problem  Sorting Problem  Given a list \(L\) of \(n\) elements, rearrange...</div></div></div></a><a class="pagination-related" href="/2026/09/14/26-7-24-1-COMPSCI320-3-analy/" title="【COMPSCI 320】 Lecture 03 Analysis Review"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-14</div><div class="info-item-2">【COMPSCI 320】 Lecture 03 Analysis Review</div></div><div class="info-2"><div class="info-item-1">Computational Tractability Models of Computation: Turing Machines Finite state machine with infinite tape.  Running time: Number fo steps. Memory. Number of tape cells utilized.  Caveat. No random access of memory.  Single-Tape TM requires \(\leq n^2\) steps to detect \(n\)-bit palindromes(回文). Easy to detect palindromes in \(\leq cn\) steps on a real computer.  Models of Computation: Word RAM(Random Access Machine) Word RAM.  Each memory location and input/output cell stores a \(w\)-bit inte...</div></div></div></a><a class="pagination-related" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</div></div><div class="info-2"><div class="info-item-1">Revision Focus Sequence alignment occurs in the 2022-2024 MCQs; 2024 SAQ5 requires both a grid DP value and its path. Practise table filling and reconstruction first. Understand Hirschberg’s time/space tradeoff without prioritizing its full implementation. Bellman-Ford is a second example of defining a state by a resource bound, here the allowed number of edges. Sequence Alignment Edit Distance and Alignment For strings \(X=x_1\cdots x_m\) and \(Y=y_1\cdots y_n\), align characters without reu...</div></div></div></a><a class="pagination-related" href="/2026/10/27/26-8-5-1-COMPSCI320-7-greedy1/" title="【COMPSCI 320】 Lecture 07 Greedy Algorithm 1"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-26</div><div class="info-item-2">【COMPSCI 320】 Lecture 07 Greedy Algorithm 1</div></div><div class="info-2"><div class="info-item-1">Coin Changing Coin Changing  Coin Changing  Given U. S. currency denominations \(\{ 1, 5, 10, 25, 100 \}\), devise a method to pay amount to customer using fewest coins.   Cashier’s Algorithm. At each iteration, add coin of the largest value that does not take us past the amount to be paid. Cashier’s Algorithm \begin{algorithm} \caption{Cashiers-Algorithm} \begin{algorithmic} \PROCEDURE{Cashiers-Algorithm}{$x, c_1, c_2, \ldots, c_n$}     \STATE Sort $n$ coin denominations so that $0 &lt; c_1 ...</div></div></div></a><a class="pagination-related" href="/2026/09/14/26-7-23-1-COMPSCI320-2-match/" title="【COMPSCI 320】 Lecture 02 Stable Matching"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-14</div><div class="info-item-2">【COMPSCI 320】 Lecture 02 Stable Matching</div></div><div class="info-2"><div class="info-item-1">Stable Matching Goal. Given a set of preferences among hospitals and med-school students, design a self-reinforcing admissions process.  Unstable Pair  Assume that an assignment is established. Hospital \(h\) and student \(s\) form an unstable pair if both:    \(h\) prefers \(s\) to one of its admitted students. \(s\) prefers \(h\) to assigned hospital.   Stable assignment  Assignment with no unstable pairs.    Natural and desirable condition. Individual self-interest prevents any hospital–st...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">154</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dijkstras-algorithm"><span class="toc-number">1.</span> <span class="toc-text">Dijkstra’s Algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#single-pair-shortest-path-problem"><span class="toc-number">1.1.</span> <span class="toc-text">Single-Pair Shortest Path Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#single-source-shortest-paths-problem"><span class="toc-number">1.2.</span> <span class="toc-text">Single-Source Shortest Paths Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dijkstras-algorithm-1"><span class="toc-number">1.3.</span> <span class="toc-text">Dijkstra’s Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#proof-of-correctness"><span class="toc-number">1.4.</span> <span class="toc-text">Proof of Correctness</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#efficient-implementation"><span class="toc-number">1.5.</span> <span class="toc-text">Efficient Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#which-priority-queue"><span class="toc-number">1.6.</span> <span class="toc-text">Which Priority Queue?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extensions-of-dijkstras-algorithm"><span class="toc-number">1.7.</span> <span class="toc-text">Extensions of Dijkstra’s Algorithm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#minimum-spanning-trees"><span class="toc-number">2.</span> <span class="toc-text">Minimum Spanning Trees</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cycles"><span class="toc-number">2.1.</span> <span class="toc-text">Cycles</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cuts"><span class="toc-number">2.2.</span> <span class="toc-text">Cuts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cyclecut-intersection"><span class="toc-number">2.3.</span> <span class="toc-text">Cycle–Cut Intersection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spanning-tree"><span class="toc-number">2.4.</span> <span class="toc-text">Spanning Tree</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#minimum-spanning-trees-1"><span class="toc-number">2.5.</span> <span class="toc-text">Minimum Spanning Trees</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fundamental-cycle"><span class="toc-number">2.6.</span> <span class="toc-text">Fundamental Cycle</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-greedy-algorithm"><span class="toc-number">2.7.</span> <span class="toc-text">The Greedy Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#proof-of-correctness-1"><span class="toc-number">2.8.</span> <span class="toc-text">Proof of Correctness</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#prim-kruskal-boruvka"><span class="toc-number">3.</span> <span class="toc-text">Prim, Kruskal, Boruvka</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#prims-algorithm"><span class="toc-number">3.1.</span> <span class="toc-text">Prim’s Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prims-algorithm-implementation"><span class="toc-number">3.2.</span> <span class="toc-text">Prim’s Algorithm: Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kruskals-algorithm"><span class="toc-number">3.3.</span> <span class="toc-text">Kruskal’s Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#kruskals-algorithm-implementation"><span class="toc-number">3.4.</span> <span class="toc-text">Kruskal’s Algorithm: Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reverse-delete-algorithm"><span class="toc-number">3.5.</span> <span class="toc-text">Reverse-Delete Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bor%C5%AFvkas-algorithm"><span class="toc-number">3.6.</span> <span class="toc-text">Borůvka’s Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bor%C5%AFvkas-algorithm-implementation"><span class="toc-number">3.7.</span> <span class="toc-text">Borůvka’s Algorithm: Implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bor%C5%AFvkas-algorithm-on-planar-graphs"><span class="toc-number">3.8.</span> <span class="toc-text">Borůvka’s Algorithm on Planar Graphs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-hybrid-algorithm"><span class="toc-number">3.9.</span> <span class="toc-text">A Hybrid Algorithm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#single-link-clustering"><span class="toc-number">4.</span> <span class="toc-text">Single-Link Clustering</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#clustering"><span class="toc-number">4.1.</span> <span class="toc-text">Clustering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clustering-of-maximum-spacing"><span class="toc-number">4.2.</span> <span class="toc-text">Clustering of Maximum Spacing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#greedy-clustering-algorithm-analysis"><span class="toc-number">4.3.</span> <span class="toc-text">Greedy Clustering Algorithm: Analysis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#min-cost-arborescences"><span class="toc-number">5.</span> <span class="toc-text">Min-Cost Arborescences</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#arborescences"><span class="toc-number">5.1.</span> <span class="toc-text">Arborescences</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#min-cost-arborescences-problem"><span class="toc-number">5.2.</span> <span class="toc-text">Min-Cost Arborescences Problem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-sufficient-optimality-condition"><span class="toc-number">5.3.</span> <span class="toc-text">A Sufficient Optimality Condition</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reduced-costs"><span class="toc-number">5.4.</span> <span class="toc-text">Reduced Costs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#edmonds-branching-algorithm"><span class="toc-number">5.5.</span> <span class="toc-text">Edmonds Branching Algorithm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#min-cost-aborescence"><span class="toc-number">5.6.</span> <span class="toc-text">Min-Cost Aborescence</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 16 Intractability 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2">【COMPSCI 320】 Lecture 16 Intractability 2</a><time datetime="2026-10-28T09:51:57.000Z" title="发表于 2026-10-28 17:51:57">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 15 Intractability 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1">【COMPSCI 320】 Lecture 15 Intractability 1</a><time datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 14 Network Flow 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-7-1-COMPSCI320-14-nf2/" title="【COMPSCI 320】 Lecture 14 Network Flow 2">【COMPSCI 320】 Lecture 14 Network Flow 2</a><time datetime="2026-10-28T09:51:37.000Z" title="发表于 2026-10-28 17:51:37">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 13 Network Flow 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-30-1-COMPSCI320-13-nf1/" title="【COMPSCI 320】 Lecture 13 Network Flow 1">【COMPSCI 320】 Lecture 13 Network Flow 1</a><time datetime="2026-10-28T09:51:26.000Z" title="发表于 2026-10-28 17:51:26">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 12 Dynamic Programming 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-9-23-1-COMPSCI320-12-dp2/" title="【COMPSCI 320】 Lecture 12 Dynamic Programming 2">【COMPSCI 320】 Lecture 12 Dynamic Programming 2</a><time datetime="2026-10-28T09:51:06.000Z" title="发表于 2026-10-28 17:51:06">2026-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.9.0+26.10.28.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/scripts/vendor/fancybox/dist/fancybox/fancybox.umd.js"></script><script src="/scripts/vendor/lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = '/scripts/vendor/mathjax/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax || document.readyState !== 'loading' ? loadMathjax() : document.addEventListener('DOMContentLoaded', loadMathjax, { once: true })
+})()</script><script type="text/javascript" id="maid-script" src="/scripts/vendor/mermaid/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins') || '{}');
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/scripts/vendor/pseudocode/pseudocode.js"></script><script src="/scripts/js/pseudocode-init.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
