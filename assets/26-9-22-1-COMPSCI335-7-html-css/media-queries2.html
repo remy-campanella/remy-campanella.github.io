@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Media Queries Demo</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            margin: 1rem;
+        }
+
+        .query {
+            border: 1px solid #8793a0;
+            padding: 0.5rem;
+            margin-block: 0.5rem;
+        }
+
+        .query code { overflow-wrap: anywhere; }
+        .match { display: none; font-weight: bold; }
+
+        @media screen and (min-width: 40em) and (orientation: portrait) {
+            #wide-portrait .match { display: inline; }
+            #wide-portrait .no-match { display: none; }
+        }
+
+        @media print and (orientation: landscape) {
+            #landscape-print .match { display: inline; }
+            #landscape-print .no-match { display: none; }
+        }
+
+        @media (min-height: 680px), screen and (orientation: portrait) {
+            #tall-or-portrait .match { display: inline; }
+            #tall-or-portrait .no-match { display: none; }
+        }
+
+        @media not print {
+            #non-print .match { display: inline; }
+            #non-print .no-match { display: none; }
+        }
+
+        @media print {
+            .non-printable { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Media Queries Demo</h1>
+    <p class="non-printable">
+        Resize the browser window to change its width, height, and orientation.
+        Open print preview and switch between Portrait and Landscape to test the print rules.
+    </p>
+
+    <div class="query" id="wide-portrait">
+        <code>screen and (min-width: 40em) and (orientation: portrait)</code><br>
+        <span class="match">Matches</span><span class="no-match">Does not match</span>
+    </div>
+    <div class="query" id="landscape-print">
+        <code>print and (orientation: landscape)</code><br>
+        <span class="match">Matches</span><span class="no-match">Does not match</span>
+    </div>
+    <div class="query" id="tall-or-portrait">
+        <code>(min-height: 680px), screen and (orientation: portrait)</code><br>
+        <span class="match">Matches</span><span class="no-match">Does not match</span>
+    </div>
+    <div class="query" id="non-print">
+        <code>not print</code><br>
+        <span class="match">Matches</span><span class="no-match">Does not match</span>
+    </div>
+
+    <p class="non-printable">
+    This sonnet is probably the most famous of all Shakespeare's sonnets. To print it, press Ctrl+P (or select the Print option from your browser's menu).
+    </p>
+    <p>
+    Shall I compare thee to a summer's day?<br />
+    Thou art more lovely and more temperate:<br />
+    Rough winds do shake the darling buds of May,<br />
+    And summer's lease hath all too short a date:<br />
+    ...<br />
+    So long as men can breathe or eyes can see,<br />
+    So long lives this and this gives life to thee.<br />
+    </p>
+</body>
+</html>

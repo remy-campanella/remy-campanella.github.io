@@ -1,0 +1,518 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 335】 Week 10 XML &amp; XML Schema | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="XML Intro XML (Extensible Markup Language) represents structured data using named elements and attributes. XML and HTML share tag-based syntax. XML requires strict well-formedness, while HTML has its">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 335】 Week 10 XML &amp; XML Schema">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/11/06/26-10-13-1-COMPSCI335-10-xml/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="XML Intro XML (Extensible Markup Language) represents structured data using named elements and attributes. XML and HTML share tag-based syntax. XML requires strict well-formedness, while HTML has its">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp">
+<meta property="article:published_time" content="2026-11-05T11:28:37.000Z">
+<meta property="article:modified_time" content="2026-11-05T06:28:37.913Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="网络编程与分布式服务">
+<meta property="article:tag" content="C# 语言">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 335】 Week 10 XML & XML Schema",
+  "url": "https://remy-campanella.github.io/2026/11/06/26-10-13-1-COMPSCI335-10-xml/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp",
+  "datePublished": "2026-11-05T11:28:37.000Z",
+  "dateModified": "2026-11-05T06:28:37.913Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/11/06/26-10-13-1-COMPSCI335-10-xml/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/scripts/vendor/fontawesome/css/all.min.css"><link rel="stylesheet" href="/scripts/vendor/fancybox/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 335】 Week 10 XML & XML Schema',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/scripts/css/font.css"></noscript><link rel="stylesheet" href="/scripts/vendor/pseudocode/pseudocode.min.css"><link rel="stylesheet" href="/scripts/css/pseudocode.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">157</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci335_cover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 335】 Week 10 XML &amp; XML Schema</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 335】 Week 10 XML &amp; XML Schema</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-11-05T11:28:37.000Z" title="发表于 2026-11-05 19:28:37">2026-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-11-05T06:28:37.913Z" title="更新于 2026-11-05 14:28:37">2026-11-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-335-Web-Programming-and-Distributed-Services/">COMPSCI 335 Web Programming and Distributed Services</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="xml-intro">XML Intro</h1>
+<p>XML (Extensible Markup Language) represents structured data using named elements and attributes. XML and HTML share tag-based syntax. XML requires strict well-formedness, while HTML has its own parsing rules.</p>
+<h2 id="a-well-formed-xml-document">A Well-Formed XML Document</h2>
+<ul>
+<li>Every element must have matching <strong>start and end tags</strong>, or use an empty-element tag such as <code>&lt;entry/&gt;</code>.</li>
+<li>A document must have a single, unique <strong>root element</strong>.</li>
+<li>Element and attribute names are <strong>case-sensitive</strong>.</li>
+<li>Elements must be properly <strong>nested</strong>. (They cannot have structural overlaps.)</li>
+<li>Special characters must be <strong>escaped</strong>, or represented by a combination of characters.</li>
+<li>Attribute values must be in <strong>quotes</strong>.</li>
+</ul>
+<h2 id="well-formed-vs.-valid">Well-Formed vs. Valid</h2>
+<p>A document is <strong>well-formed</strong> when it follows XML syntax. It is <strong>valid against a grammar</strong> when it also satisfies the specified DTD or Schema.</p>
+<p>A document may be well-formed but violate the permitted child order, required attributes, or value types. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">entry</span>&gt;</span><span class="tag">&lt;<span class="name">phone</span>&gt;</span>123<span class="tag">&lt;/<span class="name">phone</span>&gt;</span><span class="tag">&lt;<span class="name">firstname</span>&gt;</span>James<span class="tag">&lt;/<span class="name">firstname</span>&gt;</span><span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>The tags nest correctly here. Whether this entry is valid depends on the grammar.</p>
+<h2 id="xml-grammars">XML Grammars</h2>
+<p>XML grammars describe the structure and content of specific XML documents.</p>
+<p>These grammar descriptions are above and beyond being well-formed (<em>i.e.</em> content with begin/end tags, proper nesting of tags, escaping of special characters such as <code>&lt;</code>). <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">phonebook</span> <span class="attr">owner</span>=<span class="string">&quot;Austin Powers&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">entry</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">firstname</span>&gt;</span>James<span class="tag">&lt;/<span class="name">firstname</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">familyname</span>&gt;</span>Bond<span class="tag">&lt;/<span class="name">familyname</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">phone</span>&gt;</span>+44 1 77000007<span class="tag">&lt;/<span class="name">phone</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">entry</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">firstname</span>&gt;</span>Don<span class="tag">&lt;/<span class="name">firstname</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">familyname</span>&gt;</span>Key<span class="tag">&lt;/<span class="name">familyname</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">phone</span>&gt;</span>+64 9 3704321<span class="tag">&lt;/<span class="name">phone</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">phone</span>&gt;</span>+64 21 456123<span class="tag">&lt;/<span class="name">phone</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">entry</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">phonebook</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="attributes-vs.-child-elements">Attributes vs. Child Elements</h2>
+<p>Child elements can be <strong>duplicated</strong> while attributes cannot be.</p>
+<p>E.g. <code>&lt;entry&gt;&lt;phone&gt;53281&lt;/phone&gt;&lt;phone&gt;53282&lt;/phone&gt;&lt;/entry&gt;</code> is OK while <code>&lt;entry phone="53281" phone="53282"&gt;...&lt;/ entry&gt;</code> is not.</p>
+<p>Child elements can describe structures, but attributes cannot. Therefore an attribute can be transformed into a child element, but not all child elements can be transformed into attributes.</p>
+<h1 id="xml-dtd">XML DTD</h1>
+<h2 id="defining-grammar-with-dtd">Defining Grammar with DTD</h2>
+<p>Document Type Definitions are the old way of defining the grammar of XML documents. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">phonebook</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">phonebook</span> (<span class="keyword">entry</span>*)&gt;</span> &lt;!-- *: Zero or more entries --&gt;</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ATTLIST <span class="keyword">phonebook</span> <span class="keyword">owner</span> <span class="keyword">CDATA</span> <span class="keyword">#REQUIRED</span>&gt;</span> &lt;!-- #REQUIRED: A required attribute --&gt;</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">entry</span> (<span class="keyword">firstname</span>+ , <span class="keyword">familyname</span>, <span class="keyword">phone</span>+)&gt;</span> &lt;!--One or more first name, Exactly one family name, One or more phone - All in this exact order --&gt;</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">firstname</span> (<span class="keyword">#PCDATA</span>)&gt;</span> &lt;!-- #PCDATA: Contains parsed character data --&gt;</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">familyname</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="keyword">phone</span> (<span class="keyword">#PCDATA</span>)&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Pattern:</p>
+<ul>
+<li><code>A*</code>: Zero or more <code>A</code>s.</li>
+<li><code>A+</code>: One or more <code>A</code>s.</li>
+<li><code>A?</code>: Zero or one <code>A</code>.</li>
+</ul>
+<h2 id="limitations-of-dtd">Limitations of DTD</h2>
+<p>There is no way to further qualify the kind of text that can occur where <code>PCDATA</code> has been specified. Saying it can only contain numbers, for example, is not possible.</p>
+<h1 id="xml-schema-introduction">XML Schema — Introduction</h1>
+<h2 id="xml-schema">XML Schema</h2>
+<p>XML Schema define a modern way to specify a permissible tagging structure for a document. Schemas are XML documents. An XML Schema document must itself be well-formed XML and follow the rules of the XML Schema language.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:schema</span> <span class="attr">xmlns:xs</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;phoneBookType&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;entry&quot;</span> <span class="attr">type</span>=<span class="string">&quot;entryType&quot;</span> <span class="attr">minOccurs</span>=<span class="string">&quot;0&quot;</span> <span class="attr">maxOccurs</span>=<span class="string">&quot;unbounded&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;owner&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;entryType&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;firstname&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">minOccurs</span>=<span class="string">&quot;0&quot;</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;familyname&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">minOccurs</span>=<span class="string">&quot;0&quot;</span> /&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;phone&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">minOccurs</span>=<span class="string">&quot;0&quot;</span> <span class="attr">maxOccurs</span>=<span class="string">&quot;unbounded&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;phonebook&quot;</span> <span class="attr">type</span>=<span class="string">&quot;phoneBookType&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:schema</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="simple-elements">Simple Elements</h2>
+<p>These are definitions of elements that do not contain any other elements or attributes. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;age&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;age&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:integer&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Other common simple types:</p>
+<ul>
+<li><code>xs:boolean</code></li>
+<li><code>xs:time</code></li>
+<li><code>xs:decimal</code></li>
+<li><code>xs:anyType</code>: default type.</li>
+</ul>
+<h2 id="schema-namespace">Schema Namespace</h2>
+<p>Each of the elements in the schema has a prefix xs: which is associated with the XML Schema namespace through the declaration, <code>xmlns:xs="http://www.w3.org/2001/XMLSchema"</code>, that appears in the schema element.</p>
+<p>The prefix <code>xs:</code> or <code>xsd:</code> are used by convention to denote the XML Schema namespace, although any prefix can be used.</p>
+<h2 id="occurrence-indicators">Occurrence Indicators</h2>
+<p>Occurrence indicators are element attributes that say how many instances of an element can appear.</p>
+<ul>
+<li><code>minOccurs</code> to specify minimum, default is 1.</li>
+<li><code>maxOccurs</code> to specify maximum, default is 1, <code>unbounded</code> means there is no maximum limit.</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;phone&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">minOccurs</span>=<span class="string">&quot;0&quot;</span> <span class="attr">maxOccurs</span>=<span class="string">&quot;unbounded&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>If <code>minOccurs</code> and <code>maxOccurs</code> are both <code>"0"</code>, the element must be absent from the instance document. The error is including that element in the instance.</p>
+<h2 id="user-defined-simple-types">User-Defined Simple Types</h2>
+<p>Assume the price definition: <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;currency&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">currency</span>&gt;</span>NZD<span class="tag">&lt;/<span class="name">currency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>How to restrict the currency into either NZD or AUD?</p>
+<p>Declare a new type called <code>currencyType</code> that derives from <code>xs:string</code> but restricts it to the allowed values.</p>
+<p>We use the restriction element to indicate the existing (base) type: <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:simpleType</span> <span class="attr">name</span>=<span class="string">&quot;currencyType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:restriction</span> <span class="attr">base</span>=<span class="string">&quot;xs:string&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:enumeration</span> <span class="attr">value</span>=<span class="string">&quot;NZD&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:enumeration</span> <span class="attr">value</span>=<span class="string">&quot;AUD&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:restriction</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;currency&quot;</span> <span class="attr">type</span>=<span class="string">&quot;currencyType&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">currency</span>&gt;</span>NZD<span class="tag">&lt;/<span class="name">currency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">currency</span>&gt;</span>USD<span class="tag">&lt;/<span class="name">currency</span>&gt;</span><span class="comment">&lt;!-- This isn&#x27;t OK --&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="restrictions-on-values">Restrictions on Values</h2>
+<p>Restriction derives a more limited type from a base type. Bounds such as <code>minInclusive</code> and <code>maxInclusive</code> include their endpoints. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:simpleType</span> <span class="attr">name</span>=<span class="string">&quot;myIntType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:restriction</span> <span class="attr">base</span>=<span class="string">&quot;xs:integer&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:minInclusive</span> <span class="attr">value</span>=<span class="string">&quot;10000&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:maxInclusive</span> <span class="attr">value</span>=<span class="string">&quot;99999&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:restriction</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>The values 10000 and 99999 are accepted, while 9999 and 100000 are rejected.</p>
+<h2 id="patterns">Patterns</h2>
+<p>A pattern facet constrains the permitted text using XML Schema regular expressions. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:simpleType</span> <span class="attr">name</span>=<span class="string">&quot;SKUType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:restriction</span> <span class="attr">base</span>=<span class="string">&quot;xs:string&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:pattern</span> <span class="attr">value</span>=<span class="string">&quot;\d&#123;3&#125;-[A-Z]&#123;2&#125;&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:restriction</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>This matches three digits, a hyphen, and two uppercase letters, such as <code>123-NZ</code>.</p>
+<p>The language-code exercise accepts two letters, optionally followed by a hyphen and two more letters. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:simpleType</span> <span class="attr">name</span>=<span class="string">&quot;languageCodeType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:restriction</span> <span class="attr">base</span>=<span class="string">&quot;xs:string&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:pattern</span> <span class="attr">value</span>=<span class="string">&quot;[A-Za-z]&#123;2&#125;(-[A-Za-z]&#123;2&#125;)?&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:restriction</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Examples include <code>en</code>, <code>EN</code>, <code>en-NZ</code>, and <code>fr-ca</code>. This checks the shape of a code. Checking membership in the actual list of language codes would require additional restrictions.</p>
+<h2 id="union">Union</h2>
+<p>A union accepts a value if it belongs to any member type. The slides combine two number-plate formats. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:simpleType</span> <span class="attr">name</span>=<span class="string">&quot;plateType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:union</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:simpleType</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:restriction</span> <span class="attr">base</span>=<span class="string">&quot;xs:string&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">xs:pattern</span> <span class="attr">value</span>=<span class="string">&quot;[A-Z]&#123;2&#125;\s?[0-9]&#123;4&#125;&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">xs:restriction</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:simpleType</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:restriction</span> <span class="attr">base</span>=<span class="string">&quot;xs:string&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">xs:pattern</span> <span class="attr">value</span>=<span class="string">&quot;[A-Z]&#123;3&#125;\s?[0-9]&#123;3&#125;&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">xs:restriction</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:union</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Both <code>AB 1234</code> and <code>ABC123</code> satisfy a member pattern. The <code>?</code> makes the separator optional.</p>
+<h1 id="complex-types">Complex Types</h1>
+<h2 id="sequence">Sequence</h2>
+<p>A complex type can contain child elements and attributes. A sequence specifies child order. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;phoneType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;home&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;work&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;phone&quot;</span> <span class="attr">type</span>=<span class="string">&quot;phoneType&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Each child defaults to exactly one occurrence. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">phone</span>&gt;</span><span class="tag">&lt;<span class="name">home</span>&gt;</span>6302317<span class="tag">&lt;/<span class="name">home</span>&gt;</span><span class="tag">&lt;<span class="name">work</span>&gt;</span>3737599<span class="tag">&lt;/<span class="name">work</span>&gt;</span><span class="tag">&lt;/<span class="name">phone</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Reversing the two children or omitting one violates this type.</p>
+<h2 id="anonymous-types">Anonymous Types</h2>
+<p>When a type is only used once, its definition can appear directly within the element declaration. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;phone&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:complexType</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;home&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;work&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:element</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="choice">Choice</h2>
+<p>A choice selects one branch per occurrence. With the default occurrence bounds, exactly one of the two children appears. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:choice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;home&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;work&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:choice</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Either <code>&lt;phone&gt;&lt;home/&gt;&lt;/phone&gt;</code> or <code>&lt;phone&gt;&lt;work/&gt;&lt;/phone&gt;</code> is accepted. An empty <code>phone</code> or one containing both children is rejected.</p>
+<p>A repeating choice can select a different branch on every repetition. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:choice</span> <span class="attr">minOccurs</span>=<span class="string">&quot;0&quot;</span> <span class="attr">maxOccurs</span>=<span class="string">&quot;unbounded&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;phone&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:choice</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>This allows zero or more email and phone elements in any order, including email, phone, email. The occurrence bounds belong to the <strong>choice group</strong>.</p>
+<h2 id="named-groups">Named Groups</h2>
+<p>A group defines a reusable content model. A choice can select a single email element or an entire postal-address sequence. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:group</span> <span class="attr">name</span>=<span class="string">&quot;postalAddress&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;street&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;city&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:group</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;communicationType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:choice</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;email&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:group</span> <span class="attr">ref</span>=<span class="string">&quot;postalAddress&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:choice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Choosing the postal branch requires both street and city in that order.</p>
+<h2 id="all">All</h2>
+<p>An <code>all</code> group permits its child elements in any order. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;phoneType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:all</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;home&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;work&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:all</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Both home–work and work–home are valid. Both children are still required because their minimum occurrences default to 1.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Declaration</th>
+<th>Permitted child combinations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default <code>all</code>, default children</td>
+<td>Both children, in either order</td>
+</tr>
+<tr>
+<td><code>all minOccurs="0"</code>, default children</td>
+<td>Both children in either order, or neither</td>
+</tr>
+<tr>
+<td>Default <code>all</code>, each child <code>minOccurs="0"</code></td>
+<td>Both, only home, only work, or neither</td>
+</tr>
+</tbody>
+</table>
+<p>For the XSD 1.0 <code>all</code> model used in the slides, the members are individual element declarations, each with maximum occurrence 1. The group can occur at most once. Minimum occurrences may be 0 or 1.</p>
+<h1 id="attributes-and-content">Attributes and Content</h1>
+<h2 id="attribute-declarations">Attribute Declarations</h2>
+<p>Attributes are declared inside a complex type, after its content model. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;phoneType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;home&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;work&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;country&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">use</span>=<span class="string">&quot;required&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>use</code> controls attribute presence.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optional</code></td>
+<td>May be present, the default</td>
+</tr>
+<tr>
+<td><code>required</code></td>
+<td>Must be present</td>
+</tr>
+<tr>
+<td><code>prohibited</code></td>
+<td>Must be absent</td>
+</tr>
+</tbody>
+</table>
+<p>Element counts use <code>minOccurs</code> and <code>maxOccurs</code>. Attribute presence uses <code>use</code>.</p>
+<h2 id="default-values">Default Values</h2>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;country&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">default</span>=<span class="string">&quot;NZ&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;city&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">default</span>=<span class="string">&quot;Auckland&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>An optional missing attribute can receive its declared default during schema validation. For an element, a default supplies the value of an existing empty element. It does not make a required element optional.</p>
+<p>An attribute’s <code>default</code> is compatible with <code>use="optional"</code>, which is also the default use.</p>
+<h2 id="simple-content-with-attributes">Simple Content with Attributes</h2>
+<p>Text with attributes is described by a complex type with <code>simpleContent</code>. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;IntlPriceType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:simpleContent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:extension</span> <span class="attr">base</span>=<span class="string">&quot;xs:decimal&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;currency&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:extension</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:simpleContent</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">xs:element</span> <span class="attr">name</span>=<span class="string">&quot;internationalPrice&quot;</span> <span class="attr">type</span>=<span class="string">&quot;IntlPriceType&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">internationalPrice</span> <span class="attr">currency</span>=<span class="string">&quot;USD&quot;</span>&gt;</span>43.99<span class="tag">&lt;/<span class="name">internationalPrice</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>The content is decimal text, with no child elements. A decimal permits fractional digits. Scientific notation such as <code>1e3</code> belongs to types such as <code>xs:float</code>, rather than <code>xs:decimal</code>.</p>
+<h2 id="empty-content">Empty Content</h2>
+<p>A complex type containing only attribute declarations permits attributes with no element or text content. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;PriceType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;value&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:decimal&quot;</span> <span class="attr">use</span>=<span class="string">&quot;required&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br></pre></td></tr></table></figure> <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">price</span> <span class="attr">value</span>=<span class="string">&quot;43.99&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>A completely empty complex type permits no attributes or content. Such an element can act as a presence marker.</p>
+<h2 id="derivation-by-extension">Derivation by Extension</h2>
+<p>A complex type can extend another type. <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xs:complexType</span> <span class="attr">name</span>=<span class="string">&quot;InternationalPriceType&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xs:complexContent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">xs:extension</span> <span class="attr">base</span>=<span class="string">&quot;PriceType&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;currency&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:string&quot;</span> <span class="attr">use</span>=<span class="string">&quot;required&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">xs:attribute</span> <span class="attr">name</span>=<span class="string">&quot;exchangeRate&quot;</span> <span class="attr">type</span>=<span class="string">&quot;xs:float&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">xs:extension</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">xs:complexContent</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xs:complexType</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>An instance needs the inherited <code>value</code> and the added <code>currency</code>. The <code>exchangeRate</code> attribute is optional.</p>
+<h1 id="checking-conformance">Checking Conformance</h1>
+<p>Check XML syntax first, then read the grammar’s child order, occurrence bounds, value types, and attribute rules.</p>
+<p>The DTD <code>(firstname+, familyname, phone+)</code> requires one or more first names, exactly one family name, and one or more phones, in that order. An empty entry is well-formed XML but violates this DTD.</p>
+<p>The earlier Schema phonebook example uses different constraints. All three child declarations inside <code>entryType</code> have <code>minOccurs="0"</code>, so an empty entry is allowed there. Its owner attribute is optional, whereas the DTD declares owner as required.</p>
+<p>When evaluating an instance, use the specific grammar in the question.</p>
+<h1 id="sources">Sources</h1>
+<p>Course slides, <em>XML &amp; XML Schema</em>, pp. 1–68. DTD conformance appears on pp. 18–28, simple types on pp. 34–48, and complex types and attributes on pp. 50–66.</p>
+<p>The conformance checks follow the style of the 2025 paper, Questions 41–44. Current slide coverage also includes groups, attribute defaults, and derivation by extension.</p>
+<p>The occurrence and content-model rules can also be checked against the <a target="_blank" rel="noopener" href="https://www.w3.org/TR/xmlschema-0/">W3C XML Schema Primer</a>.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/11/06/26-10-13-1-COMPSCI335-10-xml/">https://remy-campanella.github.io/2026/11/06/26-10-13-1-COMPSCI335-10-xml/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1/">网络编程与分布式服务</a><a class="post-meta__tags" href="/tags/C-%E8%AF%AD%E8%A8%80/">C# 语言</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci335_cover.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/scripts/vendor/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/scripts/vendor/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 335】 Week 9 JavaScript</div></div><div class="info-2"><div class="info-item-1">JavaScript JavaScript is a powerful, high-level programming language primarily used to make web pages interactive. While HTML structures the content and CSS styles it, JavaScript adds behaviour — such as responding to clicks, validating user input, loading content dynamically, and more. It runs directly in the browser, which makes it essential for client-side web development. 1234567891011&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;script&gt;        &quot;use strict&quot;;        ale...</div></div></div></a><a class="pagination-related" href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/" title="【COMPSCI 335】 Week 11 Security Considerations"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">【COMPSCI 335】 Week 11 Security Considerations</div></div><div class="info-2"><div class="info-item-1">Security Intro Application Security Anything that has a potential to execute has a security concern.  If we are app users, execute only apps that come from a trusted party. If we are app makers, can we trust our users?  A Web Application The client that runs on a browser is the user-facing part. Servers offer services and data to support the client. A network supports the transfer of data and results. Multi-tier execution (client, application servers, database servers) adds further complexity...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</div></div><div class="info-2"><div class="info-item-1">SVG SVG SVG is a vector-based graphic format for the Web and is defined using an XML-like syntax. SVG specifies a collection of graphical objects (such as lines and circles).  SVG defines the geometry of objects using mathematical descriptions rather than pixels, which means the shapes can scale infinitely without losing clarity or becoming pixelated.  Being a vector format, it does not lose quality during resizing or zooming. SVG Example 123&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 7 HTML &amp; CSS</div></div><div class="info-2"><div class="info-item-1">HTML HTML HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s. An Example 12345678910&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Our First HTML document&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h1&gt;Our sample heading&lt;/h1&gt;    &lt;p&gt;Our sample paragraph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; DOCTYPE tells a browser the version of the HTML document. It is an artifact of the history of HTML. The content of the DOCTYPE changed th...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-12-1-COMPSCI335-4-auth/" title="【COMPSCI 335】 Week 4 Authentication and Authorisation"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-18</div><div class="info-item-2">【COMPSCI 335】 Week 4 Authentication and Authorisation</div></div><div class="info-2"><div class="info-item-1">Authentication and Authorization  Authentication verifies users’ identities(password, biometric info). Authorization decides whether users have permissions to access resources according to identities.  HTTP Basic Authentication HTTP provides a challenge and response framework for carrying out authentication. The server challenges client’s request, then client provides the authentication info. graph LR  c["client"] s["server"] c2["client"] s2["server"]  c --"GET /home"--> s s --"401 Unauthoriz...</div></div></div></a><a class="pagination-related" href="/2026/08/20/26-8-19-1-COMPSCI335-5-data-perf/" title="【COMPSCI 335】 Week 5 Customized Data Formats, Performance"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-20</div><div class="info-item-2">【COMPSCI 335】 Week 5 Customized Data Formats, Performance</div></div><div class="info-2"><div class="info-item-1">Returning Customized Data Formats from Web API flowchart LR  cli["Client"] ctrl["Controller"] datarep["Data Repository"] dbacc["DB AccessDB Context"] db["DB"] dto["DTO"] model["Model"]  cli --request--> ctrl  datarep  dbacc  db ctrl  dto  model ctrl --response--> cli When an object is sent to client, we convert it to JSON format. We also need to sent files. Output HTML Data If returning HTML ot plain text is needed, the return type of the controller should be ContentResult. ContentResult has ...</div></div></div></a><a class="pagination-related" href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/" title="【COMPSCI 335】 Week 11 Security Considerations"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-11-05</div><div class="info-item-2">【COMPSCI 335】 Week 11 Security Considerations</div></div><div class="info-2"><div class="info-item-1">Security Intro Application Security Anything that has a potential to execute has a security concern.  If we are app users, execute only apps that come from a trusted party. If we are app makers, can we trust our users?  A Web Application The client that runs on a browser is the user-facing part. Servers offer services and data to support the client. A network supports the transfer of data and results. Multi-tier execution (client, application servers, database servers) adds further complexity...</div></div></div></a><a class="pagination-related" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-11-05</div><div class="info-item-2">【COMPSCI 335】 Week 9 JavaScript</div></div><div class="info-2"><div class="info-item-1">JavaScript JavaScript is a powerful, high-level programming language primarily used to make web pages interactive. While HTML structures the content and CSS styles it, JavaScript adds behaviour — such as responding to clicks, validating user input, loading content dynamically, and more. It runs directly in the browser, which makes it essential for client-side web development. 1234567891011&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;script&gt;        &quot;use strict&quot;;        ale...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">157</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#xml-intro"><span class="toc-number">1.</span> <span class="toc-text">XML Intro</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#a-well-formed-xml-document"><span class="toc-number">1.1.</span> <span class="toc-text">A Well-Formed XML Document</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#well-formed-vs.-valid"><span class="toc-number">1.2.</span> <span class="toc-text">Well-Formed vs. Valid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xml-grammars"><span class="toc-number">1.3.</span> <span class="toc-text">XML Grammars</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#attributes-vs.-child-elements"><span class="toc-number">1.4.</span> <span class="toc-text">Attributes vs. Child Elements</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#xml-dtd"><span class="toc-number">2.</span> <span class="toc-text">XML DTD</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-grammar-with-dtd"><span class="toc-number">2.1.</span> <span class="toc-text">Defining Grammar with DTD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#limitations-of-dtd"><span class="toc-number">2.2.</span> <span class="toc-text">Limitations of DTD</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#xml-schema-introduction"><span class="toc-number">3.</span> <span class="toc-text">XML Schema — Introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#xml-schema"><span class="toc-number">3.1.</span> <span class="toc-text">XML Schema</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simple-elements"><span class="toc-number">3.2.</span> <span class="toc-text">Simple Elements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#schema-namespace"><span class="toc-number">3.3.</span> <span class="toc-text">Schema Namespace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#occurrence-indicators"><span class="toc-number">3.4.</span> <span class="toc-text">Occurrence Indicators</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#user-defined-simple-types"><span class="toc-number">3.5.</span> <span class="toc-text">User-Defined Simple Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#restrictions-on-values"><span class="toc-number">3.6.</span> <span class="toc-text">Restrictions on Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#patterns"><span class="toc-number">3.7.</span> <span class="toc-text">Patterns</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#union"><span class="toc-number">3.8.</span> <span class="toc-text">Union</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#complex-types"><span class="toc-number">4.</span> <span class="toc-text">Complex Types</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sequence"><span class="toc-number">4.1.</span> <span class="toc-text">Sequence</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#anonymous-types"><span class="toc-number">4.2.</span> <span class="toc-text">Anonymous Types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#choice"><span class="toc-number">4.3.</span> <span class="toc-text">Choice</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#named-groups"><span class="toc-number">4.4.</span> <span class="toc-text">Named Groups</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#all"><span class="toc-number">4.5.</span> <span class="toc-text">All</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#attributes-and-content"><span class="toc-number">5.</span> <span class="toc-text">Attributes and Content</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#attribute-declarations"><span class="toc-number">5.1.</span> <span class="toc-text">Attribute Declarations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#default-values"><span class="toc-number">5.2.</span> <span class="toc-text">Default Values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simple-content-with-attributes"><span class="toc-number">5.3.</span> <span class="toc-text">Simple Content with Attributes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#empty-content"><span class="toc-number">5.4.</span> <span class="toc-text">Empty Content</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#derivation-by-extension"><span class="toc-number">5.5.</span> <span class="toc-text">Derivation by Extension</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#checking-conformance"><span class="toc-number">6.</span> <span class="toc-text">Checking Conformance</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sources"><span class="toc-number">7.</span> <span class="toc-text">Sources</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/" title="【COMPSCI 335】 Week 11 Security Considerations"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 11 Security Considerations"/></a><div class="content"><a class="title" href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/" title="【COMPSCI 335】 Week 11 Security Considerations">【COMPSCI 335】 Week 11 Security Considerations</a><time datetime="2026-11-05T11:28:53.000Z" title="发表于 2026-11-05 19:28:53">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/26-10-13-1-COMPSCI335-10-xml/" title="【COMPSCI 335】 Week 10 XML &amp; XML Schema"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 10 XML &amp; XML Schema"/></a><div class="content"><a class="title" href="/2026/11/06/26-10-13-1-COMPSCI335-10-xml/" title="【COMPSCI 335】 Week 10 XML &amp; XML Schema">【COMPSCI 335】 Week 10 XML &amp; XML Schema</a><time datetime="2026-11-05T11:28:37.000Z" title="发表于 2026-11-05 19:28:37">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 9 JavaScript"/></a><div class="content"><a class="title" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript">【COMPSCI 335】 Week 9 JavaScript</a><time datetime="2026-11-05T11:28:26.000Z" title="发表于 2026-11-05 19:28:26">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 16 Intractability 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2">【COMPSCI 320】 Lecture 16 Intractability 2</a><time datetime="2026-10-28T09:51:57.000Z" title="发表于 2026-10-28 17:51:57">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 15 Intractability 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1">【COMPSCI 320】 Lecture 15 Intractability 1</a><time datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.9.0+26.11.5.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/scripts/vendor/fancybox/dist/fancybox/fancybox.umd.js"></script><script src="/scripts/vendor/lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = '/scripts/vendor/mathjax/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax || document.readyState !== 'loading' ? loadMathjax() : document.addEventListener('DOMContentLoaded', loadMathjax, { once: true })
+})()</script><script type="text/javascript" id="maid-script" src="/scripts/vendor/mermaid/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins') || '{}');
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/scripts/vendor/pseudocode/pseudocode.js"></script><script src="/scripts/js/pseudocode-init.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>

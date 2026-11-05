@@ -1,0 +1,568 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>【COMPSCI 335】 Week 11 Security Considerations | remy-campanella.github.io</title><meta name="author" content="Remy Campanella"><meta name="copyright" content="Remy Campanella"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Security Intro Application Security Anything that has a potential to execute has a security concern.  If we are app users, execute only apps that come from a trusted party. If we are app makers, can w">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【COMPSCI 335】 Week 11 Security Considerations">
+<meta property="og:url" content="https://remy-campanella.github.io/2026/11/06/26-10-20-1-COMPSCI335-11-security/index.html">
+<meta property="og:site_name" content="remy-campanella.github.io">
+<meta property="og:description" content="Security Intro Application Security Anything that has a potential to execute has a security concern.  If we are app users, execute only apps that come from a trusted party. If we are app makers, can w">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp">
+<meta property="article:published_time" content="2026-11-05T11:28:53.000Z">
+<meta property="article:modified_time" content="2026-11-05T06:28:53.659Z">
+<meta property="article:author" content="Remy Campanella">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="外文">
+<meta property="article:tag" content="网络编程与分布式服务">
+<meta property="article:tag" content="C# 语言">
+<meta property="article:tag" content="奥克兰大学课程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【COMPSCI 335】 Week 11 Security Considerations",
+  "url": "https://remy-campanella.github.io/2026/11/06/26-10-20-1-COMPSCI335-11-security/",
+  "image": "https://remy-campanella.github.io/image/background/categories/compsci335_cover.webp",
+  "datePublished": "2026-11-05T11:28:53.000Z",
+  "dateModified": "2026-11-05T06:28:53.659Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Remy Campanella",
+      "url": "https://remy-campanella.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/icon/icon.png"><link rel="canonical" href="https://remy-campanella.github.io/2026/11/06/26-10-20-1-COMPSCI335-11-security/index.html"><link rel="preconnect" href="https://unpkg.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/scripts/vendor/fontawesome/css/all.min.css"><link rel="stylesheet" href="/scripts/vendor/fancybox/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://unpkg.com/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【COMPSCI 335】 Week 11 Security Considerations',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/scripts/css/font.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="/scripts/css/font.css"></noscript><link rel="stylesheet" href="/scripts/vendor/pseudocode/pseudocode.min.css"><link rel="stylesheet" href="/scripts/css/pseudocode.css"><!-- hexo injector head_end start -->
+    <link rel="stylesheet" href="/css/gallery.css" media="print" onload="this.media='all'">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">157</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/image/background/categories/compsci335_cover.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/image/icon/loading.gif" data-lazy-src="/image/icon/icon.png" alt="Logo"><span class="site-name">remy-campanella.github.io</span></a><a class="nav-page-title" href="/"><span class="site-name">【COMPSCI 335】 Week 11 Security Considerations</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories"><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags"><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about"><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/album"><span> 图库</span></a></div><div class="menus_item"><a class="site-page" href="/origin"><span> 起源之地</span></a></div><div class="menus_item"><a class="site-page" href="/rsm"><span> RSM Project</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">【COMPSCI 335】 Week 11 Security Considerations</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-11-05T11:28:53.000Z" title="发表于 2026-11-05 19:28:53">2026-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-11-05T06:28:53.659Z" title="更新于 2026-11-05 14:28:53">2026-11-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E5%AD%A6%E4%B9%A0/COMPSCI-335-Web-Programming-and-Distributed-Services/">COMPSCI 335 Web Programming and Distributed Services</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="security-intro">Security Intro</h1>
+<h2 id="application-security">Application Security</h2>
+<p>Anything that has a potential to execute has a security concern.</p>
+<ul>
+<li>If we are app users, execute only apps that come from a trusted party.</li>
+<li>If we are app makers, can we trust our users?</li>
+</ul>
+<h2 id="a-web-application">A Web Application</h2>
+<p>The client that runs on a browser is the user-facing part.</p>
+<p>Servers offer services and data to support the client.</p>
+<p>A network supports the transfer of data and results.</p>
+<p>Multi-tier execution (client, application servers, database servers) adds further complexity.</p>
+<h2 id="web-application-security">Web Application Security</h2>
+<p>In using a web application, we trust many parties.</p>
+<ul>
+<li>The browser</li>
+<li>The device the browser is running on (+ OS + other apps on the device)</li>
+<li>The server(s) the browser is connecting to</li>
+<li>The network connecting the client and the server(s)</li>
+<li>The data</li>
+</ul>
+<p>If any of them is compromised, we are potentially in for trouble.</p>
+<h2 id="social-engineering">Social Engineering</h2>
+<p>Phishing attacks — mostly based on social engineering.</p>
+<p>Legal boundaries aren’t always clear.</p>
+<p>Typosquatting (sting site, URL hijacking).</p>
+<h2 id="some-common-attacks">Some Common Attacks</h2>
+<ul>
+<li>Compromised devices.</li>
+<li>Database attacks — SQL injection(SQLi).</li>
+<li>Cross-Site scripting(XSS).</li>
+<li>Cross-Site request forgery(CSRF).</li>
+<li>Path traversal attacks.</li>
+<li>Compromised passwords.</li>
+</ul>
+<h1 id="a-compromised-device">A Compromised Device</h1>
+<h2 id="trusting-devices">Trusting Devices</h2>
+<p>One should be mindful trusting devices which someone else had access to. Trusting a compromised device is likely to be harmful!</p>
+<h2 id="dns-pollution">DNS Pollution</h2>
+<p>DNS resolves hostnames to IP addresses. If one compromises a DNS server, then valid domain names can be mapped to IP addresses controlled by the offender. A compromised computer can be configured to point to a malicious DNS server.</p>
+<h2 id="virtual-hosting-and-trojan-horses">Virtual Hosting and Trojan Horses</h2>
+<p>Virtual hosting allows a single physical server to host many sites.</p>
+<p>Running several Trojan horses on the compromised computer allows stealing multiple information.</p>
+<h1 id="cross-site-scriptingxss">Cross-Site Scripting(XSS)</h1>
+<h2 id="cross-site-scripting">Cross-Site Scripting</h2>
+<p>A <strong>code injection</strong> vulnerability. An attacker is able to inject potentially malicious content into a website and deliver/execute them under the privileges of the site.</p>
+<p>This could be HTML(HTML injection) or JavaScript(code injection) that could cause greater grievance.</p>
+<p>The slide demonstration supplies an HTML event handler such as <code>&lt;img src="x" alt="pix" onerror="alert('hello')"/&gt;</code>. If untrusted input is interpreted as HTML and event handlers are allowed, it can execute code.</p>
+<p>A particular script failing to execute does not establish that the injection point is safe. In particular, scripts inserted through <code>innerHTML</code> behave differently from event-handler attributes. Treat the slides’ browser-filter discussion as historical context.</p>
+<h2 id="reflected-vs.-persistent-xss">Reflected vs. Persistent XSS</h2>
+<p>The XSS attacks above are called reflected XSS. This is because the script is <strong>reflected to the user</strong> rather than being stored on a site.</p>
+<p>Persistent XSS attacks are when the script or code is <strong>stored on the attacked server</strong>. This is a lot more damaging—any user viewing this content can be affected by the script.</p>
+<p><em>E.g.</em>, posting messages on a vulnerable forum.</p>
+<h2 id="mitigating-xss">Mitigating XSS</h2>
+<p>For user-supplied text, create text nodes or assign <code>textContent</code>. <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;result&quot;</span>);</span><br><span class="line">result.<span class="property">textContent</span> = userInput;</span><br></pre></td></tr></table></figure></p>
+<p>Assigning the same input to <code>innerHTML</code> parses it as markup. HTML escaping represents special characters such as <code>&lt;</code>, <code>&gt;</code>, and <code>&amp;</code> as text. The required escaping or validation depends on the output context.</p>
+<p>A server-stored value can still be untrusted input. Persistent XSS becomes possible when that value is later rendered as executable markup.</p>
+<h1 id="sql-injection">SQL Injection</h1>
+<h2 id="sql">SQL</h2>
+<p>SQL is used to query and modify relational databases. SQL injection occurs when user-supplied data changes the structure of a dynamically constructed SQL command.</p>
+<h2 id="sample-sql-queries">Sample SQL Queries</h2>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Password <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> Username <span class="operator">=</span> <span class="string">&#x27;boca359&#x27;</span>;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> Username <span class="operator">=</span> <span class="string">&#x27;boca359&#x27;</span>;</span><br><span class="line"><span class="keyword">INSERT INTO</span> Users (Username, Password, PasswordHint) <span class="keyword">VALUES</span> (<span class="string">&#x27;jbon007&#x27;</span>, <span class="string">&#x27;access&#x27;</span>, <span class="string">&#x27;I need access&#x27;</span>); </span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> Users;</span><br></pre></td></tr></table></figure>
+<h2 id="sanitize-inputs">Sanitize Inputs</h2>
+<p>Remove, replace, or escape characters that lead to attacks. E.g., the single quote.</p>
+<p>Legit users suffer. Would Tim O’Reilly be happy to be called <code>Tim OReilly</code> or <code>Tim O\'Reilly</code>?</p>
+<p>Every single user input needs to be mindfully sanitized.</p>
+<p>Should character “equivalents” be considered? <em>E.g.</em>, <code>O'Reilly</code> vs. <code>O’Reilly</code>.</p>
+<p>Alternative: Treat data as data – never as code.</p>
+<h2 id="parameterized-queries">Parameterized Queries</h2>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">String query = </span><br><span class="line"><span class="string">&quot;INSERT INTO Users (UserName,Password,PasswordHint) VALUES(@UserName,@Password,@PasswordHint)&quot;</span>;</span><br><span class="line"></span><br><span class="line">SqlCommand command = <span class="keyword">new</span> SqlCommand(query, db.Connection);</span><br><span class="line">command.Parameters.Add(<span class="keyword">new</span> SqlParameter(<span class="string">&quot;@UserName&quot;</span>, <span class="string">&quot;bond007&quot;</span>));</span><br><span class="line">command.Parameters.Add(<span class="keyword">new</span> SqlParameter(<span class="string">&quot;@Password&quot;</span>, <span class="string">&quot;access&quot;</span>)); </span><br><span class="line">command.Parameters.Add(<span class="keyword">new</span> SqlParameter(<span class="string">&quot;@PasswordHint&quot;</span>, <span class="string">&quot;who cares&#x27;); DROP TABLE Users; --&quot;</span>));</span><br><span class="line">command.ExecuteNonQuery();</span><br></pre></td></tr></table></figure>
+<h2 id="insertion-using-linq-to-sql">Insertion Using LINQ to SQL</h2>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">User user = <span class="keyword">new</span> User</span><br><span class="line">&#123;</span><br><span class="line">    UserName = <span class="string">&quot;bond007&quot;</span>,</span><br><span class="line">    Password = <span class="string">&quot;access&quot;</span>,</span><br><span class="line">    PasswordHint = <span class="string">&quot;who cares&#x27;); DROP TABLE Users; --&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line">db.Users.InsertOnSubmit(user);</span><br><span class="line">db.SubmitChanges();</span><br></pre></td></tr></table></figure>
+<h2 id="data-and-sql-commands">Data and SQL Commands</h2>
+<p>The slide example inserts a password hint into a command string. An input containing a closing quote, a second SQL statement, and a comment marker can change how that command is parsed.</p>
+<p>In the parameterized version, the hint is supplied as a parameter value. Its punctuation remains part of the stored text. The example models SQL construction only.</p>
+<p>The LINQ to SQL example also turns ordinary property values into SQL parameters. The protection comes from parameter binding. Concatenating input into a raw SQL command still needs separate attention.</p>
+<h1 id="cookies-sessions-and-same-origin-policy">Cookies, Sessions and Same-Origin Policy</h1>
+<h2 id="http-sessions">HTTP Sessions</h2>
+<p>It won’t be good user experience if we need to authenticate every single HTTP request. Logging on to a site requires persistence – at least for a reasonable duration.</p>
+<p>The browser transparently exchanges credentials, cookies, session IDs to make this happen.</p>
+<p>A session is application-level state built on top of stateless HTTP. In the course example, login creates a session identifier that lets the server associate later requests with the user.</p>
+<h2 id="cookie-headers">Cookie Headers</h2>
+<p>The server asks the browser to store a cookie through a response header. <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>SessionId=g234</span><br></pre></td></tr></table></figure></p>
+<p>The browser sends an applicable stored cookie through a request header. <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>SessionId=g234</span><br></pre></td></tr></table></figure></p>
+<p>Cookie scope and attributes determine when it can accompany a request. A cookie associated with secret.org does not become a cookie belonging to bad.org merely because the user visits both sites.</p>
+<h2 id="what-makes-an-origin">What Makes an Origin?</h2>
+<p>For the HTTP(S) examples in the course, an origin is the combination of <strong>scheme, hostname, and effective port</strong>.</p>
+<p>Assume the document is served from <code>http://www.site.org/foobar/page.html</code>.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Resource URL</th>
+<th>Same origin?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>http://www.site.org/bar/data</code></td>
+<td>Yes</td>
+<td>Path differs, origin is unchanged</td>
+</tr>
+<tr>
+<td><code>http://www.site.org:80/data</code></td>
+<td>Yes</td>
+<td>80 is the default HTTP port</td>
+</tr>
+<tr>
+<td><code>https://www.site.org/data</code></td>
+<td>No</td>
+<td>Scheme differs</td>
+</tr>
+<tr>
+<td><code>http://www.site.org:81/data</code></td>
+<td>No</td>
+<td>Port differs</td>
+</tr>
+<tr>
+<td><code>http://site.org/data</code></td>
+<td>No</td>
+<td>Hostname differs</td>
+</tr>
+<tr>
+<td><code>http://m.www.site.org/data</code></td>
+<td>No</td>
+<td>Hostname differs</td>
+</tr>
+</tbody>
+</table>
+<p>The relevant origin is the document’s origin. Loading an external script into that document does not give that script a separate page origin for its requests.</p>
+<h2 id="same-origin-policy">Same-Origin Policy</h2>
+<p>The browser’s same-origin policy restricts access to data belonging to another origin. This protects a logged-in user’s information from scripts in an unrelated page.</p>
+<p>Cross-origin embedding of resources such as images and classic scripts is often allowed. That does not grant a page general access to the embedded resource’s contents. A cross-origin iframe also retains origin boundaries around its document.</p>
+<p>For <code>fetch</code>, the browser applies CORS checks before exposing a cross-origin response to the calling script. Some requests can reach the server even when the script cannot read the response. This distinction matters for CSRF.</p>
+<h1 id="cross-origin-resource-sharing">Cross-Origin Resource Sharing</h1>
+<h2 id="allowing-cross-origin-reads">Allowing Cross-Origin Reads</h2>
+<p>CORS lets a server opt into cross-origin access using response headers. The browser checks the permission before exposing the response.</p>
+<p>A public resource can allow origins with <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>*</span><br></pre></td></tr></table></figure></p>
+<p>Adding this header to the client’s request does not grant permission. It is the resource server’s response that must supply the appropriate CORS headers.</p>
+<h2 id="credentials">Credentials</h2>
+<p>A cross-origin fetch that needs cookies explicitly requests credential inclusion. <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&quot;https://secret.org/data&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">credentials</span>: <span class="string">&quot;include&quot;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>For a page at <code>https://good.org</code>, the responding server must permit that origin and credentialed access. <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>https://good.org</span><br><span class="line"><span class="attribute">Access-Control-Allow-Credentials</span><span class="punctuation">: </span>true</span><br></pre></td></tr></table></figure></p>
+<p>Cookie eligibility still depends on cookie attributes and browser policy. These headers grant permission to read a credentialed response. They do not by themselves force the browser to send cookies.</p>
+<p>A credentialed CORS response needs a specific allowed origin. The wildcard <code>*</code> does not satisfy that check.</p>
+<h2 id="preflight">Preflight</h2>
+<p>Some cross-origin requests require the browser to send an <code>OPTIONS</code> preflight before the actual request, for example a request using an <code>Authorization</code> header.</p>
+<p>The preflight describes the proposed method and headers. <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>https://good.org</span><br><span class="line"><span class="attribute">Access-Control-Request-Method</span><span class="punctuation">: </span>POST</span><br><span class="line"><span class="attribute">Access-Control-Request-Headers</span><span class="punctuation">: </span>authorization, content-type</span><br></pre></td></tr></table></figure></p>
+<p>The server grants permission through response headers such as <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>https://good.org</span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span><span class="punctuation">: </span>POST</span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span><span class="punctuation">: </span>Authorization, Content-Type</span><br></pre></td></tr></table></figure></p>
+<p>Keep the request’s <code>Access-Control-Request-*</code> headers distinct from the response’s <code>Access-Control-Allow-*</code> headers. A successful preflight permits the actual request to proceed.</p>
+<h2 id="diagnosing-a-cors-error">Diagnosing a CORS Error</h2>
+<p>The course example includes a misspelled URL, <code>corss/Version</code>. A wrong endpoint may produce a response without the expected CORS headers. Check the URL, HTTP method, request headers, and server response.</p>
+<p>Using <code>mode: "no-cors"</code> can produce an <strong>opaque response</strong>. JavaScript cannot inspect its body or ordinary status information, so this does not provide readable cross-origin data.</p>
+<h2 id="cors-proxy">CORS Proxy</h2>
+<p>A proxy performs a server-to-server request, then returns the result with suitable CORS headers. Browser CORS restrictions apply to the browser’s response access.</p>
+<p>The course proxy example supplies the destination as an encoded query parameter. <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> destination = <span class="string">&quot;https://cws.auckland.ac.nz/CorsNot/Bird?id=1&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> proxyUrl =</span><br><span class="line">    <span class="string">&quot;https://academicintegrity.cs.auckland.ac.nz/cors/Proxy?url=&quot;</span> +</span><br><span class="line">    <span class="built_in">encodeURIComponent</span>(destination);</span><br></pre></td></tr></table></figure></p>
+<p>The browser communicates with the proxy origin. It does not automatically give the proxy the user’s cookies for the destination origin. A proxy can retrieve public data without acquiring the user’s destination session.</p>
+<h2 id="jsonp">JSONP</h2>
+<p>JSONP returns JavaScript that calls a supplied callback with the data. <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">versionP</span>(<span class="string">&quot;v1.0.0&quot;</span>);</span><br></pre></td></tr></table></figure></p>
+<p>A classic script element can load that response from another origin. <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> <span class="title function_">versionP</span> = (<span class="params">version</span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;result&quot;</span>).<span class="property">textContent</span> = version;</span></span><br><span class="line"><span class="language-javascript">    &#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cws.auckland.ac.nz/CorsNot/VersionP&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;result&quot;</span>&gt;</span>Waiting<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Define the callback before the downloaded script executes. Here <code>defer</code> also ensures that the span exists when the callback runs.</p>
+<p>For the click-to-load exercise, the click handler creates a script element. After the response loads and executes, it calls the callback. The callback can update the page and remove the temporary script element.</p>
+<p>JSONP gives the external response the ability to execute code in the page. The course presents this as a legacy technique with security concerns.</p>
+<h1 id="cross-site-request-forgery-csrf">Cross-Site Request Forgery (CSRF)</h1>
+<h2 id="forging-a-users-action">Forging a User’s Action</h2>
+<p>CSRF exploits a browser’s automatic inclusion of applicable credentials. A user logged into a bank can be tricked into making a request that the bank accepts as an intended action.</p>
+<p>The slide example uses a link shaped like <code>http://www.bank.com/send?m=1000&amp;to=lucifer</code>. If following that link sends an applicable session cookie and the server treats the GET request as a transfer instruction, the action can occur without the user’s intended authorization.</p>
+<p>The attacker may only need to cause the action. Reading the response is not required.</p>
+<h2 id="mitigation">Mitigation</h2>
+<p>The slides discuss strong session identifiers and checking <code>Origin</code> or <code>Referer</code>. Strong identifiers reduce session guessing, while source checks help distinguish requests from an unexpected origin.</p>
+<p>Strong identifiers alone do not stop a browser from sending a valid session cookie on a forged request. Anti-CSRF tokens bind state-changing requests to the intended session or workflow. Appropriate cookie <code>SameSite</code> settings provide another restriction on cross-site credential use.</p>
+<p>A server should validate the relevant protections. A client-side check can be bypassed by submitting requests directly.</p>
+<p>The <code>Origin</code> header identifies the scheme, hostname, and port. It does not distinguish applications at different paths on the same origin. The slides explicitly note this limit.</p>
+<h2 id="xss-vs.-csrf">XSS vs. CSRF</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Attack</th>
+<th>What is exploited</th>
+<th>Typical consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XSS</td>
+<td>Untrusted content interpreted as executable markup or script</td>
+<td>Code executes with the page’s privileges</td>
+</tr>
+<tr>
+<td>SQLi</td>
+<td>Untrusted input incorporated into SQL command structure</td>
+<td>Database commands are changed</td>
+</tr>
+<tr>
+<td>CSRF</td>
+<td>An unintended request carries applicable user credentials</td>
+<td>Server performs an unintended action</td>
+</tr>
+</tbody>
+</table>
+<p>The slides describe XSS as making the client trust attacker-controlled content from a site, and CSRF as making the server trust an unintended client request.</p>
+<h1 id="reading-security-questions">Reading Security Questions</h1>
+<p>Trace the input from its source to the operation that interprets it. For HTML, distinguish text insertion from markup parsing. For SQL, distinguish command text from parameter values. For a request, check origin, credentials, server authorization, and whether the attacker needs to read the response.</p>
+<p>The 2025 paper separates same-origin comparisons (Questions 45–46) from vulnerability recognition (Questions 47–50). For X/Y/Z questions, evaluate each statement before selecting the matching option.</p>
+<h1 id="sources">Sources</h1>
+<p>Course slides, <em>Web Application Security</em>, pp. 1–57, and <em>Cross-Origin Resource Sharing (CORS)</em>, pp. 1–43. The security slides cover XSS (pp. 17–30), SQL injection (pp. 31–46), and CSRF (pp. 47–56). The CORS slides cover cookies and sessions (pp. 5–14), origins (pp. 15–20), CORS and proxies (pp. 22–31), and JSONP (pp. 34–43).</p>
+<p>The notes distinguish the slides’ simplified examples from the credential and response-access conditions needed to reason about actual browser requests.</p>
+<p>Browser response and credential details are clarified in the <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS">MDN CORS guide</a>. The HTML-insertion example is explained in the <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML">MDN innerHTML reference</a>.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io">Remy Campanella</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://remy-campanella.github.io/2026/11/06/26-10-20-1-COMPSCI335-11-security/">https://remy-campanella.github.io/2026/11/06/26-10-20-1-COMPSCI335-11-security/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://remy-campanella.github.io" target="_blank">remy-campanella.github.io</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a><a class="post-meta__tags" href="/tags/%E5%A4%96%E6%96%87/">外文</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E6%9C%8D%E5%8A%A1/">网络编程与分布式服务</a><a class="post-meta__tags" href="/tags/C-%E8%AF%AD%E8%A8%80/">C# 语言</a><a class="post-meta__tags" href="/tags/%E5%A5%A5%E5%85%8B%E5%85%B0%E5%A4%A7%E5%AD%A6%E8%AF%BE%E7%A8%8B/">奥克兰大学课程</a></div><div class="post-share"><div class="social-share" data-image="/image/background/categories/compsci335_cover.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/scripts/vendor/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="/scripts/vendor/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/11/06/26-10-13-1-COMPSCI335-10-xml/" title="【COMPSCI 335】 Week 10 XML &amp; XML Schema"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">【COMPSCI 335】 Week 10 XML & XML Schema</div></div><div class="info-2"><div class="info-item-1">XML Intro XML (Extensible Markup Language) represents structured data using named elements and attributes. XML and HTML share tag-based syntax. XML requires strict well-formedness, while HTML has its own parsing rules. A Well-Formed XML Document  Every element must have matching start and end tags, or use an empty-element tag such as &lt;entry/&gt;. A document must have a single, unique root element. Element and attribute names are case-sensitive. Elements must be properly nested. (They canno...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/10/04/26-9-22-2-COMPSCI335-8-svg/" title="【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 8 Scalable Vector Graphics (SVG)</div></div><div class="info-2"><div class="info-item-1">SVG SVG SVG is a vector-based graphic format for the Web and is defined using an XML-like syntax. SVG specifies a collection of graphical objects (such as lines and circles).  SVG defines the geometry of objects using mathematical descriptions rather than pixels, which means the shapes can scale infinitely without losing clarity or becoming pixelated.  Being a vector format, it does not lose quality during resizing or zooming. SVG Example 123&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot...</div></div></div></a><a class="pagination-related" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-11-05</div><div class="info-item-2">【COMPSCI 335】 Week 9 JavaScript</div></div><div class="info-2"><div class="info-item-1">JavaScript JavaScript is a powerful, high-level programming language primarily used to make web pages interactive. While HTML structures the content and CSS styles it, JavaScript adds behaviour — such as responding to clicks, validating user input, loading content dynamically, and more. It runs directly in the browser, which makes it essential for client-side web development. 1234567891011&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;script&gt;        &quot;use strict&quot;;        ale...</div></div></div></a><a class="pagination-related" href="/2026/10/04/26-9-22-1-COMPSCI335-7-html-css/" title="【COMPSCI 335】 Week 7 HTML &amp; CSS"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-04</div><div class="info-item-2">【COMPSCI 335】 Week 7 HTML &amp; CSS</div></div><div class="info-2"><div class="info-item-1">HTML HTML HTML stands for Hypertext Markup Language, developed by Sir Tim Berners-Lee around 1990s. An Example 12345678910&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;    &lt;title&gt;Our First HTML document&lt;/title&gt;&lt;/head&gt;&lt;body&gt;    &lt;h1&gt;Our sample heading&lt;/h1&gt;    &lt;p&gt;Our sample paragraph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; DOCTYPE tells a browser the version of the HTML document. It is an artifact of the history of HTML. The content of the DOCTYPE changed th...</div></div></div></a><a class="pagination-related" href="/2026/08/06/26-8-4-1-COMPSCI335-3-web-api/" title="【COMPSCI 335】 Week 3 Web API"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-06</div><div class="info-item-2">【COMPSCI 335】 Week 3 Web API</div></div><div class="info-2"><div class="info-item-1">JavaScript Object Notation JSON Types  string: enclosed in double quotation marks. number: any type of number. boolean: true, false. null array: enclosed with []. object  one or several &lt;key&gt;: &lt;value&gt; pairs. enclosed with &#123;&#125;. pairs are seperated with ,. &lt;key&gt; is a string, &lt;value&gt; could be any JSON type.   Using ASP.NET Core to Develop WebAPI There is a DB table Customers that stores the information of customers. The API provides  GetCustomers GetCustomer AddC...</div></div></div></a><a class="pagination-related" href="/2026/09/23/26-8-20-2-COMPSCI335-6-join-perf-agn/" title="【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-23</div><div class="info-item-2">【COMPSCI 335】 Week 6 LINQ Join, Performance and Agentic API</div></div><div class="info-2"><div class="info-item-1">Naming Convention The name of a method with async modifier is giving an Async suffix. 1async Task&lt;T&gt; GoWorkAsync() Web API with async and await Use non-blocking method to utilise APIs we’ve written. Data Model 12345678public class Customer&#123;    [Key]    public int Id &#123;get; set;&#125;    public string FirstName &#123;get; set;&#125;    public string LastName &#123;get; set;&#125;    public string? Email &#123;get; set;&#125;&#125; The get and set methods are provided by EntityFr...</div></div></div></a><a class="pagination-related" href="/2026/08/18/26-8-12-1-COMPSCI335-4-auth/" title="【COMPSCI 335】 Week 4 Authentication and Authorisation"><img class="cover" src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-18</div><div class="info-item-2">【COMPSCI 335】 Week 4 Authentication and Authorisation</div></div><div class="info-2"><div class="info-item-1">Authentication and Authorization  Authentication verifies users’ identities(password, biometric info). Authorization decides whether users have permissions to access resources according to identities.  HTTP Basic Authentication HTTP provides a challenge and response framework for carrying out authentication. The server challenges client’s request, then client provides the authentication info. graph LR  c["client"] s["server"] c2["client"] s2["server"]  c --"GET /home"--> s s --"401 Unauthoriz...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/icon/loading.gif" data-lazy-src="/image/icon/Cover.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Remy Campanella</div><div class="author-info-description">A Remy Campanella blog website on Github.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">157</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">127</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/remy-campanella"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:remy_campanella@yeah.net" target="_blank" title="Yeah Email"><i class="fas fa-envelope" style="color: #cc2400;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">本站上线评论功能啦！总得给读者找点事做。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#security-intro"><span class="toc-number">1.</span> <span class="toc-text">Security Intro</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#application-security"><span class="toc-number">1.1.</span> <span class="toc-text">Application Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-web-application"><span class="toc-number">1.2.</span> <span class="toc-text">A Web Application</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web-application-security"><span class="toc-number">1.3.</span> <span class="toc-text">Web Application Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#social-engineering"><span class="toc-number">1.4.</span> <span class="toc-text">Social Engineering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#some-common-attacks"><span class="toc-number">1.5.</span> <span class="toc-text">Some Common Attacks</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#a-compromised-device"><span class="toc-number">2.</span> <span class="toc-text">A Compromised Device</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#trusting-devices"><span class="toc-number">2.1.</span> <span class="toc-text">Trusting Devices</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dns-pollution"><span class="toc-number">2.2.</span> <span class="toc-text">DNS Pollution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#virtual-hosting-and-trojan-horses"><span class="toc-number">2.3.</span> <span class="toc-text">Virtual Hosting and Trojan Horses</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cross-site-scriptingxss"><span class="toc-number">3.</span> <span class="toc-text">Cross-Site Scripting(XSS)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#cross-site-scripting"><span class="toc-number">3.1.</span> <span class="toc-text">Cross-Site Scripting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reflected-vs.-persistent-xss"><span class="toc-number">3.2.</span> <span class="toc-text">Reflected vs. Persistent XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mitigating-xss"><span class="toc-number">3.3.</span> <span class="toc-text">Mitigating XSS</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sql-injection"><span class="toc-number">4.</span> <span class="toc-text">SQL Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sql"><span class="toc-number">4.1.</span> <span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sample-sql-queries"><span class="toc-number">4.2.</span> <span class="toc-text">Sample SQL Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sanitize-inputs"><span class="toc-number">4.3.</span> <span class="toc-text">Sanitize Inputs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#parameterized-queries"><span class="toc-number">4.4.</span> <span class="toc-text">Parameterized Queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#insertion-using-linq-to-sql"><span class="toc-number">4.5.</span> <span class="toc-text">Insertion Using LINQ to SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#data-and-sql-commands"><span class="toc-number">4.6.</span> <span class="toc-text">Data and SQL Commands</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cookies-sessions-and-same-origin-policy"><span class="toc-number">5.</span> <span class="toc-text">Cookies, Sessions and Same-Origin Policy</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#http-sessions"><span class="toc-number">5.1.</span> <span class="toc-text">HTTP Sessions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie-headers"><span class="toc-number">5.2.</span> <span class="toc-text">Cookie Headers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#what-makes-an-origin"><span class="toc-number">5.3.</span> <span class="toc-text">What Makes an Origin?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#same-origin-policy"><span class="toc-number">5.4.</span> <span class="toc-text">Same-Origin Policy</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cross-origin-resource-sharing"><span class="toc-number">6.</span> <span class="toc-text">Cross-Origin Resource Sharing</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#allowing-cross-origin-reads"><span class="toc-number">6.1.</span> <span class="toc-text">Allowing Cross-Origin Reads</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#credentials"><span class="toc-number">6.2.</span> <span class="toc-text">Credentials</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#preflight"><span class="toc-number">6.3.</span> <span class="toc-text">Preflight</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#diagnosing-a-cors-error"><span class="toc-number">6.4.</span> <span class="toc-text">Diagnosing a CORS Error</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cors-proxy"><span class="toc-number">6.5.</span> <span class="toc-text">CORS Proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jsonp"><span class="toc-number">6.6.</span> <span class="toc-text">JSONP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cross-site-request-forgery-csrf"><span class="toc-number">7.</span> <span class="toc-text">Cross-Site Request Forgery (CSRF)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#forging-a-users-action"><span class="toc-number">7.1.</span> <span class="toc-text">Forging a User’s Action</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mitigation"><span class="toc-number">7.2.</span> <span class="toc-text">Mitigation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xss-vs.-csrf"><span class="toc-number">7.3.</span> <span class="toc-text">XSS vs. CSRF</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#reading-security-questions"><span class="toc-number">8.</span> <span class="toc-text">Reading Security Questions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sources"><span class="toc-number">9.</span> <span class="toc-text">Sources</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/" title="【COMPSCI 335】 Week 11 Security Considerations"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 11 Security Considerations"/></a><div class="content"><a class="title" href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/" title="【COMPSCI 335】 Week 11 Security Considerations">【COMPSCI 335】 Week 11 Security Considerations</a><time datetime="2026-11-05T11:28:53.000Z" title="发表于 2026-11-05 19:28:53">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/26-10-13-1-COMPSCI335-10-xml/" title="【COMPSCI 335】 Week 10 XML &amp; XML Schema"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 10 XML &amp; XML Schema"/></a><div class="content"><a class="title" href="/2026/11/06/26-10-13-1-COMPSCI335-10-xml/" title="【COMPSCI 335】 Week 10 XML &amp; XML Schema">【COMPSCI 335】 Week 10 XML &amp; XML Schema</a><time datetime="2026-11-05T11:28:37.000Z" title="发表于 2026-11-05 19:28:37">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci335_cover.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 335】 Week 9 JavaScript"/></a><div class="content"><a class="title" href="/2026/11/06/26-9-29-1-COMPSCI335-9-js/" title="【COMPSCI 335】 Week 9 JavaScript">【COMPSCI 335】 Week 9 JavaScript</a><time datetime="2026-11-05T11:28:26.000Z" title="发表于 2026-11-05 19:28:26">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 16 Intractability 2"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-21-1-COMPSCI320-16-intra2/" title="【COMPSCI 320】 Lecture 16 Intractability 2">【COMPSCI 320】 Lecture 16 Intractability 2</a><time datetime="2026-10-28T09:51:57.000Z" title="发表于 2026-10-28 17:51:57">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1"><img src="/image/icon/loading.gif" data-lazy-src="/image/background/categories/compsci320_cover.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="【COMPSCI 320】 Lecture 15 Intractability 1"/></a><div class="content"><a class="title" href="/2026/10/28/26-10-14-1-COMPSCI320-15-intra1/" title="【COMPSCI 320】 Lecture 15 Intractability 1">【COMPSCI 320】 Lecture 15 Intractability 1</a><time datetime="2026-10-28T09:51:46.000Z" title="发表于 2026-10-28 17:51:46">2026-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By Remy Campanella</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div><div class="footer_custom_text">源代码库版本 1.9.0+26.11.5.1</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/scripts/vendor/fancybox/dist/fancybox/fancybox.umd.js"></script><script src="/scripts/vendor/lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = '/scripts/vendor/mathjax/tex-mml-chtml.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax || document.readyState !== 'loading' ? loadMathjax() : document.addEventListener('DOMContentLoaded', loadMathjax, { once: true })
+})()</script><script type="text/javascript" id="maid-script" src="/scripts/vendor/mermaid/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins') || '{}');
+  mermaid.initialize(options);
+}
+</script><script>(() => {
+  const abcjsInit = () => {
+    const abcjsFn = () => {
+      setTimeout(() => {
+        const sheets = document.querySelectorAll(".abc-music-sheet")
+        for (let i = 0; i < sheets.length; i++) {
+          const ele = sheets[i]
+          if (ele.children.length > 0) continue
+
+          // Parse parameters from data-params attribute
+          let params = {}
+          const dp = ele.getAttribute("data-params")
+          if (dp) {
+            try {
+              params = JSON.parse(dp)
+            } catch (e) {
+              console.error("Failed to parse data-params:", e)
+            }
+          }
+
+          // Merge parsed parameters with the responsive option
+          // Ensures params content appears before responsive
+          const options = { ...params, responsive: "resize" }
+
+          // Render the music score using ABCJS.renderAbc
+          ABCJS.renderAbc(ele, ele.textContent, options)
+        }
+      }, 100)
+    }
+
+    if (typeof ABCJS === "object") {
+      abcjsFn()
+    } else {
+      btf.getScript("https://unpkg.com/abcjs@6.6.3/dist/abcjs-basic-min.js").then(abcjsFn)
+    }
+  }
+
+  if (window.pjax) {
+    abcjsInit()
+  } else {
+    window.addEventListener("load", abcjsInit)
+  }
+
+  btf.addGlobalFn("encrypt", abcjsInit, "abcjs")
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = (el = document, path = location.pathname) => {
+    twikoo.init({
+      el: el.querySelector('#twikoo-wrap'),
+      envId: 'https://twikoo-cloudflare.remy-campanella.workers.dev/',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      },
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    
+
+    isShuoshuo && (window.shuoshuoComment.destroyTwikoo = () => {
+      if (el.children.length) {
+        el.innerHTML = ''
+        el.classList.add('no-comment')
+      }
+    })
+  }
+
+  const loadTwikoo = (el, path) => {
+    if (typeof twikoo === 'object') setTimeout(() => init(el, path), 0)
+    else btf.getScript('https://unpkg.com/twikoo@1.7.11/dist/twikoo.all.min.js').then(() => init(el, path))
+  }
+
+  if (isShuoshuo) {
+    'Twikoo' === 'Twikoo'
+      ? window.shuoshuoComment = { loadComment: loadTwikoo }
+      : window.loadOtherComment = loadTwikoo
+    return
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/scripts/vendor/pseudocode/pseudocode.js"></script><script src="/scripts/js/pseudocode-init.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start -->
+    <script src="/js/gallery.js" async></script>
+<!-- hexo injector body_end end --></body></html>
