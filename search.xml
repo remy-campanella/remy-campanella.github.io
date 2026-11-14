@@ -4,6 +4,334 @@
   
     
     <entry>
+      <title>【STATS 380】 11 Exam</title>
+      <link href="/2026/11/10/26-10-19-1-STATS380-11-exam/"/>
+      <url>/2026/11/10/26-10-19-1-STATS380-11-exam/</url>
+      
+        <content type="html"><![CDATA[<h1 id="instructions">Instructions</h1><ul><li>Allowed packages: <code>&#123;base&#125;</code>, <code>&#123;utils&#125;</code>, <code>&#123;tools&#125;</code>, <code>&#123;grDevices&#125;</code>, <code>&#123;graphics&#125;</code>, <code>&#123;stats&#125;</code></li><li>Calculators</li><li>A4 cheatsheet, both sides</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 10 Consolidation</title>
+      <link href="/2026/11/10/26-10-12-1-STATS380-10-cons/"/>
+      <url>/2026/11/10/26-10-12-1-STATS380-10-cons/</url>
+      
+        <content type="html"><![CDATA[<h2 id="handling-missing-values-on-import">Handling Missing Values on Import</h2><p>The Young People worksheet uses an underscore to mark missing values. Handle this in <code>getTable()</code> during import so later reshaping and plotting can work with numeric data. <code>na.strings = c("NA", "_")</code> keeps the existing <code>"NA"</code> marker as well. Even with <code>na.rm = TRUE</code>, a column containing only missing values has no finite range to plot.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">getTable <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>csv_file<span class="punctuation">,</span> skip<span class="punctuation">,</span> nrows<span class="punctuation">,</span> keep<span class="punctuation">,</span> years<span class="punctuation">,</span> value_name<span class="punctuation">,</span> by<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    wide <span class="operator">&lt;-</span> read.csv<span class="punctuation">(</span>csv_file<span class="punctuation">,</span> skip <span class="operator">=</span> skip<span class="punctuation">,</span> nrows <span class="operator">=</span> nrows<span class="punctuation">,</span></span><br><span class="line">                     header <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">,</span> na.strings <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;NA&quot;</span><span class="punctuation">,</span> <span class="string">&quot;_&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> keep<span class="punctuation">)</span><span class="punctuation">]</span></span><br><span class="line">    <span class="built_in">names</span><span class="punctuation">(</span>wide<span class="punctuation">)</span> <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>by<span class="punctuation">,</span> years<span class="punctuation">)</span></span><br><span class="line">    long <span class="operator">&lt;-</span> reshape2<span class="operator">::</span>melt<span class="punctuation">(</span>wide<span class="punctuation">,</span> id.vars <span class="operator">=</span> by<span class="punctuation">,</span> variable.name <span class="operator">=</span> <span class="string">&quot;year&quot;</span><span class="punctuation">,</span></span><br><span class="line">                           value.name <span class="operator">=</span> value_name<span class="punctuation">)</span></span><br><span class="line">    long<span class="operator">$</span>year <span class="operator">&lt;-</span> <span class="built_in">as.integer</span><span class="punctuation">(</span><span class="built_in">as.character</span><span class="punctuation">(</span>long<span class="operator">$</span>year<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">    long</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><p>After the change, run regression checks on the Children tables that were already readable. Also check that underscores in the Young People tables become <code>NA</code> and that the measure column is numeric. Match the types and column structure of the reference and actual results before comparing, so representation differences introduced by CSV import or export are distinguishable from value changes.</p><h2 id="extracting-tables-from-multiple-worksheets">Extracting Tables from Multiple Worksheets</h2><p><code>tableInfo()</code> supplies metadata for the tables in a worksheet, and <code>tableBy()</code> calls the rate or proportion reader based on the table type. The example uses these two lecture helpers. <code>mapply()</code> pairs up each table’s arguments, while <code>MoreArgs</code> supplies the same file path and years to every call for that worksheet.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">extractTables <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>csv_file<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    info <span class="operator">&lt;-</span> tableInfo<span class="punctuation">(</span>csv_file<span class="punctuation">)</span></span><br><span class="line">    tables <span class="operator">&lt;-</span> mapply<span class="punctuation">(</span></span><br><span class="line">        tableBy<span class="punctuation">,</span> skip <span class="operator">=</span> info<span class="operator">$</span>skip<span class="punctuation">,</span> nrows <span class="operator">=</span> info<span class="operator">$</span>nrows<span class="punctuation">,</span></span><br><span class="line">        by <span class="operator">=</span> info<span class="operator">$</span>by<span class="punctuation">,</span> type <span class="operator">=</span> info<span class="operator">$</span>type<span class="punctuation">,</span></span><br><span class="line">        MoreArgs <span class="operator">=</span> <span class="built_in">list</span><span class="punctuation">(</span>csv <span class="operator">=</span> csv_file<span class="punctuation">,</span> years <span class="operator">=</span> info<span class="operator">$</span>years<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        SIMPLIFY <span class="operator">=</span> <span class="literal">FALSE</span></span><br><span class="line">    <span class="punctuation">)</span></span><br><span class="line">    <span class="built_in">names</span><span class="punctuation">(</span>tables<span class="punctuation">)</span> <span class="operator">&lt;-</span> info<span class="operator">$</span>by</span><br><span class="line">    <span class="built_in">list</span><span class="punctuation">(</span>info <span class="operator">=</span> info<span class="punctuation">,</span> tables <span class="operator">=</span> tables<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">files <span class="operator">&lt;-</span> list.files<span class="punctuation">(</span><span class="string">&quot;CSV&quot;</span><span class="punctuation">,</span> pattern <span class="operator">=</span> <span class="string">&quot;[.]csv$&quot;</span><span class="punctuation">,</span> full.names <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br><span class="line">sheets <span class="operator">&lt;-</span> setNames<span class="punctuation">(</span>lapply<span class="punctuation">(</span>files<span class="punctuation">,</span> extractTables<span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">                   sub<span class="punctuation">(</span><span class="string">&quot;[.]csv$&quot;</span><span class="punctuation">,</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span> basename<span class="punctuation">(</span>files<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p>The result is a named, nested list. The outer list is indexed by worksheet. Within each entry, <code>info</code> stores the extraction metadata and <code>tables</code> stores the long tables by name. <code>SIMPLIFY = FALSE</code> keeps each table as a separate data frame.</p><h2 id="comparing-tables-across-worksheets">Comparing Tables Across Worksheets</h2><p>A list organised by worksheet is convenient for batch import. To compare releases, regroup the results by table name. For example, extract the Ethnic group table from each release, add a source column and combine the rows. Earlier releases can lack tables introduced later, so look up tables by name and check that the columns are compatible. The lectures also standardise older age-group labels to align with <code>Children</code> and <code>Young-people</code>.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">collectTable <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>sheets<span class="punctuation">,</span> table_name<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    pieces <span class="operator">&lt;-</span> lapply<span class="punctuation">(</span><span class="built_in">names</span><span class="punctuation">(</span>sheets<span class="punctuation">)</span><span class="punctuation">,</span> <span class="keyword">function</span><span class="punctuation">(</span>sheet_name<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        table <span class="operator">&lt;-</span> sheets<span class="punctuation">[[</span>sheet_name<span class="punctuation">]</span><span class="punctuation">]</span><span class="operator">$</span>tables<span class="punctuation">[[</span>table_name<span class="punctuation">]</span><span class="punctuation">]</span></span><br><span class="line">        <span class="keyword">if</span> <span class="punctuation">(</span><span class="built_in">is.null</span><span class="punctuation">(</span>table<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="built_in">return</span><span class="punctuation">(</span><span class="literal">NULL</span><span class="punctuation">)</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">        data.frame<span class="punctuation">(</span>sheet <span class="operator">=</span> sheet_name<span class="punctuation">,</span> table<span class="punctuation">,</span> check.names <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">)</span></span><br><span class="line">    do.call<span class="punctuation">(</span>rbind<span class="punctuation">,</span> pieces<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><p>After combining the rows, distinguish the <strong>observation year</strong> from the <strong>report release</strong>. The same observation year can appear in several releases. Group plots by ethnicity and draw a separate line for each release to show differences in overlapping years. If labels or statistical definitions changed, check how the source tables define their measures.</p><h2 id="automating-conversion-saving-results-and-organising-files">Automating Conversion, Saving Results and Organising Files</h2><ul><li><strong>Automated conversion.</strong> The lectures use <code>readxl::excel_sheets()</code> to list worksheets, select sheets by name and read them with <code>readxl::read_xlsx()</code>. Output filenames are built from the report year and sheet name. The outer iteration works over workbooks and the inner iteration over the selected sheets.</li><li><strong>Serialisation.</strong> Use <code>write.csv(table, path, row.names = FALSE)</code> to save extracted tables. Include the sheet and table names in the output path so the files can be reviewed and used in regression checks. CSV is portable, but check column names, types and missing values when reading it back. Use <code>saveRDS()</code> and <code>readRDS()</code> to preserve R object classes and attributes.</li><li><strong>File organisation.</strong> Keep original workbooks, converted CSVs, R functions, tests and generated results in separate directories. Use <code>file.path()</code> to build paths, <code>list.files()</code> to enumerate inputs and <code>source()</code> to load functions in dependency order. This gives each result a reproducible path back to the original workbook.</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 9 Testing and Debugging</title>
+      <link href="/2026/11/10/26-10-5-1-STATS380-9-test-deb/"/>
+      <url>/2026/11/10/26-10-5-1-STATS380-9-test-deb/</url>
+      
+        <content type="html"><![CDATA[<h2 id="building-tests-from-small-examples">Building Tests from Small Examples</h2><p>Use inputs whose expected results can be checked by hand. For a table-boundary function, cover a valid start, a row inside a table, a note row, the final row, a missing label and invalid arguments. Changing one condition at a time makes failures easier to locate. The <code>tableStart()</code> example uses the lecture’s first-column rule and handles the final row explicitly.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">tableStart <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>column<span class="punctuation">,</span> in_table<span class="punctuation">,</span> i<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="built_in">is.logical</span><span class="punctuation">(</span>in_table<span class="punctuation">)</span> <span class="operator">||</span> <span class="built_in">length</span><span class="punctuation">(</span>in_table<span class="punctuation">)</span> <span class="operator">!=</span> <span class="number">1L</span> <span class="operator">||</span></span><br><span class="line">        <span class="built_in">is.na</span><span class="punctuation">(</span>in_table<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        stop<span class="punctuation">(</span><span class="string">&quot;&#x27;in_table&#x27; must be TRUE or FALSE&quot;</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="built_in">is.numeric</span><span class="punctuation">(</span>i<span class="punctuation">)</span> <span class="operator">||</span> <span class="built_in">length</span><span class="punctuation">(</span>i<span class="punctuation">)</span> <span class="operator">!=</span> <span class="number">1L</span> <span class="operator">||</span> <span class="operator">!</span><span class="built_in">is.finite</span><span class="punctuation">(</span>i<span class="punctuation">)</span> <span class="operator">||</span></span><br><span class="line">        i <span class="operator">&lt;</span> <span class="number">1</span> <span class="operator">||</span> i <span class="operator">&gt;</span> <span class="built_in">length</span><span class="punctuation">(</span>column<span class="punctuation">)</span> <span class="operator">||</span> i <span class="operator">%%</span> <span class="number">1</span> <span class="operator">!=</span> <span class="number">0</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        stop<span class="punctuation">(</span><span class="string">&quot;&#x27;i&#x27; must index one row&quot;</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="operator">!</span>in_table <span class="operator">&amp;&amp;</span> i <span class="operator">&lt;</span> <span class="built_in">length</span><span class="punctuation">(</span>column<span class="punctuation">)</span> <span class="operator">&amp;&amp;</span></span><br><span class="line">        <span class="operator">!</span><span class="built_in">is.na</span><span class="punctuation">(</span>column<span class="punctuation">[</span>i<span class="punctuation">]</span><span class="punctuation">)</span> <span class="operator">&amp;&amp;</span> <span class="operator">!</span>grepl<span class="punctuation">(</span><span class="string">&quot;^Ratio&quot;</span><span class="punctuation">,</span> column<span class="punctuation">[</span>i<span class="punctuation">]</span><span class="punctuation">)</span> <span class="operator">&amp;&amp;</span></span><br><span class="line">        <span class="operator">!</span><span class="built_in">is.na</span><span class="punctuation">(</span>column<span class="punctuation">[</span>i <span class="operator">+</span> <span class="number">1L</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">column <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="literal">NA</span><span class="punctuation">,</span> <span class="string">&quot;Ratio note&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Group A&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Group B&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Total&quot;</span><span class="punctuation">)</span></span><br><span class="line">stopifnot<span class="punctuation">(</span></span><br><span class="line">    identical<span class="punctuation">(</span>tableStart<span class="punctuation">(</span>column<span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    identical<span class="punctuation">(</span>tableStart<span class="punctuation">(</span>column<span class="punctuation">,</span> <span class="literal">TRUE</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    identical<span class="punctuation">(</span>tableStart<span class="punctuation">(</span>column<span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    identical<span class="punctuation">(</span>tableStart<span class="punctuation">(</span>column<span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">)</span></span><br><span class="line">tools<span class="operator">::</span>assertError<span class="punctuation">(</span>tableStart<span class="punctuation">(</span>column<span class="punctuation">,</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="literal">FALSE</span><span class="punctuation">,</span> <span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">tools<span class="operator">::</span>assertError<span class="punctuation">(</span>tableStart<span class="punctuation">(</span>column<span class="punctuation">,</span> <span class="literal">FALSE</span><span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p>Test-driven development starts with a test that exposes a defect. Confirm that it fails, then change the implementation until it passes and rerun the existing tests. For regression testing, save a trusted result before a change, then rerun the same input and compare. Use <code>source()</code> to run the checks in a test script together.</p><ul><li><code>identical(actual, expected)</code> checks that type, structure and values match exactly.</li><li><code>all.equal(actual, expected)</code> returns <code>TRUE</code> when the comparison succeeds and a description when it finds differences. Use <code>isTRUE()</code> around it in a condition.</li><li><code>tools::assertError(expr)</code> checks that the expression raises an error. If the contract specifies an error class or message, verify that too.</li></ul><h2 id="tracing-warnings-and-errors">Tracing Warnings and Errors</h2><p>The lecture workflow fails on the 2021 Young People worksheet. The plotting code calls <code>seq()</code> to position labels and reports a non-finite endpoint, alongside a warning that coercion introduced <code>NA</code> values. Reducing the batch to a single table traces the issue to a measure column containing <code>"_"</code> as a missing-value marker. This caused the numeric data to be read as character values.</p><ol type="1"><li>Read the full error and warning messages and note which call and inputs triggered them.</li><li>Use <code>traceback()</code> immediately after the failure to see whether the call stack leads to batch import, table processing or plotting.</li><li>Reduce the input to the table that reproduces the problem. Use <code>str()</code>, <code>class()</code> and <code>head()</code> to inspect intermediate values, including range endpoints and group labels.</li><li>Find the first step that violates an assumption. After fixing the import, keep a small example containing the missing-value marker as a regression test.</li></ol><h2 id="debugging-tools">Debugging Tools</h2><table><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr><th>Tool</th><th>Use</th></tr></thead><tbody><tr><td><code>traceback()</code></td><td>Shows the call stack for the most recent uncaught error.</td></tr><tr><td><code>debugonce(f)</code> and <code>debug(f)</code></td><td>Enter the debugger on the next call or on every call to <code>f</code>, respectively. Clear persistent debugging with <code>undebug(f)</code>.</td></tr><tr><td><code>browser()</code></td><td>Pauses at the inserted statement so you can inspect the local environment.</td></tr><tr><td><code>options(error = recover)</code></td><td>Lets you choose a call frame after an interactive error. Restore the previous setting when finished.</td></tr></tbody></table><p>At the debugger prompt, use <code>n</code> to step, <code>s</code> to step into a call, <code>c</code> to continue and <code>Q</code> to quit debugging. If a variable has the same name as a command, use a call such as <code>print(n)</code> to inspect it.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 8 Divide and Conquer and Version Control</title>
+      <link href="/2026/11/10/26-9-28-1-STATS380-8-divide/"/>
+      <url>/2026/11/10/26-9-28-1-STATS380-8-divide/</url>
+      
+        <content type="html"><![CDATA[<h2 id="breaking-down-table-detection">Breaking Down Table Detection</h2><p>Tables in one worksheet share a layout but start and end on different rows. First locate each row range, then collect its metadata and use both to extract the long table. Separating these steps lets you check the detected ranges independently.</p><p>The lectures scan the first column and track <code>inTable</code>. Outside a table, a row that meets the start condition begins a new table. Inside a table, an end marker triggers the row count and returns the scan to its outside state. The helpers <code>tableStart()</code> and <code>tableEnd()</code> express these two rules. They rely on layout features such as consecutive non-empty labels, notes beginning with <code>Ratio</code> and <code>Total</code> rows. Check that those markers still apply to newer worksheets.</p><p>The example scans a simplified column containing group labels, blanks and <code>Total</code>. Outside a table, the first non-empty group label starts the range. Inside a table, <code>Total</code> ends it. Real worksheets also need the rules for recognising notes and other non-data rows.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">tableRanges <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>column<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    start <span class="operator">&lt;-</span> <span class="literal">NA_integer_</span></span><br><span class="line">    skip <span class="operator">&lt;-</span> integer<span class="punctuation">(</span><span class="punctuation">)</span></span><br><span class="line">    nrows <span class="operator">&lt;-</span> integer<span class="punctuation">(</span><span class="punctuation">)</span></span><br><span class="line">    <span class="keyword">for</span> <span class="punctuation">(</span>i <span class="keyword">in</span> <span class="built_in">seq_along</span><span class="punctuation">(</span>column<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        label <span class="operator">&lt;-</span> column<span class="punctuation">[</span>i<span class="punctuation">]</span></span><br><span class="line">        <span class="keyword">if</span> <span class="punctuation">(</span><span class="built_in">is.na</span><span class="punctuation">(</span>label<span class="punctuation">)</span> <span class="operator">||</span> label <span class="operator">==</span> <span class="string">&quot;&quot;</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="keyword">next</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="punctuation">(</span>label <span class="operator">==</span> <span class="string">&quot;Total&quot;</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="built_in">is.na</span><span class="punctuation">(</span>start<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">                skip <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>skip<span class="punctuation">,</span> start <span class="operator">-</span> <span class="number">1L</span><span class="punctuation">)</span></span><br><span class="line">                nrows <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>nrows<span class="punctuation">,</span> i <span class="operator">-</span> start<span class="punctuation">)</span></span><br><span class="line">                start <span class="operator">&lt;-</span> <span class="literal">NA_integer_</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span> <span class="keyword">else</span> <span class="keyword">if</span> <span class="punctuation">(</span><span class="built_in">is.na</span><span class="punctuation">(</span>start<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">            start <span class="operator">&lt;-</span> i</span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="built_in">is.na</span><span class="punctuation">(</span>start<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        stop<span class="punctuation">(</span><span class="string">&quot;Missing Total row&quot;</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    data.frame<span class="punctuation">(</span>skip <span class="operator">=</span> skip<span class="punctuation">,</span> nrows <span class="operator">=</span> nrows<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">first_column <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="literal">NA</span><span class="punctuation">,</span> <span class="string">&quot;Group A&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Group B&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Total&quot;</span><span class="punctuation">,</span> <span class="literal">NA</span><span class="punctuation">,</span> <span class="string">&quot;Group C&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Total&quot;</span><span class="punctuation">)</span></span><br><span class="line">tableRanges<span class="punctuation">(</span>first_column<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#   skip nrows</span></span><br><span class="line"><span class="comment"># 1    1     2</span></span><br><span class="line"><span class="comment"># 2    5     1</span></span><br></pre></td></tr></table></figure><p><code>start</code> stores both the starting row and the scan state. <code>NA</code> means the scan is outside a table. To begin reading at <code>start</code>, skip <code>start - 1</code> rows. Excluding the end marker gives <code>end - start</code> rows in the range, including any blanks within it. <code>seq_along()</code> skips the loop entirely for an empty input.</p><h2 id="from-row-ranges-to-table-metadata">From Row Ranges to Table Metadata</h2><p><code>tableInfo()</code> returns <code>skip</code>, <code>nrows</code>, the grouping column name <code>by</code> and the measure type <code>type</code> for each table, plus <code>years</code> shared by the worksheet. The first four vectors align by table. Pass <code>years</code> separately as a fixed argument to the reader. The lectures extract the first year from the financial-year heading and add one, so <code>2010/11</code> becomes 2011.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">headers <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;2010/11&quot;</span><span class="punctuation">,</span> <span class="string">&quot;2011/12&quot;</span><span class="punctuation">,</span> <span class="string">&quot;2012/13&quot;</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">as.integer</span><span class="punctuation">(</span>sub<span class="punctuation">(</span><span class="string">&quot;/.*$&quot;</span><span class="punctuation">,</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span> headers<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="number">1L</span></span><br><span class="line"><span class="comment"># 2011 2012 2013</span></span><br></pre></td></tr></table></figure><p>The lectures use the layout of the data blocks to distinguish rate tables from proportion tables and dispatch to the appropriate reader. Confirm the format and position of any notes at the bottom before excluding them. If a table has no closing marker, check the layout before passing an incomplete range to the reader.</p><h2 id="version-control">Version Control</h2><p>Copying scripts by hand preserves snapshots, but finding the change to a particular function gets harder as the copies accumulate. Git records a history of commits. The working tree contains the files being edited, the staging area holds the content selected for the next commit, and a commit records that version. One commit can cover several files, with a message describing the change they make together.</p><table><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr><th>Operation</th><th>Purpose</th></tr></thead><tbody><tr><td><code>git init</code></td><td>Initialises a repository in the current directory.</td></tr><tr><td><code>git status</code></td><td>Shows unstaged changes, staged changes and untracked files.</td></tr><tr><td><code>git diff</code> and <code>git diff --staged</code></td><td>Show unstaged and staged changes, respectively.</td></tr><tr><td><code>git add tableInfo.R</code></td><td>Stages the current contents of the file. Stage it again if you want later edits included.</td></tr><tr><td><code>git commit -m "Extract table boundary helpers"</code></td><td>Records the contents of the staging area.</td></tr><tr><td><code>git log</code></td><td>Shows the commit history.</td></tr></tbody></table><p>The lectures demonstrate the same workflow from R with <code>git2r</code>, using <code>init()</code>, <code>status()</code>, <code>add()</code> and <code>commit()</code>. A diff helps review a refactoring. The history records what changed, and regression tests check whether existing results still agree.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 7 Style, Refactoring and Graphics</title>
+      <link href="/2026/11/10/26-9-21-1-STATS380-7-sty-ref-grph/"/>
+      <url>/2026/11/10/26-9-21-1-STATS380-7-sty-ref-grph/</url>
+      
+        <content type="html"><![CDATA[<h2 id="code-style-and-function-contracts">Code Style and Function Contracts</h2><p>Indentation and spacing reveal code structure. Use braces around conditional and loop bodies. Choose function names that describe actions and variable names that convey meaning and units. For example, <code>rate_cols</code> holds column positions and <code>rate</code> holds the extracted values. Comments explain the purpose, inputs, output and assumptions such as column order.</p><p>Check inputs near the start of a function. The example requires <code>nrows</code> to be one finite positive whole number and accepts the ordinary R double <code>3</code>. Short-circuit evaluation with <code>&amp;&amp;</code> checks the type and length before comparing the value.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">check_nrows <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>nrows<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    valid <span class="operator">&lt;-</span> <span class="built_in">is.numeric</span><span class="punctuation">(</span>nrows<span class="punctuation">)</span> <span class="operator">&amp;&amp;</span> <span class="built_in">length</span><span class="punctuation">(</span>nrows<span class="punctuation">)</span> <span class="operator">==</span> <span class="number">1L</span> <span class="operator">&amp;&amp;</span></span><br><span class="line">        <span class="built_in">is.finite</span><span class="punctuation">(</span>nrows<span class="punctuation">)</span> <span class="operator">&amp;&amp;</span> nrows <span class="operator">&gt;=</span> <span class="number">1</span> <span class="operator">&amp;&amp;</span> nrows <span class="operator">%%</span> <span class="number">1</span> <span class="operator">==</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span>valid<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        stop<span class="punctuation">(</span><span class="string">&quot;&#x27;nrows&#x27; must be a single positive integer&quot;</span><span class="punctuation">,</span> call. <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="built_in">invisible</span><span class="punctuation">(</span>nrows<span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><p>For CSV extraction, check that <code>keep</code> has valid, unique column indices, that the number of indices matches the number of years, and that the group column exists. Reporting invalid inputs early prevents them from surfacing later as unrelated reshaping or plotting errors.</p><h2 id="scope-the-search-path-and-modularity">Scope, the Search Path and Modularity</h2><p>Assignments inside a function normally affect the current call. R resolves a name absent from that call by searching the function’s enclosing environments. That search can reach the global workspace <code>.GlobalEnv</code> and attached packages. Use <code>ls()</code> to list objects in the current environment and <code>search()</code> to inspect the search path. When packages export functions with the same name, <code>pkg::fun()</code> identifies the intended one.</p><p>If <code>getTable()</code> reads the global variables <code>csvFile</code> and <code>yearNames</code>, changing those variables changes its behaviour. Passing them as arguments makes the dependencies visible and lets several datasets be processed independently in the same session. Modular functions have a clear responsibility, explicit dependencies and a consistent return structure. Reading, reshaping and plotting can each be checked separately.</p><h2 id="refactoring-and-comparing-results">Refactoring and Comparing Results</h2><p>Establish the expected behaviour before reorganising the code. In the lectures, two similar blocks are compared to identify what varies. Paths, years and column indices become arguments, and commonly used combinations become higher-level functions. Compare values, column names, row order and types. Use <code>isTRUE(all.equal(old_result, new_result))</code> for approximate numeric comparisons and <code>identical()</code> when exact agreement matters.</p><p>The lectures use <code>diffobj::diffPrint(f_old, f_new)</code> to compare function objects and <code>diffobj::diffFile("old.R", "new.R")</code> to compare script files with their original formatting. Use <code>quote(&#123; ... &#125;)</code> to capture expressions for comparison without evaluating them. A diff shows what changed in the code. Comparing outputs checks whether its behaviour was preserved.</p><h2 id="writing-a-grouped-plotting-function">Writing a Grouped Plotting Function</h2><p>The lectures combine two similar plotting blocks into <code>plotTable(data, by, yvar)</code>. Since <code>by</code> and <code>yvar</code> are column names stored as strings, use <code>data[[by]]</code> and <code>data[[yvar]]</code> to retrieve the columns. This example assumes numeric years and measures, with at least one observation whose coordinates are finite.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">plotTable <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>data<span class="punctuation">,</span> by<span class="punctuation">,</span> yvar<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    groups <span class="operator">&lt;-</span> split<span class="punctuation">(</span>data<span class="punctuation">,</span> data<span class="punctuation">[[</span>by<span class="punctuation">]</span><span class="punctuation">]</span><span class="punctuation">,</span> drop <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br><span class="line">    colours <span class="operator">&lt;-</span> <span class="built_in">seq_along</span><span class="punctuation">(</span>groups<span class="punctuation">)</span></span><br><span class="line">    plot<span class="punctuation">(</span>data<span class="operator">$</span>year<span class="punctuation">,</span> data<span class="punctuation">[[</span>yvar<span class="punctuation">]</span><span class="punctuation">]</span><span class="punctuation">,</span> type <span class="operator">=</span> <span class="string">&quot;n&quot;</span><span class="punctuation">,</span></span><br><span class="line">         xlab <span class="operator">=</span> <span class="string">&quot;Year&quot;</span><span class="punctuation">,</span> ylab <span class="operator">=</span> yvar<span class="punctuation">,</span> main <span class="operator">=</span> by<span class="punctuation">)</span></span><br><span class="line">    <span class="keyword">for</span> <span class="punctuation">(</span>i <span class="keyword">in</span> <span class="built_in">seq_along</span><span class="punctuation">(</span>groups<span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">        g <span class="operator">&lt;-</span> groups<span class="punctuation">[[</span>i<span class="punctuation">]</span><span class="punctuation">]</span></span><br><span class="line">        g <span class="operator">&lt;-</span> g<span class="punctuation">[</span>order<span class="punctuation">(</span>g<span class="operator">$</span>year<span class="punctuation">)</span><span class="punctuation">,</span> <span class="punctuation">]</span></span><br><span class="line">        lines<span class="punctuation">(</span>g<span class="operator">$</span>year<span class="punctuation">,</span> g<span class="punctuation">[[</span>yvar<span class="punctuation">]</span><span class="punctuation">]</span><span class="punctuation">,</span> col <span class="operator">=</span> colours<span class="punctuation">[</span>i<span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    legend<span class="punctuation">(</span><span class="string">&quot;topright&quot;</span><span class="punctuation">,</span> legend <span class="operator">=</span> <span class="built_in">names</span><span class="punctuation">(</span>groups<span class="punctuation">)</span><span class="punctuation">,</span> col <span class="operator">=</span> colours<span class="punctuation">,</span> lty <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span></span><br><span class="line">    <span class="built_in">invisible</span><span class="punctuation">(</span><span class="literal">NULL</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><p><code>type = "n"</code> sets up shared axes. <code>lines()</code> joins points in the order supplied, so sort each group by year first. The lectures also label curves directly by ordering labels by each group’s starting value, leaving space on the left, and joining each label to its curve with <code>text()</code> and <code>segments()</code>. If a function changes graphical parameters, save the old settings with <code>op &lt;- par(...)</code> and restore them with <code>on.exit(par(op))</code>.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 6 Coding and Developing Functions</title>
+      <link href="/2026/11/10/26-9-14-1-STATS380-6-code/"/>
+      <url>/2026/11/10/26-9-14-1-STATS380-6-code/</url>
+      
+        <content type="html"><![CDATA[<h2 id="recording-data-processing-in-code">Recording Data Processing in Code</h2><p>The lectures use New Zealand’s Youth Justice Indicators workbook as a running example. Each worksheet contains titles, notes, blank rows and several tables. The initial task is to recreate time series for ethnic groups. The same process is then extended to other measures, tables and years.</p><p>Manual copying leaves the selected range and processing steps implicit. A script records the input path, rows to skip, columns to keep and output structure. It can be rerun when the data change, and each step can be inspected when the results differ.</p><h2 id="reading-one-table-from-a-worksheet-csv">Reading One Table from a Worksheet CSV</h2><p>The lecture workflow exports each worksheet as a CSV and reads selected ranges from the known layout. For the first table in the 2021 Children worksheet, skip 20 rows and read three rows starting at row 21. Column 1 holds the group labels, and columns 24 through 34 hold rates for 11 years.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">csv_file <span class="operator">&lt;-</span> <span class="string">&quot;CSV/2021-1.1-Children.csv&quot;</span></span><br><span class="line">years <span class="operator">&lt;-</span> 2011<span class="operator">:</span><span class="number">2021</span></span><br><span class="line">rate_cols <span class="operator">&lt;-</span> 24<span class="operator">:</span><span class="number">34</span></span><br><span class="line"></span><br><span class="line">rate_wide <span class="operator">&lt;-</span> read.csv<span class="punctuation">(</span>csv_file<span class="punctuation">,</span> skip <span class="operator">=</span> <span class="number">20</span><span class="punctuation">,</span> nrows <span class="operator">=</span> <span class="number">3</span><span class="punctuation">,</span></span><br><span class="line">                      header <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> rate_cols<span class="punctuation">)</span><span class="punctuation">]</span></span><br><span class="line"><span class="built_in">names</span><span class="punctuation">(</span>rate_wide<span class="punctuation">)</span> <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;group&quot;</span><span class="punctuation">,</span> years<span class="punctuation">)</span></span><br><span class="line">matplot<span class="punctuation">(</span>years<span class="punctuation">,</span> t<span class="punctuation">(</span>as.matrix<span class="punctuation">(</span>rate_wide<span class="punctuation">[</span><span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">        type <span class="operator">=</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span> xlab <span class="operator">=</span> <span class="string">&quot;Year&quot;</span><span class="punctuation">,</span> ylab <span class="operator">=</span> <span class="string">&quot;Rate&quot;</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p><code>skip</code> is the number of rows to skip before reading, and <code>nrows</code> is the number of data rows to read. <code>header = FALSE</code> treats the first selected row as data. Drop the group column before converting to a matrix so the character labels do not coerce the values to character. After transposing, each column contains one group’s time series.</p><h2 id="extracting-repeated-steps-into-a-function">Extracting Repeated Steps into a Function</h2><p>The count, population and rate tables share the same steps for reading, renaming and reshaping. Their column positions and measure names differ. Pass the file, row range, years and grouping column name as arguments to reuse the function for tables with the same layout. The example uses <code>reshape2::melt()</code> as in the lectures.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">getTable <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>csv_file<span class="punctuation">,</span> skip<span class="punctuation">,</span> nrows<span class="punctuation">,</span> keep<span class="punctuation">,</span> years<span class="punctuation">,</span> value_name<span class="punctuation">,</span> by<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    wide <span class="operator">&lt;-</span> read.csv<span class="punctuation">(</span>csv_file<span class="punctuation">,</span> skip <span class="operator">=</span> skip<span class="punctuation">,</span> nrows <span class="operator">=</span> nrows<span class="punctuation">,</span></span><br><span class="line">                     header <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> keep<span class="punctuation">)</span><span class="punctuation">]</span></span><br><span class="line">    <span class="built_in">names</span><span class="punctuation">(</span>wide<span class="punctuation">)</span> <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span>by<span class="punctuation">,</span> years<span class="punctuation">)</span></span><br><span class="line">    long <span class="operator">&lt;-</span> reshape2<span class="operator">::</span>melt<span class="punctuation">(</span>wide<span class="punctuation">,</span> id.vars <span class="operator">=</span> by<span class="punctuation">,</span> variable.name <span class="operator">=</span> <span class="string">&quot;year&quot;</span><span class="punctuation">,</span></span><br><span class="line">                           value.name <span class="operator">=</span> value_name<span class="punctuation">)</span></span><br><span class="line">    long<span class="operator">$</span>year <span class="operator">&lt;-</span> <span class="built_in">as.integer</span><span class="punctuation">(</span><span class="built_in">as.character</span><span class="punctuation">(</span>long<span class="operator">$</span>year<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">    long</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><ul><li>A wide table has one column per year. A long table has one row for each group and year, identified by <code>group</code> and <code>year</code> together.</li><li><code>melt()</code> keeps the ID column, collects the old column names into <code>year</code> and places their values in the measure column. If years are stored as a factor, convert them to character before converting to integers. Direct conversion would yield the factor codes.</li><li>The number of years determines the measure columns. In the lecture’s rate layout, the group column is followed by count, population and rate blocks of <span class="math inline">\(n\)</span> columns each.</li></ul><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">n <span class="operator">&lt;-</span> <span class="built_in">length</span><span class="punctuation">(</span>years<span class="punctuation">)</span></span><br><span class="line">count_cols <span class="operator">&lt;-</span> 1L <span class="operator">+</span> <span class="built_in">seq_len</span><span class="punctuation">(</span>n<span class="punctuation">)</span></span><br><span class="line">pop_cols <span class="operator">&lt;-</span> count_cols <span class="operator">+</span> n</span><br><span class="line">rate_cols <span class="operator">&lt;-</span> count_cols <span class="operator">+</span> <span class="number">2L</span> <span class="operator">*</span> n</span><br><span class="line"></span><br><span class="line">count <span class="operator">&lt;-</span> getTable<span class="punctuation">(</span>csv_file<span class="punctuation">,</span> <span class="number">20</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">,</span> count_cols<span class="punctuation">,</span> years<span class="punctuation">,</span> <span class="string">&quot;count&quot;</span><span class="punctuation">,</span> <span class="string">&quot;group&quot;</span><span class="punctuation">)</span></span><br><span class="line">pop <span class="operator">&lt;-</span> getTable<span class="punctuation">(</span>csv_file<span class="punctuation">,</span> <span class="number">20</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">,</span> pop_cols<span class="punctuation">,</span> years<span class="punctuation">,</span> <span class="string">&quot;pop&quot;</span><span class="punctuation">,</span> <span class="string">&quot;group&quot;</span><span class="punctuation">)</span></span><br><span class="line">rate <span class="operator">&lt;-</span> getTable<span class="punctuation">(</span>csv_file<span class="punctuation">,</span> <span class="number">20</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">,</span> rate_cols<span class="punctuation">,</span> years<span class="punctuation">,</span> <span class="string">&quot;rate&quot;</span><span class="punctuation">,</span> <span class="string">&quot;group&quot;</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">key <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;group&quot;</span><span class="punctuation">,</span> <span class="string">&quot;year&quot;</span><span class="punctuation">)</span></span><br><span class="line">stopifnot<span class="punctuation">(</span>identical<span class="punctuation">(</span>count<span class="punctuation">[</span>key<span class="punctuation">]</span><span class="punctuation">,</span> pop<span class="punctuation">[</span>key<span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">,</span> identical<span class="punctuation">(</span>count<span class="punctuation">[</span>key<span class="punctuation">]</span><span class="punctuation">,</span> rate<span class="punctuation">[</span>key<span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">combined <span class="operator">&lt;-</span> cbind<span class="punctuation">(</span>count<span class="punctuation">,</span> pop<span class="punctuation">[</span><span class="string">&quot;pop&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span> rate<span class="punctuation">[</span><span class="string">&quot;rate&quot;</span><span class="punctuation">]</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p><code>cbind()</code> combines columns by position, so check that the key columns have the same values in the same order. If order may differ, use <code>merge(..., by = key)</code> to match by key. Check that the keys are unique, since duplicates can multiply the number of rows. When counts contain commas as thousands separators, confirm their meaning before removing them and converting to numbers.</p><h2 id="writing-higher-level-functions">Writing Higher-Level Functions</h2><p><code>getTable()</code> reads one measure. The lectures build on it with <code>getRateBy()</code> for count, population and rate, and <code>getPropBy()</code> for number and proportion. The caller supplies the file, table position, years and grouping name. The higher-level functions handle column selection. Table positions are supplied manually here and calculated later by <code>tableInfo()</code>.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 5 Statistical Computing</title>
+      <link href="/2026/11/10/26-8-20-1-STATS380-5-stats-comp/"/>
+      <url>/2026/11/10/26-8-20-1-STATS380-5-stats-comp/</url>
+      
+        <content type="html"><![CDATA[<h2 id="splitapplycombine">Split–Apply–Combine</h2><p>Split the data into groups, apply the same function to each group, then combine the results into the required list, vector, matrix or data frame. Decide what shape the result should have before choosing how to combine it.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">d <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>group <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;A&quot;</span><span class="punctuation">,</span> <span class="string">&quot;A&quot;</span><span class="punctuation">,</span> <span class="string">&quot;B&quot;</span><span class="punctuation">,</span> <span class="string">&quot;B&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">                value <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">3</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">6</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">groups <span class="operator">&lt;-</span> split<span class="punctuation">(</span>d<span class="punctuation">,</span> d<span class="operator">$</span>group<span class="punctuation">,</span> drop <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br><span class="line">limits <span class="operator">&lt;-</span> lapply<span class="punctuation">(</span>groups<span class="punctuation">,</span> <span class="keyword">function</span><span class="punctuation">(</span>g<span class="punctuation">)</span> <span class="built_in">range</span><span class="punctuation">(</span>g<span class="operator">$</span>value<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">do.call<span class="punctuation">(</span>rbind<span class="punctuation">,</span> limits<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#   [,1] [,2]</span></span><br><span class="line"><span class="comment"># A    3    5</span></span><br><span class="line"><span class="comment"># B    2    6</span></span><br></pre></td></tr></table></figure><ul><li><strong>Split.</strong> <code>split(d, d$group)</code> returns a named list and preserves row order within each group. Factor levels determine group order, and <code>drop = TRUE</code> removes unused groups. Rows with missing group labels are omitted. To group by several variables, use <code>split(d, list(d$group, d$year), drop = TRUE)</code>.</li><li><strong>Apply.</strong> <code>lapply()</code> always returns a list. Use <code>...</code> to pass additional arguments to every call. For example, <code>lapply(groups, function(g) mean(g$value, na.rm = TRUE))</code> computes a mean for each group.</li><li><strong>Combine.</strong> <code>do.call(rbind, limits)</code> passes each list element as a separate argument to <code>rbind()</code>. Vectors can combine into a matrix, and data frames with matching columns can combine into a data frame. Use <code>unlist()</code> to flatten results into a vector. Mixed atomic types are coerced to a common type.</li></ul><table><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr><th>Function</th><th>Input and result</th></tr></thead><tbody><tr><td><code>sapply(X, FUN)</code></td><td>Tries to simplify the results. One scalar per group usually gives a vector, and equal-length vectors can give a matrix. If simplification fails, the result remains a list.</td></tr><tr><td><code>vapply(X, FUN, FUN.VALUE)</code></td><td>Specifies the expected type and length with a template. For example, <code>vapply(groups, nrow, integer(1))</code> expects one integer per group.</td></tr><tr><td><code>apply(M, 1, FUN)</code> and <code>apply(M, 2, FUN)</code></td><td>Work over matrix rows and columns, respectively. A data frame can be coerced to a matrix with a common type before the function is applied.</td></tr><tr><td><code>mapply(FUN, x, y)</code></td><td>Passes corresponding elements from several inputs. Use <code>MoreArgs</code> for fixed arguments and <code>SIMPLIFY = FALSE</code> to retain a list.</td></tr><tr><td><code>tapply(x, g, FUN)</code></td><td>Applies a function to a vector by group and usually returns an array indexed by group.</td></tr><tr><td><code>aggregate(d["value"], list(group = d$group), FUN)</code></td><td>Summarises the selected column within each group and returns a data frame.</td></tr></tbody></table><p>The same approach works for moving averages. Each index is the start of a window. For a window of width 2, there are <code>length(x) - 1</code> complete windows.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">3</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">6</span><span class="punctuation">)</span></span><br><span class="line">vapply<span class="punctuation">(</span><span class="built_in">seq_len</span><span class="punctuation">(</span><span class="built_in">length</span><span class="punctuation">(</span>x<span class="punctuation">)</span> <span class="operator">-</span> <span class="number">1L</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">       <span class="keyword">function</span><span class="punctuation">(</span>i<span class="punctuation">)</span> mean<span class="punctuation">(</span>x<span class="punctuation">[</span>i<span class="operator">:</span><span class="punctuation">(</span>i <span class="operator">+</span> <span class="number">1L</span><span class="punctuation">)</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">,</span> numeric<span class="punctuation">(</span><span class="number">1</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># 4.0 3.5 4.0</span></span><br></pre></td></tr></table></figure><h2 id="distribution-functions-and-random-numbers">Distribution Functions and Random Numbers</h2><table><colgroup><col style="width: 33%" /><col style="width: 33%" /><col style="width: 33%" /></colgroup><thead><tr><th>Prefix</th><th>Input and result</th><th>Normal example</th></tr></thead><tbody><tr><td><code>d</code></td><td>Takes a value and returns a density or discrete point probability</td><td><code>dnorm(x, mean, sd)</code></td></tr><tr><td><code>p</code></td><td>Takes a threshold and returns the cumulative probability <span class="math inline">\(P(X \le q)\)</span></td><td><code>pnorm(q, mean, sd)</code></td></tr><tr><td><code>q</code></td><td>Takes a probability and returns a quantile</td><td><code>qnorm(p, mean, sd)</code></td></tr><tr><td><code>r</code></td><td>Takes a sample size and generates simulated values</td><td><code>rnorm(n, mean, sd)</code></td></tr></tbody></table><p>The same naming scheme applies to <code>binom</code> (<code>size</code> and <code>prob</code>), <code>pois</code> (<code>lambda</code>), <code>t</code> (<code>df</code>) and <code>f</code> (<code>df1</code> and <code>df2</code>). A continuous distribution assigns zero probability to a single point. Subtract cumulative probabilities to find the probability of an interval. <code>lower.tail = FALSE</code> gives <span class="math inline">\(P(X &gt; q)\)</span>. For an integer-valued distribution, use <span class="math inline">\(q = k-1\)</span> to obtain <span class="math inline">\(P(X \ge k)\)</span>.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pbinom<span class="punctuation">(</span><span class="number">6</span><span class="punctuation">,</span> size <span class="operator">=</span> <span class="number">114</span><span class="punctuation">,</span> prob <span class="operator">=</span> <span class="number">0.5</span><span class="punctuation">)</span>                     <span class="comment"># P(X &lt;= 6)</span></span><br><span class="line">ppois<span class="punctuation">(</span><span class="number">4</span><span class="punctuation">,</span> lambda <span class="operator">=</span> <span class="number">3</span><span class="punctuation">,</span> lower.tail <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span>              <span class="comment"># P(X &gt;= 5)</span></span><br><span class="line">pnorm<span class="punctuation">(</span><span class="number">37.5</span><span class="punctuation">,</span> mean <span class="operator">=</span> <span class="number">36.86</span><span class="punctuation">,</span> sd <span class="operator">=</span> <span class="number">0.19</span><span class="punctuation">,</span> lower.tail <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span> <span class="comment"># P(X &gt; 37.5)</span></span><br><span class="line"></span><br><span class="line">set.seed<span class="punctuation">(</span><span class="number">380</span><span class="punctuation">)</span></span><br><span class="line">sample<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;head&quot;</span><span class="punctuation">,</span> <span class="string">&quot;tail&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> size <span class="operator">=</span> <span class="number">10</span><span class="punctuation">,</span> replace <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p><code>set.seed()</code> fixes the starting point of the random number sequence. Set it once at the start of a simulation, then let the state advance. <code>sample(x)</code> samples without replacement by default and can shuffle a vector with more than one element. For a numeric vector that might contain one value, use <code>x[sample.int(length(x))]</code> to shuffle by index. This avoids the special case in which <code>sample(5)</code> samples from <code>1:5</code>.</p><h2 id="checking-hypotheses-by-simulation">Checking Hypotheses by Simulation</h2><p><strong>Visual inference.</strong> Generate several datasets of the same size as the observed data under the assumed model. Plot them on the same scale and randomly place the observed data among the simulated panels. Look for features that distinguish the observed panel. The lecture example simulates beaver temperatures by adding normal errors to fitted values.</p><p><strong>Permutation test.</strong> Hold the observations fixed and shuffle the group labels when exchangeability under the null justifies doing so. Recompute the same statistic for each shuffle, then compare the observed statistic with the simulated null distribution. The following example uses the lecture’s beaver data.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">y <span class="operator">&lt;-</span> beaver1<span class="operator">$</span>temp</span><br><span class="line">active <span class="operator">&lt;-</span> beaver1<span class="operator">$</span>activ <span class="operator">==</span> <span class="number">1</span></span><br><span class="line">mean_difference <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>label<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    mean<span class="punctuation">(</span>y<span class="punctuation">[</span>label<span class="punctuation">]</span><span class="punctuation">)</span> <span class="operator">-</span> mean<span class="punctuation">(</span>y<span class="punctuation">[</span><span class="operator">!</span>label<span class="punctuation">]</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line">observed <span class="operator">&lt;-</span> mean_difference<span class="punctuation">(</span>active<span class="punctuation">)</span></span><br><span class="line">set.seed<span class="punctuation">(</span><span class="number">380</span><span class="punctuation">)</span></span><br><span class="line">null <span class="operator">&lt;-</span> replicate<span class="punctuation">(</span><span class="number">2000</span><span class="punctuation">,</span> mean_difference<span class="punctuation">(</span>sample<span class="punctuation">(</span>active<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">hist<span class="punctuation">(</span>null<span class="punctuation">,</span> main <span class="operator">=</span> <span class="string">&quot;Permutation distribution&quot;</span><span class="punctuation">,</span> xlab <span class="operator">=</span> <span class="string">&quot;Mean difference&quot;</span><span class="punctuation">)</span></span><br><span class="line">abline<span class="punctuation">(</span>v <span class="operator">=</span> observed<span class="punctuation">,</span> col <span class="operator">=</span> <span class="string">&quot;red&quot;</span><span class="punctuation">,</span> lwd <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line"><span class="punctuation">(</span><span class="number">1</span> <span class="operator">+</span> <span class="built_in">sum</span><span class="punctuation">(</span><span class="built_in">abs</span><span class="punctuation">(</span>null<span class="punctuation">)</span> <span class="operator">&gt;=</span> <span class="built_in">abs</span><span class="punctuation">(</span>observed<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">/</span> <span class="punctuation">(</span><span class="built_in">length</span><span class="punctuation">(</span>null<span class="punctuation">)</span> <span class="operator">+</span> <span class="number">1</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p>The absolute mean difference measures extremeness in either direction. Adding one to the numerator and denominator includes the observed arrangement in the comparison. If successive observations are dependent in time, check whether unrestricted shuffling is appropriate.</p><h2 id="simulating-sample-means">Simulating Sample Means</h2><p>A single sample produces one sample mean. To examine its sampling distribution, repeatedly draw from a skewed exponential distribution and compare the results for different sample sizes.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set.seed<span class="punctuation">(</span><span class="number">380</span><span class="punctuation">)</span></span><br><span class="line">means_5 <span class="operator">&lt;-</span> replicate<span class="punctuation">(</span><span class="number">2000</span><span class="punctuation">,</span> mean<span class="punctuation">(</span>rexp<span class="punctuation">(</span><span class="number">5</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">means_50 <span class="operator">&lt;-</span> replicate<span class="punctuation">(</span><span class="number">2000</span><span class="punctuation">,</span> mean<span class="punctuation">(</span>rexp<span class="punctuation">(</span><span class="number">50</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">c</span><span class="punctuation">(</span>sd<span class="punctuation">(</span>means_5<span class="punctuation">)</span><span class="punctuation">,</span> sd<span class="punctuation">(</span>means_50<span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure><p>For independent, identically distributed observations with finite variance, <span class="math inline">\(\operatorname{SD}(\bar X)=\sigma/\sqrt{n}\)</span>. The distribution of the standardised sample mean approaches a normal distribution as <span class="math inline">\(n\)</span> grows. Larger samples reduce the sampling variability of the mean.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【STATS 380】 4a R Classes, Dates, Regular Expressions and Closures</title>
+      <link href="/2026/11/10/26-8-17-1-STATS380-4a-r-details/"/>
+      <url>/2026/11/10/26-8-17-1-STATS380-4a-r-details/</url>
+      
+        <content type="html"><![CDATA[<h2 id="classes-attributes-and-generic-functions">Classes, Attributes and Generic Functions</h2><p>An R object’s underlying type and its class can differ. Use <code>typeof()</code> to see its storage type, <code>mode()</code> for a broader classification, and <code>class()</code> to see its class. A factor is stored as integers, while <code>mode()</code> groups integers and doubles under <code>"numeric"</code>. A data frame is stored as a list.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">group <span class="operator">&lt;-</span> factor<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;B&quot;</span><span class="punctuation">,</span> <span class="string">&quot;A&quot;</span><span class="punctuation">,</span> <span class="string">&quot;B&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">typeof<span class="punctuation">(</span>group<span class="punctuation">)</span>        <span class="comment"># &quot;integer&quot;</span></span><br><span class="line">mode<span class="punctuation">(</span>group<span class="punctuation">)</span>          <span class="comment"># &quot;numeric&quot;</span></span><br><span class="line"><span class="built_in">class</span><span class="punctuation">(</span>group<span class="punctuation">)</span>         <span class="comment"># &quot;factor&quot;</span></span><br><span class="line">levels<span class="punctuation">(</span>group<span class="punctuation">)</span>        <span class="comment"># &quot;A&quot; &quot;B&quot;</span></span><br><span class="line"><span class="built_in">as.integer</span><span class="punctuation">(</span>group<span class="punctuation">)</span>    <span class="comment"># 2 1 2</span></span><br><span class="line"><span class="built_in">as.character</span><span class="punctuation">(</span>group<span class="punctuation">)</span>  <span class="comment"># &quot;B&quot; &quot;A&quot; &quot;B&quot;</span></span><br></pre></td></tr></table></figure><p><code>names</code>, <code>dim</code>, <code>dimnames</code>, <code>levels</code> and an explicitly set <code>class</code> are examples of attributes. Use <code>attributes(x)</code> to inspect them all and <code>attr(x, "label")</code> to get or set a single attribute. <code>class(x)</code> can also infer a class from the object’s type and dimensions.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">m <span class="operator">&lt;-</span> matrix<span class="punctuation">(</span><span class="number">1</span><span class="operator">:</span><span class="number">6</span><span class="punctuation">,</span> nrow <span class="operator">=</span> <span class="number">2</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">attr</span><span class="punctuation">(</span>m<span class="punctuation">,</span> <span class="string">&quot;dim&quot;</span><span class="punctuation">)</span>             <span class="comment"># 2 3</span></span><br><span class="line">d <span class="operator">&lt;-</span> data.frame<span class="punctuation">(</span>value <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">2</span><span class="punctuation">)</span></span><br><span class="line"><span class="built_in">attributes</span><span class="punctuation">(</span>d<span class="punctuation">)</span></span><br><span class="line"><span class="built_in">attr</span><span class="punctuation">(</span>d<span class="punctuation">,</span> <span class="string">&quot;label&quot;</span><span class="punctuation">)</span> <span class="operator">&lt;-</span> <span class="string">&quot;Example data&quot;</span></span><br><span class="line">print<span class="punctuation">(</span>d<span class="punctuation">)</span>                   <span class="comment"># Data-frame display</span></span><br><span class="line">print<span class="punctuation">(</span><span class="built_in">unclass</span><span class="punctuation">(</span>d<span class="punctuation">)</span><span class="punctuation">)</span>          <span class="comment"># List display, with other attributes retained</span></span><br></pre></td></tr></table></figure><p>S3 generics such as <code>print()</code> and <code>summary()</code> choose a method based on the object’s class. For example, <code>print(d)</code> uses the data-frame printing method. The selected method determines the result or side effect.</p><h2 id="dates-and-date-times">Dates and Date-Times</h2><p><code>Date</code> stores days relative to 1970-01-01. <code>as.Date()</code> parses character input, and <code>format()</code> converts dates into display strings. When a numeric source uses its own reference date, pass it as <code>origin</code>. If the source numbers the origin as day 1, subtract 1 before conversion.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">day <span class="operator">&lt;-</span> as.Date<span class="punctuation">(</span><span class="string">&quot;18/06/2026&quot;</span><span class="punctuation">,</span> format <span class="operator">=</span> <span class="string">&quot;%d/%m/%Y&quot;</span><span class="punctuation">)</span></span><br><span class="line">day <span class="operator">+</span> <span class="number">7</span></span><br><span class="line">format<span class="punctuation">(</span>day<span class="punctuation">,</span> <span class="string">&quot;%Y&quot;</span><span class="punctuation">)</span>                          <span class="comment"># &quot;2026&quot;</span></span><br><span class="line">as.Date<span class="punctuation">(</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">)</span> <span class="operator">-</span> <span class="number">1</span><span class="punctuation">,</span> origin <span class="operator">=</span> <span class="string">&quot;1990-01-01&quot;</span><span class="punctuation">)</span></span><br><span class="line">diff<span class="punctuation">(</span>seq<span class="punctuation">(</span>day<span class="punctuation">,</span> by <span class="operator">=</span> <span class="string">&quot;month&quot;</span><span class="punctuation">,</span> length.out <span class="operator">=</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 30 days, then 31</span></span><br></pre></td></tr></table></figure><p><code>%Y</code> represents a four-digit year, <code>%y</code> a two-digit year, <code>%m</code> a month and <code>%d</code> a day. Subtracting two dates returns a <code>difftime</code> object. Calendar months vary in length, so use <code>seq(..., by = "month")</code> to generate monthly dates.</p><p>Use <code>POSIXct</code> or <code>POSIXlt</code> for dates with times. <code>POSIXct</code> stores seconds relative to 1970-01-01 UTC. <code>POSIXlt</code> exposes components such as the hour and day of the week. The time format codes <code>%H</code>, <code>%M</code> and <code>%S</code> represent hours, minutes and seconds.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hhmm <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">840</span><span class="punctuation">,</span> <span class="number">935</span><span class="punctuation">)</span></span><br><span class="line">stamp <span class="operator">&lt;-</span> as.POSIXct<span class="punctuation">(</span></span><br><span class="line">    sprintf<span class="punctuation">(</span><span class="string">&quot;1990-12-12 %02d:%02d&quot;</span><span class="punctuation">,</span> hhmm <span class="operator">%/%</span> <span class="number">100</span><span class="punctuation">,</span> hhmm <span class="operator">%%</span> <span class="number">100</span><span class="punctuation">)</span><span class="punctuation">,</span></span><br><span class="line">    format <span class="operator">=</span> <span class="string">&quot;%Y-%m-%d %H:%M&quot;</span><span class="punctuation">,</span> tz <span class="operator">=</span> <span class="string">&quot;Pacific/Auckland&quot;</span></span><br><span class="line"><span class="punctuation">)</span></span><br><span class="line">as.POSIXlt<span class="punctuation">(</span>stamp<span class="punctuation">)</span><span class="operator">$</span>hour                      <span class="comment"># 8 9</span></span><br><span class="line">difftime<span class="punctuation">(</span>stamp<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">]</span><span class="punctuation">,</span> stamp<span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">,</span> units <span class="operator">=</span> <span class="string">&quot;mins&quot;</span><span class="punctuation">)</span> <span class="comment"># 55 minutes</span></span><br></pre></td></tr></table></figure><h2 id="regular-expressions">Regular Expressions</h2><table><colgroup><col style="width: 50%" /><col style="width: 50%" /></colgroup><thead><tr><th>Pattern</th><th>Meaning</th></tr></thead><tbody><tr><td><code>^</code>, <code>$</code></td><td>Start and end of the string</td></tr><tr><td><code>.</code>, <code>[.]</code></td><td>Any single character and a literal period</td></tr><tr><td><code>[Tt]</code>, <code>[^0-9]</code></td><td>T or t, and any character outside the digit range</td></tr><tr><td><code>[[:alpha:]]</code>, <code>[[:space:]]</code></td><td>An alphabetic character and a whitespace character</td></tr><tr><td><code>?</code>, <code>+</code>, <code>*</code>, <code>&#123;n&#125;</code></td><td>Repeat the preceding pattern zero or one time, one or more times, zero or more times, or exactly n times, respectively</td></tr></tbody></table><p>Parentheses group patterns and a vertical bar separates alternatives. For example, <code>^(cat|dog)$</code> matches the whole string <code>"cat"</code> or <code>"dog"</code>.</p><p><code>grep()</code> returns the indices of matching elements. Set <code>value = TRUE</code> to get the original matching strings. <code>grepl()</code> returns one logical value per element. <code>regexpr()</code> finds the first match in each string, while <code>gregexpr()</code> finds all matches. Pass the result to <code>regmatches()</code> to extract the matched text.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">x <span class="operator">&lt;-</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;2021-children.csv&quot;</span><span class="punctuation">,</span> <span class="string">&quot;draft.txt&quot;</span><span class="punctuation">,</span> <span class="string">&quot;2023-youth.csv&quot;</span><span class="punctuation">)</span></span><br><span class="line">grep<span class="punctuation">(</span><span class="string">&quot;[.]csv$&quot;</span><span class="punctuation">,</span> x<span class="punctuation">)</span>                              <span class="comment"># 1 3</span></span><br><span class="line">grepl<span class="punctuation">(</span><span class="string">&quot;.&quot;</span><span class="punctuation">,</span> x<span class="punctuation">,</span> fixed <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span>                     <span class="comment"># TRUE TRUE TRUE</span></span><br><span class="line">regmatches<span class="punctuation">(</span>x<span class="punctuation">,</span> gregexpr<span class="punctuation">(</span><span class="string">&quot;[0-9]&#123;4&#125;&quot;</span><span class="punctuation">,</span> x<span class="punctuation">)</span><span class="punctuation">)</span>          <span class="comment"># One list element per string</span></span><br><span class="line">sub<span class="punctuation">(</span><span class="string">&quot;^([0-9]&#123;4&#125;)-.*$&quot;</span><span class="punctuation">,</span> <span class="string">&quot;\\1&quot;</span><span class="punctuation">,</span> x<span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">]</span><span class="punctuation">)</span>        <span class="comment"># &quot;2021&quot; &quot;2023&quot;</span></span><br><span class="line">strsplit<span class="punctuation">(</span>x<span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="string">&quot;-&quot;</span><span class="punctuation">,</span> fixed <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span>         <span class="comment"># Each element is a character vector</span></span><br></pre></td></tr></table></figure><p><code>sub()</code> replaces the first match in each string, and <code>gsub()</code> replaces every match. In a replacement string, <code>"\\1"</code> inserts the text captured by the first group. R parses the string before the regular expression engine parses the pattern, so a literal period can also be written as <code>"\\."</code>. For literal searches, <code>fixed = TRUE</code> avoids regular expression escaping.</p><h2 id="lexical-scope-and-closures">Lexical Scope and Closures</h2><p>R first looks for a name in the current call environment, then follows the chain of enclosing environments from where the function was <strong>defined</strong>. A returned inner function retains access to its defining environment. This is the closure mechanism illustrated in the lectures.</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">make_adder <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="punctuation">(</span>offset<span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    force<span class="punctuation">(</span>offset<span class="punctuation">)</span></span><br><span class="line">    <span class="keyword">function</span><span class="punctuation">(</span>x<span class="punctuation">)</span> x <span class="operator">+</span> offset</span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line">add_two <span class="operator">&lt;-</span> make_adder<span class="punctuation">(</span><span class="number">2</span><span class="punctuation">)</span></span><br><span class="line">add_five <span class="operator">&lt;-</span> make_adder<span class="punctuation">(</span><span class="number">5</span><span class="punctuation">)</span></span><br><span class="line">add_two<span class="punctuation">(</span><span class="number">10</span><span class="punctuation">)</span>  <span class="comment"># 12</span></span><br><span class="line">add_five<span class="punctuation">(</span><span class="number">10</span><span class="punctuation">)</span> <span class="comment"># 15</span></span><br></pre></td></tr></table></figure><p>Each returned function uses its own <code>offset</code>. Calling <code>force(offset)</code> evaluates that argument before the factory returns the inner function.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 学习 </category>
+          
+          <category> STATS 380 Statistical Computing </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 学习笔记 </tag>
+            
+            <tag> 统计学 </tag>
+            
+            <tag> R 语言 </tag>
+            
+            <tag> 数据科学 </tag>
+            
+            <tag> 外文 </tag>
+            
+            <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>【COMPSCI 335】 Week 11 Security Considerations</title>
       <link href="/2026/11/06/26-10-20-1-COMPSCI335-11-security/"/>
       <url>/2026/11/06/26-10-20-1-COMPSCI335-11-security/</url>
@@ -28,11 +356,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -65,11 +393,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -102,11 +430,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -637,11 +965,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -674,11 +1002,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -711,11 +1039,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -904,11 +1232,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -941,11 +1269,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -984,9 +1312,9 @@
             
             <tag> 外文 </tag>
             
-            <tag> 奥克兰大学课程 </tag>
-            
             <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -1025,9 +1353,9 @@
             
             <tag> 外文 </tag>
             
-            <tag> 奥克兰大学课程 </tag>
-            
             <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -1066,9 +1394,9 @@
             
             <tag> 外文 </tag>
             
-            <tag> 奥克兰大学课程 </tag>
-            
             <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -1107,9 +1435,9 @@
             
             <tag> 外文 </tag>
             
-            <tag> 奥克兰大学课程 </tag>
-            
             <tag> 统计计算 </tag>
+            
+            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -1118,7 +1446,7 @@
     
     
     <entry>
-      <title>【RSM CN】 雪花枫叶的回忆（C1 ~ I1）</title>
+      <title>【RSM CN】 雪花枫叶的回忆（Chapter 1 ~ Inerval 1）</title>
       <link href="/2026/08/16/26-8-14-RSMCN-1-c1i1/"/>
       <url>/2026/08/16/26-8-14-RSMCN-1-c1i1/</url>
       
@@ -1187,11 +1515,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -1224,11 +1552,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
@@ -1339,11 +1667,11 @@
             
             <tag> 外文 </tag>
             
+            <tag> 奥克兰大学课程 </tag>
+            
             <tag> 网络编程与分布式服务 </tag>
             
             <tag> C# 语言 </tag>
-            
-            <tag> 奥克兰大学课程 </tag>
             
         </tags>
       
